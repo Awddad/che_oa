@@ -1,9 +1,31 @@
 <?php
-
-return [
-    'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
-];
+if(YII_ENV_DEV) //开发库
+{
+    return [
+        'class' => 'yii\db\Connection',
+        'dsn' => 'mysql:host=192.168.1.22;dbname=crm',
+        'username' => 'oa',
+        'password' => 'che@oa',
+        'charset' => 'utf8',
+    ];    
+}
+else if(YII_ENV_TEST) //测试环境
+{
+    return [
+        'class' => 'yii\db\Connection',
+        'dsn' => 'mysql:host=192.168.1.21;dbname=crm',
+        'username' => 'oa',
+        'password' => 'che@oa',
+        'charset' => 'utf8',
+    ];
+}
+else //正式环境
+{
+    return [
+        'class' => 'yii\db\Connection',
+        'dsn' => 'mysql:host=192.168.1.21;dbname=crm',
+        'username' => 'oa',
+        'password' => 'che@oa',
+        'charset' => 'utf8',
+    ];
+}
