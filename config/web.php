@@ -21,7 +21,7 @@ $config = [
             'on beforeSend' => function ($event) {
                 $response = $event->sender;
                 $response->data = [
-                    'code' => $response->statusCode,
+                    'code' => $response->data['code'],
                     'message' => $response->data['message'],
                     'data' => $response->data['data'],
                 ];
