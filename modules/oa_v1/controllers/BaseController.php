@@ -24,6 +24,9 @@ use yii\web\Response;
  */
 class BaseController extends Controller
 {
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         return [
@@ -46,6 +49,11 @@ class BaseController extends Controller
         ];
     }
 
+
+    public static $code = [
+        200 => '成功',
+    ];
+
     /**
      * 统一返回格式
      *
@@ -56,6 +64,7 @@ class BaseController extends Controller
      */
     public function _return($data, $message = 'success', $code = 200)
     {
-        return compact('data', 'message', $code);
+        $message = isset(static::$code[$code]) ? static::$code[$code] : $message;
+        return compact('data', 'message', 'code');
     }
 }

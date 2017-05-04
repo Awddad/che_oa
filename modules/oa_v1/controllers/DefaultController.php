@@ -14,7 +14,6 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-        aaa;
         return $this->_return(null);
     }
 }
