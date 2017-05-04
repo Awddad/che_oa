@@ -6,10 +6,29 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'modules' => [
+        'oa_v1' => [
+            'class' => 'app\modules\oa_v1\module',
+        ],
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'Ecb0jTYLy3LKDtkASW3CrmO6dukqB4I6',
+        ],
+        'response' => [
+            'class' => 'yii\web\Response',
+            'on beforeSend' => function ($event) {
+                $response = $event->sender;
+                $response->data = [
+                    'code' => $response->statusCode,
+                    'message' => $response->data['message'],
+                    'data' => $response->data['data'],
+                ];
+                $response->statusCode = 200;
+
+            },
+
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -61,7 +80,7 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1', '*'],
     ];
 }
 
