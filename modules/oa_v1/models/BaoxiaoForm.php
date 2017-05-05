@@ -1,0 +1,219 @@
+<?php
+namespace app\modules\oa_v1\models;
+
+use Yii;
+use app\models as appmodel;
+use yii\web\UploadedFile;
+
+
+class BaoxiaoForm extends BaseForm
+{
+	public $user;
+	public $apply_id;//流水号
+	public $type = 1;//申请类型
+	public $bank_card_id;//收款银行卡号
+	public $bank_name;//收款银行
+	public $bank_name_des;//支行
+	public $bao_xiao_list;//报效明细
+	public $approval_persons;//审批人
+	public $copy_person;//抄送人
+	public $cai_wu_need = 2;//需要财务确认
+	public $fujian;//附件
+	public $pic;//图片
+	public $money = 0;//报效金额
+	
+	public function rules(){
+		return [
+			[
+				['bank_card_id','bank_name','bank_name_des','bao_xiao_list','approval_persons','copy_person'],
+				'required',
+				'message'=>'{attribute}不能为空'
+			],
+			['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
+			['approval_persons','validatePersons','params'=>'审批人'],
+			['copy_person','validatePersons','params'=>'抄送人'],
+			['bao_xiao_list','validateList'],
+		];
+	}
+	public function validatePersons($attribute, $params)
+	{
+		if (!$this->hasErrors()) {
+			$validator = new \yii\validators\NumberValidator();
+			$validator -> integerOnly = true;
+			foreach($this->$attribute as $v){
+				if(!$validator->validate($v['person_id'])){
+					$this->addError($attribute, "{$params}id不能为空");
+				}elseif(!$v['person_name']){
+					$this->addError($attribute, "{$params}姓名不能为空");
+				}
+				if ($this->hasErrors()){
+					return;
+				}
+			}
+		}
+	}
+	public function validateList($attribute)
+	{
+		if (!$this->hasErrors()) {
+			
+		}
+	}
+	
+	/**
+	 * 存储报销单
+	 */
+	public function saveBaoxiao()
+	{
+		$this -> apply_id = $this -> createId('apply');
+		$model_apply = new appmodel\Apply();
+		$this -> loadModel('apply',$model_apply);
+		$transaction = Yii::$app -> db -> beginTransaction();
+		try{
+			if($model_apply -> insert()){
+				$this -> saveBaoxiaoList();
+				$this -> baoxiao();
+				$this -> approvalLog();
+				$this -> copyLog();
+				//$this -> approvalPerson($model_apply);
+				//$this -> copyPerson($model_apply);
+				
+				$transaction -> commit();
+				return true;
+			}	
+		}catch(Exception $e){
+			$transaction -> rollBack();
+			return false;
+		}
+		
+	}
+	
+	protected function createId($type)
+	{
+		$id = '';
+		switch($type){
+			case 'apply':
+				$id = 'ap'.time().'00'.rand(10,99).rand(100,999);
+				break;
+			case 'baoxiaolist':
+				$id = 'bl'.time().'22'.rand(10,99).rand(100,999);
+				break;
+		}
+		return $id;
+	}
+	/**
+	 * 初始化model
+	 * @param string $type ['apply','baoxiao','baoxiaolist']
+	 * @param object $model AR对象
+	 * @param array $data
+	 */
+	protected function loadModel($type,&$model,$data=[])
+	{
+		if('apply' == $type){
+			$model -> load(['Apply'=>(array)$this]);
+			$model -> apply_id = $this -> apply_id;
+			$model -> create_time = time();
+			$model -> title = "{$this->user['name']}的报销单";
+			$model -> person = $this->user['name'];
+			$model -> person_id = $this->user['id'];
+			$model -> approval_persons = implode(',', array_column($model -> approval_persons,'person_name'));
+			$model -> copy_person = implode(',', array_column($model -> copy_person,'person_name'));
+			$approval_person = array_column($this -> approval_persons,'person_name')[0];
+			$model -> next_des = "待{$approval_person}审批";
+		}elseif('baoxiao' == $type){
+			$model -> apply_id = $this -> apply_id;
+			$model -> bao_xiao_list_ids = implode(',',array_column($this ->bao_xiao_list,'id'));
+			$model -> money = $this -> money;
+			$model -> bank_card_id = $this -> bank_card_id;
+			$model -> bank_name = $this -> bank_name;
+			$model -> bank_name_des = $this -> bank_name_des;
+			$model -> files = $this -> fujian?implode(',',$this -> fujian):'';
+			$model -> pics = $this -> pic?implode(',',$this -> pic):'';
+		}elseif('baoxiaolist' == $type){
+			$model -> apply_id = $this -> createId('baoxiaolist');
+			$model -> money = $data['money'];
+			$model -> type_name = $data['type_name'];
+			$model -> type = $data['type'];
+			$model -> des = $data['des'];
+		}elseif('approval_log' == $type){
+			$model -> apply_id = $this -> apply_id;
+			$model -> approval_person = $data['person_name'];
+			$model -> approval_person_id = $data['person_id'];
+			$model -> steep = $data['steep'];
+			$model -> is_end = isset($data['is_end']) ? $data['is_end']: 0;
+		}elseif('copy' == $type){
+			$model -> apply_id = $this -> apply_id;
+			$model -> copy_person_id = $data['person_id'];
+			$model -> copy_person = $data['person_name'];
+		}
+	}
+	
+	protected function saveBaoxiaoList()
+	{
+		$model_biaoxiao_list = new appmodel\BaoXiaoList();
+		foreach($this -> bao_xiao_list as &$v){
+			$_model_biaoxiao_list = clone $model_biaoxiao_list;
+			$this -> money += $v['money'];
+			$this -> loadModel('baoxiaolist',$_model_biaoxiao_list,$v);
+			if($_model_biaoxiao_list -> insert()){
+				$v['id'] = $_model_biaoxiao_list -> id;
+			}else{
+				throw new \Exception('明细失败');
+			}
+		}
+	}
+	protected function baoxiao()
+	{
+		$model_bao_xiao = new appmodel\BaoXiao();
+		$this -> loadModel('baoxiao',$model_bao_xiao);
+		if(!$model_bao_xiao -> insert()){
+			throw new \Exception('报销失败');
+		}
+	}
+	protected function approvalLog()
+	{
+		$model_approval = new appmodel\ApprovalLog();
+		foreach($this -> approval_persons as $k => &$v){
+			if($k == count($this -> approval_persons)){
+				$v['is_end'] = 1;
+			}
+			$_model_approval = clone $model_approval;
+			$this -> loadModel('approval_log', $_model_approval, $v);
+			if(!$_model_approval -> insert()){
+				throw new \Exception('审核人失败');
+			}
+		}
+	}
+	protected function copyLog()
+	{
+		$model_copy = new appmodel\ApplyCopyPerson();
+		foreach($this -> copy_person as $k => &$v){
+			$_model_copy = clone $model_copy;
+			$this -> loadModel('copy', $_model_copy, $v);
+			if(!$_model_copy -> insert()){
+				throw new \Exception('抄送人失败');
+			}
+		}
+	}
+	/**
+	 * 保存文件
+	 * @param unknown_type $file
+	 * @param unknown_type $dir
+	 */
+	public function saveFile($file,$dir)
+	{
+		$base_dir = str_replace('\\', '/', Yii::$app -> basePath);
+		$root_path = $base_dir.'/web'.$dir;
+
+		if($file && !is_dir($root_path)){
+			mkdir($root_path,0777,true);
+		}
+		$res = [];
+		foreach($file as $v){
+			$tmp_file_name = iconv("UTF-8","gb2312", $v -> baseName).$this->user['id'].rand(100,999).'.'.$v -> extension;
+			
+			if($v -> saveAs($root_path.'/'.$tmp_file_name))
+				$res[] = $dir.'/'.$tmp_file_name;
+		}
+		return $res;
+	}
+}

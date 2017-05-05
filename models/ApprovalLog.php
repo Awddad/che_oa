@@ -35,7 +35,7 @@ class ApprovalLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'apply_id', 'approval_person', 'approval_person_id'], 'required'],
+            [['apply_id', 'approval_person', 'approval_person_id'], 'required'],
             [['id', 'approval_person_id', 'steep', 'is_end', 'result', 'approval_time', 'is_to_me_now'], 'integer'],
             [['des'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
