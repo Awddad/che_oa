@@ -42,7 +42,7 @@ class BaseController extends Controller
         if($strOsType == 'web')//web版的使用单点登录
         {
 //            if(1)//需要后门，绕过单点登录，允许通过 site/login地址登录
-            
+
             $serverUrl = Yii::$app->params['quan_xian']['auth_sso_url'];//单点登录地址
             $brokerId = Yii::$app->params['quan_xian']['auth_broker_id'];//项目appID
             $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
@@ -79,9 +79,9 @@ class BaseController extends Controller
         {
             //app 版本的登录   先预留
         }
-        return true;
+        return parent::beforeAction($action);
     }
-        
+
     /**
      * @return array
      */
