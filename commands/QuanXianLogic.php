@@ -41,6 +41,7 @@ class QuanXianLogic
             'organizations' =>  $this->preUrl . '/organizations/tree',//获取组织架构的接口地址
             'userlist' => $this->preUrl . '/projects/users',//获取项目中的所有人
             'login' => $this->preUrl . '/users/login', //登录接口
+            'bqqtips' => $this->preUrl . '/bqq/tips',//企业QQ客户端提醒
         ];
     }
     
@@ -78,7 +79,6 @@ class QuanXianLogic
         }
         return $arrLoginInfo;
     }
-    
     
     /**
      * @功能：拉取组织架构
@@ -196,6 +196,56 @@ class QuanXianLogic
             return $result;
         }
         return false;
+    }
+    /**
+     * @功能：与权限系统交互，给部分人的企业QQ发送tips消息
+     * @作者：王雕
+     * @创建时间：2017-05-04
+     * @param string $strWindowsTitle   Tips弹出窗口的标题，限长24字符
+     * @param string $strTipsTitle      Tips的消息标题，限长42字符
+     * @param string $strContent        Tips的正文内容，限长264字符
+     * @param array $arrReceivers       消息接收人，逗号分隔的open_id列表
+     * @param string $strTipsUrl        点击消息跳转的网页地址如果有链接，使用此参数，url，限长1024字节
+     * @param int $intShowTime          窗口显示的时间： 0 一直显示不会自动消失 大于0 显示相应时间后自动关闭（单位：秒），最大512秒
+     * @return array $arrSendResult     发送结果 result = 0 成功， 非0 失败 msg 失败原因
+     */
+    public function sendbQQNotice($strWindowsTitle, $strTipsTitle, $strContent, $arrReceivers, $strTipsUrl = '', $intShowTime = 0)
+    {
+        $arrPost = [
+            '_token' => $this->_token,
+            'receivers' => implode(',', $arrReceivers),
+            'window_title' => $strWindowsTitle,
+            'tips_title' => $strTipsTitle,
+            'tips_content' => $strContent,
+        ];
+        $strTipsUrl && $arrPost['tips_url'] = $strTipsUrl;
+        $intShowTime && $arrPost['display_time'] = $intShowTime;
+        if(mb_strlen($strWindowsTitle) > 24)
+        {
+            $arrSendResult = ['result' => 2, 'msg' => 'Tips弹出窗口的标题，限长24字符'];
+        }
+        else if(mb_strlen($strTipsTitle) > 42)
+        {
+            $arrSendResult = ['result' => 3, 'msg' => 'Tips的消息标题，限长42字符'];
+        }
+        else if(mb_strlen($strContent) > 264)
+        {
+            $arrSendResult = ['result' => 4, 'msg' => 'Tips的正文内容，限长264字符'];
+        }
+        else
+        {
+            $jsonRtn = $this->thisHttpPost($this->arrApiUrl['bqqtips'], $arrPost);
+            $arrRtn = json_decode($jsonRtn, true);
+            if($arrRtn && $arrRtn['success'] == 1)
+            {
+                $arrSendResult = ['result' => 0, 'msg' => ''];
+            }
+            else
+            {
+                $arrSendResult = ['result' => 5, 'msg' => (isset($arrRtn['message']) ? $arrRtn['message'] : 'api请求失败')];
+            }
+        }
+        return $arrSendResult;
     }
     
     /**
