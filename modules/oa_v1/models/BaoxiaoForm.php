@@ -80,6 +80,7 @@ class BaoxiaoForm extends BaseForm
 				$transaction -> commit();
 				return true;
 			}	
+			return false;
 		}catch(Exception $e){
 			$transaction -> rollBack();
 			return false;
