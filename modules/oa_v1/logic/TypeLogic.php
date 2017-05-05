@@ -6,7 +6,7 @@
  * Time: 16:17
  */
 
-namespace app\logic;
+namespace app\modules\oa_v1\logic;
 
 
 use app\models\DdType;

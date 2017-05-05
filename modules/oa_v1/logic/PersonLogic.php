@@ -6,9 +6,9 @@
  * Time: 11:26
  */
 
-namespace app\logic;
+namespace app\modules\oa_v1\logic;
 
-
+use app\logic\Logic;
 use app\models\Person;
 
 /**
