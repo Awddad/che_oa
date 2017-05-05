@@ -26,12 +26,12 @@ class ExpenseController extends BaseController
         $data = [
             'ExpenseForm' => \Yii::$app->request->post()
         ];
-        $data['ExpenseForm']['files']  = UploadedFile::getInstancesByName('files');
-        $data['ExpenseForm']['pics']  = UploadedFile::getInstancesByName('pics');
+        $data['ExpenseForm']['files']  = $form->saveUploadFile('files');
+        $data['ExpenseForm']['pics']  = $form->saveUploadFile('pics');
         if($form->load($data) && $form->validate()&& $form->save()) {
             return $this->_return($form);
         } else {
-            return $this->_return($form->errors, '失败', 400);
+            return $this->_return($form->errors, 400);
         }
         //return $this->_return([]);
     }

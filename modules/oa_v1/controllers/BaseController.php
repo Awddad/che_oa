@@ -52,6 +52,7 @@ class BaseController extends Controller
 
     public static $code = [
         200 => '成功',
+        400 => '失败'
     ];
 
     /**
@@ -62,7 +63,7 @@ class BaseController extends Controller
      * @param int $code
      * @return array
      */
-    public function _return($data, $message = 'success', $code = 200)
+    public function _return($data, $code = 200, $message = 'success')
     {
         $message = isset(static::$code[$code]) ? static::$code[$code] : $message;
         return compact('data', 'message', 'code');

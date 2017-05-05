@@ -96,8 +96,8 @@ class ExpenseForm extends Model
 
     public function save()
     {
+        return $this;
         $user = \Yii::$app->session->get('userinfo');
-        $this->validate();
         $apply = new Apply();
         $apply->apply_id = $this->createApplyId();
         $apply->title = $this->title;
@@ -193,7 +193,7 @@ class ExpenseForm extends Model
     }
 
     /**
-     * 审批人
+     * 抄送人
      *
      * @param Apply $apply
      */
@@ -234,30 +234,38 @@ class ExpenseForm extends Model
         return $model;
     }
 
-
     /**
-     * 保存文件信息
+     * 保存文件
+     *
+     * @param $name
+     * @return array
      */
-    public function setFiles()
+    public function saveUploadFile($name)
     {
-        $this->files = UploadedFile::getInstancesByName('files');
+        $files = UploadedFile::getInstancesByName($name);
+        $basePath = \Yii::$app->basePath.'/web';
+        if($name == 'pics') {
+            $filePath = static::$PICS_PATH.date('Y-m-d').'/';
+        } else {
+            $filePath = static::$FILES_PATH.date('Y-m-d').'/';
+        }
+        $rootPath = $basePath.$filePath;
+        $data = [];
+        foreach ($files as  $file) {
+            $ext = $file->getExtension();
+            $randName = $file->name;
+            if (!file_exists($rootPath)) {
+                mkdir($rootPath, 0777, true);
+            }
+            $fileName = $rootPath.$randName;
+            $file->saveAs($fileName);
+            $data[] = [
+                'name' => $str = str_replace('.'.$ext, '', $file->name),
+                'ext' => $ext,
+                'url' => 'http://'.$_SERVER['HTTP_HOST'].$filePath . $randName
+            ];
+        }
+        return $data;
     }
 
-    /**
-     * 保存文件信息
-     */
-    public function getFiles()
-    {
-        return $this->files;
-    }
-
-    public function setPics()
-    {
-        $this->pics = UploadedFile::getInstancesByName('pics');
-    }
-
-    public function getPics()
-    {
-        return $this->pics;
-    }
 }
