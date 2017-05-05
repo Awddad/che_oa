@@ -15,11 +15,11 @@ return [
     //权限系统开发环境
     'quan_xian' => [
         'auth_sso_url' => 'http://test.sso-server.checheng.net',//单点登录地址
-        'auth_broker_id' => '1564008852796463',//项目appID
-        'auth_broker_secret' => 'bc215b07eadcf943b132cd9705e221ed',//配置的项目 Secret
+        'auth_broker_id' => '1566533804163555',//项目appID
+        'auth_broker_secret' => 'b507cf99e021565e7b9f4772d10cbd77',//配置的项目 Secret
         'auth_sso_login_url' => 'http://test.sso.checheng.net',//跳转的单点登录页面
         'auth_api_url' => 'http://test.qx-api.checheng.net/api',//拉取组织和人员以及角色信息的接口地址
-        'auth_token' => 'af42c8786178a2460e6a63653aef9d2a',//token
+        'auth_token' => 'c455ad536e009c1832a4eb219d8fe5fb',//token
 
     ],
 ];

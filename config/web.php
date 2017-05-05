@@ -19,14 +19,16 @@ $config = [
         'response' => [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
-                $response = $event->sender;
-                $response->data = [
-                    'code' => $response->data['code'],
-                    'message' => $response->data['message'],
-                    'data' => $response->data['data'],
-                ];
-                $response->statusCode = 200;
-
+                if(\Yii::$app->controller->id != 'site')//预留登录后门用
+                {
+                    $response = $event->sender;
+                    $response->data = [
+                        'code' => isset($response->data['code']) ? $response->data['code'] : 0,
+                        'message' => isset($response->data['message']) ? $response->data['message'] : '',
+                        'data' => isset($response->data['data']) ? $response->data['data'] : NULL,
+                    ];
+                    $response->statusCode = 200;
+                }
             },
 
         ],

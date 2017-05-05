@@ -39,9 +39,45 @@ class QuanXianLogic
         //配置接口地址列表
         $this->arrApiUrl = [
             'organizations' =>  $this->preUrl . '/organizations/tree',//获取组织架构的接口地址
-            'userlist' => $this->preUrl . '/users',//获取所有人
+            'userlist' => $this->preUrl . '/projects/users',//获取项目中的所有人
             'login' => $this->preUrl . '/users/login', //登录接口
+            'bqqtips' => $this->preUrl . '/bqq/tips',//企业QQ客户端提醒
         ];
+    }
+    
+    /**
+     * @功能：通过api接口登录
+     * @作者：王雕
+     * @创建时间：2017-05-04
+     * @param string $strPhoneOrEmail   用户名（手机号或者邮箱号）
+     * @param string $strPwd            密码
+     * @return array $arrLoginInfo      登录结果 result = 0 表示成功  非0 表示失败
+     */
+    public function curlLogin($strPhoneOrEmail, $strPwd)
+    {
+        $arrLoginInfo = [
+            'result' => 1, //默认登录失败
+            'access_token' => '',//登录成功后才有
+            'person_id' => 0,//用户的 person_id 信息
+        ];
+        //通过用户名密码的形式api登录
+        $arrPost = [
+            '_token' => $this->_token,
+            'account' => $strPhoneOrEmail,
+            'password' => $strPwd,
+        ];
+        $jsonRtn = $this->thisHttpPost($this->arrApiUrl['login'], $arrPost);
+        $arrRtn = json_decode($jsonRtn, true);
+        //登录后需要返回权限列表
+        if($arrRtn['success'] && !empty($arrRtn['data']))
+        {
+            $arrLoginInfo = [
+                'result' => 0, //登录成功
+                'access_token' => $arrRtn['data']['token'],//token
+                'person_id' => $arrRtn['data']['id'],//用户的 person_id 信息
+            ];
+        }
+        return $arrLoginInfo;
     }
     
     /**
@@ -124,12 +160,18 @@ class QuanXianLogic
             'page' => 1,
             'per_page' => 1000000,//一次拉取所有员工
             'show_deleted' => 1,
-            'show_bank_cards' => true  //只返回架构数据，不返回人员信息
         ];
         $jsonRtn = $this->thisHttpPost($this->arrApiUrl['userlist'], $arrPost);
         $arrRtn = json_decode($jsonRtn, true);
         if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) &&!empty($arrRtn['data']['data']))//接口处理数据成功
         {
+            //获取组织架构信息
+            $arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+            foreach($arrOrgListTmp as $val)
+            {
+                $arrOrgList[$val['org_id']] = $val['org_name'];
+            }
+            //构造入库数据
             $arrPerson = [];
             foreach($arrRtn['data']['data'] as $val)
             {
@@ -137,11 +179,13 @@ class QuanXianLogic
                     'person_id' => $val['id'],
                     'person_name' => $val['name'],
                     'org_id' => $val['organization_id'],
-                    'org_name' => $val['organization']['name'],
-                    'is_delete' => (!empty($val['deleted_at']) ? 1 : 0),
-                    'profession' => $val['position']['name'],
+                    'org_name' => (isset($arrOrgList[$val['organization_id']]) ? $arrOrgList[$val['organization_id']] : ''),
+                    'is_delete' => ($val['status'] == 1 ? 0 : 1),
+                    'profession' => $val['position_name'],
                     'email' => $val['email'],
                     'phone' => $val['phone'],
+                    'bqq_open_id' => $val['bqq_open_id'],
+                    'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] ))
                 ];
             }
             //更新入库
@@ -152,6 +196,56 @@ class QuanXianLogic
             return $result;
         }
         return false;
+    }
+    /**
+     * @功能：与权限系统交互，给部分人的企业QQ发送tips消息
+     * @作者：王雕
+     * @创建时间：2017-05-04
+     * @param string $strWindowsTitle   Tips弹出窗口的标题，限长24字符
+     * @param string $strTipsTitle      Tips的消息标题，限长42字符
+     * @param string $strContent        Tips的正文内容，限长264字符
+     * @param array $arrReceivers       消息接收人，逗号分隔的open_id列表
+     * @param string $strTipsUrl        点击消息跳转的网页地址如果有链接，使用此参数，url，限长1024字节
+     * @param int $intShowTime          窗口显示的时间： 0 一直显示不会自动消失 大于0 显示相应时间后自动关闭（单位：秒），最大512秒
+     * @return array $arrSendResult     发送结果 result = 0 成功， 非0 失败 msg 失败原因
+     */
+    public function sendbQQNotice($strWindowsTitle, $strTipsTitle, $strContent, $arrReceivers, $strTipsUrl = '', $intShowTime = 0)
+    {
+        $arrPost = [
+            '_token' => $this->_token,
+            'receivers' => implode(',', $arrReceivers),
+            'window_title' => $strWindowsTitle,
+            'tips_title' => $strTipsTitle,
+            'tips_content' => $strContent,
+        ];
+        $strTipsUrl && $arrPost['tips_url'] = $strTipsUrl;
+        $intShowTime && $arrPost['display_time'] = $intShowTime;
+        if(mb_strlen($strWindowsTitle) > 24)
+        {
+            $arrSendResult = ['result' => 2, 'msg' => 'Tips弹出窗口的标题，限长24字符'];
+        }
+        else if(mb_strlen($strTipsTitle) > 42)
+        {
+            $arrSendResult = ['result' => 3, 'msg' => 'Tips的消息标题，限长42字符'];
+        }
+        else if(mb_strlen($strContent) > 264)
+        {
+            $arrSendResult = ['result' => 4, 'msg' => 'Tips的正文内容，限长264字符'];
+        }
+        else
+        {
+            $jsonRtn = $this->thisHttpPost($this->arrApiUrl['bqqtips'], $arrPost);
+            $arrRtn = json_decode($jsonRtn, true);
+            if($arrRtn && $arrRtn['success'] == 1)
+            {
+                $arrSendResult = ['result' => 0, 'msg' => ''];
+            }
+            else
+            {
+                $arrSendResult = ['result' => 5, 'msg' => (isset($arrRtn['message']) ? $arrRtn['message'] : 'api请求失败')];
+            }
+        }
+        return $arrSendResult;
     }
     
     /**
