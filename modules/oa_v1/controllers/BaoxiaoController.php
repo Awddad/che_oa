@@ -31,12 +31,12 @@ class BaoxiaoController extends BaseController
 			
 			if($model -> validate()){
 				if($model -> saveBaoxiao()){
-					return $this -> _return(null);
+					return $this -> _return(null,200);
 				}else{
-					return $this -> _return(null,1002,'system error');
+					return $this -> _return(null,404);
 				}
 			}else{
-				return $this -> _return(current($model -> getErrors())[0],1001,'data_error');
+				return $this -> _return(current($model -> getErrors())[0],403);
 			}
 		}
 	}

@@ -113,6 +113,8 @@ class BaseController extends Controller
         400 => '失败',
         401 => '未登录',
         402 => '用户不存在',
+        403 => '参数错误',
+        404 => '系统错误',
     ];
 
     /**
