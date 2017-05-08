@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
+use app\models\Org;
 use app\models\Person;
 
 /**
@@ -28,5 +29,54 @@ class PersonLogic extends Logic
     public function getPersonName($personId)
     {
         return Person::findOne($personId)->person_name;
+    }
+
+    /**
+     * 获取筛选
+     */
+    public function getSelectPerson()
+    {
+        $persons = Person::find()->orderBy('person_id desc')->all();
+        $data = [];
+        foreach ($persons as $person) {
+            $personName = $this->getOrgName($person);
+            $data[] = [
+                'id' => $person->person_id,
+                'name' => $personName
+            ];
+        }
+        return $data;
+    }
+
+    /**
+     * @param Person $person
+     * @return string
+     */
+    public function getOrgName($person)
+    {
+        $org = Org::findOne($person->org_id);
+        if($org->pid == 0) {
+            return [$org->org_name];
+        } else {
+            $arr = [$org->org_name];
+            $orgArr =  $this->getParentOrg($org, $arr);
+            rsort($orgArr);
+            return implode(' ', $orgArr);
+        }
+    }
+
+    /**
+     * @param $org
+     * @param $result
+     * @return string
+     */
+    public function getParentOrg($org, &$result)
+    {
+        $parent = Org::findOne($org->pid);
+        $result[] = $parent->org_name;
+        if($parent->pid != 0 ){
+            $this->getParentOrg($parent, $result);
+        }
+        return $result;
     }
 }
