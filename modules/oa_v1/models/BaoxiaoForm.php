@@ -41,8 +41,8 @@ class BaoxiaoForm extends BaseForm
 			$validator = new \yii\validators\NumberValidator();
 			$validator -> integerOnly = true;
 			foreach($this->$attribute as $v){
-				if(!$validator->validate($v['person_id'])){
-					$this->addError($attribute, "{$params}id不能为空");
+				if(!$validator-> validate($v['person_id'])){
+					$this->addError($attribute, "{$params}id不正确");
 				}elseif(!$v['person_name']){
 					$this->addError($attribute, "{$params}姓名不能为空");
 				}
@@ -54,8 +54,17 @@ class BaoxiaoForm extends BaseForm
 	}
 	public function validateList($attribute)
 	{
-		if (!$this->hasErrors()) {
-			
+		if (!$this -> hasErrors()) {
+			foreach($this->$attribute as $v){
+				if($v['money'] <= 0){
+					$this->addError($attribute, "报销金额不正确");
+				}elseif(!$v['type_name']){
+					$this->addError($attribute, "报销类型不正确");
+				}
+				if ($this->hasErrors()){
+					return;
+				}
+			}
 		}
 	}
 	
@@ -81,7 +90,7 @@ class BaoxiaoForm extends BaseForm
 				return true;
 			}	
 			return false;
-		}catch(Exception $e){
+		}catch(\Exception $e){
 			$transaction -> rollBack();
 			return false;
 		}
@@ -141,6 +150,7 @@ class BaoxiaoForm extends BaseForm
 			$model -> approval_person_id = $data['person_id'];
 			$model -> steep = $data['steep'];
 			$model -> is_end = isset($data['is_end']) ? $data['is_end']: 0;
+			$model -> is_to_me_now = $data['steep'] == 1 ? 1 : 0;
 		}elseif('copy' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> copy_person_id = $data['person_id'];
@@ -158,6 +168,7 @@ class BaoxiaoForm extends BaseForm
 			if($_model_biaoxiao_list -> insert()){
 				$v['id'] = $_model_biaoxiao_list -> id;
 			}else{
+				//throw new \Exception(current($model_bao_xiao->getErrors())[0]);
 				throw new \Exception('明细失败');
 			}
 		}
@@ -167,6 +178,7 @@ class BaoxiaoForm extends BaseForm
 		$model_bao_xiao = new appmodel\BaoXiao();
 		$this -> loadModel('baoxiao',$model_bao_xiao);
 		if(!$model_bao_xiao -> insert()){
+			//throw new \Exception(current($model_bao_xiao->getErrors())[0]);
 			throw new \Exception('报销失败');
 		}
 	}
@@ -180,6 +192,7 @@ class BaoxiaoForm extends BaseForm
 			$_model_approval = clone $model_approval;
 			$this -> loadModel('approval_log', $_model_approval, $v);
 			if(!$_model_approval -> insert()){
+				//throw new \Exception(current($model_bao_xiao->getErrors())[0]);
 				throw new \Exception('审核人失败');
 			}
 		}
@@ -191,6 +204,7 @@ class BaoxiaoForm extends BaseForm
 			$_model_copy = clone $model_copy;
 			$this -> loadModel('copy', $_model_copy, $v);
 			if(!$_model_copy -> insert()){
+				//throw new \Exception(current($model_bao_xiao->getErrors())[0]);
 				throw new \Exception('抄送人失败');
 			}
 		}
