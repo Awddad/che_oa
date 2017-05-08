@@ -39,7 +39,8 @@ class PersonLogic extends Logic
         $persons = Person::find()->orderBy('person_id desc')->all();
         $data = [];
         foreach ($persons as $person) {
-            $personName = $this->getOrgName($person);
+            $orgArr = $this->getOrgName($person);
+            $personName = $person->person_name. ' '. implode('-', $orgArr);
             $data[] = [
                 'id' => $person->person_id,
                 'name' => $personName
@@ -61,7 +62,7 @@ class PersonLogic extends Logic
             $arr = [$org->org_name];
             $orgArr =  $this->getParentOrg($org, $arr);
             rsort($orgArr);
-            return implode(' ', $orgArr);
+            return $orgArr;
         }
     }
 
