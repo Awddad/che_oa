@@ -14,8 +14,6 @@ class BaoxiaoController extends BaseController
 	 */
 	public function actionAdd()
 	{
-		$user = array('id'=>228453,'name'=>'三屌');
-		
 		$file_config = [
 			'fujian'=>'/upload/files/baoxiao/'.date('Ymd'),
 			'pic'=>'/upload/images/baoxiao/'.date('Ymd')
@@ -27,18 +25,18 @@ class BaoxiaoController extends BaseController
 		{
 			$model = new BaoxiaoForm();
 			$model -> load($post);
-			$model -> user = $user;
+			$model -> user = array('id'=>$this->arrPersonInfo['person_id'],'name'=>$this->arrPersonInfo['person_name']);;
 			$model -> fujian  = $model -> saveFile(UploadedFile::getInstancesByName('fujian'),$file_config['fujian']);
 			$model -> pic  = $model -> saveFile(UploadedFile::getInstancesByName('pic'),$file_config['pic']);
 			
 			if($model -> validate()){
 				if($model -> saveBaoxiao()){
-					return $this -> _return(null);
+					return $this -> _return(null,200);
 				}else{
-					return $this -> _return(null,'system error',500);
+					return $this -> _return(null,404);
 				}
 			}else{
-				return $this -> _return(current($model -> getErrors()),'error',500);
+				return $this -> _return(current($model -> getErrors())[0],403);
 			}
 		}
 	}
