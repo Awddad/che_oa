@@ -51,6 +51,13 @@ class BaseForm extends Model
 
 
     /**
+     * 申请类型
+     * @var
+     */
+    public $type;
+
+
+    /**
      * 审批人
      *
      * @param Apply $apply
@@ -61,13 +68,13 @@ class BaseForm extends Model
         $i = 1;
         $count = count($this->approval_persons);
         foreach ($this->approval_persons as $v) {
-            $personName = PersonLogic::instance()->getPersonName($v['copy_person_id']);
+            $personName = PersonLogic::instance()->getPersonName($v);
             $end = $i == $count ? 1 : 0;
             $begin = $i == 1 ? : 0;
             $data[] = [
                 $apply->apply_id,
                 $personName,
-                $v['copy_person_id'],
+                $v,
                 $i,
                 $end,
                 $begin
@@ -88,10 +95,10 @@ class BaseForm extends Model
     {
         $data = [];
         foreach ($this->copy_person as $v) {
-            $personName = PersonLogic::instance()->getPersonName($v['copy_person_id']);
+            $personName = PersonLogic::instance()->getPersonName($v);
             $data[] = [
                 $apply->apply_id,
-                $v['copy_person_id'],
+                $v,
                 $personName,
             ];
         }
@@ -142,8 +149,30 @@ class BaseForm extends Model
         return $data;
     }
 
+    /**
+     * 创建申请ID
+     *
+     * @return string
+     */
     public function createApplyId()
     {
-
+        return date('YmdHis'). '0' .$this->type . rand(100, 999);
     }
+
+    /**
+     * 创建申请标题
+     *
+     * @param $user
+     * @return string
+     */
+    public function createApplyTitle($user)
+    {
+        return $user['person_name'] . '的' . $this->typeArr[$this->type] . '申请';
+    }
+
+    public $typeArr = [
+        1 => '报销',
+        2 => '借款',
+        3 => '还款'
+    ];
 }

@@ -127,19 +127,26 @@ class LoanForm extends BaseForm
         ];
     }
 
-    public function save()
+    /**
+     * 保存报销申请
+     *
+     * @param $user
+     * @return $this
+     * @throws Exception
+     */
+    public function save($user)
     {
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
-        $user = ['person_id' => 1, 'person_name' => '测试'];
         $apply = new Apply();
         $apply->apply_id = $this->createApplyId();
-        $apply->title = $this->title;
+        $apply->title = $this->createApplyTitle($user);
         $apply->create_time = $_SERVER['REQUEST_TIME'];
         $apply->type = $this->type;
         $apply->person_id = $user['person_id'];
         $apply->person = $user['person_name'];
         $apply->status = 1;
         $apply->next_des = '等待'.$nextName.'审批';
+        print_r($apply);die;
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
@@ -155,7 +162,6 @@ class LoanForm extends BaseForm
             $transaction->rollBack();
             throw $exception;
         }
-        return $this;
     }
 
     /**

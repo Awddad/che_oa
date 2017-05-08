@@ -9,8 +9,6 @@ use Yii;
  * 借款申请附表 - 记录借款申请的详情
  *
  * @property string $apply_id
- * @property string $person
- * @property integer $person_id
  * @property string $money
  * @property string $des
  * @property string $tips
@@ -39,12 +37,12 @@ class JieKuan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'person', 'person_id', 'bank_card_id', 'bank_name', 'bank_name_des', 'get_money_time', 'pay_back_time', 'is_pay_back', 'pics', 'status'], 'required'],
-            [['person_id', 'get_money_time', 'pay_back_time', 'is_pay_back', 'status'], 'integer'],
+            [['apply_id', 'bank_card_id', 'bank_name', 'bank_name_des', 'get_money_time', 'pay_back_time', 'is_pay_back', 'pics', 'status'], 'required'],
+            [['get_money_time', 'pay_back_time', 'is_pay_back', 'status'], 'integer'],
             [['money'], 'number'],
             [['des', 'tips'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['person', 'bank_name', 'bank_name_des', 'pics'], 'string', 'max' => 255],
+            [['bank_name', 'bank_name_des', 'pics'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 16],
         ];
     }
