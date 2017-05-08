@@ -5,7 +5,7 @@ use Yii;
 use yii\base\Controller;
 use app\models as appmodel;
 
-class ApprovalController extends BaseController
+class ApplyListController extends BaseController
 {
 	private $page_size = 10;
 	
