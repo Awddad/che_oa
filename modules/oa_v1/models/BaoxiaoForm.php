@@ -38,6 +38,10 @@ class BaoxiaoForm extends BaseForm
 	public function validatePersons($attribute, $params)
 	{
 		if (!$this->hasErrors()) {
+			foreach($this->$attribute as $k=>$v){
+				$tmp[$k] = @$v['steep'];
+			}
+			array_multisort($this->$attribute, $tmp);
 			$validator = new \yii\validators\NumberValidator();
 			$validator -> integerOnly = true;
 			foreach($this->$attribute as $v){
@@ -149,6 +153,7 @@ class BaoxiaoForm extends BaseForm
 			$model -> approval_person = $data['person_name'];
 			$model -> approval_person_id = $data['person_id'];
 			$model -> steep = $data['steep'];
+			$model -> result = 0;
 			$model -> is_end = isset($data['is_end']) ? $data['is_end']: 0;
 			$model -> is_to_me_now = $data['steep'] == 1 ? 1 : 0;
 		}elseif('copy' == $type){

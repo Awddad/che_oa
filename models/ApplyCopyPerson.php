@@ -47,4 +47,9 @@ class ApplyCopyPerson extends \yii\db\ActiveRecord
             'copy_person' => '抄送人姓名',
         ];
     }
+    
+    public function getApply()
+    {
+    	return $this -> hasOne(Apply::className(), ['apply_id' => 'apply_id']);
+    }
 }
