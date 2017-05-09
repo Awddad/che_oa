@@ -89,10 +89,10 @@ class LoanForm extends BaseForm
     public $copy_person = [];
 
     /**
-     * 申请类型
+     * 申请类型 借款默认为2
      * @var
      */
-    public $type;
+    public $type = 2;
 
     /**
      * 表单验证
@@ -103,7 +103,8 @@ class LoanForm extends BaseForm
         return [
             [
                 ['type'],
-                'integer'
+                'integer',
+
             ],
             [
                 ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'copy_person'],
@@ -146,12 +147,13 @@ class LoanForm extends BaseForm
         $apply->person = $user['person_name'];
         $apply->status = 1;
         $apply->next_des = '等待'.$nextName.'审批';
-        print_r($apply);die;
+        $apply->approval_persons = $this->getPerson('approval_persons');
+        $apply->copy_person = $this->getPerson('copy_person');
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
             if (!$apply->save()) {
-                new Exception('申请失败');
+                throw new Exception('申请失败',$apply->errors);
             }
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
@@ -162,12 +164,15 @@ class LoanForm extends BaseForm
             $transaction->rollBack();
             throw $exception;
         }
+        return $this;
     }
 
     /**
      *
-     * @param Apply $apply
+     *
+     * @param $apply
      * @return JieKuan
+     * @throws Exception
      */
     public function saveLoan($apply)
     {
@@ -176,13 +181,16 @@ class LoanForm extends BaseForm
         $model->bank_name = $this->bank_name;
         $model->bank_card_id = $this->bank_card_id;
         $model->bank_name_des = $this->bank_name_des;
-        $model->pics = $this->pics;
+        $model->pics = json_encode($this->pics);
         $model->money = $this->money;
         $model->des = $this->des;
         $model->tips = $this->tips;
+        $model->get_money_time = 0;
+        $model->pay_back_time = 0;
+        $model->is_pay_back = 0;
         $model->status = 1;
         if (!$model->save()) {
-            new Exception('借款保存失败');
+            throw new Exception('借款保存失败', $model->errors);
         }
         return $model;
     }

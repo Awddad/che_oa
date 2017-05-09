@@ -56,6 +56,15 @@ class BaseForm extends Model
      */
     public $type;
 
+    /**
+     * @var array
+     */
+    public $typeArr = [
+        1 => '报销',
+        2 => '借款',
+        3 => '还款'
+    ];
+
 
     /**
      * 审批人
@@ -83,7 +92,21 @@ class BaseForm extends Model
         }
         \Yii::$app->db->createCommand()->batchInsert('oa_approval_log',[
             'apply_id', 'approval_person', 'approval_person_id', 'steep', 'is_end','is_to_me_now'
-        ],$data);
+        ],$data)->execute();
+    }
+
+    /**
+     * 获取审批人或抄送人姓名
+     * @param $type
+     * @return string
+     */
+    public function getPerson($type)
+    {
+        $person = [];
+        foreach ($this->$type as $v) {
+            $person[] = PersonLogic::instance()->getPersonName($v);
+        }
+        return implode(',',$person);
     }
 
     /**
@@ -102,9 +125,9 @@ class BaseForm extends Model
                 $personName,
             ];
         }
-        \Yii::$app->db->createCommand()->batchInsert('oa_approval_log',[
+        \Yii::$app->db->createCommand()->batchInsert('oa_apply_copy_person',[
             'apply_id', 'copy_person_id', 'copy_person',
-        ],$data);
+        ],$data)->execute();
     }
 
     /**
@@ -169,10 +192,4 @@ class BaseForm extends Model
     {
         return $user['person_name'] . '的' . $this->typeArr[$this->type] . '申请';
     }
-
-    public $typeArr = [
-        1 => '报销',
-        2 => '借款',
-        3 => '还款'
-    ];
 }
