@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\models;
 use Yii;
 use app\models as appmodel;
 use yii\web\UploadedFile;
+use app\commands\MyTcPdf;
 
 
 class BaoxiaoForm extends BaseForm
@@ -21,6 +22,8 @@ class BaoxiaoForm extends BaseForm
 	public $fujian;//附件
 	public $pic;//图片
 	public $money = 0;//报效金额
+	public $create_time;//创建时间
+	public $title;//标题
 	
 	public function rules(){
 		return [
@@ -91,7 +94,7 @@ class BaoxiaoForm extends BaseForm
 				//$this -> copyPerson($model_apply);
 				
 				$transaction -> commit();
-				return true;
+				return $this -> apply_id;
 			}	
 			return false;
 		}catch(\Exception $e){
@@ -106,10 +109,10 @@ class BaoxiaoForm extends BaseForm
 		$id = '';
 		switch($type){
 			case 'apply':
-				$id = 'ap'.time().'00'.rand(10,99).rand(100,999);
+				$id = 'ap'.$this -> create_time.'00'.rand(10,99).rand(100,999);
 				break;
 			case 'baoxiaolist':
-				$id = 'bl'.time().'22'.rand(10,99).rand(100,999);
+				$id = 'bl'.$this -> create_time.'22'.rand(10,99).rand(100,999);
 				break;
 		}
 		return $id;
@@ -125,8 +128,8 @@ class BaoxiaoForm extends BaseForm
 		if('apply' == $type){
 			$model -> load(['Apply'=>(array)$this]);
 			$model -> apply_id = $this -> apply_id;
-			$model -> create_time = time();
-			$model -> title = "{$this->user['name']}的报销单";
+			$model -> create_time = $this -> create_time;
+			$model -> title = $this -> title;
 			$model -> person = $this->user['name'];
 			$model -> person_id = $this->user['id'];
 			$model -> approval_persons = implode(',', array_column($model -> approval_persons,'person_name'));
@@ -235,5 +238,37 @@ class BaoxiaoForm extends BaseForm
 				$res[] = $dir.'/'.$tmp_file_name;
 		}
 		return $res;
+	}
+	
+	public function saveAccount($dir)
+	{
+		$arrInfo = [
+			'apply_date' => date('Y年m月d日',$this -> create_time),
+			'apply_id' => $this -> apply_id,
+			'org_full_name' => $this -> title,
+			'person' => $this -> user['name'],
+			'bank_name' => $this -> bank_name.$this -> bank_name_des,
+			'bank_card_id' => $this -> bank_card_id,
+			'approval_person' => implode(',', array_column($this -> approval_persons,'person_name')),//多个人、分隔
+			'copy_person' => implode(',', array_column($this -> copy_person,'person_name')),//多个人、分隔
+			'list' => []
+		];
+		foreach($this -> bao_xiao_list as $v){
+			$arrInfo['list'][] = [
+					'type_name' => $v['type_name'],
+					'money' => $v['money'],
+					'detail' => $v['des']
+					];
+		}
+		$base_dir = str_replace('\\', '/', Yii::$app -> basePath);
+		$root_path = $base_dir.'/web'.$dir;
+		if(!is_dir($root_path)){
+			mkdir($root_path,0777,true);
+		}
+		
+		$fileName = $arrInfo['apply_id'].'.pdf';
+		$myPdf = new MyTcPdf();
+		$myPdf -> createBaoXiaoDanPdf($root_path.'/'.$fileName, $arrInfo);
+		
 	}
 }

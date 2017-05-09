@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\logic;
 
 
+use app\logic\Logic;
 use app\models\DdType;
 use yii\helpers\ArrayHelper;
 

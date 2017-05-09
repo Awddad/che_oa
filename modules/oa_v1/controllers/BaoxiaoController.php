@@ -16,7 +16,8 @@ class BaoxiaoController extends BaseController
 	{
 		$file_config = [
 			'fujian'=>'/upload/files/baoxiao/'.date('Ymd'),
-			'pic'=>'/upload/images/baoxiao/'.date('Ymd')
+			'pic'=>'/upload/images/baoxiao/'.date('Ymd'),
+			'pdf'=>'/upload/account/baoxiao/'.date('Ymd'),
 		];
 		
 		$request = Yii::$app -> request;
@@ -25,13 +26,16 @@ class BaoxiaoController extends BaseController
 		{
 			$model = new BaoxiaoForm();
 			$model -> load($post);
+			$model -> title = $this->arrPersonInfo['person_name'].'的报销单';
+			$model -> create_time = time();
 			$model -> user = array('id'=>$this->arrPersonInfo['person_id'],'name'=>$this->arrPersonInfo['person_name']);;
 			$model -> fujian  = $model -> saveFile(UploadedFile::getInstancesByName('fujian'),$file_config['fujian']);
 			$model -> pic  = $model -> saveFile(UploadedFile::getInstancesByName('pic'),$file_config['pic']);
 			
 			if($model -> validate()){
-				if($model -> saveBaoxiao()){
-					return $this -> _return(null,200);
+				if($apply_id = $model -> saveBaoxiao() ){
+					$model -> saveAccount($file_config['pdf']);
+					return $this -> _return($apply_id,200);
 				}else{
 					return $this -> _return(null,404);
 				}
