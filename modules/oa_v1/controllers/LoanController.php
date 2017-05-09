@@ -25,7 +25,8 @@ class LoanController extends BaseController
 
         $data['LoanForm'] = \Yii::$app->request->post();
         $data['LoanForm']['pics']  = $model->saveUploadFile('pics');
-        if ($model->load($data) && $model->validate() && $model->save()) {
+        $user = $this->arrPersonInfo;
+        if ($model->load($data) && $model->validate() && $model->save($user)) {
             return $this->_return($model);
         } else {
             return $this->_return($model->errors, 400);
