@@ -45,5 +45,37 @@ class BaoxiaoController extends BaseController
 		}
 	}
 	
+	public function actionGetType()
+	{
+		$data = [
+				['id'=>1,'val'=>'住宿费'],
+				['id'=>2,'val'=>'餐饮费'],
+				['id'=>3,'val'=>'交通费'],
+				['id'=>4,'val'=>'其他费'],
+		];
+		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+	}
 	
+	public function actionGetBankcard()
+	{
+		$data = [
+			['card_id'=>'1234567890123456','bank_name'=>'工商银行'],
+			['card_id'=>'2234567890123456','bank_name'=>'交通银行'],
+		];
+		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+	}
+	
+	public function actionGetUserList()
+	{
+		$data = [
+			['person_id'=>10001,'person'=>'测试1','department'=>'万剩伟业 技术部'],
+			['person_id'=>10005,'person'=>'测试5','department'=>'车城伟业 技术部'],
+			['person_id'=>10002,'person'=>'测试2','department'=>'万剩伟业 新镇部'],
+			['person_id'=>10003,'person'=>'测试3','department'=>'万剩伟业 总经理办公室'],
+			['person_id'=>10009,'person'=>'测试9','department'=>'万剩伟业 技术部'],
+			['person_id'=>10008,'person'=>'测试8','department'=>'万剩伟业 技术部'],
+			['person_id'=>10010,'person'=>'测试10','department'=>'万剩伟业 技术部'],
+		];
+		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+	}
 }
