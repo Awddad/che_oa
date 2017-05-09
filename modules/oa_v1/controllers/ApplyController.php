@@ -4,16 +4,14 @@ namespace app\modules\oa_v1\controllers;
 use Yii;
 use yii\base\Controller;
 use app\models as appmodel;
+use app\modules\oa_v1\logic\TypeLogic;
 
-class ApplyListController extends BaseController
+class ApplyController extends BaseController
 {
-	private $page_size = 10;
+	private $page_size = 20;
 	
 	public function actionGetList()
 	{
-		
-		$this -> arrPersonInfo['person_id'] = 1099;
-		
 		$get = Yii::$app -> request -> get();
 		$type = $get['type'];
 		$page = isset($get['page']) ? (1 <= $get['page'] ? (int)$get['page'] : 1) : 1; 
@@ -59,13 +57,15 @@ class ApplyListController extends BaseController
 		if($keywords){
 			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
 		}
-		$query = $query -> select('*') -> offset($page-1)->limit($this -> page_size);
+		$_query = clone $query;
+		$query -> select('*') -> offset($page-1)->limit($this -> page_size);
         //var_dump($query -> createCommand()->getRawSql());die();
 		$res = $query -> asArray() -> all();
-		//var_dump($res);die();
-		$data = [];
+		$total = $_query -> count();
+		//var_dump($res,$total);die();
+		$data = ['total'=>$total,'res'=>[]];
 		foreach($res as $v){
-			$data[] = [
+			$data['res'][] = [
 						'apply_id' => $v['apply_id'],//审批单编号
 						'date' => date('Y-m-d h:i:s',$v['create_time']),//创建时间
 						'type' => $v['type'] ,//类型
@@ -75,11 +75,14 @@ class ApplyListController extends BaseController
 						'approval_persons' => str_replace(',', ' -> ', $v['approval_persons']),//审批人
 						'copy_person' => $v['copy_person'],//抄送人
 						'status' => $v['status'],//状态
-						'status_value' => $v['next_des'],//下步说明
+						'next_des' => $v['next_des'],//下步说明
 						'can_cancel' => in_array($v['status'], [1,11]) ? 1 : 0,//是否可以撤销
 					  ];
 		}
 		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
 		
 	} 
+	
+	
+	
 }
