@@ -66,4 +66,9 @@ class ApprovalLog extends \yii\db\ActiveRecord
 （审核步骤没到我这边或者我已经审核过了的话 值都为0）',
         ];
     }
+    
+    public function getApply()
+    {
+    	return $this -> hasOne(Apply::className(), ['apply_id' => 'apply_id']);
+    }
 }

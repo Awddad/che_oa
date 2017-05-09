@@ -107,6 +107,11 @@ class BaseController extends Controller
         ];
     }
     
+    protected $type = [
+    					1 => '报销',
+    					2 => '借款',
+    					3 => '还款',
+    ];
 
     public static $code = [
         200 => '成功',
