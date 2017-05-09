@@ -174,12 +174,27 @@ class BaseForm extends Model
 
     /**
      * 创建申请ID
+     * 审批单编号生成规则
+     * 201705031617            01/02/03              089
+     * 具体到秒的时间戳           申请类型         随机三位数
      *
      * @return string
      */
     public function createApplyId()
     {
-        return date('YmdHis'). '0' .$this->type . rand(100, 999);
+        return date('YmdHis'). '0' .$this->type . $this->getRandNum();
+    }
+
+    /**
+     * 随机数
+     *
+     * @param int $length
+     * @return string
+     */
+    public function getRandNum($length = 3)
+    {
+        $num = rand(0, pow(10, $length) - 1);
+        return str_pad($num, $length, 0, STR_PAD_LEFT);
     }
 
     /**
