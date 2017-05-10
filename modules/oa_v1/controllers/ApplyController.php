@@ -81,7 +81,7 @@ class ApplyController extends BaseController
 						'can_cancel' => in_array($v['status'], [1,11]) ? 1 : 0,//是否可以撤销
 					  ];
 		}
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 		
 	} 
 	/**
@@ -120,7 +120,7 @@ class ApplyController extends BaseController
 		if($apply['caiwu']['fukuan']){
 			$data['caiwu'] = $this -> getFukuanData($apply);
 		}
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 	}
 	/**
 	 * 借款详情
@@ -150,7 +150,7 @@ class ApplyController extends BaseController
 		if($apply['caiwu']['fukuan']){
 			$data['caiwu'] = $this -> getFukuanData($apply);
 		}
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 	}
 	/**
 	 * 还款信息
@@ -188,7 +188,7 @@ class ApplyController extends BaseController
 		if($apply['caiwu']['shoukuan']){
 			$data['caiwu'] = $this -> getShoukuanData($apply);
 		}
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 	}
 	
 	

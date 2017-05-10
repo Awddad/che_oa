@@ -53,7 +53,7 @@ class BaoxiaoController extends BaseController
 				['id'=>3,'val'=>'交通费'],
 				['id'=>4,'val'=>'其他费'],
 		];
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 	}
 	
 	public function actionGetBankcard()
@@ -62,7 +62,7 @@ class BaoxiaoController extends BaseController
 			['card_id'=>'1234567890123456','bank_name'=>'工商银行'],
 			['card_id'=>'2234567890123456','bank_name'=>'交通银行'],
 		];
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 	}
 	
 	public function actionGetUserList()
@@ -76,6 +76,6 @@ class BaoxiaoController extends BaseController
 			['person_id'=>10008,'person'=>'测试8','department'=>'万剩伟业 技术部'],
 			['person_id'=>10010,'person'=>'测试10','department'=>'万剩伟业 技术部'],
 		];
-		return $this -> _return(json_encode($data,JSON_UNESCAPED_UNICODE),200);
+		return $this -> _return($data,200);
 	}
 }
