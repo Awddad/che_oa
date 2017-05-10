@@ -48,7 +48,7 @@ class ApplyLogic extends BaseLogic
 			-> Where(['copy_person_id'=>$user['person_id']])
 			-> orderBy('create_time');
 		}else{
-			return $this -> _return('type不正确',403);
+			return false;
 		}
 		if(@$search['start_time']){
 			$start_time = strtotime($search['start_time'].' 0:0:0');
