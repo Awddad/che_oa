@@ -150,7 +150,7 @@ class BaseForm extends Model
         $data = [];
         foreach ($files as  $file) {
             $ext = $file->getExtension();
-            if (!in_array($ext, ['jpg', 'gif', 'png'])) {
+            if (!in_array($ext, ['doc','xlsx','pdf'])) {
                 $this->addError($name, '格式错误');
                 return false;
             }
