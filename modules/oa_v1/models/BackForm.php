@@ -2,37 +2,37 @@
 /**
  * Created by PhpStorm.
  * User: xjun
- * Date: 2017/5/5
- * Time: 11:10
+ * Date: 2017/5/9
+ * Time: 11:01
  */
 
 namespace app\modules\oa_v1\models;
 
-
-use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use app\models\JieKuan;
+use app\models\PayBack;
+use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
+use Yii;
 
 
 /**
- * 借款表单
+ * 还款表单
  *
- * Class LoanForm
+ * Class BackForm
  * @package app\modules\oa_v1\models
  *
+ * @property string $money
  * @property string $bank_card_id
  * @property string $bank_name
  * @property string $bank_name_des
- * @property string $tips
  * @property string $des
- * @property string $pics
- * @property string $money
+ * @property array $apply_ids
+ * @property integer $type
  * @property array $approval_persons
  * @property array $copy_person
- * @property int $type
  */
-class LoanForm extends BaseForm
+class BackForm extends BaseForm
 {
     /**
      * 借款金额
@@ -59,22 +59,17 @@ class LoanForm extends BaseForm
     public $bank_name_des;
 
     /**
-     * 备注
-     * @var
-     */
-    public $tips;
-
-    /**
      * 借款事由
      * @var
      */
     public $des;
 
     /**
-     * 上传图片
+     * 借款IDs
      * @var
      */
-    public $pics;
+    public $apply_ids = [];
+
 
     /**
      * 审批人
@@ -89,22 +84,26 @@ class LoanForm extends BaseForm
     public $copy_person = [];
 
     /**
-     * 申请类型 借款默认为2
+     * 申请类型 还款默认为3
      * @var
      */
-    public $type = 2;
+    public $type = 3;
 
     /**
      * 表单验证
+     *
      * @return array
      */
     public function rules()
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'copy_person'],
-                'required',
-                'message' => '缺少必填字段'
+                ['money', 'bank_card_id', 'bank_name', 'apply_ids', 'approval_persons' , 'copy_person'],
+                'required'
+            ],
+            [
+                ['money', 'bank_card_id', 'bank_name', 'bank_name_des', 'des'],
+                'string'
             ],
             [
                 ['approval_persons', 'copy_person'],
@@ -112,15 +111,33 @@ class LoanForm extends BaseForm
                 'rule' => ['integer']
             ],
             [
-                ['pics'],
-                'each',
-                'rule' => ['safe']
+                ['apply_ids'],
+                'checkApplyIds',
             ],
-            [
-                ['money', 'bank_card_id', 'bank_name', 'bank_name_des','des', 'tips'],
-                'string'
-            ]
         ];
+    }
+
+    /**
+     * 检查还款
+     *
+     * @param $attribute
+     */
+    public function checkApplyIds($attribute)
+    {
+        if(empty($this->$attribute)) {
+            $this->addError($attribute, '还款不能为空');
+        }
+        foreach ($this->$attribute as $v){
+            $apply = Apply::findOne($v);
+            if ($apply->status == 99) {
+                $jieKuan = JieKuan::findOne($v);
+                if ($jieKuan->status > 99) {
+                    $this->addError($attribute, $v. '不能还款');
+                }
+            } else {
+                $this->addError($attribute, $v. '不能还款');
+            }
+        }
     }
 
     /**
@@ -152,7 +169,7 @@ class LoanForm extends BaseForm
             }
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
-            $this->saveLoan($apply);
+            $this->saveBack($apply);
             $transaction->commit();
 
         } catch (Exception $exception){
@@ -163,31 +180,24 @@ class LoanForm extends BaseForm
     }
 
     /**
-     *
+     * 保存还款信息
      *
      * @param $apply
-     * @return JieKuan
+     * @return PayBack
      * @throws Exception
      */
-    public function saveLoan($apply)
+    public function saveBack($apply)
     {
-        $model = new JieKuan();
+        $model = new PayBack();
         $model->apply_id = $apply->apply_id;
-        $model->bank_name = $this->bank_name;
-        $model->bank_card_id = $this->bank_card_id;
-        $model->bank_name_des = $this->bank_name_des ? : '';
-        $model->pics = json_encode($this->pics);
+        $model->jie_kuan_ids = implode(',', $this->apply_ids);
         $model->money = $this->money;
-        $model->des = $this->des;
-        $model->tips = $this->tips;
-        $model->get_money_time = 0;
-        $model->pay_back_time = 0;
-        $model->is_pay_back = 0;
-        $model->status = 1;
+        $model->bank_card_id = $this->bank_card_id;
+        $model->bank_name = $this->bank_name;
+        $model->bank_name_des = $this->bank_name_des ? : '';
         if (!$model->save()) {
             throw new Exception('借款保存失败', $model->errors);
         }
         return $model;
     }
-
 }

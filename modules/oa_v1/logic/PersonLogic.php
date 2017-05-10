@@ -8,7 +8,6 @@
 
 namespace app\modules\oa_v1\logic;
 
-use app\logic\Logic;
 use app\models\Org;
 use app\models\Person;
 
@@ -18,7 +17,7 @@ use app\models\Person;
  * Class PersonLogic
  * @package app\logic
  */
-class PersonLogic extends Logic
+class PersonLogic extends BaseLogic
 {
     /**
      * 根据ID得到用户姓名

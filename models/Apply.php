@@ -81,4 +81,34 @@ class Apply extends \yii\db\ActiveRecord
             'cai_wu_time' => '财务确认时间',
         ];
     }
+
+    /**
+     * 报销
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getExpense()
+    {
+        return $this->hasOne(BaoXiao::className(), ['apply_id' => 'apply_id']);
+    }
+
+    /**
+     * 借款
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoan()
+    {
+        return $this->hasOne(JieKuan::className(), ['apply_id' => 'apply_id']);
+    }
+
+    /**
+     * 还款
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPayBack()
+    {
+        return $this->hasOne(PayBack::className(), ['apply_id' => 'apply_id']);
+    }
 }

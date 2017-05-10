@@ -9,11 +9,16 @@
 namespace app\modules\oa_v1\logic;
 
 
-use app\logic\Logic;
 use app\models\DdType;
 use yii\helpers\ArrayHelper;
 
-class TypeLogic extends Logic
+/**
+ * 获取报销类型名称
+ *
+ * Class TypeLogic
+ * @package app\modules\oa_v1\logic
+ */
+class TypeLogic extends BaseLogic
 {
     /**
      * 获取报销类型名称
