@@ -5,7 +5,7 @@ use Yii;
 use yii\base\Controller;
 use app\models as appmodel;
 use app\modules\oa_v1\logic\TypeLogic;
-use app\modules\oa_v1\models\Apply;
+use app\modules\oa_v1\logic\ApplyLogic;
 
 class ApplyController extends BaseController
 {
@@ -14,59 +14,11 @@ class ApplyController extends BaseController
 	public function actionGetList()
 	{
 		$get = Yii::$app -> request -> get();
-		$type = $get['type'];
-		$page = isset($get['page']) ? (1 <= $get['page'] ? (int)$get['page'] : 1) : 1; 
-		$keywords = iconv(mb_detect_encoding(@$get['keywords'],"UTF-8,GB2312,GBK"),"UTF-8//IGNORE",@$get['keywords']); 
+		$logic = new ApplyLogic();
+		$res = $logic -> getApplyList($get,$this -> arrPersonInfo);
 		
-		$query ;
-		
-		if(1 == $type){//待我审批
-			$approval_model = new appmodel\ApprovalLog();
-			$query = $approval_model::find() 
-									-> andWhere(['approval_person_id'=>$this -> arrPersonInfo['person_id'],'is_to_me_now'=>1])
-									-> andWhere(['or', 'status=1', 'status=11'])
-									-> joinWith('apply a')
-									-> orderBy('create_time');;
-		}elseif(2 == $type){//我已审批
-			$approval_model = new appmodel\ApprovalLog();
-			$query = $approval_model::find() 
-									-> andWhere(['approval_person_id'=>$this -> arrPersonInfo['person_id'],'result'=>1])
-									-> joinWith('apply a')
-									-> orderBy('create_time');
-		}elseif(3 == $type){//我发起的
-			$apply_model = new appmodel\Apply();
-			$query = $apply_model::find()
-								-> alias('a')
-								-> Where(['person_id'=>$this -> arrPersonInfo['person_id']])
-								-> orderBy('create_time');
-		}elseif(4 == $type){//抄送给我的
-			$copy_model = new appmodel\ApplyCopyPerson();
-			$query = $copy_model::find()
-								-> joinWith('apply a')
-								-> Where(['copy_person_id'=>$this -> arrPersonInfo['person_id']])
-								-> orderBy('create_time');
-		}else{
-			return $this -> _return('type不正确',403);
-		}
-		if(@$get['start_time']){
-			$start_time = strtotime($get['start_time'].' 0:0:0');
-			$query -> andWhere(['>','create_time',$start_time]);
-		}
-		if(@$get['end_time']){
-			$end_time = strtotime($get['end_time'].' 23:59:59');
-			$query -> andWhere(['<','create_time',$end_time]);
-		}
-		if($keywords){
-			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
-		}
-		$_query = clone $query;
-		$query -> select('*') -> offset($page-1)->limit($this -> page_size);
-        //var_dump($query -> createCommand()->getRawSql());die();
-		$res = $query -> asArray() -> all();
-		$total = $_query -> count();
-		//var_dump($res,$total);die();
-		$data = ['total'=>$total,'res'=>[]];
-		foreach($res as $v){
+		$data = ['page'=>$res['pages'],'res'=>[]];
+		foreach($res['data'] as $v){
 			$data['res'][] = [
 						'apply_id' => $v['apply_id'],//审批单编号
 						'date' => date('Y-m-d h:i:s',$v['create_time']),//创建时间
@@ -94,7 +46,7 @@ class ApplyController extends BaseController
 		if(!$apply_id){
 			return $this -> _return("参数不能为空",403);
 		}
-		$model = new Apply();
+		$model = new ApplyLogic();
 		$apply = $model -> getApplyInfo($apply_id,1);
 		if(!$apply){
 			return $this -> _return('报销单不存在！',403);
@@ -132,7 +84,7 @@ class ApplyController extends BaseController
 		if(!$apply_id){
 			return $this -> _return("参数不能为空",403);
 		}
-		$model = new Apply();
+		$model = new ApplyLogic();
 		$apply = $model -> getApplyInfo($apply_id,2);
 		if(!$apply){
 			return $this -> _return('借款单不存在！',403);
@@ -162,7 +114,7 @@ class ApplyController extends BaseController
 		if(!$apply_id){
 			return $this -> _return("参数不能为空",403);
 		}
-		$model = new Apply();
+		$model = new ApplyLogic();
 		$apply = $model -> getApplyInfo($apply_id,3);
 		if(!$apply){
 			return $this -> _return('还款单不存在！',403);
@@ -199,7 +151,7 @@ class ApplyController extends BaseController
 	{
 		$data = [
 				'apply_id' => $apply['apply_id'],
-				'create_time' => $date('Y-m-d h:i:s',$apply['create_time']),
+				'create_time' => date('Y-m-d h:i:s',$apply['create_time']),
 				'next_des' => $apply['next_des'],
 				'title' => $apply['title'],
 				'type' => $apply['type'],
