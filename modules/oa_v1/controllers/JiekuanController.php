@@ -2,6 +2,7 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\modules\oa_v1\logic\BackLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
@@ -77,6 +78,9 @@ class JiekuanController extends BaseController
             ->limit($pagination->limit)
             ->all();
 
-        return $this->_return(['info' => ['data' => $data]]);
+        return $this->_return([
+            'info' => $data,
+            'pages' => BackLogic::instance()->pageFix($pagination)
+        ]);
     }
 }
