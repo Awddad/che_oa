@@ -11,7 +11,9 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\Apply;
 use app\models\JieKuan;
+use app\models\PayBack;
 use yii\data\Pagination;
+use yii\web\UploadedFile;
 
 
 /**
@@ -21,6 +23,27 @@ use yii\data\Pagination;
  */
 class BackLogic extends BaseLogic
 {
+    /**
+     * @param $applyId
+     * @return array|bool
+     */
+    public function backForm($applyId)
+    {
+        $payBack = PayBack::findOne($applyId);
+        if($payBack->apply->status != 4) {
+            $this->errorCode = 1010;
+            $this->error = '申请ID不能确认，请求不合法';
+            return false;
+        }
+        return [
+            'pay_org' => $this->getPayOrg(),
+            'pay_bank_card' => $this->getPayBankCard(),
+            'car_type' => $this->getPayBankCard(),
+            'bank_card_id' => $payBack->bank_card_id,
+            'bank_name' => $payBack->bank_name,
+            'bank_name_des' => $payBack->bank_name_des,
+        ];
+    }
     /**
      * @param $user
      * @return array
@@ -99,4 +122,29 @@ class BackLogic extends BaseLogic
         }
         return $data;
     }
+
+    public function getPayOrg()
+    {
+        return [
+            1 => '部门1',
+            2 => '部门2'
+        ];
+    }
+
+    public function getBankCardId()
+    {
+        return [
+            1 => '12345678912',
+            2 => '32659798922'
+        ];
+    }
+
+    public function getPayBankCard()
+    {
+        return [
+            '1' => '类型1',
+            '2' => '类型2'
+        ];
+    }
+
 }

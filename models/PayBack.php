@@ -56,4 +56,9 @@ class PayBack extends \yii\db\ActiveRecord
             'bank_name_des' => '还款银行 - 支行',
         ];
     }
+
+    public function getApply()
+    {
+        return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
+    }
 }

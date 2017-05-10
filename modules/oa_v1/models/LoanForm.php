@@ -176,7 +176,7 @@ class LoanForm extends BaseForm
         $model->bank_name = $this->bank_name;
         $model->bank_card_id = $this->bank_card_id;
         $model->bank_name_des = $this->bank_name_des ? : '';
-        $model->pics = json_encode($this->pics);
+        $model->pics = $this->pics;
         $model->money = $this->money;
         $model->des = $this->des;
         $model->tips = $this->tips;
