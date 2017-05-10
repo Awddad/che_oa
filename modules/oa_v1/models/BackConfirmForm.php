@@ -30,7 +30,8 @@ class BackConfirmForm extends CaiWuShouKuan
             [
                 [
                     'apply_id', 'org_id', 'org_name', 'bank_card_id',
-                    'bank_name', 'bank_name_des', 'shou_kuan_id', 'shou_kuan_time'
+                    'bank_name', 'bank_name_des', 'shou_kuan_id', 'shou_kuan_time',
+                    'create_cai_wu_log'
                 ],
                 'required'
             ],

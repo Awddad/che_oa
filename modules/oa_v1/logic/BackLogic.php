@@ -29,8 +29,8 @@ class BackLogic extends BaseLogic
      */
     public function backForm($applyId)
     {
-        $payBack = PayBack::findOne($applyId);
-        if($payBack->apply->status != 4) {
+        $apply = Apply::findOne($applyId);
+        if($apply->status != 4 || $apply->type != 3) {
             $this->errorCode = 1010;
             $this->error = '申请ID不能确认，请求不合法';
             return false;
@@ -39,9 +39,9 @@ class BackLogic extends BaseLogic
             'pay_org' => $this->getPayOrg(),
             'pay_bank_card' => $this->getPayBankCard(),
             'car_type' => $this->getPayBankCard(),
-            'bank_card_id' => $payBack->bank_card_id,
-            'bank_name' => $payBack->bank_name,
-            'bank_name_des' => $payBack->bank_name_des,
+            'bank_card_id' => $apply->payBack->bank_card_id,
+            'bank_name' => $apply->payBack->bank_name,
+            'bank_name_des' => $apply->payBack->bank_name_des,
         ];
     }
     /**

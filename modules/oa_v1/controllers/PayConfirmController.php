@@ -22,12 +22,26 @@ use app\modules\oa_v1\models\PayConfirmForm;
 class PayConfirmController extends BaseController
 {
     /**
+     * 付款确认表单
+     */
+    public function actionForm()
+    {
+        $applyId = \Yii::$app->request->get('apply_id');
+        $data = PayLogic::instance()->getForm($applyId);
+        if(!$data) {
+            return $this->_return($data, PayLogic::instance()->errorCode);
+        }
+        return $this->_return($data);
+    }
+
+    /**
      * 付款确认
      */
     public function actionIndex()
     {
         $model = new PayConfirmForm();
         $post['PayConfirmForm'] = \Yii::$app->request->post();
+        $post['BackConfirmForm']['pics']  = $model->saveUploadFile('pics');
         if ($model->load($post) && $model->save()) {
             return $this->_return('');
         } else {
