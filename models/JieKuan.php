@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "oa_jie_kuan".
@@ -71,5 +72,40 @@ class JieKuan extends \yii\db\ActiveRecord
 102 - 还款失败
 ',
         ];
+    }
+
+    /**
+     * 获取申请表相关信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApply()
+    {
+        return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
+    }
+
+    /**
+     * 接口返回的相关字段
+     * @return array
+     */
+    public function fields()
+    {
+        return
+            [
+                'apply_id',
+                'get_money_time',
+                'money' => function ($model) {
+                    return Yii::$app->formatter->asCurrency($model->money);
+                },
+                'des',
+                'person' => function ($model) {
+                    return ArrayHelper::getValue($model->apply, 'person');
+                },
+                'org' => function ($model) {
+                    $personInfo = ArrayHelper::getValue($model->apply, 'personInfo');
+                    $org = ArrayHelper::getValue($personInfo, 'org');
+                    $orgName = ArrayHelper::getValue($org, 'orgName', []);
+                    return join(' - ', $orgName);
+                }
+            ];
     }
 }

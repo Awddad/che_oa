@@ -25,6 +25,10 @@ use Yii;
  */
 class Apply extends \yii\db\ActiveRecord
 {
+    const TYPE_BAO_XIAO = 1;
+    const TYPE_JIE_KUAN = 2;
+    const TYPE_HUAN_KUAN = 3;
+
     /**
      * @inheritdoc
      */
@@ -110,5 +114,14 @@ class Apply extends \yii\db\ActiveRecord
     public function getPayBack()
     {
         return $this->hasOne(PayBack::className(), ['apply_id' => 'apply_id']);
+    }
+
+    /*
+     * 获取申请表员工的信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPersonInfo()
+    {
+        return $this->hasOne(Person::className(), ['person_id' => 'person_id']);
     }
 }

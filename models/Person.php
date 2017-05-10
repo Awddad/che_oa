@@ -64,4 +64,13 @@ class Person extends \yii\db\ActiveRecord
             'last_login_time' => '员工最近一次登录时间',
         ];
     }
+
+    /**
+     * 获取该员工的组织信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrg()
+    {
+        return $this->hasOne(Org::className(), ['org_id' => 'org_id']);
+    }
 }

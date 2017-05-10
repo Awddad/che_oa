@@ -79,4 +79,25 @@ class PersonLogic extends BaseLogic
         }
         return $result;
     }
+
+
+    /**
+     * 通过关键字，获取员工id
+     * @param $key
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getPersonIdsByKey($key)
+    {
+        return Person::find()->select('person_id')->where(['like', 'person_name', $key])->all();
+    }
+
+    /**
+     * 通过部门id，获取部门员工
+     * @param $orgId
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getPersonIdsByOrgId($orgId)
+    {
+        return Person::find()->select('person_id')->where(['org_id' => $orgId])->all();
+    }
 }
