@@ -57,7 +57,8 @@ class ApplyController extends BaseController
 		$data['info'] = [
 				'money' => $apply['info']['money'],
 				'bank_card_id' => $apply['info']['bank_card_id'],
-				'bank_name' => $apply['info']['bank_name'].$apply['info']['bank_name_des'],
+				'bank_name' => $apply['info']['bank_name'],
+				'bank_des' => $apply['info']['bank_name_des'],
 				'file' => json_decode($apply['info']['files']),
 				'pics' => explode(',', $apply['info']['pics']),
 				'pdf' => $apply['info']['bao_xiao_dan_pdf'],
@@ -95,7 +96,8 @@ class ApplyController extends BaseController
 		$data['info'] = [
 			'money' => $apply['info']['money'],
 			'bank_card_id' => $apply['info']['bank_card_id'],
-			'bank_name' => $apply['info']['bank_name'].$apply['info']['bank_name_des'],
+			'bank_name' => $apply['info']['bank_name'],
+			'bank_des' => $apply['info']['bank_name_des'],
 			'tips' => $apply['info']['tips'],
 			'des' => $apply['info']['des'],
 			'pics' => explode(',',$apply['info']['pics']),
@@ -125,7 +127,8 @@ class ApplyController extends BaseController
 		$data['info'] = [
 			'money' =>  $apply['info']['money'],
 			'bank_card_id' => $apply['info']['bank_card_id'],
-			'bank_name' => $apply['info']['bank_name'].$apply['info']['bank_name_des'],
+			'bank_name' => $apply['info']['bank_name'],
+			'bank_des' => $apply['info']['bank_name_des'],
 			'des' => $apply['info']['des'],
 			'list'=>[],
 			];
