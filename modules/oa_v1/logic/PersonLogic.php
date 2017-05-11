@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\Org;
 use app\models\Person;
+use yii\helpers\ArrayHelper;
 
 /**
  * 人员相关逻辑
@@ -99,5 +100,16 @@ class PersonLogic extends BaseLogic
     public static function getPersonIdsByOrgId($orgId)
     {
         return Person::find()->select('person_id')->where(['org_id' => $orgId])->all();
+    }
+
+    /**
+     * 组织架构
+     * @return array
+     */
+    public function getOrg()
+    {
+
+        $org = Org::find()->all();
+        return ArrayHelper::map($org, 'org_id', 'org_name');
     }
 }

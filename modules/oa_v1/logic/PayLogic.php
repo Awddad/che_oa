@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\logic;
 
 
+use app\logic\server\ThirdServer;
 use app\models\Apply;
 use yii\data\Pagination;
 
@@ -85,9 +86,12 @@ class PayLogic extends BaseLogic
 
     /**
      * 获取确认表单
+     *
      * @param $applyId
+     * @param array $person
+     * @return array|bool
      */
-    public function getForm($applyId)
+    public function getForm($applyId, $person)
     {
         $apply = Apply::findOne($applyId);
         if($apply->status != 4 || in_array($apply->type, [1, 2])) {
@@ -96,36 +100,12 @@ class PayLogic extends BaseLogic
             return false;
         }
         return [
-            'pay_org' => $this->getPayOrg(),
-            'pay_bank_card' => $this->getPayBankCard(),
-            'car_type' => $this->getPayBankCard(),
+            'pay_org' => PersonLogic::instance()->getOrg(),
+            'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
+            'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
             'bank_card_id' => $apply->payBack->bank_card_id,
             'bank_name' => $apply->payBack->bank_name,
             'bank_name_des' => $apply->payBack->bank_name_des,
-        ];
-    }
-
-    public function getPayOrg()
-    {
-        return [
-            1 => '部门1',
-            2 => '部门2'
-        ];
-    }
-
-    public function getBankCardId()
-    {
-        return [
-            1 => '12345678912',
-            2 => '32659798922'
-        ];
-    }
-
-    public function getPayBankCard()
-    {
-        return [
-            '1' => '类型1',
-            '2' => '类型2'
         ];
     }
 
