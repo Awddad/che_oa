@@ -13,12 +13,18 @@ use yii\data\Pagination;
  */
 class ApplyLogic extends BaseLogic
 {
+	/**
+	 * 获取申请列表
+	 * @param unknown_type $search
+	 * @param unknown_type $user
+	 */
 	public function getApplyList($search,$user)
 	{
 		$type = $search['type'];
 		$page = isset($search['page']) ? (1 <= $search['page'] ? (int)$search['page'] : 1) : 1;
 		$page_size = @$search['page_size'] ? : 20;
 		$keywords = iconv(mb_detect_encoding(@$search['keywords'],"UTF-8,GB2312,GBK"),"UTF-8//IGNORE",@$search['keywords']);
+		$apply_type = (int)@$search['at'];
 		
 		$query ;
 		
@@ -50,16 +56,43 @@ class ApplyLogic extends BaseLogic
 		}else{
 			return false;
 		}
+		//开始时间
 		if(@$search['start_time']){
 			$start_time = strtotime($search['start_time'].' 0:0:0');
 			$query -> andWhere(['>','create_time',$start_time]);
 		}
+		//结束时间
 		if(@$search['end_time']){
 			$end_time = strtotime($search['end_time'].' 23:59:59');
 			$query -> andWhere(['<','create_time',$end_time]);
 		}
+		//关键词
 		if($keywords){
 			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
+		}
+		//状态
+		switch(@$search['status']){
+			case 1://审核中
+				$query -> andWhere(['in','status',[1,11]]);
+				break;
+			case 2://财务确认中
+				$query -> andWhere(['status'=>4]);
+				break;
+			case 3://撤销
+				$query -> andWhere(['status'=>3]);
+				break;
+			case 4://审核不通过
+				$query -> andWhere(['status'=>2]);
+				break;
+			case 5://完成
+				$query -> andWhere(['status'=>99]);
+				break;
+			default:
+				break;
+		}
+		//类型
+		if($apply_type){
+			$query -> andWhere(['a.type' => $apply_type]);
 		}
 		
 		$_query = clone $query;
@@ -67,14 +100,22 @@ class ApplyLogic extends BaseLogic
 		$total = $_query -> count();
 		//var_dump($total);die();
 		$pagination = new Pagination(['totalCount' => $total]);
-		
 		//当前页
 		$pagination -> setPage($page-1);
 		//每页显示条数
 		$pagination->setPageSize($page_size, true);
+		//排序
+		switch(@$search['ob']){
+			case 1://时间顺序
+				$orderBy = ['create_time'=>SORT_ASC];
+				break;
+			default://时间倒序
+				$orderBy = ['create_time'=>SORT_DESC];
+				break;
+		}
 		
-		$query -> select('*') -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
-		//var_dump($query -> createCommand()->getRawSql());die();
+		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+		var_dump($query -> createCommand()->getRawSql());die();
 		$res = $query -> asArray() -> all();
 		//var_dump($res);die();
 		
@@ -84,7 +125,11 @@ class ApplyLogic extends BaseLogic
 		];
 		
 	}
-	
+	/**
+	 * 获取申请详情
+	 * @param int $apply_id 审批号
+	 * @param int $type 审批类型
+	 */
 	public function getApplyInfo($apply_id,$type = null)
 	{
 		$app_model = new appmodel\Apply();
