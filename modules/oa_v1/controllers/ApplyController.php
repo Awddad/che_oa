@@ -6,6 +6,7 @@ use yii\base\Controller;
 use app\models as appmodel;
 use app\modules\oa_v1\logic\TypeLogic;
 use app\modules\oa_v1\logic\ApplyLogic;
+use app\modules\oa_v1\logic\PersonLogic;
 
 class ApplyController extends BaseController
 {
@@ -194,5 +195,50 @@ class ApplyController extends BaseController
 			'time' => date('Y-m-d h:i:s',$apply['caiwu']['shoukuan']['shou_kuan_time']),
 			'tips' => $apply['caiwu']['shoukuan']['tips'],
 		];
+	}
+	
+	
+	/**
+	 * 获取状态值
+	 */
+	public function actionGetType()
+	{
+		$res = \app\modules\oa_v1\logic\TreeTagLogic::instance()->getTreeTagsByParentId();
+		return $this -> _return($res,200);
+	}
+	/**
+	 * 获取银行卡
+	 */
+	public function actionGetBankcard()
+	{
+		$cards = appmodel\PersonBankInfo::find() -> where(['person_id' => $this -> arrPersonInfo['person_id']]) -> asArray() -> all();
+		foreach($cards as $v){
+			$data[] = ['card_id'=>$v['bank_card_id'],'bank_name'=>$v['bank_name'],'bank_des'=>$v['bank_name_des']];
+		}
+		return $this -> _return($data,200);
+	}
+	
+	/**
+	 * 添加银行卡
+	 */
+	public function actionAddBankcard()
+	{
+		$request = Yii::$app -> request;
+		if($request -> isPost){
+			$post = $request -> post();
+			if($post['card_id'] && $post['bank_name'] && $post['bank_des']){
+				return $this -> _return(null,200);
+			}
+			return $this -> _return(null,403);
+		}	
+		return $this -> _return(null,403);
+	}
+	/**
+	 * 获取员工列表
+	 */
+	public function actionGetUserList()
+	{
+		$data = PersonLogic::instance() -> getSelectPerson();
+		return $this -> _return($data,200);
 	}
 }
