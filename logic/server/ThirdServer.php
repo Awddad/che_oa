@@ -17,48 +17,60 @@ use app\logic\Logic;
  * Class ThirdServer
  * @package app\logic\server
  */
-class ThirdServer extends Logic
+class ThirdServer extends Server
 {
     /**
-     * GET 请求
-     * @param $url
+     * 请求TOKEN
+     *
+     * @var string
      */
-    public function httpGet($url)
+    public $token = 'debf6cc22a8baf00904acc5f42535575';
+
+    /**
+     * 基础URL
+     * @var string
+     */
+    protected $baseUrl = 'http://test.pocket.checheng.net/api/';
+
+    /**
+     * 获取科目标签树形结构 URL
+     * @var string
+     */
+    public $tagTreeUrl = 'tag-tree';
+
+    /**
+     * 获取组织架构下的可用卡号(包含全局卡号)
+     *
+     * @var string
+     */
+    public $accountUrl = 'accounts';
+
+
+    /**
+     * 获取科目标签树形结构
+     *
+     * @return bool|mixed
+     */
+    public function getTagTree()
     {
-        $this->httpSend($url);
+        return $this->httpPost($this->baseUrl.$this->tagTreeUrl, ['_token' => $this->token]);
     }
 
     /**
-     * POST 请求
-     * @param $url
-     * @param $data
+     * 获取科目标签树形结构
+     *
+     * @param $organizationId
      * @return mixed
      */
-    public function httpPost($url, $data)
+    public function getAccount($organizationId)
     {
-        return $this->httpSend($url, $data, 'POST');
-    }
-
-    /**
-     * 发送HTTP 请求
-     * @param $url
-     * @param array $param
-     * @param string $type
-     * @return mixed
-     */
-    public function httpSend($url, $param = [] ,$type = 'GET')
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        if($type == 'POST'){
-            $param = http_build_query($param);
-            curl_setopt($ch, CURLOPT_POST, TRUE);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $param);
+        $rst = $this->httpPost($this->baseUrl.$this->accountUrl, [
+            '_token' => $this->token,
+            'organization_id' => $organizationId
+        ]);
+        if($rst['success'] == 1) {
+            return $rst['data'];
         }
-        $data = curl_exec($ch);//运行curl
-        curl_close($ch);
-        return json_decode($data, true);
+        return false;
     }
 }

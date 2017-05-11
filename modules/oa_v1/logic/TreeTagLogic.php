@@ -10,9 +10,15 @@ namespace app\modules\oa_v1\logic;
 
 
 use app\logic\Logic;
-use app\logic\server\FinanceServer;
+use app\logic\server\ThirdServer;
 use app\models\TagTree;
 
+/**
+ * 科目标签树形结构
+ *
+ * Class TreeTagLogic
+ * @package app\modules\oa_v1\logic
+ */
 class TreeTagLogic extends Logic
 {
     /**
@@ -20,7 +26,7 @@ class TreeTagLogic extends Logic
      */
     public function getTreeTag()
     {
-        $treeTags = FinanceServer::instance()->getTagTree();
+        $treeTags = ThirdServer::instance()->getTagTree();
         if($treeTags && $treeTags['success'] == 1) {
             $data = $this->getSaveArr($treeTags['data']);
             return $this->saveTreeTag($data);
@@ -66,7 +72,7 @@ class TreeTagLogic extends Logic
      * 获取报销类别
      *
      *
-     * @param int $parentId 17 | 费用支出
+     * @param int $parentId 17-费用支出 | 1-收入 | 2-支出
      * @param array $data
      * @return array
      */
