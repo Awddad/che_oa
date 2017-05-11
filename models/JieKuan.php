@@ -44,7 +44,7 @@ class JieKuan extends \yii\db\ActiveRecord
             [['des', 'tips'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
             [['bank_name', 'bank_name_des', 'pics'], 'string', 'max' => 255],
-            [['bank_card_id'], 'string', 'max' => 16],
+            [['bank_card_id'], 'string', 'max' => 25],
         ];
     }
 

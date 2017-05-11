@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\modules\oa_v1\logic\PersonLogic;
+use app\modules\oa_v1\logic\TreeTagLogic;
 
 
 /**
@@ -17,7 +18,8 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-        return $this->_return(null);
+        $data = TreeTagLogic::instance()->getTreeTagsByParentId();
+        return $this->_return($data);
     }
 
     /**
