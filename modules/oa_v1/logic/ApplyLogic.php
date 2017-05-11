@@ -115,7 +115,7 @@ class ApplyLogic extends BaseLogic
 		}
 		
 		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
-		var_dump($query -> createCommand()->getRawSql());die();
+		//var_dump($query -> createCommand()->getRawSql());die();
 		$res = $query -> asArray() -> all();
 		//var_dump($res);die();
 		
