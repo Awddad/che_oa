@@ -65,7 +65,8 @@ class TreeTagLogic extends Logic
     /**
      * 获取报销类别
      *
-     * @param int $parentId
+     *
+     * @param int $parentId 17 | 费用支出
      * @param array $data
      * @return array
      */
