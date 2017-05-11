@@ -5,6 +5,7 @@ use Yii;
 use app\models as appmodel;
 use yii\web\UploadedFile;
 use app\commands\MyTcPdf;
+use app\modules\oa_v1\logic\PersonLogic;
 
 
 class BaoxiaoForm extends BaseForm
@@ -47,11 +48,11 @@ class BaoxiaoForm extends BaseForm
 			array_multisort($this->$attribute, $tmp);
 			$validator = new \yii\validators\NumberValidator();
 			$validator -> integerOnly = true;
-			foreach($this->$attribute as $v){
+			foreach($this->$attribute as &$v){
 				if(!$validator-> validate($v['person_id'])){
 					$this->addError($attribute, "{$params}id不正确");
-				}elseif(!$v['person_name']){
-					$this->addError($attribute, "{$params}姓名不能为空");
+				}elseif(!$v['person_name'] = PersonLogic::instance() -> getPersonName($v['person_id'])){
+					$this->addError($attribute, "{$params}id不正确！");
 				}
 				if ($this->hasErrors()){
 					return;
@@ -109,7 +110,7 @@ class BaoxiaoForm extends BaseForm
 		$id = '';
 		switch($type){
 			case 'apply':
-				$id = 'ap'.$this -> create_time.'00'.rand(10,99).rand(100,999);
+				$id = $this -> createApplyId();
 				break;
 			case 'baoxiaolist':
 				$id = 'bl'.$this -> create_time.'22'.rand(10,99).rand(100,999);
@@ -143,10 +144,10 @@ class BaoxiaoForm extends BaseForm
 			$model -> bank_card_id = $this -> bank_card_id;
 			$model -> bank_name = $this -> bank_name;
 			$model -> bank_name_des = $this -> bank_name_des;
-			$model -> files = $this -> fujian?implode(',',$this -> fujian):'';
+			$model -> files = json_encode($this -> fujian);
 			$model -> pics = $this -> pic?implode(',',$this -> pic):'';
 		}elseif('baoxiaolist' == $type){
-			$model -> apply_id = $this -> createId('baoxiaolist');
+			$model -> apply_id = $this -> apply_id;
 			$model -> money = $data['money'];
 			$model -> type_name = $data['type_name'];
 			$model -> type = $data['type'];
@@ -232,10 +233,15 @@ class BaoxiaoForm extends BaseForm
 		}
 		$res = [];
 		foreach($file as $v){
-			$tmp_file_name = iconv("UTF-8","gb2312", $v -> baseName).$this->user['id'].rand(100,999).'.'.$v -> extension;
+			$base_name = iconv("UTF-8","gb2312", $v -> baseName);
+			$tmp_file_name = $base_name.$this->user['id'].rand(100,999).'.'.$v -> extension;
 			
 			if($v -> saveAs($root_path.'/'.$tmp_file_name))
-				$res[] = $dir.'/'.$tmp_file_name;
+				$res[] = [
+							'name' => $base_name,
+							'ext' => $v -> extension,
+							'url' => $dir.'/'.$tmp_file_name
+						]; 
 		}
 		return $res;
 	}

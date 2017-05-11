@@ -9,14 +9,15 @@ use app\modules\oa_v1\logic\ApplyLogic;
 
 class ApplyController extends BaseController
 {
-	private $page_size = 20;
 	
 	public function actionGetList()
 	{
 		$get = Yii::$app -> request -> get();
 		$logic = new ApplyLogic();
 		$res = $logic -> getApplyList($get,$this -> arrPersonInfo);
-		
+		if(!$res){
+			return $this -> _return(null,403);
+		}
 		$data = ['page'=>$res['pages'],'res'=>[]];
 		foreach($res['data'] as $v){
 			$data['res'][] = [
@@ -56,7 +57,7 @@ class ApplyController extends BaseController
 				'money' => $apply['info']['money'],
 				'bank_card_id' => $apply['info']['bank_card_id'],
 				'bank_name' => $apply['info']['bank_name'].$apply['info']['bank_name_des'],
-				'file' => explode(',', $apply['info']['files']),
+				'file' => json_decode($apply['info']['files']),
 				'pics' => explode(',', $apply['info']['pics']),
 				'pdf' => $apply['info']['bao_xiao_dan_pdf'],
 				'list' => [],
@@ -91,12 +92,12 @@ class ApplyController extends BaseController
 		}
 		$data = $this -> getData($apply);
 		$data['info'] = [
-			'money' => $v['money'],
+			'money' => $apply['info']['money'],
 			'bank_card_id' => $apply['info']['bank_card_id'],
 			'bank_name' => $apply['info']['bank_name'].$apply['info']['bank_name_des'],
 			'tips' => $apply['info']['tips'],
 			'des' => $apply['info']['des'],
-			'pics' => implode(',',$apply['info']['pics']),
+			'pics' => explode(',',$apply['info']['pics']),
 			'is_pay_back' => $apply['info']['is_pay_back'],
 		];
 		if($apply['caiwu']['fukuan']){
@@ -121,12 +122,10 @@ class ApplyController extends BaseController
 		}
 		$data = $this -> getData($apply);
 		$data['info'] = [
-			'money' => $v['money'],
+			'money' =>  $apply['info']['money'],
 			'bank_card_id' => $apply['info']['bank_card_id'],
 			'bank_name' => $apply['info']['bank_name'].$apply['info']['bank_name_des'],
 			'des' => $apply['info']['des'],
-			'pics' => implode(',',$apply['info']['pics']),
-			'is_pay_back' => $apply['info']['is_pay_back'],
 			'list'=>[],
 			];
 		foreach($apply['info']['list'] as $v){
@@ -173,7 +172,7 @@ class ApplyController extends BaseController
 									'person' => $v['approval_person'],
 									'steep'	=> $v['steep'],
 									'result' => $v['result'],
-									'time' => date('Y-m-d h:i:s',$v['approval_time']),
+									'time' => $v['approval_time']? date('Y-m-d h:i:s',$v['approval_time']):'',
 									'des' => $v['des'],
 								];
 		}

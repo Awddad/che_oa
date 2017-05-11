@@ -21,12 +21,12 @@ class BaoxiaoController extends BaseController
 		];
 		
 		$request = Yii::$app -> request;
-		$post['BaoxiaoForm'] = Yii::$app->request->post();
 		if($request->isPost)
 		{
+			$post['BaoxiaoForm'] = Yii::$app->request->post();
 			$model = new BaoxiaoForm();
 			$model -> load($post);
-			$model -> title = $this->arrPersonInfo['person_name'].'的报销单';
+			$model -> title = $model -> createApplyTitle($this->arrPersonInfo);
 			$model -> create_time = time();
 			$model -> user = array('id'=>$this->arrPersonInfo['person_id'],'name'=>$this->arrPersonInfo['person_name']);;
 			$model -> fujian  = $model -> saveFile(UploadedFile::getInstancesByName('fujian'),$file_config['fujian']);
@@ -43,6 +43,7 @@ class BaoxiaoController extends BaseController
 				return $this -> _return(current($model -> getErrors())[0],403);
 			}
 		}
+		return $this -> _return(null,400);
 	}
 	
 	public function actionGetType()
@@ -59,8 +60,8 @@ class BaoxiaoController extends BaseController
 	public function actionGetBankcard()
 	{
 		$data = [
-			['card_id'=>'1234567890123456','bank_name'=>'工商银行'],
-			['card_id'=>'2234567890123456','bank_name'=>'交通银行'],
+			['card_id'=>'1234567890123456','bank_name'=>'工商银行','bank_des'=>'普陀分行'],
+			['card_id'=>'2234567890123456','bank_name'=>'交通银行','bank_des'=>'世界支行'],
 		];
 		return $this -> _return($data,200);
 	}
@@ -68,14 +69,14 @@ class BaoxiaoController extends BaseController
 	public function actionGetUserList()
 	{
 		$data = [
-			['person_id'=>10001,'person'=>'测试1','department'=>'万剩伟业 技术部'],
-			['person_id'=>10005,'person'=>'测试5','department'=>'车城伟业 技术部'],
-			['person_id'=>10002,'person'=>'测试2','department'=>'万剩伟业 新镇部'],
-			['person_id'=>10003,'person'=>'测试3','department'=>'万剩伟业 总经理办公室'],
-			['person_id'=>10009,'person'=>'测试9','department'=>'万剩伟业 技术部'],
-			['person_id'=>10008,'person'=>'测试8','department'=>'万剩伟业 技术部'],
-			['person_id'=>10010,'person'=>'测试10','department'=>'万剩伟业 技术部'],
+			['person_id'=>257,'person'=>'测试1','department'=>'万剩伟业 技术部'],
+			['person_id'=>270,'person'=>'测试5','department'=>'车城伟业 技术部'],
+			['person_id'=>271,'person'=>'测试2','department'=>'万剩伟业 新镇部'],
+			['person_id'=>272,'person'=>'测试3','department'=>'万剩伟业 总经理办公室'],
+			['person_id'=>274,'person'=>'测试9','department'=>'万剩伟业 技术部'],
+			['person_id'=>275,'person'=>'测试8','department'=>'万剩伟业 技术部'],
 		];
 		return $this -> _return($data,200);
 	}
+	
 }

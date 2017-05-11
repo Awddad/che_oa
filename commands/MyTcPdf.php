@@ -38,6 +38,7 @@ class MyTcPdf {
             return false;//文件类型不是pdf
         }
         //参考格式
+        /*
         $arrInfo = [
             'apply_date' => '2017年5月5日',
             'apply_id' => '20170505102037012134', 
@@ -56,7 +57,7 @@ class MyTcPdf {
             'approval_person' => '陈贵、李财',//多个人、分隔 
             'copy_person' => '张三',//多个人、分隔 
         ];
-        
+        */
         // html 具体样式等前端提供，此处先写个demo
         $strListHtml = '<tr><th>类别</th><th>金额</th><th>明细</th></tr>';
         foreach($arrInfo['list'] as $val)
