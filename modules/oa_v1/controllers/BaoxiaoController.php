@@ -5,6 +5,7 @@ namespace app\modules\oa_v1\controllers;
 use Yii;
 use app\modules\oa_v1\models\BaoxiaoForm;
 use yii\web\UploadedFile;
+use app\modules\oa_v1\logic\TreeTagLogic;
 
 
 class BaoxiaoController extends BaseController
@@ -48,13 +49,16 @@ class BaoxiaoController extends BaseController
 	
 	public function actionGetType()
 	{
+		$res = TreeTagLogic::instance()->getTreeTagsByParentId();
+		/*
 		$data = [
 				['id'=>1,'val'=>'住宿费'],
 				['id'=>2,'val'=>'餐饮费'],
 				['id'=>3,'val'=>'交通费'],
 				['id'=>4,'val'=>'其他费'],
 		];
-		return $this -> _return($data,200);
+		*/
+		return $this -> _return($res,200);
 	}
 	
 	public function actionGetBankcard()
