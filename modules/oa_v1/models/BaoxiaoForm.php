@@ -98,7 +98,7 @@ class BaoxiaoForm extends BaseForm
 				return $this -> apply_id;
 			}	
 			return false;
-		}catch(\Exception $e){
+		}catch(Exception $e){
 			$transaction -> rollBack();
 			return false;
 		}
