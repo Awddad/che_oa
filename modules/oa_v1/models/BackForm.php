@@ -137,7 +137,7 @@ class BackForm extends BaseForm
      * 保存报销申请
      *
      * @param $user
-     * @return $this
+     * @return integer
      * @throws Exception
      */
     public function save($user)
@@ -173,7 +173,7 @@ class BackForm extends BaseForm
             $transaction->rollBack();
             throw $exception;
         }
-        return $this;
+        return $apply->apply_id;
     }
 
     /**

@@ -127,7 +127,7 @@ class LoanForm extends BaseForm
      * 保存报销申请
      *
      * @param $user
-     * @return $this
+     * @return integer
      * @throws Exception
      */
     public function save($user)
@@ -154,12 +154,11 @@ class LoanForm extends BaseForm
             $this->copyPerson($apply);
             $this->saveLoan($apply);
             $transaction->commit();
-
         } catch (Exception $exception){
             $transaction->rollBack();
             throw $exception;
         }
-        return $this;
+        return $apply->apply_id;
     }
 
     /**

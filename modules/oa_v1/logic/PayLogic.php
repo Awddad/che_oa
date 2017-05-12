@@ -41,6 +41,25 @@ class PayLogic extends BaseLogic
                 'in', 'type', [1, 2]
             ]);
         }
+        $keyword = \Yii::$app->request->post('keyword');
+
+        if($keyword) {
+            $query->andFilterWhere([
+                'or',
+                ['apply_id' => $keyword],
+                ['title' => $keyword]
+            ]);
+        }
+
+        $beginTime = \Yii::$app->request->post('begin_time');
+        $endTime = \Yii::$app->request->post('end_time');
+        if($beginTime && $endTime) {
+            $query->andWhere([
+                'and',
+                ['>=', 'create_time', strtotime($beginTime)],
+                ['<', 'create_time', strtotime('+1day',strtotime($beginTime))],
+            ]);
+        }
 
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
@@ -94,19 +113,32 @@ class PayLogic extends BaseLogic
     public function getForm($applyId, $person)
     {
         $apply = Apply::findOne($applyId);
-        if($apply->status != 4 || in_array($apply->type, [1, 2])) {
+        if($apply->status != 4 || !in_array($apply->type, [1, 2])) {
             $this->errorCode = 1010;
             $this->error = '申请ID不能确认，请求不合法';
             return false;
         }
-        return [
-            'pay_org' => PersonLogic::instance()->getOrg(),
-            'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
-            'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
-            'bank_card_id' => $apply->payBack->bank_card_id,
-            'bank_name' => $apply->payBack->bank_name,
-            'bank_name_des' => $apply->payBack->bank_name_des,
-        ];
+        if($apply->type == 1) {
+            return [
+                'pay_org' => PersonLogic::instance()->getOrg(),
+                'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
+                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
+                'bank_card_id' => $apply->payBack->bank_card_id,
+                'bank_name' => $apply->payBack->bank_name,
+                'bank_name_des' => $apply->payBack->bank_name_des,
+            ];
+        }
+        if($apply->type == 1) {
+            return [
+                'pay_org' => PersonLogic::instance()->getOrg(),
+                'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
+                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
+                'bank_card_id' => $apply->payBack->bank_card_id,
+                'bank_name' => $apply->payBack->bank_name,
+                'bank_name_des' => $apply->payBack->bank_name_des,
+            ];
+        }
+
     }
 
 }

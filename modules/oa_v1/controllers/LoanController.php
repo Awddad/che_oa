@@ -29,8 +29,8 @@ class LoanController extends BaseController
             $data['LoanForm']['pics']  = $model->saveUploadImg('pics');
         }
         $user = $this->arrPersonInfo;
-        if ($model->load($data) && $model->validate() && $model->save($user)) {
-            return $this->_return($model);
+        if ($model->load($data) && $model->validate() && $applyId = $model->save($user)) {
+            return $this->_return($applyId);
         } else {
             return $this->_return($model->errors, 400);
         }

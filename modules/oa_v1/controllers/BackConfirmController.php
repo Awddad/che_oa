@@ -51,7 +51,7 @@ class BackConfirmController extends BaseController
         $model = new BackConfirmForm();
         $post['BackConfirmForm'] = \Yii::$app->request->post();
         $post['BackConfirmForm']['pics']  = $model->saveUploadFile('pics');
-        if ($model->load($post) && $model->saveConfirm($this->arrPersonInfo)) {
+        if ($model->load($post) && $model->saveConfirm()) {
             return $this->_return('');
         } else {
             return $this->_return($model->errors, 400);

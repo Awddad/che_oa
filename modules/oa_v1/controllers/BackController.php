@@ -44,8 +44,8 @@ class BackController extends BaseController
 
         $data['BackForm'] = \Yii::$app->request->post();
         $user = $this->arrPersonInfo;
-        if ($model->load($data) && $model->validate() && $model->save($user)) {
-            return $this->_return($model);
+        if ($model->load($data) && $model->validate() && $applyId = $model->save($user)) {
+            return $this->_return($applyId);
         } else {
             return $this->_return($model->errors, 400);
         }
