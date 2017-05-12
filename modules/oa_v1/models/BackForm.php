@@ -13,7 +13,6 @@ use app\models\JieKuan;
 use app\models\PayBack;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
-use Yii;
 
 
 /**
@@ -34,12 +33,6 @@ use Yii;
  */
 class BackForm extends BaseForm
 {
-    /**
-     * 借款金额
-     * @var
-     */
-    public $money;
-
     /**
      * 借款转入到的银行卡号
      * @var
@@ -98,11 +91,11 @@ class BackForm extends BaseForm
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'apply_ids', 'approval_persons' , 'copy_person'],
+                ['bank_card_id', 'bank_name', 'apply_ids', 'approval_persons' , 'copy_person'],
                 'required'
             ],
             [
-                ['money', 'bank_card_id', 'bank_name', 'bank_name_des', 'des'],
+                ['bank_card_id', 'bank_name', 'bank_name_des', 'des'],
                 'string'
             ],
             [
@@ -195,7 +188,7 @@ class BackForm extends BaseForm
         $model = new PayBack();
         $model->apply_id = $apply->apply_id;
         $model->jie_kuan_ids = implode(',', $this->apply_ids);
-        $model->money = $this->money;
+        $model->money = $this->getMoney();
         $model->bank_card_id = $this->bank_card_id;
         $model->bank_name = $this->bank_name;
         $model->bank_name_des = $this->bank_name_des ? : '';
@@ -203,5 +196,20 @@ class BackForm extends BaseForm
             throw new Exception('借款保存失败', $model->errors);
         }
         return $model;
+    }
+
+    /**
+     * 获取金额
+     *
+     * @return string
+     */
+    public function getMoney()
+    {
+        $money = 0;
+        foreach ($this->apply_ids as $apply_id) {
+            $loan = JieKuan::findOne($apply_id);
+            $money += floatval($loan->money);
+        }
+        return $money;
     }
 }
