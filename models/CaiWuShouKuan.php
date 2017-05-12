@@ -20,6 +20,7 @@ use Yii;
  * @property string $tips
  * @property integer $create_cai_wu_log
  * @property string $pics
+ * @property string $is_told_cai_wu_success
  */
 class CaiWuShouKuan extends \yii\db\ActiveRecord
 {
@@ -38,7 +39,7 @@ class CaiWuShouKuan extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'org_id', 'org_name', 'bank_card_id', 'bank_name', 'bank_name_des', 'shou_kuan_id'], 'required'],
-            [['org_id', 'type', 'shou_kuan_time', 'create_cai_wu_log'], 'integer'],
+            [['org_id', 'type', 'shou_kuan_time', 'create_cai_wu_log', 'is_told_cai_wu_success'], 'integer'],
             [['tips'], 'string'],
             [['apply_id', 'org_name', 'bank_name', 'bank_name_des', 'shou_kuan_id', 'pics'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 16],

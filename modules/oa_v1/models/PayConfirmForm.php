@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 
 
+use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\CaiWuFuKuan;
 use app\models\Person;
@@ -80,7 +81,7 @@ class PayConfirmForm extends CaiWuFuKuan
         return implode(",", $data);
     }
 
-    public function saveConfrim()
+    public function saveConfirm()
     {
         $db = \Yii::$app->db;
         $transaction = $db->getTransaction();
@@ -103,6 +104,11 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['trade_number'] = $this->shou_kuan_id;
             $param['order_number'] = $this->apply_id;
             $param['order_type'] = '';
+            $rst = ThirdServer::instance()->payment($param);
+            if($rst['success'] == 1) {
+                $this->is_told_cai_wu_success = 1;
+                $this->update();
+            }
             $transaction->commit();
         } catch (Exception $exception) {
             $transaction->rollBack();

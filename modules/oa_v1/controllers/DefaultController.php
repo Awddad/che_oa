@@ -13,6 +13,8 @@ use app\modules\oa_v1\logic\TreeTagLogic;
 class DefaultController extends BaseController
 {
     /**
+     * TEST
+     *
      * Renders the index view for the module
      * @return string
      */

@@ -12,7 +12,7 @@ namespace app\modules\oa_v1\controllers;
 use app\modules\oa_v1\models\LoanForm;
 
 /**
- * 还款
+ * 借款
  *
  * Class LoanController
  * @package app\modules\oa_v1\controllers

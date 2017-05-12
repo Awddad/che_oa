@@ -27,7 +27,7 @@ class PayConfirmController extends BaseController
     public function actionForm()
     {
         $applyId = \Yii::$app->request->get('apply_id');
-        $data = PayLogic::instance()->getForm($applyId);
+        $data = PayLogic::instance()->getForm($applyId, $this->arrPersonInfo);
         if(!$data) {
             return $this->_return($data, PayLogic::instance()->errorCode);
         }
@@ -42,7 +42,7 @@ class PayConfirmController extends BaseController
         $model = new PayConfirmForm();
         $post['PayConfirmForm'] = \Yii::$app->request->post();
         $post['BackConfirmForm']['pics']  = $model->saveUploadFile('pics');
-        if ($model->load($post) && $model->save()) {
+        if ($model->load($post) && $model->saveConfirm()) {
             return $this->_return('');
         } else {
             return $this->_return($model->errors, 400);

@@ -163,7 +163,7 @@ class LoanForm extends BaseForm
     }
 
     /**
-     *
+     * 保存借款信息
      *
      * @param $apply
      * @return JieKuan
