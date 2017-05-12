@@ -1,10 +1,9 @@
 <?php
 namespace app\modules\oa_v1\controllers;
 
+use app\models\Apply;
 use Yii;
-use yii\base\Controller;
 use app\models as appmodel;
-use app\modules\oa_v1\logic\TypeLogic;
 use app\modules\oa_v1\logic\ApplyLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 
@@ -244,4 +243,36 @@ class ApplyController extends BaseController
 		$data = PersonLogic::instance() -> getSelectPerson();
 		return $this -> _return($data,200);
 	}
+
+    /**
+     * 申请撤销操作
+     * @return array
+     */
+    public function actionRevoke()
+    {
+        $personId = Yii::$app->request->post('person_id');
+        $applyId = Yii::$app->request->post('apply_id');
+
+        $apply = Apply::findOne($applyId);
+        if (!$apply) {
+            return $this->_returnError(1010);
+        }
+
+        if ($apply->person_id != $personId) {
+            return $this->_returnError(2101);
+        }
+
+        if (!in_array($apply->status, [Apply::STATUS_WAIT, Apply::STATUS_ING])) {
+            return $this->_returnError(2001);
+        }
+
+        $apply->status = Apply::STATUS_REVOKED;
+        $apply->next_des = '该申请已撤销';
+
+        if ($apply->save()) {
+            return $this->_return('', 200);
+        } else {
+            return $this->_returnError(404, $apply->errors);
+        }
+    }
 }
