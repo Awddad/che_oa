@@ -32,7 +32,7 @@ class PayLogic extends BaseLogic
             'status' => 4
         ]);
         //筛选
-        if($type && in_array($type, [1,2])) {
+        if ($type && in_array($type, [1, 2])) {
             $query->andWhere([
                 'type' => $type
             ]);
@@ -43,7 +43,7 @@ class PayLogic extends BaseLogic
         }
         $keyword = \Yii::$app->request->post('keyword');
 
-        if($keyword) {
+        if ($keyword) {
             $query->andFilterWhere([
                 'or',
                 ['apply_id' => $keyword],
@@ -53,11 +53,11 @@ class PayLogic extends BaseLogic
 
         $beginTime = \Yii::$app->request->post('begin_time');
         $endTime = \Yii::$app->request->post('end_time');
-        if($beginTime && $endTime) {
+        if ($beginTime && $endTime) {
             $query->andWhere([
                 'and',
                 ['>=', 'create_time', strtotime($beginTime)],
-                ['<', 'create_time', strtotime('+1day',strtotime($beginTime))],
+                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
 
@@ -66,18 +66,18 @@ class PayLogic extends BaseLogic
         $pagination = new Pagination(['totalCount' => $totalCount]);
 
         //当前页
-        $currentPage = \Yii::$app->request->post('currentPage') ? : 1;
+        $currentPage = \Yii::$app->request->post('currentPage') ?: 1;
         //每页显示条数
-        $perPage = \Yii::$app->request->post('perPage') ? : 20;
+        $perPage = \Yii::$app->request->post('perPage') ?: 20;
 
         $pagination->setPageSize($perPage, true);
 
-        $pagination->setPage($currentPage -1);
+        $pagination->setPage($currentPage - 1);
         $models = $query->limit($pagination->getLimit())->offset(
             $pagination->getPage() * $pagination->pageSize
         )->orderBy(['create_time' => SORT_DESC])->all();
-        $data   = [];
-        if(!empty($models)) {
+        $data = [];
+        if (!empty($models)) {
             foreach ($models as $model) {
                 if ($model->type == 1) {
                     $typeName = '申请报销';
@@ -113,29 +113,29 @@ class PayLogic extends BaseLogic
     public function getForm($applyId, $person)
     {
         $apply = Apply::findOne($applyId);
-        if($apply->status != 4 || !in_array($apply->type, [1, 2])) {
+        if ($apply->status != 4 || !in_array($apply->type, [1, 2])) {
             $this->errorCode = 1010;
             $this->error = '申请ID不能确认，请求不合法';
             return false;
         }
-        if($apply->type == 1) {
+        if ($apply->type == 1) {
             return [
                 'pay_org' => PersonLogic::instance()->getOrg(),
                 'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
-                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
-                'bank_card_id' => $apply->payBack->bank_card_id,
-                'bank_name' => $apply->payBack->bank_name,
-                'bank_name_des' => $apply->payBack->bank_name_des,
+                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
+                'bank_card_id' => $apply->expense->bank_card_id,
+                'bank_name' => $apply->expense->bank_name,
+                'bank_name_des' => $apply->expense->bank_name_des,
             ];
         }
-        if($apply->type == 1) {
+        if ($apply->type == 2) {
             return [
                 'pay_org' => PersonLogic::instance()->getOrg(),
                 'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
-                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
-                'bank_card_id' => $apply->payBack->bank_card_id,
-                'bank_name' => $apply->payBack->bank_name,
-                'bank_name_des' => $apply->payBack->bank_name_des,
+                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
+                'bank_card_id' => $apply->loan->bank_card_id,
+                'bank_name' => $apply->loan->bank_name,
+                'bank_name_des' => $apply->loan->bank_name_des,
             ];
         }
 

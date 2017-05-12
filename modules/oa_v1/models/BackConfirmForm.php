@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 
 
+use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\CaiWuShouKuan;
 use app\models\Person;
@@ -32,9 +33,8 @@ class BackConfirmForm extends CaiWuShouKuan
         return [
             [
                 [
-                    'apply_id', 'org_id', 'org_name', 'bank_card_id',
-                    'bank_name', 'bank_name_des', 'shou_kuan_id', 'shou_kuan_time',
-                    'create_cai_wu_log'
+                    'apply_id', 'org_id', 'org_name', 'bank_card_id', 'bank_name', 'shou_kuan_id',
+                    'shou_kuan_time', 'create_cai_wu_log', 'type'
                 ],
                 'required'
             ],
@@ -83,31 +83,45 @@ class BackConfirmForm extends CaiWuShouKuan
     public function saveConfirm()
     {
         $db = \Yii::$app->db;
-        $transaction = $db->getTransaction();
+        $transaction = $db->beginTransaction();
         try{
-            $this->save();
+            //$this->create_time = time();
+            if (!$this->save()) {
+                new Exception('确认失败', $this->errors);
+            }
             $apply = Apply::findOne($this->apply_id);
             $apply->status = 99; //订单完成
             $apply->save();
-            $person = Person::findOne($this->apply_id);
+            $person = Person::findOne($apply->person_id);
             $param = [];
             $param['organization_id'] = $person->org_id;
             $param['account_id'] = $person->person_id;
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
-            $param['time'] = $this->shou_kuan_time;
+            $param['time'] = date('Y-m-d h:i:s', $this->shou_kuan_time);;
             $param['remark'] = $this->tips;
-            $param['other_name'] = $person->person_name;
-            $param['other_card'] = $this->bank_card_id;
-            $param['other_bank'] = $this->bank_card_id;
+            //收入 可为空
+            //if($apply->type == 3) {
+            //    $param['other_name'] = $person->person_name;
+            //    $param['other_card'] = $apply->payBack->bank_card_id;
+            //    $param['other_bank'] = $apply->payBack->bank_name;
+            //}
+
             $param['trade_number'] = $this->shou_kuan_id;
             $param['order_number'] = $this->apply_id;
-            $param['order_type'] = '';
+            $param['order_type'] = 1;
             $transaction->commit();
         } catch (Exception $exception) {
             $transaction->rollBack();
+            throw $exception;
         }
-        return '';
+        $rst = ThirdServer::instance()->payment($param);
+        print_r($rst);die;
+        if($rst['success'] == 1) {
+            $this->is_told_cai_wu_success = 1;
+            $this->update();
+        }
+        return true;
     }
 
     /**
@@ -115,9 +129,9 @@ class BackConfirmForm extends CaiWuShouKuan
      */
     public function getMoney($apply)
     {
-        if($apply->status == 1) {
+        if($apply->type == 1) {
             $money = $apply->expense->money;
-        } else if($apply->status == 2){
+        } else if($apply->type == 2){
             $money = $apply->loan->money;
         } else {
             $money = $apply->payBack->money;
