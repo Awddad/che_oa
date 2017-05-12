@@ -180,7 +180,7 @@ class BaseForm extends Model
     {
         $files = UploadedFile::getInstancesByName($name);
         if(empty($files)) {
-            $this->addError($name, '格式错误');
+            //$this->addError($name, '格式错误');
             return false;
         }
         $basePath = \Yii::$app->basePath.'/web';

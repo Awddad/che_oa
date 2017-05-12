@@ -55,15 +55,15 @@ class BackLogic extends BaseLogic
             'oa_apply.status' => 99,
             'oa_jie_kuan.status' => 1,
             'oa_apply.person_id' => $user['person_id']
-        ])->all();
+        ])->asArray()->all();
         $data = [];
         if (!empty($jieKuan)) {
             foreach ($jieKuan as $k => $v) {
                 $data[] = [
-                    'apply_id' => $v->apply_id,
-                    'money' => $v->money,
-                    'get_money_time' => $v->get_money_time,
-                    'des' => $v->des
+                    'apply_id' => $v['apply_id'],
+                    'money' => $v['money'],
+                    'get_money_time' => $v['get_money_time'],
+                    'des' => $v['des']
                 ];
             }
         }
@@ -124,4 +124,29 @@ class BackLogic extends BaseLogic
         return $data;
     }
 
+    /**
+     * @param PayBack $payBack
+     */
+    public function sendPayment($payBack)
+    {
+        $param = [];
+        $param['organization_id'];
+        $param['account_id'];
+        $param['tag_id'];
+        $param['money'];
+        $param['time'];
+        $param['remark'];
+        $param['other_name'];
+        $param['other_card'];
+        $param['other_bank'];
+        $param['trade_number'];
+        $param['order_number'];
+        $param['order_type'];
+        $data = ThirdServer::instance()->payment($param);
+        if($data['success'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

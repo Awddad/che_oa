@@ -9,7 +9,6 @@
 namespace app\logic\server;
 
 
-use app\logic\Logic;
 
 /**
  * 第三方接口相关逻辑
@@ -45,6 +44,13 @@ class ThirdServer extends Server
      */
     public $accountUrl = 'accounts';
 
+    /**
+     * 生成订单流水
+     *
+     * @var string
+     */
+    public $paymentUrl = 'payment';
+
 
     /**
      * 获取科目标签树形结构
@@ -68,6 +74,23 @@ class ThirdServer extends Server
             '_token' => $this->token,
             'organization_id' => $organizationId
         ]);
+        if($rst['success'] == 1) {
+            return $rst['data'];
+        }
+        return false;
+    }
+
+
+    /**
+     * 创建流水
+     *
+     * @param $param
+     * @return bool
+     */
+    public function payment($param)
+    {
+        $param['_token'] = $this->token;
+        $rst = $this->httpPost($this->baseUrl.$this->accountUrl, $param);
         if($rst['success'] == 1) {
             return $rst['data'];
         }

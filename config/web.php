@@ -7,6 +7,7 @@ $config = [
     'timeZone' => 'Asia/Shanghai',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'zh-CN',
     'modules' => [
         'oa_v1' => [
             'class' => 'app\modules\oa_v1\module',
