@@ -62,7 +62,7 @@ class BackLogic extends BaseLogic
                 $data[] = [
                     'apply_id' => $v['apply_id'],
                     'money' => $v['money'],
-                    'get_money_time' => $v['get_money_time'],
+                    'get_money_time' => date('Y-m-d H:i', $v['get_money_time']),
                     'des' => $v['des']
                 ];
             }

@@ -170,6 +170,10 @@ class BackForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $this->saveBack($apply);
+            //改变借款单状态
+            foreach ($this->apply_ids as $apply_id) {
+                JieKuan::updateAll(['status' => 99], ['apply_id' => $apply_id]);
+            }
             $transaction->commit();
 
         } catch (Exception $exception){
