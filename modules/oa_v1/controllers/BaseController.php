@@ -158,7 +158,10 @@ class BaseController extends Controller
         402 => '用户不存在',
         403 => '参数错误',
         404 => '系统错误',
-        1010 => '申请ID不能确认，请求不合法'
+        1010 => '申请ID不能确认，请求不合法',
+        2001 => '不在审批状态中',
+        2002 => '审批人错误',
+        2404 => '状态异常，请联系管理员',
     ];
 
     /**
@@ -173,5 +176,17 @@ class BaseController extends Controller
     {
         $message = isset(static::$code[$code]) ? static::$code[$code] : $message;
         return compact('data', 'message', 'code');
+    }
+
+    /**
+     * 错误信息返回
+     * @param int $code
+     * @param string|array|object $data
+     * @param string $message
+     * @return array
+     */
+    public function _returnError($code, $data = null, $message = 'fail')
+    {
+        return $this->_return($data, $code, $message);
     }
 }

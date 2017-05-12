@@ -29,6 +29,13 @@ class Apply extends \yii\db\ActiveRecord
     const TYPE_JIE_KUAN = 2;
     const TYPE_HUAN_KUAN = 3;
 
+    const STATUS_WAIT = 1;//等待审核
+    const STATUS_ING = 11;//审核中
+    const STATUS_FAIL = 2;//审核失败
+    const STATUS_REVOKED = 3;//申请撤销
+    const STATUS_CONFIRM = 4;//财务确认
+    const STATUS_OK = 99;//申请撤销
+
     /**
      * @inheritdoc
      */
@@ -123,5 +130,59 @@ class Apply extends \yii\db\ActiveRecord
     public function getPersonInfo()
     {
         return $this->hasOne(Person::className(), ['person_id' => 'person_id']);
+    }
+
+    /**
+     * 获取该申请，当前需要审批的信息
+     * @return array|null|ApprovalLog
+     */
+    public function getNowApproval()
+    {
+        return $this->hasOne(ApprovalLog::className(), ['apply_id' => 'apply_id'])
+            ->where(['is_to_me_now' => 1])
+            ->one();
+    }
+
+    /**
+     * 审批不通过的操作
+     * @return bool
+     */
+    public function approvalFail()
+    {
+        $this->status = self::STATUS_FAIL;
+        $this->next_des = '审批不通过，已终止';
+        return $this->save();
+    }
+
+    /**
+     * 审批通过，继续下一步审批
+     * @param $person
+     * @return bool
+     */
+    public function approvalPass($person)
+    {
+        $this->next_des = "待 {$person} 审批";
+        return $this->save();
+    }
+
+    /**
+     * 审批结束，待财务确认
+     */
+    public function approvalConfirm()
+    {
+        $this->next_des = '待财务部门确认';
+        $this->status = self::STATUS_CONFIRM;
+        return $this->save();
+    }
+
+    /**
+     * 审批通过，申请全部完成
+     * @return bool
+     */
+    public function approvalComplete()
+    {
+        $this->next_des = '审批完成';
+        $this->status = self::STATUS_OK;
+        return $this->save();
     }
 }
