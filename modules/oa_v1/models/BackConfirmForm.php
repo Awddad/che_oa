@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\models;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\CaiWuShouKuan;
+use app\models\Org;
 use app\models\Person;
 use yii\db\Exception;
 use yii\web\UploadedFile;
@@ -33,7 +34,7 @@ class BackConfirmForm extends CaiWuShouKuan
         return [
             [
                 [
-                    'apply_id', 'org_id', 'org_name', 'bank_card_id', 'bank_name', 'shou_kuan_id',
+                    'apply_id', 'org_id', 'bank_card_id', 'bank_name', 'shou_kuan_id',
                     'shou_kuan_time', 'create_cai_wu_log', 'type'
                 ],
                 'required'
@@ -85,6 +86,7 @@ class BackConfirmForm extends CaiWuShouKuan
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
+            $this->org_name = Org::findOne($this->org_id)->org_name;
             //$this->create_time = time();
             if (!$this->save()) {
                 new Exception('确认失败', $this->errors);
@@ -116,7 +118,6 @@ class BackConfirmForm extends CaiWuShouKuan
             throw $exception;
         }
         $rst = ThirdServer::instance()->payment($param);
-        print_r($rst);die;
         if($rst['success'] == 1) {
             $this->is_told_cai_wu_success = 1;
             $this->update();

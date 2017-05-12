@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\models;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\CaiWuFuKuan;
+use app\models\Org;
 use app\models\Person;
 use yii\db\Exception;
 use yii\web\UploadedFile;
@@ -33,7 +34,7 @@ class PayConfirmForm extends CaiWuFuKuan
         return [
             [
                 [
-                    'apply_id', 'org_id', 'org_name', 'bank_card_id', 'fu_kuan_id', 'fu_kuan_time', 'type',
+                    'apply_id', 'org_id', 'bank_card_id', 'fu_kuan_id', 'fu_kuan_time', 'type',
                     'bank_name'
                 ],
                 'required'
@@ -87,6 +88,7 @@ class PayConfirmForm extends CaiWuFuKuan
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
+            $this->org_name = Org::findOne($this->org_id)->org_name;
             $this->create_time = time();
             if (!$this->save()) {
                 new Exception('确认失败', $this->errors);

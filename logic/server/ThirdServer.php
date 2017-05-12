@@ -90,10 +90,6 @@ class ThirdServer extends Server
     public function payment($param)
     {
         $param['_token'] = $this->token;
-        $rst = $this->httpPost($this->baseUrl.$this->accountUrl, $param);
-        if($rst['success'] == 1) {
-            return $rst['data'];
-        }
-        return false;
+        return $this->httpPost($this->baseUrl.$this->paymentUrl, $param);
     }
 }
