@@ -33,7 +33,8 @@ class PayConfirmForm extends CaiWuFuKuan
         return [
             [
                 [
-                    'apply_id', 'org_id', 'org_name', 'bank_card_id', 'fu_kuan_id', 'fu_kuan_time'
+                    'apply_id', 'org_id', 'org_name', 'bank_card_id', 'fu_kuan_id', 'fu_kuan_time', 'type',
+                    'bank_name'
                 ],
                 'required'
             ],
@@ -84,36 +85,50 @@ class PayConfirmForm extends CaiWuFuKuan
     public function saveConfirm()
     {
         $db = \Yii::$app->db;
-        $transaction = $db->getTransaction();
+        $transaction = $db->beginTransaction();
         try{
-            $this->save();
+            $this->create_time = time();
+            if (!$this->save()) {
+                new Exception('确认失败', $this->errors);
+            }
             $apply = Apply::findOne($this->apply_id);
             $apply->status = 99; //订单完成
             $apply->save();
-            $person = Person::findOne($this->apply_id);
+            $person = Person::findOne($apply->person_id);
             $param = [];
             $param['organization_id'] = $person->org_id;
             $param['account_id'] = $person->person_id;
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
-            $param['time'] = $this->shou_kuan_time;
+            $param['time'] = date('Y-m-d h:i:s', $this->fu_kuan_time);
             $param['remark'] = $this->tips;
-            $param['other_name'] = $person->person_name;
-            $param['other_card'] = $this->bank_card_id;
-            $param['other_bank'] = $this->bank_card_id;
-            $param['trade_number'] = $this->shou_kuan_id;
-            $param['order_number'] = $this->apply_id;
-            $param['order_type'] = '';
-            $rst = ThirdServer::instance()->payment($param);
-            if($rst['success'] == 1) {
-                $this->is_told_cai_wu_success = 1;
-                $this->update();
+
+            if($apply->type == 1) {
+                $param['other_name'] = $person->person_name;
+                $param['other_card'] = $apply->expense->bank_card_id;
+                $param['other_bank'] = $apply->expense->bank_name;
             }
+
+            if($apply->type == 2) {
+                $param['other_name'] = $person->person_name;
+                $param['other_card'] = $apply->loan->bank_card_id;
+                $param['other_bank'] = $apply->loan->bank_name;
+            }
+
+            $param['trade_number'] = $this->fu_kuan_id;
+            $param['order_number'] = $this->apply_id;
+            $param['order_type'] = 1;
             $transaction->commit();
         } catch (Exception $exception) {
             $transaction->rollBack();
+            throw $exception;
         }
-        return '';
+        $rst = ThirdServer::instance()->payment($param);
+        if($rst['success'] == 1) {
+            $this->is_told_cai_wu_success = 1;
+            $this->update();
+        }
+        return true;
     }
 
     /**
@@ -121,11 +136,13 @@ class PayConfirmForm extends CaiWuFuKuan
      */
     public function getMoney($apply)
     {
-        if($apply->status == 1) {
+        if($apply->type == 1) {
             $money = $apply->expense->money;
-        } else if($apply->status == 2){
+        }
+        if($apply->type == 2){
             $money = $apply->loan->money;
-        } else {
+        }
+        if($apply->type == 3) {
             $money = $apply->payBack->money;
         }
         return $money;

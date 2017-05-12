@@ -31,7 +31,7 @@ class BackLogic extends BaseLogic
     public function backForm($applyId, $person)
     {
         $apply = Apply::findOne($applyId);
-        if($apply->status != 4 || $apply->type != 3) {
+        if ($apply->status != 4 || $apply->type != 3) {
             $this->errorCode = 1010;
             $this->error = '申请ID不能确认，请求不合法';
             return false;
@@ -45,6 +45,7 @@ class BackLogic extends BaseLogic
             'bank_name_des' => $apply->payBack->bank_name_des,
         ];
     }
+
     /**
      * @param $user
      * @return array
@@ -82,24 +83,43 @@ class BackLogic extends BaseLogic
             'type' => 3
         ]);
 
+        $keyword = \Yii::$app->request->post('keyword');
+
+        if ($keyword) {
+            $query->andFilterWhere([
+                'or',
+                ['apply_id' => $keyword],
+                ['title' => $keyword]
+            ]);
+        }
+
+        $beginTime = \Yii::$app->request->post('begin_time');
+        $endTime = \Yii::$app->request->post('end_time');
+        if ($beginTime && $endTime) {
+            $query->andWhere([
+                'and',
+                ['>=', 'create_time', strtotime($beginTime)],
+                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
+            ]);
+        }
 
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
 
         //当前页
-        $currentPage = \Yii::$app->request->post('currentPage') ? : 1;
+        $currentPage = \Yii::$app->request->post('currentPage') ?: 1;
         //每页显示条数
-        $perPage = \Yii::$app->request->post('perPage') ? : 20;
+        $perPage = \Yii::$app->request->post('perPage') ?: 20;
 
         $pagination->setPageSize($perPage, true);
 
-        $pagination->setPage($currentPage -1);
+        $pagination->setPage($currentPage - 1);
         $models = $query->limit($pagination->getLimit())->offset(
             $pagination->getPage() * $pagination->pageSize
         )->orderBy(['create_time' => SORT_DESC])->all();
-        $data   = [];
-        if(!empty($models)) {
+        $data = [];
+        if (!empty($models)) {
             foreach ($models as $model) {
                 $typeName = '';
                 $money = 0;
@@ -143,7 +163,7 @@ class BackLogic extends BaseLogic
         $param['order_number'];
         $param['order_type'];
         $data = ThirdServer::instance()->payment($param);
-        if($data['success'] == 1) {
+        if ($data['success'] == 1) {
             return true;
         } else {
             return false;
