@@ -18,9 +18,19 @@ use Yii;
  * @property integer $result
  * @property integer $approval_time
  * @property integer $is_to_me_now
+ * @property Apply $apply
+ * @property ApprovalLog $nextApprovalLog
  */
 class ApprovalLog extends \yii\db\ActiveRecord
 {
+    const STATUS_PASS = 1;
+    const STATUS_FAIL = 2;
+
+    const SCENARIO_FAIL = 'fail';//审批不通过
+    const SCENARIO_PASS = 'pass';// 审批通过，需要继续审批
+    const SCENARIO_CONFIRM = 'confirm';// 审批通过，需要继续审批，需要财务
+    const SCENARIO_COMPLETE = 'complete';// 审批通过，不需要继续审批，申请完成
+
     /**
      * @inheritdoc
      */
@@ -66,9 +76,65 @@ class ApprovalLog extends \yii\db\ActiveRecord
 （审核步骤没到我这边或者我已经审核过了的话 值都为0）',
         ];
     }
-    
+
+    /**
+     * 获取该审批的申请信息
+     * @return \yii\db\ActiveQuery|Apply
+     */
     public function getApply()
     {
-    	return $this -> hasOne(Apply::className(), ['apply_id' => 'apply_id']);
+        return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
+    }
+
+    /**
+     * 获取下一条审批记录
+     * @return array|null|self
+     */
+    public function getNextApprovalLog()
+    {
+        return self::find()->where(['apply_id' => $this->apply_id, 'steep' => ($this->steep + 1)])->one();
+    }
+
+    /**
+     * 设置该记录为需要我审核
+     */
+    public function setApprovalPerson()
+    {
+        $this->is_to_me_now = true;
+        return $this->save();
+    }
+
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_FAIL => ['*'],
+            self::SCENARIO_PASS => ['*'],
+            self::SCENARIO_CONFIRM => ['*'],
+            self::SCENARIO_COMPLETE => ['*'],
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            switch ($this->scenario) {
+                case self::SCENARIO_FAIL;
+                    return $this->apply->approvalFail();
+                    break;
+                case self::STATUS_PASS;
+                    $nextApproval = $this->nextApprovalLog;
+                    return ($nextApproval->setApprovalPerson() && $this->apply->approvalPass($nextApproval->approval_person));
+                    break;
+                case self::SCENARIO_CONFIRM;
+                    return $this->apply->approvalConfirm();
+                    break;
+                case self::SCENARIO_COMPLETE;
+                    return $this->apply->approvalComplete();
+                    break;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
