@@ -107,6 +107,7 @@ class ApprovalLog extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
+        	self::SCENARIO_DEFAULT => ['*'],
             self::SCENARIO_FAIL => ['*'],
             self::SCENARIO_PASS => ['*'],
             self::SCENARIO_CONFIRM => ['*'],

@@ -68,6 +68,8 @@ class BaoxiaoForm extends BaseForm
 					$this->addError($attribute, "报销金额不正确");
 				}elseif(!$v['type_name']){
 					$this->addError($attribute, "报销类型不正确");
+				}elseif(!$v['type'] > 0){
+					$this->addError($attribute, "报销类型不正确!");
 				}
 				if ($this->hasErrors()){
 					return;
