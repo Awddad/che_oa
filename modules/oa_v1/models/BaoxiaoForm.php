@@ -4,7 +4,7 @@ namespace app\modules\oa_v1\models;
 use Yii;
 use app\models as appmodel;
 use yii\web\UploadedFile;
-use app\commands\MyTcPdf;
+use app\logic\MyTcPdf;
 use app\modules\oa_v1\logic\PersonLogic;
 
 
