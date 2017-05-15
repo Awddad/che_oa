@@ -112,4 +112,14 @@ class PersonLogic extends BaseLogic
         $org = Org::find()->all();
         return ArrayHelper::map($org, 'org_id', 'org_name');
     }
+    /**
+     * 通过用户id 获得部门
+     * @param int $person_id
+     */
+    public function getOrgNameByPersonId($person_id)
+    {
+    	$person = Person::findOne($person_id);
+    	$orgArr = $this -> getOrgName($person);
+    	return implode('-', $orgArr);
+    }
 }
