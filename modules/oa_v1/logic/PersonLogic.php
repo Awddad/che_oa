@@ -135,12 +135,11 @@ class PersonLogic extends BaseLogic
         if(empty($org)) {
             return [];
         }
-        $sql = Org::find()->where(['pid' => $orgId])->createCommand()->getRawSql();
         foreach ($org as $value) {
             $data[] = [
                 'label' => $value->org_name,
                 'value' => $value->org_id,
-                'children' => $this->getOrgs($value->org_id, $data)
+                'children' => $this->getOrgs($value->org_id, [])
             ];
         }
         return $data;

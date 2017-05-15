@@ -89,7 +89,7 @@ class TreeTagLogic extends Logic
             $data[] = [
                 'label' => $tree->name,
                 'value' => $tree->id,
-                'children' => $this->getTreeTagsByParentId($tree->id, $data)
+                'children' => $this->getTreeTagsByParentId($tree->id, [])
             ];
         }
         return $data;
