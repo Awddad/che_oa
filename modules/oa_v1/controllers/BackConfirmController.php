@@ -54,7 +54,6 @@ class BackConfirmController extends BaseController
         if($files) {
             $data['BackConfirmForm']['pics']  = $files;
         }
-        $post['BackConfirmForm']['pics']  = $model->saveUploadFile('pics');
         if ($model->load($post) &&  $model->validate() && $model->saveConfirm()) {
             return $this->_return('');
         } else {
