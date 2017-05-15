@@ -34,7 +34,7 @@ class BaoXiao extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'bao_xiao_list_ids', 'bank_card_id', 'bank_name', 'bank_name_des'], 'required'],
+            [['apply_id', 'bao_xiao_list_ids', 'bank_card_id', 'bank_name'], 'required'],
             [['money'], 'number'],
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
