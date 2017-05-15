@@ -1,5 +1,5 @@
 <?php
-namespace app\commands;
+namespace app\logic;
 /**
  * php生成与PDF类封装
  * @author：王雕
@@ -7,8 +7,6 @@ namespace app\commands;
  */
 use TCPDF;
 class MyTcPdf {
-    
-    
     /**
      * 
      * @param array $strSaveName   保存的文件名 

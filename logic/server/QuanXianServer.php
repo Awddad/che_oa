@@ -1,5 +1,5 @@
 <?php
-namespace app\commands;
+namespace app\logic\server;
 /**
  * @功能：与权限系统交互的功能
  * @作者：王雕
@@ -8,8 +8,10 @@ namespace app\commands;
 use Yii;
 use app\models\Org;
 use app\models\Person;
-use app\commands\PublicMethod;
-class QuanXianLogic 
+use app\models\PersonBankInfo;
+use app\models\Role;
+use app\models\RoleOrgPermission;
+class QuanXianServer extends ThirdServer
 {
     /*
      * @var string  与权限系统对接的接口地址（前面的公用部分）
@@ -42,6 +44,13 @@ class QuanXianLogic
             'userlist' => $this->preUrl . '/projects/users',//获取项目中的所有人
             'login' => $this->preUrl . '/users/login', //登录接口
             'bqqtips' => $this->preUrl . '/bqq/tips',//企业QQ客户端提醒
+//            'changePassword' => $this->preUrl . '/users/change-password', //登录后修改密码接口
+            'roles' => $this->preUrl . '/projects/roles', //拉取项目中的角色以及角色权限的数据接口
+            'role_user' => $this->preUrl . '/projects/role_user',//
+            //
+//            'passwordPhoneCode' => $this->preUrl . '/password/phone/code',//手机号修改密码 - 第一步 发送短信验证码
+//            'passwordPhone' => $this->preUrl . '/password/phone/reset', //手机号修改密码 - 第二步 根据接收到的验证码修改密码
+
         ];
     }
     
@@ -66,8 +75,7 @@ class QuanXianLogic
             'account' => $strPhoneOrEmail,
             'password' => $strPwd,
         ];
-        $jsonRtn = $this->thisHttpPost($this->arrApiUrl['login'], $arrPost);
-        $arrRtn = json_decode($jsonRtn, true);
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['login'], $arrPost);
         //登录后需要返回权限列表
         if($arrRtn['success'] && !empty($arrRtn['data']))
         {
@@ -93,8 +101,7 @@ class QuanXianLogic
                 'organization_id' => 1, //车城控股集团 （总部）
                 'show_users' => 0  //只返回架构数据，不返回人员信息
             ];
-        $jsonRtn = $this->thisHttpPost($this->arrApiUrl['organizations'], $arrPost);
-        $arrRtn = json_decode($jsonRtn, true);
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['organizations'], $arrPost);
         if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) && !empty($arrRtn['data'][0]) )//接口处理数据成功
         {
             $this->formatOrgList($arrRtn['data']);
@@ -161,8 +168,7 @@ class QuanXianLogic
             'per_page' => 1000000,//一次拉取所有员工
             'show_deleted' => 1,
         ];
-        $jsonRtn = $this->thisHttpPost($this->arrApiUrl['userlist'], $arrPost);
-        $arrRtn = json_decode($jsonRtn, true);
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['userlist'], $arrPost);
         if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) &&!empty($arrRtn['data']['data']))//接口处理数据成功
         {
             //获取组织架构信息
@@ -172,7 +178,8 @@ class QuanXianLogic
                 $arrOrgList[$val['org_id']] = $val['org_name'];
             }
             //构造入库数据
-            $arrPerson = [];
+            $arrPerson = [];//oa_person表的入库数据
+            $arrBankList = [];//oa_person_bank_info表的入库数据
             foreach($arrRtn['data']['data'] as $val)
             {
                 $arrPerson[] = [
@@ -180,6 +187,7 @@ class QuanXianLogic
                     'person_name' => $val['name'],
                     'org_id' => $val['organization_id'],
                     'org_name' => (isset($arrOrgList[$val['organization_id']]) ? $arrOrgList[$val['organization_id']] : ''),
+                    'org_full_name' => $this->getOrgFullName($val['organization_id'], $arrOrgListTmp),
                     'is_delete' => ($val['status'] == 1 ? 0 : 1),
                     'profession' => $val['position_name'],
                     'email' => $val['email'],
@@ -187,16 +195,178 @@ class QuanXianLogic
                     'bqq_open_id' => $val['bqq_open_id'],
                     'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] ))
                 ];
+                //银行卡信息
+                if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
+                {
+                    foreach($val['bank_cards'] as $bankInfo)
+                    {
+                        $arrBankList[] = [
+                            'id' => $bankInfo['id'],
+                            'bank_name' => $bankInfo['bank'],
+                            'bank_name_des' => '',
+                            'bank_card_id' => $bankInfo['number'],
+                            'is_salary' => $bankInfo['is_salary'],
+                            'person_id' => $bankInfo['user_id'],
+                        ];
+                    }
+                }
             }
-            //更新入库
+            //更新入库 - oa_person 表
             $strTable = Person::tableName();
             $arrKeys = array_keys($arrPerson[0]);
             $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrPerson, 'person_id');
             $result = Yii::$app->db->createCommand($strSql)->execute();
+            
+            //更新入库 - oa_person_bank_info表
+            if(!empty($arrBankList))
+            {
+                $db = Yii::$app->db;
+                $transaction = $db->beginTransaction();
+                try
+                {
+                    $strBankTable = PersonBankInfo::tableName();
+                    $arrBankClumes = array_keys($arrBankList[0]);
+                    //清表
+                    $db->createCommand()->delete($strBankTable)->execute();
+                    //入库
+                    $db->createCommand()->batchInsert($strBankTable, $arrBankClumes, $arrBankList)->execute();
+                    $transaction->commit();
+                } catch (Exception $ex) {
+                    $transaction->rollBack();
+                }
+            }
             return $result;
         }
         return false;
     }
+    
+    /**
+     * @功能：根据组织id获取组织架构全称
+     * @作者：王雕
+     * @创建时间：2017-05-11
+     * @param string $orgId     需要查询的组织架构id
+     * @param array $arrOrgListTmp  库里面组织架构全表信息，不传的话函数里面会自己查库获取
+     * @return string $strOrgFullName   组织架构全称
+     */
+    public function getOrgFullName($orgId, $arrOrgListTmp = [])
+    {
+        if(empty($arrOrgListTmp))
+        {
+            $arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+        }
+        foreach($arrOrgListTmp as $val)
+        {
+            $arrOrgList[$val['org_id']] = $val;
+        }
+        $arrOrgName = [];
+        while(isset($arrOrgList[$orgId]))
+        {
+            array_unshift($arrOrgName, $arrOrgList[$orgId]['org_name']);
+            $orgId = $arrOrgList[$orgId]['pid'];
+        }
+        $strOrgFullName = implode('-', $arrOrgName);
+        return $strOrgFullName;
+    }
+    
+    
+    /**
+     * @功能：从权限系统中拉取项目的角色配置信息
+     * @作者：王雕
+     * @创建时间：2017-05-11
+     */
+    public function curlUpdateRole()
+    {
+        $result = 0;
+        $arrPost = [
+            '_token' => $this->_token,
+            'current_page' => 1,
+            'per_page' => 1000000,//由于有分页，设置每页10万条数据一次拉取所有的 O(∩_∩)O~
+        ];
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['roles'], $arrPost);
+        if($arrRtn['success'] == 1 && !empty($arrRtn['data']['data']) && is_array($arrRtn['data']['data']))
+        {
+            //整理入库数据
+            $arrRoles = [];
+            foreach($arrRtn['data']['data'] as $val)
+            {
+                $arrRoles[] = [
+                    'id' => $val['id'],
+                    'name' => $val['name'],
+                    'slug' => $val['slug'],
+                    'permissions' => json_encode($val['permissions'])
+                ];
+            }
+            
+            //更新入库 - oa_person_bank_info表
+            if(!empty($arrRoles))
+            {
+                $db = Yii::$app->db;
+                $transaction = $db->beginTransaction();
+                try
+                {
+                    $strRoleTable = Role::tableName();
+                    $arrRolesClumes = array_keys($arrRoles[0]);
+                    //清表
+                    $db->createCommand()->delete($strRoleTable)->execute();
+                    //入库
+                    $result = $db->createCommand()->batchInsert($strRoleTable, $arrRolesClumes, $arrRoles)->execute();
+                    $transaction->commit();
+                } catch (Exception $ex) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+        return $result;
+    }
+    
+    
+    /**
+     * @功能：从权限系统中拉取项目的用户的角色和数据权限信息
+     * @作者：王雕
+     * @创建时间：2017-05-11
+     */
+    public function curlUpdateUserRoleOrgPermission()
+    {
+        $result = 0;
+        $arrPost = [
+            '_token' => $this->_token,
+        ];
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['role_user'], $arrPost);
+        if($arrRtn['success'] == 1 && !empty($arrRtn['data']) && is_array($arrRtn['data']))
+        {
+            //整理入库数据
+            $arrRoleData = [];
+            foreach($arrRtn['data'] as $val)
+            {
+                $arrRoleData[] = [
+                    'person_id' => $val['user_id'],
+                    'role_id' => $val['project_role_id'],
+                    'org_ids' => implode(',', $val['organization_ids'])
+                ];
+            }
+            
+            //更新入库 - oa_person_bank_info表
+            if(!empty($arrRoleData))
+            {
+                $db = Yii::$app->db;
+                $transaction = $db->beginTransaction();
+                try
+                {
+                    $strTable = RoleOrgPermission::tableName();
+                    $arrClumes = array_keys($arrRoleData[0]);
+                    //清表
+                    $db->createCommand()->delete($strTable)->execute();
+                    //入库
+                    $result = $db->createCommand()->batchInsert($strTable, $arrClumes, $arrRoleData)->execute();
+                    $transaction->commit();
+                } catch (Exception $ex) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+        return $result;
+    }
+    
     /**
      * @功能：与权限系统交互，给部分人的企业QQ发送tips消息
      * @作者：王雕
@@ -234,8 +404,7 @@ class QuanXianLogic
         }
         else
         {
-            $jsonRtn = $this->thisHttpPost($this->arrApiUrl['bqqtips'], $arrPost);
-            $arrRtn = json_decode($jsonRtn, true);
+            $arrRtn = $this->thisHttpPost($this->arrApiUrl['bqqtips'], $arrPost);
             if($arrRtn && $arrRtn['success'] == 1)
             {
                 $arrSendResult = ['result' => 0, 'msg' => ''];
@@ -257,9 +426,9 @@ class QuanXianLogic
      * @param array $options    curl配置参数
      * @return string $jsonRtn  curl请求结果
      */
-    private function thisHttpPost($url, $params = array(), $options = array())
+    private function thisHttpPost($url, $params = array())
     {
-        $jsonRtn = PublicMethod::http_post($url, $params, $options);
+        $jsonRtn = $this->httpPost($url, $params);
         /**
          * 可以加log
          */
