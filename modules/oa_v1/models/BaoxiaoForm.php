@@ -139,6 +139,7 @@ class BaoxiaoForm extends BaseForm
 			$model -> copy_person = $model -> copy_person?implode(',', array_column($model -> copy_person,'person_name')):'';
 			$approval_person = array_column($this -> approval_persons,'person_name')[0];
 			$model -> next_des = "待{$approval_person}审批";
+			$model -> org_id = $this -> user['org_id'];
 		}elseif('baoxiao' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> bao_xiao_list_ids = implode(',',array_column($this ->bao_xiao_list,'id'));

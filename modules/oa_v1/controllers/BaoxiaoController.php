@@ -28,7 +28,7 @@ class BaoxiaoController extends BaseController
 			$model -> load($post);
 			$model -> title = $model -> createApplyTitle($this->arrPersonInfo);
 			$model -> create_time = time();
-			$model -> user = array('id'=>$this->arrPersonInfo['person_id'],'name'=>$this->arrPersonInfo['person_name']);;
+			$model -> user = array('id'=>$this->arrPersonInfo['person_id'],'name'=>$this->arrPersonInfo['person_name'],'org_id'=>$this->arrPersonInfo['org_id']);
 			$model -> fujian  = $model -> saveFile(UploadedFile::getInstancesByName('fujian'),$file_config['fujian']);
 			$model -> pic  = $model -> saveFile(UploadedFile::getInstancesByName('pic'),$file_config['pic']);
 			
