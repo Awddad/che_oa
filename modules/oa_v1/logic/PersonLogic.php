@@ -51,7 +51,7 @@ class PersonLogic extends BaseLogic
 
     /**
      * @param Person $person
-     * @return string
+     * @return array
      */
     public function getOrgName($person)
     {
@@ -115,11 +115,33 @@ class PersonLogic extends BaseLogic
     /**
      * 通过用户id 获得部门
      * @param int $person_id
+     * @return string
      */
     public function getOrgNameByPersonId($person_id)
     {
     	$person = Person::findOne($person_id);
     	$orgArr = $this -> getOrgName($person);
     	return implode('-', $orgArr);
+    }
+
+    /**
+     * @param int $orgId
+     * @param $data
+     * @return array
+     */
+    public function getOrgs($orgId = 0, $data = [])
+    {
+        $org = Org::find()->where(['pid' => $orgId])->all();
+        if(empty($org)) {
+            return [];
+        }
+        foreach ($org as $value) {
+            $data[] = [
+                'label' => $value->org_name,
+                'value' => $value->org_id,
+                'children' => $this->getOrgs($value->org_id, [])
+            ];
+        }
+        return $data;
     }
 }
