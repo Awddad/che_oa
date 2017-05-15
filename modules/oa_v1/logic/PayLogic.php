@@ -64,13 +64,13 @@ class PayLogic extends BaseLogic
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
-
+        $order = 'create_time desc';
         if(\Yii::$app->request->post('desc')) {
             $order = \Yii::$app->request->post('desc') .' desc';
         }
 
         if(\Yii::$app->request->post('asc')) {
-            $order = \Yii::$app->request->post('desc') .' asc';
+            $order = \Yii::$app->request->post('asc') .' asc';
         }
 
         //当前页
