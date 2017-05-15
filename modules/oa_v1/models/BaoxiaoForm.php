@@ -280,6 +280,6 @@ class BaoxiaoForm extends BaseForm
 		$fileName = $arrInfo['apply_id'].'.pdf';
 		$myPdf = new MyTcPdf();
 		$myPdf -> createBaoXiaoDanPdf($root_path.'/'.$fileName, $arrInfo);
-		appmodel\BaoXiao::updateAll(['bao_xiao_dan_pdf' => "$dir/$fileName"],"apply_id='{$this->apply_id}'");
+		appmodel\Apply::updateAll(['apply_list_pdf' => "$dir/$fileName"],"apply_id='{$this->apply_id}'");
 	}
 }

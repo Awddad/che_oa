@@ -66,7 +66,7 @@ class ApplyController extends BaseController
 				'bank_des' => $apply['info']['bank_name_des'],
 				'file' => json_decode($apply['info']['files']),
 				'pics' => explode(',', $apply['info']['pics']),
-				'pdf' => $apply['info']['bao_xiao_dan_pdf'],
+				//'pdf' => $apply['info']['bao_xiao_dan_pdf'],
 				'list' => [],
 		];
 		foreach($apply['info']['list'] as $v){
@@ -173,6 +173,7 @@ class ApplyController extends BaseController
 				'status' => $apply['status'],
 				'copy_person' => [],
 				'approval' => [],
+				'pdf' => $apply['apply_list_pdf'],
 			];
 		foreach($apply['copy_person'] as $v){
 			$data['copy_person'][] = [
