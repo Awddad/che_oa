@@ -103,6 +103,15 @@ class BackLogic extends BaseLogic
             ]);
         }
 
+        $order = 'create_time desc';
+        if(\Yii::$app->request->post('desc')) {
+            $order = \Yii::$app->request->post('desc') .' desc';
+        }
+
+        if(\Yii::$app->request->post('asc')) {
+            $order = \Yii::$app->request->post('asc') .' asc';
+        }
+
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
@@ -117,7 +126,7 @@ class BackLogic extends BaseLogic
         $pagination->setPage($currentPage - 1);
         $models = $query->limit($pagination->getLimit())->offset(
             $pagination->getPage() * $pagination->pageSize
-        )->orderBy(['create_time' => SORT_DESC])->all();
+        )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
             foreach ($models as $model) {
