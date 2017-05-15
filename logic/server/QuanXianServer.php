@@ -44,13 +44,9 @@ class QuanXianServer extends ThirdServer
             'userlist' => $this->preUrl . '/projects/users',//获取项目中的所有人
             'login' => $this->preUrl . '/users/login', //登录接口
             'bqqtips' => $this->preUrl . '/bqq/tips',//企业QQ客户端提醒
-//            'changePassword' => $this->preUrl . '/users/change-password', //登录后修改密码接口
             'roles' => $this->preUrl . '/projects/roles', //拉取项目中的角色以及角色权限的数据接口
             'role_user' => $this->preUrl . '/projects/role_user',//
-            //
-//            'passwordPhoneCode' => $this->preUrl . '/password/phone/code',//手机号修改密码 - 第一步 发送短信验证码
-//            'passwordPhone' => $this->preUrl . '/password/phone/reset', //手机号修改密码 - 第二步 根据接收到的验证码修改密码
-
+            'user_add_bankcards' => $this->preUrl . '/users/bankcards',//用户添加银行卡
         ];
     }
     
@@ -239,6 +235,39 @@ class QuanXianServer extends ThirdServer
         }
         return false;
     }
+    
+    /**
+     * @功能：向权限系统增加员工银行卡
+     * @作者：王雕
+     * @创建时间：2017-05-15
+     * @param int       $intPersonId            用户id
+     * @param string    $strBankName            银行名
+     * @param string    $strBankNameDes         支行名
+     * @param string    $strCardId              卡号
+     * @param int       $intIsSalary            是否是工资卡 1 - 是 非1 - 不是
+     * @return boolean  $result                 true - 添加成功 false - 添加失败
+     */
+    public function curlAddUserBankList($intPersonId, $strBankName, $strBankNameDes, $strCardId, $intIsSalary = 0)
+    {
+        $result = false;
+        $arrPost = [
+            '_token' => $this->_token,
+            'user_id' => $intPersonId,
+            'bank' => $strBankName,
+            'bank_detail' => $strBankNameDes,
+            'number' => $strCardId,
+            'is_salary' => ($intIsSalary == 1 ? 1 : 0)
+        ];
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['user_add_bankcards'], $arrPost);
+        if($arrRtn['success'] == 1)//接口处理数据成功 - 加卡成功
+        {
+            //加卡成功 - 本地库中加银行卡 此处需要优化，直接插一条数据到银行表中就ok了，等栩栩提供成功后的id给我
+            $this->curlUpdateUser();
+            $result = true;
+        }
+        return $result;
+    }
+    
     
     /**
      * @功能：根据组织id获取组织架构全称
