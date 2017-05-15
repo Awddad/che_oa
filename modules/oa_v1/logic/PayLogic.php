@@ -65,6 +65,14 @@ class PayLogic extends BaseLogic
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
 
+        if(\Yii::$app->request->post('desc')) {
+            $order = \Yii::$app->request->post('desc') .' desc';
+        }
+
+        if(\Yii::$app->request->post('asc')) {
+            $order = \Yii::$app->request->post('desc') .' asc';
+        }
+
         //当前页
         $currentPage = \Yii::$app->request->post('currentPage') ?: 1;
         //每页显示条数
@@ -72,10 +80,11 @@ class PayLogic extends BaseLogic
 
         $pagination->setPageSize($perPage, true);
 
+
         $pagination->setPage($currentPage - 1);
         $models = $query->limit($pagination->getLimit())->offset(
             $pagination->getPage() * $pagination->pageSize
-        )->orderBy(['create_time' => SORT_DESC])->all();
+        )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
             foreach ($models as $model) {
