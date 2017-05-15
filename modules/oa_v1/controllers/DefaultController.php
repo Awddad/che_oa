@@ -35,7 +35,7 @@ class DefaultController extends BaseController
     
     /**
      * 获取用户信息接口
-     * @return type
+     * @return array
      */
     public function actionGetUserInfo()
     {
@@ -45,10 +45,11 @@ class DefaultController extends BaseController
         ];
         return $this->_return($arrData);
     }
-    
+
     /**
      * 获取申请id
-     * @return type
+     *
+     * @return array
      */
     public function actionGetApplyId()
     {
@@ -75,6 +76,11 @@ class DefaultController extends BaseController
         }
     }
 
+    /**
+     * 获取组织架构
+     *
+     * @return array
+     */
     public function actionOrg()
     {
         $data = PersonLogic::instance()->getOrgs();

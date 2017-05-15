@@ -144,6 +144,8 @@ class LoanForm extends BaseForm
         $apply->next_des = '等待'.$nextName.'审批';
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
+        $apply->apply_list_pdf = '';
+        $apply->org_id = $user['org_id'];
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
