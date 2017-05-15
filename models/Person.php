@@ -28,7 +28,7 @@ class Person extends \yii\db\ActiveRecord
     {
         return 'oa_person';
     }
-
+    
     /**
      * @inheritdoc
      */
@@ -37,7 +37,7 @@ class Person extends \yii\db\ActiveRecord
         return [
             [['person_id', 'org_id'], 'required'],
             [['person_id', 'org_id', 'is_delete', 'last_login_time'], 'integer'],
-            [['person_name', 'org_name', 'email'], 'string', 'max' => 255],
+            [['person_name', 'org_name', 'email', 'org_full_name'], 'string', 'max' => 255],
             [['profession'], 'string', 'max' => 4],
             [['phone'], 'string', 'max' => 11],
             [['access_token'], 'string', 'max' => 1000],
@@ -54,6 +54,7 @@ class Person extends \yii\db\ActiveRecord
             'person_name' => '员工姓名',
             'org_id' => '员工所在的组织id',
             'org_name' => '员工所在的组织名称',
+            'org_full_name' => '用户的组织名称全称（从最高层往下显示）',
             'is_delete' => '员工是否被删除：
 0 - 正常
 1 - 删除',
