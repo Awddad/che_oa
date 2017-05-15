@@ -20,7 +20,7 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-        $data = TreeTagLogic::instance()->getTreeTagsByParentId();
+        $data = TreeTagLogic::instance()->getTreeTagsByParentId(1);
         return $this->_return($data);
     }
 
@@ -73,5 +73,11 @@ class DefaultController extends BaseController
         {
             return $this->_return([], 403);
         }
+    }
+
+    public function actionOrg()
+    {
+        $data = PersonLogic::instance()->getOrgs();
+        return $this->_return($data);
     }
 }

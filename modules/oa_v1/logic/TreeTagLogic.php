@@ -76,7 +76,7 @@ class TreeTagLogic extends Logic
      * @param array $data
      * @return array
      */
-    public function getTreeTagsByParentId($parentId = 17, &$data =[])
+    public function getTreeTagsByParentId($parentId = 17, $data =[])
     {
         $tagTree = TagTree::find()->where([
             'parent_id' => $parentId,
@@ -85,7 +85,6 @@ class TreeTagLogic extends Logic
         if(empty($tagTree)) {
             return [];
         }
-        $data = [];
         foreach ($tagTree as $tree) {
             $data[] = [
                 'label' => $tree->name,
