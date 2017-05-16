@@ -23,13 +23,13 @@ class ThirdServer extends Server
      *
      * @var string
      */
-    public $token = 'debf6cc22a8baf00904acc5f42535575';
+    public $token = '';
 
     /**
      * 基础URL
      * @var string
      */
-    protected $baseUrl = 'http://test.pocket.checheng.net/api/';
+    public $baseUrl = '';
 
     /**
      * 获取科目标签树形结构 URL

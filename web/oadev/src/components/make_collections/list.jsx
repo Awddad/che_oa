@@ -79,7 +79,8 @@ const MakeCollectionsList = React.createClass({
         },{
             title:'金额',
             dataIndex:'money',
-            key:'money'
+            key:'money',
+            className: 'column-money',
         },{
             title:'操作',
             dataIndex:'operation',
