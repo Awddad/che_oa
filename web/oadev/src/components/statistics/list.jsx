@@ -11,7 +11,7 @@ const LoadDetailsList= React.createClass({
             type:'Statistics/query',
             payload:{
                 page:page,
-                page_size:perPage,
+                pageSize:perPage,
                 key:key,
                 time:time,
             }
@@ -22,9 +22,8 @@ const LoadDetailsList= React.createClass({
         this.props.dispatch({
             type:'Statistics/query',
             payload:{
-                type:type,
                 page:current,
-                page_size:pageSize,
+                pageSize:pageSize,
                 key:key,
                 time:time,
             }
@@ -34,7 +33,7 @@ const LoadDetailsList= React.createClass({
     render(){
 
         const { dataSource,keyword,time,type,current,totalCount,pageSize,pageCount,perPage,currentPage,loading,total,sortingType} = this.props.Statistics;
-        
+
         const columns = [{
             title: '序号',
             dataIndex: 'id',
@@ -98,7 +97,8 @@ const LoadDetailsList= React.createClass({
                         showQuickJumper
                         current = { current }
                         defaultCurrent={ 1 }
-                        total={ total } 
+                        defaultPageSize={10}
+                        total={ total }
                         onChange={ this.paginationChange }
                         onShowSizeChange={this.onShowSizeChange}
                         showSizeChanger

@@ -59,9 +59,7 @@ const LoadDetail = React.createClass({
                   time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
                 }
-                if (fieldsValue.department.length > 0) {
 
-                }
                 this.props.dispatch({
                     type:'Statistics/search',
                     payload: {

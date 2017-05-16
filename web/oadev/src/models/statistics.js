@@ -32,7 +32,7 @@ export default {
             type: 'query',
             payload: {
                 pageCount:location.query.pageCount == null? "" : location.query.pageCount,
-                page_size:10,
+                pageSize:10,
             },
           });
         }
@@ -78,8 +78,9 @@ export default {
                 payload:{
                     key: payload.key,
                     time: payload.time,
-                    department:data.data.value,
-                    dataSource:data.data.info
+                    dataSource:data.data.info,
+                    current:data.data.pages.currentPage,
+                    total:data.data.pages.totalCount
                 }
             });
         }
