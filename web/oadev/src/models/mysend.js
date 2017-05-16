@@ -1,4 +1,4 @@
-import { query } from '../services/mysend';
+import { query,revoke } from '../services/mysend';
 import { parse } from 'qs';
 import { message} from 'antd';
 
@@ -30,7 +30,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/mysend') {
-          dispatch({  
+          dispatch({
             type: 'query',
             payload: {
                 type: 3,
@@ -92,6 +92,25 @@ export default {
                     at:payload.at
                 }
             });
+        }
+    },
+    *revoke({payload},{call,put}){
+        const { data } = yield call(revoke,payload);
+        if(data && data.code === 200){
+            message.success("撤销成功",3);
+            const { data } = yield call(query, payload);
+            if (data && data.code == 200) {
+              yield put({
+                type: 'querySuccess',
+                payload: {
+                    dataSource: data.data.res,
+                    total: data.data.page.totalCount,
+                    current: data.data.page.currentPage,
+                },
+              });
+            }
+        }else{
+            message.error("撤销失败",3);
         }
     }
   },

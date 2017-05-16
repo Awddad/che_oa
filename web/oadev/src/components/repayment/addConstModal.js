@@ -26,8 +26,9 @@ const AddConstModal = React.createClass({
             this.props.dispatch({
               type: 'repayMent/addconst',
               payload: {
-                row:row,
-                type:1
+                    row:row,
+                    type:1,
+
                 }
             });
         });
@@ -41,17 +42,18 @@ const AddConstModal = React.createClass({
         const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
-            sm: { span: 6 },
+            sm: { span: 4 },
           },
           wrapperCol: {
             xs: { span: 24 },
-            sm: { span: 14 },
+            sm: { span: 18 },
           },
         };
 
         const modalOpts = {
           key:this.props.key,
           title:this.props.title,
+          width:600,
           visible:this.props.isshowconstmodal,
           onOk:this.handleonOK,
           onCancel:this.onCancel,

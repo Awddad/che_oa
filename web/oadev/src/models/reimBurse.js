@@ -5,7 +5,6 @@ import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'reimBurse',
-
   state: {
     constCard:[],//初始化银行卡信息
     constType:[],//报销类型
@@ -13,6 +12,7 @@ export default {
     tabledata:[],//新增的报销明细
     carddata:[],//新增的银行卡
     constdata:[],//审批人
+    initialconstdata:[],
     copydata:[],//抄送人
     bxtypeID:[],//报销明细记录ID
     CardDetail:{},//提交申请返回的必填字段数据
@@ -62,6 +62,7 @@ export default {
         });
     },
     *modelHandle({ payload }, { call, put }) {//数据新增刷新
+      let response =null;
       switch(payload.modalIndex){
          case 0:
             yield put({
@@ -70,20 +71,30 @@ export default {
             });
           break;
         case 1:
-          const response1  = yield call(constType, payload);
-          if (response1.data.data) {
+          response = yield call(constType, payload);
+          if (response.data.data) {
             yield put({
                 type: 'modelHandle1',
-                payload:{...payload,constType: response1.data.data}
+                payload:{...payload,constType: response.data.data}
             });
           }
           break;
         case 2:
-          const  response2  = yield call(constPersonal, payload);
-          if (response2) {
+          let data = null;
+          if(payload.constPersonal == null || payload.constPersonal.length == 0){
+              response = yield call(constPersonal, payload);
+              data = response.data.data;
+          }else{
+              data = payload.constPersonal;
+          }
+          console.log(data);
+          if (data) {
             yield put({
                 type: 'modelHandle1',
-                payload:{...payload,constPersonal: response2.data.data}
+                payload:{
+                  ...payload,
+                  constPersonal: data
+                }
             });
           }
           break;
@@ -128,10 +139,21 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+      let index =null;
+      for(let i =0;i<Object.keys(payload.constPersonal).length;i++ )
+      {
+        //console.log(payload.row.id +','+Object.values(payload.constPersonal)[i].id);
+        if(payload.row.id == Object.values(payload.constPersonal)[i].id ){
+          index = i;
+        }
+      }
+      let arr = Object.values(payload.constPersonal);
+          arr.splice(index,1)
       yield put({
           type: 'updateConst',
           payload: {
-              constdata : data
+              constdata : data,
+              constPersonal:arr
           }
       });
     },

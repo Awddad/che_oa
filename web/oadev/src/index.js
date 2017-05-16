@@ -46,7 +46,7 @@ app.model(require('./models/make_collections'));
 app.model(require('./models/detail'));
 app.model(require('./models/statistics'));
 app.model(require('./models/waitme-approve'));
-
+app.model(require('./models/UserInfo'));
 
 // 4. Router
 app.router(require('./router'));

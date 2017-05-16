@@ -22,12 +22,13 @@ const AddConstModal = React.createClass({
             const constdata = { ...getFieldsValue() };
             const name = (constdata.audit_personal.label).split(" ")[0];
             const row = {'id':constdata.audit_personal.key,'name':name};
-
+            const { constPersonal } = this.props.reimBurse;
             this.props.dispatch({
               type: 'reimBurse/addconst',
               payload: {
-                row:row,
-                type:1
+                    row:row,
+                    type:1,
+                    constPersonal:constPersonal
                 }
             });
         });

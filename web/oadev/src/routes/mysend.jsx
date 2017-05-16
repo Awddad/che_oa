@@ -1,16 +1,36 @@
 import React, { PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Form, Icon, Button, Row, Col,message} from 'antd';
+import { Form, Icon, Button, Row, Col,message,Modal} from 'antd';
 
 import styles from './style.less';
 import Main from '../components/home/main';
 import MysendSearch from '../components/mysend/search';
 import MysendList from '../components/mysend/list';
 
-
+const confirm = Modal.confirm;
 const Mysend=React.createClass({
-   render(){
+    // 撤销
+    showConfirm(event) {
+        let { personID } = this.props.UserInfo;
+        let apply_id = event.target.getAttribute("data-applyid") == null ? event.target.parentNode.getAttribute("data-applyid") : event.target.getAttribute("data-applyid");
+        const link = this.props;
+        this.props;
+        confirm({
+            title: '确认撤销该申请吗？',
+            content: '撤销该申请后，将不会继续进行审批流程',
+            onOk() {
+                link.dispatch({
+                    type: 'mysend/revoke',
+                    payload:{
+                        apply_id:apply_id,
+                        person_id:personID
+                    }
+                });
+            }
+        });
+    },
+    render(){
         const {
             loading,
             res,
@@ -96,7 +116,7 @@ const Mysend=React.createClass({
                     <div className={styles.home_wrap}>
                         <h2 className={styles.mb_md}>我发起的</h2>
                         <MysendSearch {...mysendSearchProps}/>
-                        <MysendList {...mysendListProps}/>
+                        <MysendList {...mysendListProps} handleClick = {this.showConfirm}/>
                     </div>
                 </Row>
             </Main>
@@ -108,11 +128,12 @@ Mysend.propTypes = {
   mysend: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
+  UserInfo:PropTypes.object,
 };
 
 // 与models绑定,namespace
-function mapStateToProps({ mysend }) {
-  return { mysend };
+function mapStateToProps({ mysend,UserInfo }) {
+  return { mysend,UserInfo };
 }
 
 

@@ -1,14 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
+import { routerRedux } from 'dva/router';
 import styles from './search.less';
-
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 
-const confirm = Modal.confirm;
 const MysendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
         const { at,type,onSorting }=this.props.mysend;
         let sorting = "";
         let filterType = null;
@@ -22,21 +20,6 @@ const MysendList = React.createClass({
         }
         this.props.onSorting(sorting, filterType);
     },
-     // 撤销
-    showConfirm() {
-        confirm({
-            title: '确认撤销该申请吗？',
-            content: '撤销该申请后，将不会继续进行审批流程',
-            onOk() {
-                return new Promise((resolve) => {
-                });
-            },
-            onCancel() {
-
-            }
-        });
-    },
-
     render(){
         const { dataSource,keywords,start_time,end_time,at,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sortingType,onPageChange,onDeleteItem,onShowSizeChange} = this.props.mysend;
             const columns = [{
@@ -106,7 +89,7 @@ const MysendList = React.createClass({
 
 
                     return result = (<p><a className="mr-md" href={url}>详情</a>
-                                <span className={record.can_cancel==1?styles.show:styles.hide} onClick={this.showConfirm}>
+                                <span className={record.can_cancel==1?styles.show:styles.hide} data-applyid={record.apply_id} onClick={this.props.handleClick}>
                                     <a>撤销</a>
                                 </span>
                             </p>);
@@ -138,15 +121,18 @@ const MysendList = React.createClass({
     })
 
 MysendList.propTypes = {
-  onPageChange: PropTypes.func,
-  onDeleteItem: PropTypes.func,
-  dataSource: PropTypes.array,
-  loading: PropTypes.any,
-  total: PropTypes.any,
-  current: PropTypes.any,
+    location:PropTypes.object,
+    dispatch: PropTypes.func,
+    UserInfo:PropTypes.object,
+    onPageChange: PropTypes.func,
+    onDeleteItem: PropTypes.func,
+    dataSource: PropTypes.array,
+    loading: PropTypes.any,
+    total: PropTypes.any,
+    current: PropTypes.any,
 };
-function mapStateToProps({mysend}){
-    return { mysend }
+function mapStateToProps({mysend,UserInfo}){
+    return { mysend,UserInfo }
 }
 export default connect(mapStateToProps)(MysendList);
 

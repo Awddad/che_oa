@@ -72,11 +72,13 @@ const Reimburse = React.createClass({
 
   //审批人选择弹窗
   showconstModal(){
+    const { constPersonal } = this.props.reimBurse;
     this.props.dispatch({
         type: 'reimBurse/modelHandle',
         payload: {
           isshowconstmodal:true,
-          modalIndex: 2
+          modalIndex: 2,
+          constPersonal:constPersonal
         }
     });
   },
