@@ -1,0 +1,31 @@
+{
+  "extends": "eslint-config-airbnb",
+  "parser": "babel-eslint",
+  "rules": {
+    "spaced-comment": [0],
+    "no-unused-vars": [0],
+    "no-empty": [0],
+    "react/wrap-multilines": [0],
+    "react/no-multi-comp": [0],
+    "no-constant-condition": [0],
+    "react/jsx-no-bind": [0],
+    "react/prop-types": [0],
+    "arrow-body-style": [0],
+    "react/prefer-stateless-function": [0],
+    "semi": [0],
+    "global-require": [0],
+    "no-shadow": [0],
+    "no-useless-computed-key": [0],
+    "no-underscore-dangle": [0],
+    // 数组和对象键值对最后一个逗号， never参数：不能带末尾的逗号, always参数：必须带末尾的逗号，
+    // always-multiline：多行模式必须带逗号，单行模式不能带逗号
+    "comma-dangle": [
+      2,
+      "never"
+    ],
+    "max-line-length": 0
+  },
+  "ecmaFeatures": {
+    "experimentalObjectRestSpread": true
+  }
+}

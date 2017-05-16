@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 
 
+use app\logic\MyTcPdf;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use app\models\JieKuan;
@@ -112,9 +113,7 @@ class LoanForm extends BaseForm
                 'rule' => ['integer']
             ],
             [
-                ['pics'],
-                'each',
-                'rule' => ['safe']
+                ['pics'], 'string'
             ],
             [
                 ['money', 'bank_card_id', 'bank_name', 'bank_name_des','des', 'tips'],
@@ -132,9 +131,35 @@ class LoanForm extends BaseForm
      */
     public function save($user)
     {
+        $applyId = $this->createApplyId();
+        $pdf = new  MyTcPdf();
+        $basePath = \Yii::$app->basePath.'/web';
+        $filePath = '/upload/pdf/loan/'.date('Y-m-d').'/';
+        $rootPath = $basePath.$filePath;
+        if (!file_exists($rootPath)) {
+            @mkdir($rootPath, 0777, true);
+        }
+        $rst = $pdf->createJieKuanDanPdf($rootPath.$applyId.'.pdf', [
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $applyId,
+            'org_full_name' => PersonLogic::instance()->getOrgNameByPersonId($user['person_id']),
+            'person' => $user['person_name'],
+            'bank_name' => $this->bank_name,
+            'bank_card_id' => $this->bank_card_id,
+            'money' => $this->money,
+            'detail' => $this->des,
+            'tips' => $this->tips,
+            'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
+            'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
+        ]);
+        if ($rst) {
+            $pdfUrl = $filePath.$applyId.'.pdf';
+        } else {
+            $pdfUrl = '';
+        }
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
         $apply = new Apply();
-        $apply->apply_id = $this->createApplyId();
+        $apply->apply_id = $applyId;
         $apply->title = $this->createApplyTitle($user);
         $apply->create_time = $_SERVER['REQUEST_TIME'];
         $apply->type = $this->type;
@@ -144,7 +169,7 @@ class LoanForm extends BaseForm
         $apply->next_des = '等待'.$nextName.'审批';
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
-        $apply->apply_list_pdf = '';
+        $apply->apply_list_pdf = $pdfUrl;
         $apply->org_id = $user['org_id'];
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
