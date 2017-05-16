@@ -70,7 +70,6 @@ export default {
                     begin_time: payload.begin_time,
                     end_time: payload.end_time,
                     dataSource:data.data.data,
-                    list: data.data.data,
                 }
             });
         }
@@ -82,7 +81,8 @@ export default {
                 type: 'querySuccess',
                 payload:{
                     keyword: payload.keyword,
-                    type:payload.type
+                    type:payload.type,
+                    dataSource:data.data.data,
                 }
             });
         }

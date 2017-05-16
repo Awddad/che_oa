@@ -21,6 +21,7 @@ export default {
     perPage:'',
     currentPage:'',
     pageCount:'',
+    totalCount:'',
     currentItem: {},
     modalVisible: false,
     modalType: 'update',

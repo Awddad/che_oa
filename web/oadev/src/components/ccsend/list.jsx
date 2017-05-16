@@ -137,7 +137,9 @@ const CcsendList = React.createClass({
                   />
                 <Pagination
                     showQuickJumper
-                    defaultCurrent={current} total={total} defaultPageSize={20} />
+                    defaultCurrent={current}
+                    total={total}
+                    defaultPageSize={perPage} />
                 </div>
             );
         }
