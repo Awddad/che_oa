@@ -40,10 +40,9 @@ class DefaultController extends BaseController
      */
     public function actionGetUserInfo()
     {
-        $this->arrPersonInfo;
         $arrData = [
             'userinfo' => $this->arrPersonInfo->toArray(),
-            'menu' => $this->arrPersonRoleInfo['menu']
+//            'menu' => $this->arrPersonRoleInfo['menu']
         ];
         return $this->_return($arrData);
     }
