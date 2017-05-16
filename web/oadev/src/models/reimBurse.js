@@ -12,7 +12,6 @@ export default {
     tabledata:[],//新增的报销明细
     carddata:[],//新增的银行卡
     constdata:[],//审批人
-    initialconstdata:[],
     copydata:[],//抄送人
     bxtypeID:[],//报销明细记录ID
     CardDetail:{},//提交申请返回的必填字段数据
@@ -52,6 +51,9 @@ export default {
           type: 'querySuccess',
           payload:{
             constCard: data.data,
+            tabledata:[],
+            constdata:[],
+            copydata:[]
           },
         });
       }
@@ -139,21 +141,10 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
-      let index =null;
-      for(let i =0;i<Object.keys(payload.constPersonal).length;i++ )
-      {
-        //console.log(payload.row.id +','+Object.values(payload.constPersonal)[i].id);
-        if(payload.row.id == Object.values(payload.constPersonal)[i].id ){
-          index = i;
-        }
-      }
-      let arr = Object.values(payload.constPersonal);
-          arr.splice(index,1)
       yield put({
           type: 'updateConst',
           payload: {
-              constdata : data,
-              constPersonal:arr
+              constdata : data
           }
       });
     },
@@ -174,12 +165,18 @@ export default {
       if (data && data.code === 200) {
         yield put({
             type: 'hideModal1',
+            payload:{
+              constPersonal:[],
+              tabledata:[],
+              constdata:[],
+              copydata:[],
+            }
         });
         yield put(routerRedux.push({
           pathname: '/success',
           query: {
             apply_id:data.data,
-            urltype:payload.urltype
+            urltype:payload.urltype,
           }
         }));
       } else {

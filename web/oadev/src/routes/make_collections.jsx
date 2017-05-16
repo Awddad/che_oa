@@ -74,9 +74,10 @@ import ConfirmPayment from '../components/details/confirmPayment';
                 type:'make_collections/search',
                 payload: {
                     keyword:fieldsValue.keyword,
-                    sorging:sorging,
                     begin_time:begin_time,
                     end_time:end_time,
+                    currentPage:1,
+                    perPage:perPage,
                 },
             });
         },
