@@ -8,6 +8,7 @@
 
 namespace app\modules\oa_v1\models;
 
+use app\logic\MyTcPdf;
 use app\models\Apply;
 use app\models\JieKuan;
 use app\models\PayBack;
@@ -142,9 +143,34 @@ class BackForm extends BaseForm
      */
     public function save($user)
     {
+        $applyId = $this->createApplyId();
+        $pdf = new  MyTcPdf();
+        $basePath = \Yii::$app->basePath.'/web';
+        $filePath = '/upload/pdf/payback/'.date('Y-m-d').'/';
+        $rootPath = $basePath.$filePath;
+        if (!file_exists($rootPath)) {
+            @mkdir($rootPath, 0777, true);
+        }
+        $rst = $pdf->createHuanKuanDanPdf($rootPath.$applyId.'.pdf', [
+            'list' => $this->getBackList(),
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $applyId,
+            'org_full_name' => PersonLogic::instance()->getOrgNameByPersonId($user['person_id']),
+            'person' => $user['person_name'],
+            'bank_name' => $this->bank_name,
+            'bank_card_id' => $this->bank_card_id,
+            'tips' => $this->tips,
+            'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
+            'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
+        ]);
+        if ($rst) {
+            $pdfUrl = $filePath.$applyId.'.pdf';
+        } else {
+            $pdfUrl = '';
+        }
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
         $apply = new Apply();
-        $apply->apply_id = $this->createApplyId();
+        $apply->apply_id = $applyId;
         $apply->title = $this->createApplyTitle($user);
         $apply->create_time = $_SERVER['REQUEST_TIME'];
         $apply->type = $this->type;
@@ -155,7 +181,7 @@ class BackForm extends BaseForm
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
         $apply->org_id = $user['org_id'];
-        $apply->apply_list_pdf = '';
+        $apply->apply_list_pdf = $pdfUrl;
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
@@ -213,5 +239,25 @@ class BackForm extends BaseForm
             $money += floatval($loan->money);
         }
         return $money;
+    }
+
+    /**
+     * 报销list
+     *
+     * @return array
+     */
+    public function getBackList()
+    {
+        $data = [];
+        foreach ($this->apply_ids as $apply_id) {
+            $back = JieKuan::findOne($apply_id);
+            $data[] = [
+                'create_time' => date('Y-m-d H:i', $back->apply->create_time),
+                'money' => $back->money,
+                'detail' => $back->des
+            ];
+        }
+
+        return $data;
     }
 }
