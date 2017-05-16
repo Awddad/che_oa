@@ -26,7 +26,10 @@ class TreeTagLogic extends Logic
      */
     public function getTreeTag()
     {
-        $treeTags = ThirdServer::instance()->getTagTree();
+        $treeTags = ThirdServer::instance([
+            'token' => \Yii::$app->params['cai_wu']['token'],
+            'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+        ])->getTagTree();
         if($treeTags && $treeTags['success'] == 1) {
             $data = $this->getSaveArr($treeTags['data']);
             return $this->saveTreeTag($data);

@@ -60,4 +60,12 @@ class PayConfirmController extends BaseController
         $pay = PayLogic::instance()->canConfirmList();
         return $this->_return($pay);
     }
+
+    /**
+     * 导出付款确认列表
+     */
+    public function actionExport()
+    {
+        PayLogic::instance()->export($this->arrPersonInfo);
+    }
 }

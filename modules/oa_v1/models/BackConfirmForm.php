@@ -116,7 +116,10 @@ class BackConfirmForm extends CaiWuShouKuan
             $transaction->rollBack();
             throw $exception;
         }
-        $rst = ThirdServer::instance()->payment($param);
+        $rst = ThirdServer::instance([
+            'token' => \Yii::$app->params['cai_wu']['token'],
+            'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+        ])->payment($param);
         if($rst['success'] == 1) {
             $this->is_told_cai_wu_success = 1;
             $this->update();
