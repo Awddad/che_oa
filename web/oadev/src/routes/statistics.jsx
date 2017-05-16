@@ -18,6 +18,7 @@ const LoadDetail = React.createClass({
             currentItem,
             key,
             time,
+            department,
             currentPage,
             modalVisible,
             modalType,
@@ -30,6 +31,7 @@ const LoadDetail = React.createClass({
             loading:loading,
             key:key,
             time:time,
+            department:department,
             dataSource:info,
             onPageChange(currentPage){
                 dispatch(routerRedux.push({
@@ -47,32 +49,27 @@ const LoadDetail = React.createClass({
                     },
                   }));
             },
-            showDetail(apply_id){
-                dispatch(routerRedux.push({
-                    pathname:'/detail',
-                    query:{ apply_id }
-                }))
-            }
         }
       // 查询控件
-      const loadSearchProps = {
-          handleSearch:(fieldsValue)=>{
+        const loadSearchProps = {
+            handleSearch:(fieldsValue)=>{
               let time = null;
-              if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
+                if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
                   time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
-              }
-           this.props.dispatch({
-                    type:'statistics/search',
+                }
+                this.props.dispatch({
+                    type:'Statistics/search',
                     payload: {
                         key:fieldsValue.key,
+                        orgId:department,
                         sorging:sorging,
                         time:time,
                     },
                 });
             },
           handleReset:()=>{},
-      }
+        }
         return (
             <Main location={location}>
                 <Row>

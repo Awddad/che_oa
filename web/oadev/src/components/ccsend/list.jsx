@@ -139,7 +139,7 @@ const CcsendList = React.createClass({
                     showQuickJumper
                     defaultCurrent={current}
                     total={total}
-                    defaultPageSize={perPage} />
+                    defaultPageSize={20} />
                 </div>
             );
         }

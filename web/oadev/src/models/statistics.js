@@ -1,4 +1,4 @@
-import { query } from '../services/statistics';
+import { query, department } from '../services/statistics';
 import { parse } from 'qs';
 import { message} from 'antd';
 
@@ -6,15 +6,13 @@ export default {
   namespace: 'Statistics',
   state: {
     dataSource: [],
+    department:null,
     field: '',
-    type:4,
     keywords: '',
     start_time:'',
     end_time:'',
     loading: false,
     total: null,
-    at:'',
-    ob:'',
     sortingType:'',
     repayment:[],
     current: 1,
@@ -41,21 +39,28 @@ export default {
   effects: {
     *query({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
-      const { data } = yield call(query, payload);
-
-      if (data && data.code == 200) {
+      const response = yield call(query, payload);
+      const response1 = yield call(department,payload);
+      if (response.data && response.data.code == 200) {
         yield put({
           type: 'querySuccess',
           payload: {
-              dataSource: data.data.info,
-              total: data.data.pages.totalCount,
-              current: data.data.pages.currentPage,
+              dataSource: response.data.data.info,
+              total: response.data.data.pages.totalCount,
+              current: response.data.data.pages.currentPage,
           },
         });
       }
+      if(response1.data && response1.data.code === 200){
+            yield put({
+                type: 'querySuccess',
+                payload:{
+                    department:response1.data.data,
+                }
+            });
+        }
     },
     *search({ payload },{ call,put }){
-        // console.log(payload);
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
             yield put({
@@ -63,6 +68,7 @@ export default {
                 payload:{
                     key: payload.key,
                     time: payload.time,
+                    department:data.data.value,
                     dataSource:data.data.info
                 }
             });

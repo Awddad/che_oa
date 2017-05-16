@@ -7,8 +7,8 @@ import styles from './search.less';
 const LoadDetailsList= React.createClass({
     render(){
 
-        const { dataSource,keyword,time,at,type,current,repayment,loading,total,sortingType} = this.props.Statistics;
-      
+        const { dataSource,keyword,time,type,current,loading,total,sortingType} = this.props.Statistics;
+        
         const columns = [{
             title: '序号',
             dataIndex: 'id',
