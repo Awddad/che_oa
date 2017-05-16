@@ -103,6 +103,7 @@ TABLEHTML;
         $pdf->writeHTML($strHtml, true, false, true, false, '');
         $pdf->lastPage();
         $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I
+        return is_file($strSaveName);
     }
     
     
@@ -193,6 +194,7 @@ TABLEHTML;
         $pdf->writeHTML($strHtml, true, false, true, false, '');
         $pdf->lastPage();
         $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I    
+        return is_file($strSaveName);
     }
     
 /**
@@ -291,6 +293,7 @@ TABLEHTML;
         $pdf->writeHTML($strHtml, true, false, true, false, '');
         $pdf->lastPage();
         $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I
+        return is_file($strSaveName);
     }
     
 }
