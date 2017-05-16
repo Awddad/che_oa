@@ -16,6 +16,10 @@ export default {
     sortingType:'',
     repayment:[],
     current: 1,
+    perPage:'',
+    currentPage:'',
+    pageCount:'',
+    totalCount:'',
     currentItem: {},
     modalVisible: false,
     modalType: 'update',
@@ -27,8 +31,8 @@ export default {
           dispatch({
             type: 'query',
             payload: {
-                key: location.query.key == null? "" : location.query.key,
-                time: location.query.time == null? "" : location.query.time,
+                pageCount:location.query.pageCount == null? "" : location.query.pageCount,
+                page_size:10,
             },
           });
         }
@@ -38,20 +42,25 @@ export default {
 
   effects: {
     *query({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
-      const response = yield call(query, payload);
-      const response1 = yield call(department,payload);
-      if (response.data && response.data.code == 200) {
+        yield put({ type: 'showLoading' });
         yield put({
-          type: 'querySuccess',
-          payload: {
-              dataSource: response.data.data.info,
-              total: response.data.data.pages.totalCount,
-              current: response.data.data.pages.currentPage,
-          },
+            type: 'updateQueryKey',
+            payload: { page: 1,},
         });
-      }
-      if(response1.data && response1.data.code === 200){
+        const response = yield call(query, payload);
+        const response1 = yield call(department,payload);
+        if (response.data && response.data.code == 200) {
+            yield put({
+                type: 'querySuccess',
+                payload: {
+                    dataSource: response.data.data.info,
+                    total: response.data.data.pages.totalCount,
+                    current: response.data.data.pages.currentPage,
+                    perPage: response.data.data.pages.perPage
+                },
+            });
+        }
+        if(response1.data && response1.data.code === 200){
             yield put({
                 type: 'querySuccess',
                 payload:{
@@ -61,6 +70,7 @@ export default {
         }
     },
     *search({ payload },{ call,put }){
+        //console.log(payload)
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
             yield put({

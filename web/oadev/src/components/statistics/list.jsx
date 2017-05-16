@@ -5,9 +5,35 @@ import styles from './search.less';
 
 
 const LoadDetailsList= React.createClass({
+    paginationChange(page,pageNumber){
+        const { perPage,key,time }  = this.props.Statistics;
+        this.props.dispatch({
+            type:'Statistics/query',
+            payload:{
+                page:page,
+                page_size:perPage,
+                key:key,
+                time:time,
+            }
+        })
+    },
+    onShowSizeChange(current,pageSize){
+        const { key,time }  = this.props.Statistics;
+        this.props.dispatch({
+            type:'Statistics/query',
+            payload:{
+                type:type,
+                page:current,
+                page_size:pageSize,
+                key:key,
+                time:time,
+            }
+        })
+    },
+
     render(){
 
-        const { dataSource,keyword,time,type,current,loading,total,sortingType} = this.props.Statistics;
+        const { dataSource,keyword,time,type,current,totalCount,pageSize,pageCount,perPage,currentPage,loading,total,sortingType} = this.props.Statistics;
         
         const columns = [{
             title: '序号',
@@ -68,9 +94,16 @@ const LoadDetailsList= React.createClass({
                         bordered
 
                     />
-                <Pagination 
-                    showQuickJumper
-                    defaultCurrent={current} total={total} defaultPageSize={20} />        
+                    <Pagination
+                        showQuickJumper
+                        current = { current }
+                        defaultCurrent={ 1 }
+                        total={ total } 
+                        onChange={ this.paginationChange }
+                        onShowSizeChange={this.onShowSizeChange}
+                        showSizeChanger
+                        showQuickJumper
+                    />
             </div>
         );
     }

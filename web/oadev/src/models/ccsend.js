@@ -5,21 +5,23 @@ import { message} from 'antd';
 export default {
   namespace: 'ccsend',
   state: {
+    loading: false,
     dataSource: [],
     field: '',
     type:4,
     keywords: '',
     start_time:'',
     end_time:'',
-    loading: false,
     total: null,
     at:'',
     ob:'',
-    status:'',
     sortingType:'',
     repayment:[],
     current: 1,
-    showDetail:'',
+    perPage:'',
+    currentPage:'',
+    pageCount:'',
+    totalCount:'',
     currentItem: {},
     modalVisible: false,
     modalType: 'update',
@@ -36,7 +38,8 @@ export default {
                 at: location.query.at == null? "" : location.query.at,
                 ob:location.query.ob == null? "" : location.query.ob,
                 status:location.query.status == null? "" : location.query.status,
-                pageCount:location.query.pageCount == null? "" : location.query.pageCount
+                pageCount:location.query.pageCount == null? "" : location.query.pageCount,
+                page_size:10,
             },
           });
         }
@@ -46,22 +49,26 @@ export default {
 
   effects: {
     *query({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
-      const { data } = yield call(query, payload);
-
-      if (data && data.code == 200) {
+        yield put({ type: 'showLoading' });
         yield put({
-          type: 'querySuccess',
-          payload: {
-              dataSource: data.data.res,
-              total: data.data.page.totalCount,
-              current: data.data.page.currentPage,
-          },
-        });
-      }
+            type: 'updateQueryKey',
+            payload: { page: 1,},
+        });      
+        const { data } = yield call(query, payload);
+
+        if (data && data.code == 200) {
+            yield put({
+               type: 'querySuccess',
+               payload: {
+                  dataSource: data.data.res,
+                  total: data.data.page.totalCount,
+                  current: data.data.page.currentPage,
+                  perPage:data.data.page.perPage
+               },
+           });
+        }
     },
     *search({ payload },{ call,put }){
-        //console.log(payload);
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
             yield put({
@@ -70,7 +77,11 @@ export default {
                     keywords: payload.keywords,
                     start_time: payload.start_time,
                     end_time: payload.end_time,
-                    dataSource:data.data.res
+                    dataSource:data.data.res,
+                    total: data.data.page.totalCount,
+                    current: data.data.page.currentPage,
+                    perPage:data.data.page.perPage,
+                    current: 1,
                 }
             });
         }

@@ -54,16 +54,19 @@ const LoadDetail = React.createClass({
         const loadSearchProps = {
             handleSearch:(fieldsValue)=>{
               let time = null;
+              let orgId = null;
                 if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
                   time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
+                }
+                if (fieldsValue.department.length > 0) {
+
                 }
                 this.props.dispatch({
                     type:'Statistics/search',
                     payload: {
                         key:fieldsValue.key,
-                        orgId:department,
-                        sorging:sorging,
+                        orgId:fieldsValue.department,
                         time:time,
                     },
                 });
