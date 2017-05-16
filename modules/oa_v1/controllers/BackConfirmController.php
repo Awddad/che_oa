@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\controllers;
 use app\models\Apply;
 use app\models\CaiWuFuKuan;
 use app\modules\oa_v1\logic\BackLogic;
+use app\modules\oa_v1\logic\PayLogic;
 use app\modules\oa_v1\models\BackConfirmForm;
 
 
@@ -69,6 +70,14 @@ class BackConfirmController extends BaseController
     {
         $back = BackLogic::instance()->canConfirmList();
         return $this->_return($back);
+    }
+
+    /**
+     * 导出付款确认列表
+     */
+    public function actionExport()
+    {
+        PayLogic::instance()->export($this->arrPersonInfo);
     }
 
 }

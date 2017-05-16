@@ -178,4 +178,83 @@ class BackLogic extends BaseLogic
             return false;
         }
     }
+
+
+    /**
+     * 导出收款确认列表
+     *
+     * @param array $user
+     */
+    public function export($user)
+    {
+        $query = Apply::find()->where([
+            'status' => 4,
+            'type' => 3
+        ]);
+
+        $keyword = \Yii::$app->request->post('keyword');
+
+        if ($keyword) {
+            $query->andFilterWhere([
+                'or',
+                ['apply_id' => $keyword],
+                ['title' => $keyword]
+            ]);
+        }
+
+        $beginTime = \Yii::$app->request->post('begin_time');
+        $endTime = \Yii::$app->request->post('end_time');
+        if ($beginTime && $endTime) {
+            $query->andWhere([
+                'and',
+                ['>=', 'create_time', strtotime($beginTime)],
+                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
+            ]);
+        }
+
+        $order = 'create_time desc';
+        if (\Yii::$app->request->post('desc')) {
+            $order = \Yii::$app->request->post('desc') . ' desc';
+        }
+
+        if (\Yii::$app->request->post('asc')) {
+            $order = \Yii::$app->request->post('asc') . ' asc';
+        }
+
+        $models = $query->orderBy($order)->all();
+        $data = [];
+        if (!empty($models)) {
+            foreach ($models as $model) {
+                $typeName = '申请还款';
+                $money = $model->payBack->money;
+                $bankName = $model->payBack->bank_name;
+                $bankCardId = $model->payBack->bank_card_id;
+                $data[] = [
+                    'name' => $user['person_name'],
+                    'bank_name' => $bankName,
+                    'bank_card_id' => $bankCardId,
+                    'money' => $money,
+                    'type' => $typeName,
+                    'apply_id' => $model->apply_id,
+                    'title' => $model->title
+                ];
+            }
+        }
+        \moonland\phpexcel\Excel::export([
+            'models' => $data,
+            'columns' => [
+                'name', 'bank_name', 'bank_card_id', 'money', 'type', 'apply_id', 'title'
+            ],
+            'headers' => [
+                'name' => '姓名',
+                'bank_name' => '银行',
+                'bank_card_id' => '卡号',
+                'money' => '金额',
+                'type' => '类别',
+                'apply_id' => '审批单号',
+                'title' => '标题'
+            ],
+            'fileName' => 'pay_confirm_'.date('YmdHi').'.xlsx'
+        ]);
+    }
 }
