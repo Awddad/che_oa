@@ -15,7 +15,6 @@ const Mysend=React.createClass({
         let { personID } = this.props.UserInfo;
         let apply_id = event.target.getAttribute("data-applyid") == null ? event.target.parentNode.getAttribute("data-applyid") : event.target.getAttribute("data-applyid");
         const link = this.props;
-        this.props;
         confirm({
             title: '确认撤销该申请吗？',
             content: '撤销该申请后，将不会继续进行审批流程',

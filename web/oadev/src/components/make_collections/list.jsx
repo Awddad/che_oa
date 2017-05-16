@@ -41,36 +41,29 @@ const MakeCollectionsList = React.createClass({
         });
     },
     paginationChange(page,pageNumber){
-        const { type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.mysend;
+        const { perPage,keyword,begin_time,end_time }  = this.props.make_collections;
         this.props.dispatch({
-            type:'mysend/query',
+            type:'make_collections/query',
             payload:{
-                type:type,
-                page:page,
-                page_size:perPage,
-                keywords:keywords,
-                start_time:start_time,
+                currentPage:page,
+                perPage:perPage,
+                keyword:keyword,
+                begin_time:begin_time,
                 end_time:end_time,
-                ob:ob,
-                status:status,
-                at:at
             }
         })
     },
     onShowSizeChange(current,pageSize) {
-        const { type,keywords,start_time,end_time,ob,status,at }  = this.props.mysend;
+        const { perPage,keyword,begin_time,end_time }  = this.props.make_collections;
+        console.log(keyword);
         this.props.dispatch({
-            type:'mysend/query',
+            type:'make_collections/query',
             payload:{
-                type:type,
-                page:current,
-                page_size:pageSize,
-                keywords:keywords,
-                start_time:start_time,
+                currentPage:current,
+                perPage:pageSize,
+                keyword:keyword,
+                begin_time:begin_time,
                 end_time:end_time,
-                ob:ob,
-                status:status,
-                at:at
             }
         })
     },
@@ -145,7 +138,8 @@ const MakeCollectionsList = React.createClass({
                     pagination={false}
                     size="middle"
                     bordered />
-               <Pagination showQuickJumper current = { current } pageSizeOptions={[1,2,3,4]} defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
+                    {total}
+               <Pagination showQuickJumper current = { current } defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
 
                <GenConfirm />
 

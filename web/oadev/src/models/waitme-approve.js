@@ -32,7 +32,8 @@ export default {
             payload: {
                 type: 1,
                 at: location.query.at == null? "" : location.query.at,
-                ob: location.query.ob == null? "" : location.query.ob
+                ob: location.query.ob == null? "" : location.query.ob,
+                page_size:10,
             },
           });
         }
@@ -52,21 +53,25 @@ export default {
                   dataSource: data.data.res,
                   total: data.data.page.totalCount,
                   current: data.data.page.currentPage,
+                  perPage:data.data.page.perPage
               },
             });
           }
         },
         *search({ payload },{ call,put }){
-        //console.log(payload);
             const { data } = yield call(query,payload);
             if(data && data.code === 200){
                 yield put({
                     type: 'querySuccess',
                     payload:{
                         keywords: payload.keywords,
+                        total: data.data.page.totalCount,
+                        current: data.data.page.currentPage,
+                        perPage:data.data.page.perPage,
                         start_time: payload.start_time,
                         end_time: payload.end_time,
-                        dataSource:data.data.res
+                        dataSource:data.data.res,
+                        current:1
                     }
                 });
             }

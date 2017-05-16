@@ -80,7 +80,6 @@ export default {
                     keywords: payload.keywords,
                     start_time: payload.start_time,
                     end_time: payload.end_time,
-                    dataSource:data.data.res,
                     current:1
                 }
             });

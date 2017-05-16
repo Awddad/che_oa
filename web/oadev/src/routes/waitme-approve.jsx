@@ -70,6 +70,7 @@ const Waitme = React.createClass({
             handleSearch:(fieldsValue)=>{
                 let start_time = null;
                 let end_time = null;
+                const { type,ob,at,perPage }  = this.props.waitme;
                 if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
                     start_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                     end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
@@ -77,9 +78,12 @@ const Waitme = React.createClass({
                 this.props.dispatch({
                     type:'waitme/search',
                     payload: {
-                        type: 1,
+                        type: type,
                         keywords:fieldsValue.keywords,
-                        sorging:sorging,
+                        ob:ob,
+                        at:at,
+                        page:1,
+                        page_size:perPage,
                         start_time:start_time,
                         end_time:end_time,
                     },

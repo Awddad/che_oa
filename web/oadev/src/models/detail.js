@@ -1,4 +1,4 @@
-import { query,BaoxiaoDetail,LoanDetail,RepayMentDetail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery,PayMentConfirm,Approval } from '../services/detail';
+import { query,BaoxiaoDetail,LoanDetail,RepayMentDetail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery,PayMentConfirm,Approval,GetUserInfo } from '../services/detail';
 import { parse } from 'qs';
 import { message} from 'antd';
 
@@ -10,6 +10,7 @@ export default {
         RepayMent_Detail:{},
         isTitleStatus : '',
         ApplyID:null,
+        personID:null,
         //还款
         isShowRepaymentConfirm:false,
         repaymentDepartmentData:{},
@@ -52,24 +53,30 @@ export default {
     effects: {
         *BaoxiaoDetails({ payload }, { call, put }) {//报销详情
             const { data } = yield call(BaoxiaoDetail, payload);
-            if (data && data.code === 200) {
+            const  response2 = yield call(GetUserInfo,{});
+            if (data && data.code === 200 && response2.data && response2.data.code == 200) {
                 yield put({
                   type: 'refreshstaste',
                   payload:{
                     Baoxiao_Detail: data.data,
-                    isTitleStatus:payload.type
+                    isTitleStatus:payload.type,
+                    ApplyID:data.data.apply_id,
+                    personID:response2.data.data.userinfo.person_id,
                   },
                 });
             }
         },
         *LoanDetails({ payload }, { call, put }) {//借款详情
             const { data } = yield call(LoanDetail, payload);
-            if (data && data.code === 200) {
+            const  response2 = yield call(GetUserInfo,{});
+            if (data && data.code === 200 && response2.data && response2.data.code == 200 ) {
                 yield put({
                   type: 'refreshstaste',
                   payload:{
                     Loan_Detail: data.data,
-                    isTitleStatus:payload.type
+                    isTitleStatus:payload.type,
+                    ApplyID:data.data.apply_id,
+                    personID:response2.data.data.userinfo.person_id,
                   },
                 });
             }
@@ -112,12 +119,15 @@ export default {
 
         *RepayMentDetails({ payload }, { call, put }) {//还款详情
             const { data } = yield call(RepayMentDetail, payload);
-            if (data && data.code === 200) {
+            const  response2 = yield call(GetUserInfo,{});
+            if (data && data.code === 200 && response2.data && response2.data.code == 200) {
                 yield put({
                   type: 'refreshstaste',
                   payload:{
                     RepayMent_Detail: data.data,
-                    isTitleStatus:payload.type
+                    isTitleStatus:payload.type,
+                    ApplyID:data.data.apply_id,
+                    personID:response2.data.data.userinfo.person_id,
                   },
                 });
             }
@@ -161,7 +171,7 @@ export default {
                 message.success("确认成功!",3);
                 yield put(routerRedux.push({ pathname: payload.url }));
             }else{
-                message.error("确认成功!",3);
+                message.error(data.message,3);
             }
         },
 

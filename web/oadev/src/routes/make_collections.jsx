@@ -66,6 +66,7 @@ import ConfirmPayment from '../components/details/confirmPayment';
         handleSearch:(fieldsValue)=>{
             let begin_time = null;
             let end_time = null;
+            const { perPage }  = this.props.make_collections;
             if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
               begin_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
               end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');

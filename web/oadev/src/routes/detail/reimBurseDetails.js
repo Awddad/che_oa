@@ -2,7 +2,7 @@
 import React,{ Component,PropTypes} from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover} from 'antd';
+import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover,Modal,Input} from 'antd';
 import Main from '../../components/home/main';
 import Pagetitle from '../../components/public/pagetitle';
 import StepDetail from '../../components/details/stepDetail';
@@ -21,7 +21,68 @@ const ReimburseDetail = React.createClass({
     getInitialState(){
         return {
             ...this.props.Detail,
+            approvaltext:null,
+            ApplyID:null,
         };
+    },
+    handlepass(event){
+        const {
+            getFieldDecorator,
+            validateFields,
+            getFieldsValue,
+            getFieldValue
+        } = this.props.form;
+
+      const { ApplyID,personID } = this.props.Detail;
+      const formdata = { ...getFieldsValue() };
+
+      let link = this.props;
+      validateFields((errors) => {
+            if (errors) {
+                return;
+            }else{
+                let status = event.target.getAttribute("data-Status") == null ? event.target.parentNode.getAttribute("data-Status") : event.target.getAttribute("data-Status");
+                switch(status){
+                    case '0':
+                        Modal.confirm({
+                            title: '确认不通过该申请吗？',
+                            content: '确认不通过后，会中止该申请的继续进行并通知申请人。',
+                            iconType:'close-circle',
+                            onOk() {
+                                link.dispatch({
+                                        type:'Detail/Approval',
+                                        payload:{
+                                            apply_id:ApplyID,
+                                            person_id:personID,
+                                            des:formdata.approval,
+                                            status:status,
+                                            url:'/reimburse'
+                                        }
+                                });
+                            }
+                        });
+                    break;
+                    case '1':
+                        Modal.confirm({
+                            title: '通过该申请',
+                            content: '确定通过该用户的申请吗？',
+                            onOk() {
+                                link.dispatch({
+                                    type:'Detail/Approval',
+                                    payload:{
+                                        apply_id:ApplyID,
+                                        person_id:personID,
+                                        des:formdata.approval,
+                                        status:status,
+                                        url:'/reimburse'
+                                    }
+                                });
+                            }
+                        });
+                    break;
+                }
+            }
+        });
     },
     handleConfirmClick(){
         const { Baoxiao_Detail } = this.props.Detail;
@@ -35,13 +96,46 @@ const ReimburseDetail = React.createClass({
     },
     render(){
         const {isTitleStatus,Baoxiao_Detail,isShowPaymentConfirm,ApplyID} = this.props.Detail;
+        const {
+            getFieldDecorator,
+            validateFields,
+            getFieldsValue,
+            getFieldValue
+        } = this.props.form;
+
+        const formItemLayout = {
+                              labelCol: {
+                                xs: { span: 24 },
+                                sm: { span: 3 },
+                                md: { span: 2 },
+                              },
+                              wrapperCol: {
+                                xs: { span: 24 },
+                                sm: { span: 14 },
+                              },
+                            };
         let title=null,approval=null,confirm=null;
         if(isTitleStatus == null){
             title = '报销详情';
             approval = '';
         }else if(isTitleStatus == "approval"){
             title = '报销审批';
-            approval = (<Approval ApplyID={ ApplyID } url="/reimburse" />);
+            //approval = (<Approval url="/reimburse" handlepass = {this.handlepass}/>);
+            approval=(<div className={styles.postil}>
+                        <Form>
+                          <FormItem {...formItemLayout} label="审批备注">
+                            {getFieldDecorator('approval', {
+                              rules: [{ required: true, message: '请输入审批内容!'}]
+                            })(
+                              <Input type="text" placeholder="请输入" />
+                            )}
+                          </FormItem>
+                          <FormItem >
+                              <Button className={cs('ant-col-sm-offset-3','ant-col-md-offset-2','mr-md')} type="primary" data-Status="1" onClick={this.handlepass} >通过</Button>
+                              <Button data-Status="0" onClick={this.handlepass}>不通过</Button>
+                          </FormItem>
+                        </Form>
+                      </div>);
         }else if(isTitleStatus == "confirm"){
             title = '报销确认';
             const GenTable = () => <ApplyTable tabledata={tabledata}/>;
@@ -72,17 +166,7 @@ const ReimburseDetail = React.createClass({
                               key:'des',
                               dataIndex: 'des',
                             }];
-        const formItemLayout = {
-                              labelCol: {
-                                xs: { span: 24 },
-                                sm: { span: 3 },
-                                md: { span: 2 },
-                              },
-                              wrapperCol: {
-                                xs: { span: 24 },
-                                sm: { span: 14 },
-                              },
-                            };
+
 
             let fj_columns = [{
                               title: '序号',
@@ -152,7 +236,7 @@ ReimburseDetail.propTypes = {
    dispatch: PropTypes.func,
 };
 
-function mapStateToProps({ Detail }) {
+function mapStateToProps({ Detail}) {
   return { Detail };
 }
 
