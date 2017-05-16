@@ -21,7 +21,7 @@ const LoadDetailSearch = React.createClass({
         } = this.props.form;
         e.preventDefault();
         const detail = {...getFieldsValue()};
-        console.log(detail);
+        //console.log(detail);
         validateFields((errors) => {
             if(!!errors){
                 return;
@@ -40,9 +40,20 @@ const LoadDetailSearch = React.createClass({
         } = this.props.form;
 
         const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 18 },
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 6 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 18 },
+            },
         };
+
+        const ColSpan = {
+            xs: 24,
+            sm: 8,
+        }
 
         
         const { MonthPicker, RangePicker } = DatePicker;
@@ -53,7 +64,7 @@ const LoadDetailSearch = React.createClass({
 
         const children = [];
         children.push(
-            <Col span={8} key={1}>
+            <Col {...ColSpan} key={1}>
                 <FormItem {...formItemLayout} label={`关键字`}>
                     {getFieldDecorator('key', {
                         initialValue: key,
@@ -65,7 +76,7 @@ const LoadDetailSearch = React.createClass({
         );
         const options = this.props.Statistics.department;
         children.push(
-            <Col span={8} key={2}>
+            <Col {...ColSpan} key={2}>
                 <FormItem {...formItemLayout} label={`部门`}>
                     {getFieldDecorator('department')(
                         <Cascader options={options} placeholder="请选择" />
@@ -74,7 +85,7 @@ const LoadDetailSearch = React.createClass({
             </Col>
         );
         children.push(
-            <Col span={8} key={3}>
+            <Col {...ColSpan} key={3}>
                 <FormItem {...formItemLayout} label={`借款时间`}>
                     {getFieldDecorator('begin_end_time',rangeConfig)(
                         <RangePicker format={dateFormat}/>

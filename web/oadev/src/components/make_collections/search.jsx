@@ -19,9 +19,20 @@ const MakeCollectionSearch = ({
     }) => {
 
     const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 18 },
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 18 },
+        },
     };
+
+    const ColSpan = {
+        xs: 24,
+        sm: 8,
+    }
     
     function handleSubmit(e) {
         e.preventDefault();
@@ -42,7 +53,7 @@ const MakeCollectionSearch = ({
     
     const children = [];
       children.push(
-        <Col span={8} key={1}>
+        <Col {...ColSpan} key={1}>
           <FormItem {...formItemLayout} label={`关键字`}>
               {getFieldDecorator('keyword', {
                   initialValue: keyword,
@@ -53,7 +64,7 @@ const MakeCollectionSearch = ({
         </Col>
       );
       children.push(
-        <Col span={8} key={3}>
+        <Col {...ColSpan} key={3}>
           <FormItem {...formItemLayout} label={`申请时间`}>
                 {getFieldDecorator('begin_end_time',rangeConfig)(
                     <RangePicker format={dateFormat}/>

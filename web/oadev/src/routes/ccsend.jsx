@@ -61,12 +61,6 @@ const Ccsend = React.createClass({
                     payload: payload
                 });
             },
-            showDetail(apply_id){
-                dispatch(routerRedux.push({
-                    pathname:'/detail',
-                    query:{ apply_id }
-                }))
-            }
         }
         //console.log(ccsendListProps);
         // 查询控件
@@ -78,7 +72,6 @@ const Ccsend = React.createClass({
                   start_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
                 }
-              //console.log(fieldsValue.keywords);
                 this.props.dispatch({
                     type:'ccsend/search',
                     payload: {
