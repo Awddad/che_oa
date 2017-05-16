@@ -4,7 +4,7 @@ namespace app\modules\oa_v1\models;
 use Yii;
 use app\models as appmodel;
 use yii\web\UploadedFile;
-use app\commands\MyTcPdf;
+use app\logic\MyTcPdf;
 use app\modules\oa_v1\logic\PersonLogic;
 
 
@@ -29,7 +29,7 @@ class BaoxiaoForm extends BaseForm
 	public function rules(){
 		return [
 			[
-				['bank_card_id','bank_name','bank_name_des','bao_xiao_list','approval_persons','copy_person'],
+				['bank_card_id','bank_name','bao_xiao_list','approval_persons'],
 				'required',
 				'message'=>'{attribute}不能为空'
 			],
@@ -136,16 +136,17 @@ class BaoxiaoForm extends BaseForm
 			$model -> person = $this->user['name'];
 			$model -> person_id = $this->user['id'];
 			$model -> approval_persons = implode(',', array_column($model -> approval_persons,'person_name'));
-			$model -> copy_person = implode(',', array_column($model -> copy_person,'person_name'));
+			$model -> copy_person = $model -> copy_person?implode(',', array_column($model -> copy_person,'person_name')):'';
 			$approval_person = array_column($this -> approval_persons,'person_name')[0];
 			$model -> next_des = "待{$approval_person}审批";
+			$model -> org_id = $this -> user['org_id'];
 		}elseif('baoxiao' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> bao_xiao_list_ids = implode(',',array_column($this ->bao_xiao_list,'id'));
 			$model -> money = $this -> money;
 			$model -> bank_card_id = $this -> bank_card_id;
 			$model -> bank_name = $this -> bank_name;
-			$model -> bank_name_des = $this -> bank_name_des;
+			$model -> bank_name_des = $this -> bank_name_des?:'';
 			$model -> files = json_encode($this -> fujian);
 			$model -> pics = $this -> pic?implode(',',$this -> pic):'';
 		}elseif('baoxiaolist' == $type){
@@ -211,6 +212,9 @@ class BaoxiaoForm extends BaseForm
 	protected function copyLog()
 	{
 		$model_copy = new appmodel\ApplyCopyPerson();
+		if(!$this -> copy_person){
+			return true;
+		}
 		foreach($this -> copy_person as $k => &$v){
 			$_model_copy = clone $model_copy;
 			$this -> loadModel('copy', $_model_copy, $v);
@@ -258,7 +262,7 @@ class BaoxiaoForm extends BaseForm
 			'bank_name' => $this -> bank_name.$this -> bank_name_des,
 			'bank_card_id' => $this -> bank_card_id,
 			'approval_person' => implode(',', array_column($this -> approval_persons,'person_name')),//多个人、分隔
-			'copy_person' => implode(',', array_column($this -> copy_person,'person_name')),//多个人、分隔
+			'copy_person' => $this -> copy_person?implode(',', array_column($this -> copy_person,'person_name')):'',//多个人、分隔
 			'list' => []
 		];
 		foreach($this -> bao_xiao_list as $v){
@@ -277,6 +281,6 @@ class BaoxiaoForm extends BaseForm
 		$fileName = $arrInfo['apply_id'].'.pdf';
 		$myPdf = new MyTcPdf();
 		$myPdf -> createBaoXiaoDanPdf($root_path.'/'.$fileName, $arrInfo);
-		appmodel\BaoXiao::updateAll(['bao_xiao_dan_pdf' => "$dir/$fileName"],"apply_id='{$this->apply_id}'");
+		appmodel\Apply::updateAll(['apply_list_pdf' => "$dir/$fileName"],"apply_id='{$this->apply_id}'");
 	}
 }

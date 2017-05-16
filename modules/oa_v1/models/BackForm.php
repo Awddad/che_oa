@@ -154,6 +154,8 @@ class BackForm extends BaseForm
         $apply->next_des = '等待'.$nextName.'审批';
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
+        $apply->org_id = $user['org_id'];
+        $apply->apply_list_pdf = '';
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{

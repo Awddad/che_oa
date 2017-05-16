@@ -11,7 +11,8 @@ use app\models\Person;
 use app\models\PersonBankInfo;
 use app\models\Role;
 use app\models\RoleOrgPermission;
-class QuanXianServer extends ThirdServer
+use app\models\Menu;
+class QuanXianServer extends Server
 {
     /*
      * @var string  与权限系统对接的接口地址（前面的公用部分）
@@ -47,9 +48,64 @@ class QuanXianServer extends ThirdServer
             'roles' => $this->preUrl . '/projects/roles', //拉取项目中的角色以及角色权限的数据接口
             'role_user' => $this->preUrl . '/projects/role_user',//
             'user_add_bankcards' => $this->preUrl . '/users/bankcards',//用户添加银行卡
+            'menu_list' => $this->preUrl . '/projects/permissions',//项目目录菜单
         ];
     }
     
+    /**
+     * @功能：获取项目的目录列表缓存
+     * @作者：王雕
+     * @创建时间：2017-05-04
+     */
+    public function curlUpdateMenus()
+    {
+        // 数据存表
+        $arrPost = [
+            '_token' => $this->_token,
+            'per_page' => 100000,
+            'page' => 1,
+        ];
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['menu_list'], $arrPost);
+        if($arrRtn['success'] && !empty($arrRtn['data']) && isset($arrRtn['data']['data']))
+        {
+            $arrInsert = [];
+            $arrExistSlug = [];
+            foreach($arrRtn['data']['data'] as $val)
+            {
+                //判断权限以slug别名为主，别名相同及为同一个功能，所以别名出现多次的时候只存一次
+                if(!in_array($val['slug'], $arrExistSlug)) 
+                {
+                    $arrInsert[] = [
+                        'id' => $val['id'],
+                        'slug' => $val['slug'],
+                        'name' => $val['name'],
+                    ];
+                    $arrExistSlug[] = $val['slug'];
+                }
+            }
+            if($arrInsert)
+            {
+                $db = Yii::$app->db;
+                $transaction = $db->beginTransaction();
+                try
+                {
+                    $strTable = Menu::tableName();
+                    $arrClumes = array_keys($arrInsert[0]);
+                    //清表
+                    $db->createCommand()->delete($strTable)->execute();
+                    //入库
+                    $db->createCommand()->batchInsert($strTable, $arrClumes, $arrInsert)->execute();
+                    $transaction->commit();
+                }
+                catch (Exception $ex)
+                {
+                    $transaction->rollBack();
+                    throw $ex;
+                }
+            }
+        }
+    }
+
     /**
      * @功能：通过api接口登录
      * @作者：王雕
