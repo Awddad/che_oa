@@ -68,12 +68,14 @@ abstract class Logic extends Object
 
     /**
      * 创建对象
+     *
+     * @param array $config
      * @param bool $flush
      * @return static
      */
-    public static function instance($flush = false)
+    public static function instance($config = [],$flush = false)
     {
-        return Instance::instance(get_called_class(), $flush);
+        return Instance::instance(get_called_class(), $config, $flush);
     }
 
     /**
@@ -97,14 +99,15 @@ class Instance
 
     /**
      * 创建实例
-     * @param $name
+     * @param string $name
+     * @param array $config
      * @param bool $flush
      * @return mixed
      */
-    public static function instance($name, $flush)
+    public static function instance($name, $config, $flush)
     {
         if ($flush || !isset(self::$_instance[$name])) {
-            self::$_instance[$name] = new $name;
+            self::$_instance[$name] = new $name($config);
         }
         return self::$_instance[$name];
     }

@@ -2,9 +2,9 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\logic\server\ThirdServer;
 use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
-use app\modules\oa_v1\logic\TreeTagLogic;
 use app\models\Menu;
 
 
@@ -21,7 +21,10 @@ class DefaultController extends BaseController
      */
     public function actionIndex()
     {
-        $data = TreeTagLogic::instance()->getTreeTagsByParentId(1);
+        $data = ThirdServer::instance([
+            'token' => Yii::$app->params['cai_wu']['token'],
+            'baseUrl' => Yii::$app->params['cai_wu']['baseUrl']
+        ])->getTagTree();
         return $this->_return($data);
     }
 

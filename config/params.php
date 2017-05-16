@@ -22,4 +22,8 @@ return [
         'auth_token' => 'c455ad536e009c1832a4eb219d8fe5fb',//token
 
     ],
+    'cai_wu' => [
+        'token' => 'debf6cc22a8baf00904acc5f42535575',
+        'baseUrl' => 'http://test.pocket.checheng.net/api/'
+    ]
 ];

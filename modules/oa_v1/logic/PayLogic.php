@@ -130,7 +130,10 @@ class PayLogic extends BaseLogic
         if ($apply->type == 1) {
             return [
                 'pay_org' => PersonLogic::instance()->getOrg(),
-                'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
+                'pay_bank' => ThirdServer::instance([
+                    'token' => \Yii::$app->params['cai_wu']['token'],
+                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                ])->getAccount($person['org_id']),
                 'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
                 'bank_card_id' => $apply->expense->bank_card_id,
                 'bank_name' => $apply->expense->bank_name,
@@ -140,7 +143,10 @@ class PayLogic extends BaseLogic
         if ($apply->type == 2) {
             return [
                 'pay_org' => PersonLogic::instance()->getOrg(),
-                'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
+                'pay_bank' => ThirdServer::instance([
+                    'token' => \Yii::$app->params['cai_wu']['token'],
+                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                ])->getAccount($person['org_id']),
                 'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
                 'bank_card_id' => $apply->loan->bank_card_id,
                 'bank_name' => $apply->loan->bank_name,

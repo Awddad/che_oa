@@ -12,9 +12,7 @@ namespace app\modules\oa_v1\logic;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\JieKuan;
-use app\models\PayBack;
 use yii\data\Pagination;
-use yii\web\UploadedFile;
 
 
 /**
@@ -38,7 +36,10 @@ class BackLogic extends BaseLogic
         }
         return [
             'pay_org' => PersonLogic::instance()->getOrg(),
-            'pay_bank' => ThirdServer::instance()->getAccount($person['org_id']),
+            'pay_bank' => ThirdServer::instance([
+                'token' => \Yii::$app->params['cai_wu']['token'],
+                'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+            ])->getAccount($person['org_id']),
             'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(1),
             'bank_card_id' => $apply->payBack->bank_card_id,
             'bank_name' => $apply->payBack->bank_name,
@@ -151,32 +152,6 @@ class BackLogic extends BaseLogic
             ];
         }
         return $data;
-    }
-
-    /**
-     * @param PayBack $payBack
-     */
-    public function sendPayment($payBack)
-    {
-        $param = [];
-        $param['organization_id'];
-        $param['account_id'];
-        $param['tag_id'];
-        $param['money'];
-        $param['time'];
-        $param['remark'];
-        $param['other_name'];
-        $param['other_card'];
-        $param['other_bank'];
-        $param['trade_number'];
-        $param['order_number'];
-        $param['order_type'];
-        $data = ThirdServer::instance()->payment($param);
-        if ($data['success'] == 1) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
 
