@@ -77,7 +77,7 @@ class BackConfirmController extends BaseController
      */
     public function actionExport()
     {
-        PayLogic::instance()->export($this->arrPersonInfo);
+        BackLogic::instance()->export($this->arrPersonInfo);
     }
 
 }

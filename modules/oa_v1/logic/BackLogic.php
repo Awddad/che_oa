@@ -167,7 +167,7 @@ class BackLogic extends BaseLogic
             'type' => 3
         ]);
 
-        $keyword = \Yii::$app->request->post('keyword');
+        $keyword = \Yii::$app->request->get('keyword');
 
         if ($keyword) {
             $query->andFilterWhere([
@@ -177,8 +177,8 @@ class BackLogic extends BaseLogic
             ]);
         }
 
-        $beginTime = \Yii::$app->request->post('begin_time');
-        $endTime = \Yii::$app->request->post('end_time');
+        $beginTime = \Yii::$app->request->get('begin_time');
+        $endTime = \Yii::$app->request->get('end_time');
         if ($beginTime && $endTime) {
             $query->andWhere([
                 'and',
@@ -188,12 +188,12 @@ class BackLogic extends BaseLogic
         }
 
         $order = 'create_time desc';
-        if (\Yii::$app->request->post('desc')) {
-            $order = \Yii::$app->request->post('desc') . ' desc';
+        if (\Yii::$app->request->get('desc')) {
+            $order = \Yii::$app->request->get('desc') . ' desc';
         }
 
-        if (\Yii::$app->request->post('asc')) {
-            $order = \Yii::$app->request->post('asc') . ' asc';
+        if (\Yii::$app->request->get('asc')) {
+            $order = \Yii::$app->request->get('asc') . ' asc';
         }
 
         $models = $query->orderBy($order)->all();
