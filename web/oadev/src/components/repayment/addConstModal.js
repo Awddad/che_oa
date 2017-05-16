@@ -24,11 +24,10 @@ const AddConstModal = React.createClass({
             const row = {'id':constdata.audit_personal.key,'name':name};
 
             this.props.dispatch({
-              type: 'repayMent/addconst',
-              payload: {
+                type: 'repayMent/addconst',
+                payload: {
                     row:row,
                     type:1,
-
                 }
             });
         });

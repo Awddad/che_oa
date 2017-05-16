@@ -5,13 +5,13 @@ import { message} from 'antd';
 export default {
   namespace: 'mysend',
   state: {
+    loading: false,
     dataSource: [],
     field: '',
     type:3,
     keywords: '',
     start_time:'',
     end_time:'',
-    loading: false,
     total: null,
     at:'',
     ob:'',
@@ -38,6 +38,7 @@ export default {
                 at: location.query.at == null? "" : location.query.at,
                 ob:location.query.ob == null? "" : location.query.ob,
                 pageCount:location.query.pageCount == null? "" : location.query.pageCount,
+                page_size:10,
             },
           });
         }
@@ -61,21 +62,26 @@ export default {
               dataSource: data.data.res,
               total: data.data.page.totalCount,
               current: data.data.page.currentPage,
+              perPage:data.data.page.perPage
           },
         });
       }
     },
     *search({ payload },{ call,put }){
-        //console.log(payload);
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
                 payload:{
+                    dataSource: data.data.res,
+                    total: data.data.page.totalCount,
+                    current: data.data.page.currentPage,
+                    perPage:data.data.page.perPage,
                     keywords: payload.keywords,
                     start_time: payload.start_time,
                     end_time: payload.end_time,
-                    dataSource:data.data.res
+                    dataSource:data.data.res,
+                    current:1
                 }
             });
         }
