@@ -11,7 +11,7 @@ const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
 const menu = (
   <Menu>
     <Menu.Item>
-      <a rel="noopener noreferrer" href="#/logout">退出</a>
+      <Link rel="noopener noreferrer" to="/logout">退出</Link>
     </Menu.Item>
   </Menu>
 );
@@ -19,7 +19,7 @@ function Top({ location }) {
   return (
   	<Row>
     <div className={styles.menu}>
-      <div className={styles.sec_right}><a href="/#/changePassword" className={styles.reset}>修改密码</a>
+      <div className={styles.sec_right}><a className={styles.reset}>修改密码</a>
        <Dropdown overlay={menu}>
   	    <a className="ant-dropdown-link" href="javascript:void(0);" style={{color:'#fff'}}>
   	     <Icon type="user" style={{fontSize:16,color:'#eeeeee'}}/> {webStorage.getItem('name')} <Icon type="down" style={{paddingLeft:5}}/>

@@ -43,7 +43,6 @@ export default {
                     },
                 })
             }else if(data.code == 401 || data.code == 402){
-                alert(0);
                 window.location.href ="http://test.sso.checheng.net/login.php";
                 //yield put(routerRedux.push({pathname:''}));
             }
