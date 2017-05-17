@@ -56,7 +56,7 @@ const ReimburseDetail = React.createClass({
                                             person_id:personID,
                                             des:formdata.approval,
                                             status:status,
-                                            url:'/reimburse'
+                                            url:'/waitmeapprove'
                                         }
                                 });
                             }
@@ -74,7 +74,7 @@ const ReimburseDetail = React.createClass({
                                         person_id:personID,
                                         des:formdata.approval,
                                         status:status,
-                                        url:'/reimburse'
+                                        url:'/waitmeapprove'
                                     }
                                 });
                             }

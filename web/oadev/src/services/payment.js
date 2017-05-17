@@ -6,7 +6,7 @@ import qs from 'qs';
  */
 
 export async function query(params) {
-  return request('http://192.168.1.128:8010/oa_v1/pay-confirm/list',{
+  return request('/oa_v1/pay-confirm/list',{
     method: 'post',
     headers: {
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"

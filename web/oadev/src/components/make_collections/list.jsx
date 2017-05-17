@@ -55,7 +55,6 @@ const MakeCollectionsList = React.createClass({
     },
     onShowSizeChange(current,pageSize) {
         const { perPage,keyword,begin_time,end_time }  = this.props.make_collections;
-        console.log(keyword);
         this.props.dispatch({
             type:'make_collections/query',
             payload:{
@@ -112,7 +111,7 @@ const MakeCollectionsList = React.createClass({
             dataIndex:'operation',
             render:(text,record)=> (
                 <p>
-                    <a className="mr-md" href={"#/repaymentdetail?apply_id="+record.apply_id+"&type=confirm"}>详情</a>
+                    <a className="mr-md" href={"/repaymentdetail?apply_id="+record.apply_id+"&type=confirm"}>详情</a>
                     <a data-applyid={record.apply_id} onClick={this.ConfirmClick}>收款确认</a>
                 </p>
             )

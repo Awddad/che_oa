@@ -1,63 +1,69 @@
 import { queryTotal,queryChoiceCom,analogLogin} from '../services/adminHome';
+import { UserInfo } from '../services/adminHome';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage( window.sessionStorage || window.localStorage);
 
 export default {
-
-  namespace: 'adminHome',
-
-  state: {
-    data: {},
-    loanApply:{},
-    loading: false,
-    modalVisible: false,
-    isLoginBefore:false,
-  },
-
-  subscriptions: {
-    setup({ dispatch, history }) {
-      history.listen(location => {
-        if (location.pathname === '/adminHome') {
-          dispatch({
-            type: 'query',
-            payload: location.query,
+    namespace: 'adminHome',
+    state: {
+        data: {},
+        loanApply:{},
+        personID:null,
+        userInfo:null,
+        loading: false,
+        modalVisible: false,
+        isLoginBefore:false,
+    },
+    subscriptions: {
+        setup({ dispatch, history }) {
+          history.listen(location => {
+            if (location.pathname === '/') {
+              dispatch({
+                type: 'query',
+                payload: location.query,
+              });
+            }
           });
+        },
+    },
+    effects: {
+        *query({ payload }, { call, put }) {
+            yield put({ type: 'showLoading' });
+            const { data } = yield call(UserInfo);
+            console.log(data);
+            if (data && data.code == 200) {
+                yield put({
+                    type: 'querySuccess',
+                    payload: {
+                        userInfo:data.data,
+                        personID:data.data.userinfo.person_id
+                    },
+                })
+            }else if(data.code == 401 || data.code == 402){
+                alert(0);
+                window.location.href ="http://test.sso.checheng.net/login.php";
+                //yield put(routerRedux.push({pathname:''}));
+            }
         }
-      });
     },
-  },
-
-  effects: {
-    *query({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
-      /*const { data } = yield call(queryTotal, payload);
-      if (data) {
-        yield put({
-          type: 'querySuccess',
-          payload: {
-        	  data: data.content,
-          },
-        });
-      }*/
+    reducers: {
+        showLoading(state) {
+          return { ...state, loading: true };
+        },
+        querySuccess(state, action) {
+          return { ...state, ...action.payload, loading: false };
+        },
+        showModal(state, action) {
+          return { ...state, ...action.payload, modalVisible: true };
+        },
+        hideModal(state) {
+          return { ...state, modalVisible: false };
+        },
+        updateQueryKey(state, action) {
+          return { ...state, ...action.payload };
+        }
     }
-  },
-
-  reducers: {
-    showLoading(state) {
-      return { ...state, loading: true };
-    },
-    querySuccess(state, action) {
-      return { ...state, ...action.payload, loading: false };
-    },
-    showModal(state, action) {
-      return { ...state, ...action.payload, modalVisible: true };
-    },
-    hideModal(state) {
-      return { ...state, modalVisible: false };
-    },
-    updateQueryKey(state, action) {
-      return { ...state, ...action.payload };
-    }
-  }
 };

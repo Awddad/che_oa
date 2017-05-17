@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
-import { routerRedux } from 'dva/router';
+import { routerRedux,Link } from 'dva/router';
 import styles from './search.less';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 
@@ -111,18 +111,18 @@ const MysendList = React.createClass({
                     let result=null,url=null;
                     switch(record.type_value){
                         case "报销":
-                            url = "#/reimbursedetail?apply_id="+record.apply_id;
+                            url = "/reimbursedetail?apply_id="+record.apply_id;
                             break;
                         case "借款":
-                            url = "#/loanmetdetail?apply_id="+record.apply_id;
+                            url = "/loanmetdetail?apply_id="+record.apply_id;
                             break;
                         case "还款":
-                            url = "#/repaymentdetail?apply_id="+record.apply_id;
+                            url = "/repaymentdetail?apply_id="+record.apply_id;
                             break;
                     }
 
 
-                    return result = (<p><a className="mr-md" href={url}>详情</a>
+                    return result = (<p><Link className="mr-md" to={url}>详情</Link>
                                 <span className={record.can_cancel==1?styles.show:styles.hide} data-applyid={record.apply_id} onClick={this.props.handleClick}>
                                     <a>撤销</a>
                                 </span>

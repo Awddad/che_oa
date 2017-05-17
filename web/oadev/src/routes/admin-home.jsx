@@ -11,13 +11,15 @@ import {chkPms,chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock} from '../com
 const FormItem = Form.Item;
 
 function AdminHome({ location, dispatch, adminHome }) {
-  console.log(adminHome);
   const {
     data,
     loanApply,
     loading,
     modalVisible,
+    personID,
+    userInfo
   } = adminHome;
+
 
   return (
   	<Main location={location}>
@@ -47,9 +49,11 @@ function AdminHome({ location, dispatch, adminHome }) {
 
 AdminHome.propTypes = {
   location: PropTypes.object,
+  UserInfo: PropTypes.object,
+  adminHome:PropTypes.object,
 };
 
-function mapStateToProps({ adminHome }) {
+function mapStateToProps({ adminHome}) {
   return { adminHome };
 }
 

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
+import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import styles from './search.less';
 import Confirm from '../details/confirmPayment';
@@ -142,18 +143,18 @@ const PaymentdList= React.createClass({
                 let result=null,url=null,confirmclick=null;
                 switch(record.type_name){
                     case '申请报销':
-                        url = "#/reimbursedetail?apply_id="+record.apply_id+"&type=confirm";
+                        url = "/reimbursedetail?apply_id="+record.apply_id+"&type=confirm";
                         confirmclick = this.bxConfirmClick;
                     break;
                     case '申请借款':
-                        url = "#/loanmentdetail?apply_id="+record.apply_id+"&type=confirm";
+                        url = "/loanmentdetail?apply_id="+record.apply_id+"&type=confirm";
                         confirmclick = this.loanConfirmClick;
                     break;
                 }
 
                 return (
                             <p>
-                                <a className="mr-md" href={url}>详情</a>
+                                <Link className="mr-md" to={url}>详情</Link>
                                 <a data-applyid={record.apply_id} onClick={confirmclick}>付款确认</a>
                             </p>
                 )
