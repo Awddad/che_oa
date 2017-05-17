@@ -12,6 +12,9 @@ $config = [
         'oa_v1' => [
             'class' => 'app\modules\oa_v1\module',
         ],
+        'third_api' => [ //对外的第三方接口地址，如权限的通知接受等
+            'class' => 'app\modules\third_api\module',
+        ],
     ],
     'components' => [
         'request' => [
