@@ -286,7 +286,7 @@ const Reimburse = React.createClass({
                             </div>
                         );
 
-    console.log(constdata.length);
+
     if( constdata.length > 0 ){
       //审核人
       auditingLi =  constdata.map(function(data,index) {

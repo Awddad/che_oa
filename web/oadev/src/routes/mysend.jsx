@@ -12,7 +12,7 @@ const confirm = Modal.confirm;
 const Mysend=React.createClass({
     // 撤销
     showConfirm(event) {
-        let { personID } = this.props.UserInfo;
+        let { personID,ob,at,total,perPage } = this.props.mysend;
         let apply_id = event.target.getAttribute("data-applyid") == null ? event.target.parentNode.getAttribute("data-applyid") : event.target.getAttribute("data-applyid");
         const link = this.props;
         confirm({
@@ -23,7 +23,12 @@ const Mysend=React.createClass({
                     type: 'mysend/revoke',
                     payload:{
                         apply_id:apply_id,
-                        person_id:personID
+                        person_id:personID,
+                        type:3,
+                        at:at,
+                        ob:ob,
+                        pageCount:total,
+                        page_size:10
                     }
                 });
             }

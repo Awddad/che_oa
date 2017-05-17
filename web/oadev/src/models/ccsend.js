@@ -31,7 +31,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/ccsend') {
-          dispatch({  
+          dispatch({
             type: 'query',
             payload: {
                 type: 4,
@@ -53,7 +53,7 @@ export default {
         yield put({
             type: 'updateQueryKey',
             payload: { page: 1,},
-        });      
+        });
         const { data } = yield call(query, payload);
 
         if (data && data.code == 200) {

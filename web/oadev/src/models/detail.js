@@ -1,6 +1,7 @@
 import { query,BaoxiaoDetail,LoanDetail,RepayMentDetail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery,PayMentConfirm,Approval,GetUserInfo } from '../services/detail';
 import { parse } from 'qs';
 import { message} from 'antd';
+import { routerRedux } from 'dva/router';
 
 export default {
     namespace: 'Detail',
@@ -109,7 +110,7 @@ export default {
                     }
                 });
                 message.success("确认成功!",3);
-                yield put(routerRedux.push({ pathname: '/repayment' }));
+                yield put(routerRedux.push({ pathname: '#/payment' }));
             }else{
                 message.error(data.message,3);
             }
@@ -155,11 +156,13 @@ export default {
                 yield put({
                     type: 'refreshstaste',
                     payload:{
-                        isShowRepaymentConfirm:false
+                        isShowRepaymentConfirm:false,
+                        RepayMent_Detail: data.data,
+                        isTitleStatus:payload.type,
                     }
                 });
                 message.success("确认成功!",3);
-                yield put(routerRedux.push({ pathname: '/repayment' }));
+                yield put(routerRedux.push({ pathname: '#/make_collections' }));
             }else{
                 message.error(data.message,3);
             }

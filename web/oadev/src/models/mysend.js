@@ -1,4 +1,4 @@
-import { query,revoke } from '../services/mysend';
+import { query,revoke,GetUserInfo } from '../services/mysend';
 import { parse } from 'qs';
 import { message} from 'antd';
 
@@ -25,6 +25,7 @@ export default {
     currentItem: {},
     modalVisible: false,
     modalType: 'update',
+    personID:null,
   },
 
   subscriptions: {
@@ -54,15 +55,16 @@ export default {
         payload: { page: 1,},
       });
       const { data } = yield call(query, payload);
-
-      if (data && data.code == 200) {
+      const  response2 = yield call(GetUserInfo,{});
+      if (data && data.code == 200 && response2.data && response2.data.code == 200) {
         yield put({
           type: 'querySuccess',
           payload: {
               dataSource: data.data.res,
               total: data.data.page.totalCount,
               current: data.data.page.currentPage,
-              perPage:data.data.page.perPage
+              perPage:data.data.page.perPage,
+              personID:response2.data.data.userinfo.person_id,
           },
         });
       }

@@ -138,7 +138,6 @@ const MakeCollectionsList = React.createClass({
                     pagination={false}
                     size="middle"
                     bordered />
-                    {total}
                <Pagination showQuickJumper current = { current } defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
 
                <GenConfirm />

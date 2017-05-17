@@ -146,7 +146,6 @@ const AlreadyApproveList = React.createClass({
                 pagination={false}
                 size="middle"
                 bordered />
-                {total}
             <Pagination showQuickJumper current = { current } defaultPageSize={10} defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
             </div>
         );

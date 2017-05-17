@@ -68,6 +68,7 @@ const Ccsend = React.createClass({
             handleSearch:(fieldsValue)=>{
               let start_time = null;
               let end_time = null;
+              const {perPage} = this.props.ccsend;
               if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
                   start_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
@@ -80,6 +81,7 @@ const Ccsend = React.createClass({
                         sorging:sorging,
                         start_time:start_time,
                         end_time:end_time,
+                        page_size:perPage
                     },
                 });
             },

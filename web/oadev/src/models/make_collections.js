@@ -44,22 +44,42 @@ export default {
           yield put({ type: 'showLoading' });
           const { data } = yield call(query, payload);
           if (data && data.code == 200) {
+            let total='',current='',perPage='';
+            if(Object.keys(data.data).length > 0 ){
+                total = data.data.pages.totalCount;
+                current = data.data.pages.currentPage;
+                perPage = data.data.pages.perPage;
+            }else{
+                total = 1;
+                current = 1;
+                perPage =10;
+            }
             yield put({
               type: 'querySuccess',
               payload: {
                   keyword: payload.keyword,
                   dataSource: data.data.data,
                   list: data.data.data,
-                  total: data.data.pages.totalCount,
-                  current: data.data.pages.currentPage,
-                  perPage: data.data.pages.perPage
+                  total: total,
+                  current: current,
+                  perPage:perPage
               },
             });
           }
         },
         *search({ payload },{ call,put }){
             const { data } = yield call(query,payload);
+            let total=null,perPage=null,current=null;
             if(data && data.code === 200){
+                if(Object.keys(data.data).length > 0 ){
+                    total = data.data.pages.totalCount;
+                    current = data.data.pages.currentPage;
+                    perPage = data.data.pages.perPage;
+                }else{
+                    total = 1;
+                    current = 1;
+                    perPage =10;
+                }
                 yield put({
                     type: 'querySuccess',
                     payload:{

@@ -94,7 +94,6 @@ const ReimburseDetail = React.createClass({
     },
     render(){
         const {isTitleStatus,Loan_Detail,isShowPaymentConfirm,ApplyID} = this.props.Detail;
-        console.log(ApplyID);
         const {
             getFieldDecorator,
             validateFields,

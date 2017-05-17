@@ -162,7 +162,8 @@ const CcsendList = React.createClass({
                         showQuickJumper
                         current = { current }
                         defaultCurrent={ 1 }
-                        total={ total } 
+                        total={ total }
+                        defaultPageSize={10}
                         onChange={ this.paginationChange }
                         onShowSizeChange={this.onShowSizeChange}
                         showSizeChanger
