@@ -28,3 +28,8 @@ phpunit.phar
 
 tests/_output/*
 tests/_support/_generated
+
+Vagrantfile
+.vagrant
+composer.lock
+.gitignore
