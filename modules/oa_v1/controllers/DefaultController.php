@@ -45,7 +45,7 @@ class DefaultController extends BaseController
     {
         $arrData = [
             'userinfo' => $this->arrPersonInfo->toArray(),
-//            'menu' => $this->arrPersonRoleInfo['menu']
+            'menu' => $this->arrPersonRoleInfo['menu']
         ];
         return $this->_return($arrData);
     }
@@ -101,7 +101,7 @@ class DefaultController extends BaseController
             $session = Yii::$app->getSession();
             $session->set('role_id', $intRoleId);
             //设置权限成功 - 跳转到网站首页
-            header('Location: /oa/index.html');
+            header('Location: /oadev/dist/index.html');
             exit();
         }
         else

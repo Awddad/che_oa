@@ -11,13 +11,14 @@ export default {
     total: null,
     current: 1,
     currentItem: {},
-    title:'',  
+    title:'',
     apply_id:'',
     create_time:'',
     type_name:'',
     money:'',
     type:'',
     dataSource:[],
+    perPage:null,
     modalVisible: false,
     modalType: 'update',
   },
@@ -25,11 +26,12 @@ export default {
         setup({ dispatch, history }) {
           history.listen(location => {
             if (location.pathname === '/make_collections') {
-              dispatch({  
+              dispatch({
                 type: 'query',
                 payload: {
                     keyword: location.query.keyword == null? "" : location.query.keyword,
                     sorting: location.query.sorting == null? "" : location.query.sorting,
+                    perPage:10
                 },
               });
             }
@@ -42,29 +44,51 @@ export default {
           yield put({ type: 'showLoading' });
           const { data } = yield call(query, payload);
           if (data && data.code == 200) {
+            let total='',current='',perPage='';
+            if(Object.keys(data.data).length > 0 ){
+                total = data.data.pages.totalCount;
+                current = data.data.pages.currentPage;
+                perPage = data.data.pages.perPage;
+            }else{
+                total = 1;
+                current = 1;
+                perPage =10;
+            }
             yield put({
               type: 'querySuccess',
               payload: {
+                  keyword: payload.keyword,
                   dataSource: data.data.data,
                   list: data.data.data,
-                  total: data.data.pages.totalCount,
-                  current: data.data.pages.currentPage,
+                  total: total,
+                  current: current,
+                  perPage:perPage
               },
             });
           }
         },
         *search({ payload },{ call,put }){
-            //console.log(payload);
             const { data } = yield call(query,payload);
+            let total=null,perPage=null,current=null;
             if(data && data.code === 200){
+                if(Object.keys(data.data).length > 0 ){
+                    total = data.data.pages.totalCount;
+                    current = data.data.pages.currentPage;
+                    perPage = data.data.pages.perPage;
+                }else{
+                    total = 1;
+                    current = 1;
+                    perPage =10;
+                }
                 yield put({
                     type: 'querySuccess',
                     payload:{
-                        keyword: payload.keywords,
+                        keyword: payload.keyword,
                         begin_time: payload.begin_time,
                         end_time: payload.end_time,
                         dataSource:data.data.data,
                         list: data.data.data,
+                        total:data.data.pages.totalCount,
                     }
                 });
             }

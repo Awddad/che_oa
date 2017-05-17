@@ -278,6 +278,7 @@ const Reimburse = React.createClass({
     const  cardOptions = constCard.map(data =><Option key={tablemodalProps} value={data.bank_name+" "+data.card_id +" "+data.bank_des}>{data.bank_name+'-'+data.card_id}</Option>);
 
     const { previewVisible, previewImage, imgfileList } = this.state;
+    let auditingLi=null,copyLi=null;
     const uploadButton = (
                             <div>
                               <Icon type="plus" />
@@ -285,19 +286,23 @@ const Reimburse = React.createClass({
                             </div>
                         );
 
-    //审核人
-    const auditingLi =  constdata.map(function(data,index) {
-                              return (
-                                  <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" name={data.name} />
-                              );
-                          });
-    //抄送人
-    const copyLi =  copydata.map(function(data,index) {
-                              return (
-                                  <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={false} litype="2" name={data.name} />
-                              );
-                          });
 
+    if( constdata.length > 0 ){
+      //审核人
+      auditingLi =  constdata.map(function(data,index) {
+                                return (
+                                    <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" name={data.name} />
+                                );
+                            });
+    }
+    if(copydata.length > 0 ){
+      //抄送人
+      copyLi =  copydata.map(function(data,index) {
+                                return (
+                                    <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={false} litype="2" name={data.name} />
+                                );
+                            });
+    }
     const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
@@ -312,6 +317,8 @@ const Reimburse = React.createClass({
 
     //console.log(tabledata);
     const { getFieldDecorator } = this.props.form;
+    const GenconstPerson = () => <ApprovalPerson handleClick={this.showconstModal} approvalPerson={auditingLi} />;
+    const GencopyPerson = () => <ApprovalPerson handleClick={this.showcopyModal} approvalPerson={copyLi} />;
 
     return (
       <Main location={location}>
@@ -376,24 +383,10 @@ const Reimburse = React.createClass({
             </FormItem>
             <h3 className={cs("mt-md","mb-lg")}>审批人和抄送人</h3>
             <FormItem {...formItemLayout} label="审批人" className="labelt">
-                <div className={styles.approval_wrap} >
-                      <ul>
-                        {auditingLi}
-                        <li className={styles.add_approval} onClick={this.showconstModal}>
-                            <Icon type="plus" />
-                        </li>
-                      </ul>
-                </div>
+                <GenconstPerson />
             </FormItem>
             <FormItem {...formItemLayout} label="抄送人" >
-                <div className={styles.approval_wrap} >
-                      <ul>
-                        {copyLi}
-                        <li className={styles.add_approval} onClick={this.showcopyModal}>
-                            <Icon type="plus" />
-                        </li>
-                      </ul>
-                </div>
+                <GencopyPerson />
             </FormItem>
             <FormItem>
                    <Button className={cs('mt-md','mb-md','ant-col-sm-offset-2')} type="primary" onClick={this.showsubmitModal}>确定</Button>
@@ -405,6 +398,22 @@ const Reimburse = React.createClass({
     )
   }
 });
+
+const ApprovalPerson = React.createClass({
+    render(){
+        return (
+            <div className={styles.approval_wrap} >
+                <ul>
+                  {this.props.approvalPerson}
+                  <li className={styles.add_approval} onClick={this.props.handleClick} >
+                      <Icon type="plus" />
+                  </li>
+                 </ul>
+            </div>
+        )
+    }
+});
+
 
 Reimburse.propTypes = {
    location: PropTypes.object,

@@ -61,12 +61,6 @@ const Ccsend = React.createClass({
                     payload: payload
                 });
             },
-            showDetail(apply_id){
-                dispatch(routerRedux.push({
-                    pathname:'/detail',
-                    query:{ apply_id }
-                }))
-            }
         }
         //console.log(ccsendListProps);
         // 查询控件
@@ -74,11 +68,11 @@ const Ccsend = React.createClass({
             handleSearch:(fieldsValue)=>{
               let start_time = null;
               let end_time = null;
+              const {perPage} = this.props.ccsend;
               if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
                   start_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
                 }
-              //console.log(fieldsValue.keywords);
                 this.props.dispatch({
                     type:'ccsend/search',
                     payload: {
@@ -87,6 +81,7 @@ const Ccsend = React.createClass({
                         sorging:sorging,
                         start_time:start_time,
                         end_time:end_time,
+                        page_size:perPage
                     },
                 });
             },

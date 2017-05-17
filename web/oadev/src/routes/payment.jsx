@@ -62,25 +62,27 @@ const Payment =React.createClass({
                 query:{ apply_id }
             }))
         }
-        
+
     }
       // 查询控件
       const paymentSearchProps = {
             handleSearch:(fieldsValue)=>{
-              let start_time = null;
+              let begin_time = null;
               let end_time = null;
+              const { perPage }  = this.props.payment;
               if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
-                  start_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
+                  begin_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
                 }
-              //console.log(fieldsValue.keywords);
+
                 this.props.dispatch({
                     type:'payment/search',
                     payload: {
                         keyword:fieldsValue.keyword,
-                        sorging:sorging,
                         begin_time:begin_time,
                         end_time:end_time,
+                        currentPage:1,
+                        perPage:perPage,
                     },
                 });
             },

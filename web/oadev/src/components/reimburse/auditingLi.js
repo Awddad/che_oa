@@ -12,26 +12,28 @@ const AuditingLi = React.createClass({
     },
     handleconstClick(e){
         const index = e.target.getAttribute("data-id");
-        const { constdata } = this.props.reimBurse;
+        const { constdata,constPersonal } = this.props.reimBurse;
         constdata.splice(index,1);
-
+        alert(0);
         this.props.dispatch({
           type: 'reimBurse/addconst',
           payload: {
             constdata:constdata,
+            constPersonal:constPersonal,
             type:2
             }
         });
     },
     handlecopyClick(e){
         const index = e.target.getAttribute("data-id");
-        const { copydata } = this.props.reimBurse;
+        const { copydata,constPersonal } = this.props.reimBurse;
         copydata.splice(index,1);
 
         this.props.dispatch({
           type: 'reimBurse/addcopy',
           payload: {
             copydata:copydata,
+            constPersonal:constPersonal,
             type:2
             }
         });

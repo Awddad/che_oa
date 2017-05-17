@@ -68,7 +68,33 @@ const PaymentdList= React.createClass({
             }
         });
     },
-
+   paginationChange(page,pageNumber){
+        const { perPage,keyword,begin_time,end_time }  = this.props.payment;
+        console.log(perPage);
+        this.props.dispatch({
+            type:'payment/query',
+            payload:{
+                currentPage:page,
+                perPage:perPage,
+                keyword:keyword,
+                begin_time:begin_time,
+                end_time:end_time,
+            }
+        })
+    },
+    onShowSizeChange(current,pageSize) {
+        const { perPage,keyword,begin_time,end_time }  = this.props.payment;
+        this.props.dispatch({
+            type:'payment/query',
+            payload:{
+                currentPage:current,
+                perPage:pageSize,
+                keyword:keyword,
+                begin_time:begin_time,
+                end_time:end_time,
+            }
+        })
+    },
     render(){
 
         const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sortingType,onPageChange} = this.props.payment;
@@ -143,10 +169,9 @@ const PaymentdList= React.createClass({
         };
 
         const {Baoxiao_Detail,LoanMent_Detail,isShowPaymentConfirm} = this.props.Detail;
-        //console.log(this.props.Detail);
         let details = this.state.status == 1 ? Baoxiao_Detail : LoanMent_Detail;
-        //console.log(isShowPaymentConfirm);
         const GenConfirm = () => <Confirm isShowPaymentConfirm={ isShowPaymentConfirm } details={details}/>;
+
 
         return (
             <div>
@@ -160,11 +185,8 @@ const PaymentdList= React.createClass({
                     onChange={this.handleChange}
                     pagination={false}
                     size="middle"
-                    bordered
-                  />
-                <Pagination
-                    showQuickJumper
-                    defaultCurrent={current} total={total} defaultPageSize={20} onChange={onPageChange}/>
+                    bordered />
+                  <Pagination showQuickJumper current = { current } defaultPageSize={10} defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
             </div>
         );
     }

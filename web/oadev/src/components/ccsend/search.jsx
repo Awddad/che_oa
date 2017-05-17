@@ -18,9 +18,20 @@ const CcsendSearch = ({
     },
     }) => {
     const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 18 },
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 18 },
+        },
     };
+
+    const ColSpan = {
+        xs: 24,
+        sm: 8,
+    }
 
     // 清除检索项
     handleReset = () =>{
@@ -43,7 +54,7 @@ const CcsendSearch = ({
 
     const children = [];
     children.push(
-        <Col span={8} key={1}>
+        <Col {...ColSpan} key={1}>
             <FormItem {...formItemLayout} label={`关键字`}>
                 {getFieldDecorator('keywords', {
                     initialValue: keywords,
@@ -54,7 +65,7 @@ const CcsendSearch = ({
         </Col>
     );
     children.push(
-        <Col span={8} key={3}>
+        <Col {...ColSpan} key={3}>
             <FormItem {...formItemLayout} label={`借款时间`}>
                 {getFieldDecorator('begin_end_time',rangeConfig)(
                     <RangePicker format={dateFormat}/>

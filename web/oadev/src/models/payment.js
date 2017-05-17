@@ -11,7 +11,7 @@ export default {
     total: null,
     current: 1,
     currentItem: {},
-    title:'',  
+    title:'',
     apply_id:'',
     create_time:'',
     type_name:'',
@@ -19,6 +19,7 @@ export default {
     keyword:'',
     begin_time:'',
     start_time:'',
+    perPage:null,
     repayment:[],
     dataSource:[],
     modalVisible: false,
@@ -29,13 +30,13 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/payment') {
-          dispatch({  
+          dispatch({
             type: 'query',
             payload: {
-                // keyword: location.query.keyword == null? "" : location.query.keyword,
-                // begin_time: location.query.begin_time == null? "" : location.query.begin_time,
-                // end_time: location.query.end_time == null? "" : location.query.end_time,
-                // type: location.query.type == null? "" : location.query.type,
+                keyword: location.query.keyword == null? "" : location.query.keyword,
+                begin_time: location.query.begin_time == null? "" : location.query.begin_time,
+                end_time: location.query.end_time == null? "" : location.query.end_time,
+                perPage:10
             },
           });
         }
@@ -47,21 +48,38 @@ export default {
     *query({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { data } = yield call(query, payload);
+      let total=null,perPage=null;
+      if(data.data.length > 0){
+          total = data.data.pages.totalCount;
+          perPage = data.data.pages.perPage;
+        }else{
+          total = 0;
+          perPage=10;
+      }
       if (data && data.code == 200) {
         yield put({
           type: 'querySuccess',
           payload: {
+              keyword: payload.keyword,
               dataSource: data.data.data,
               list: data.data.data,
               total: data.data.pages.totalCount,
               current: data.data.pages.currentPage,
+              perPage: data.data.pages.perPage
           },
         });
       }
     },
     *search({ payload },{ call,put }){
-        //console.log(payload);
         const { data } = yield call(query,payload);
+        let total=null,perPage=null;
+        if(data.data.length > 0){
+          total = data.data.pages.totalCount;
+          perPage = data.data.pages.perPage;
+        }else{
+          total = 0;
+          perPage=10;
+        }
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
@@ -70,6 +88,8 @@ export default {
                     begin_time: payload.begin_time,
                     end_time: payload.end_time,
                     dataSource:data.data.data,
+                    total:total,
+                    perPage:perPage
                 }
             });
         }

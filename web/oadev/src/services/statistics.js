@@ -8,3 +8,8 @@ export async function query(params) {
   return request(`http://192.168.1.128:8010/oa_v1/jiekuan/index?${qs.stringify(params)}`);
 }
 
+ 
+export async function department(params) {
+  return request(`http://192.168.1.128:8010/oa_v1/default/org?${qs.stringify(params)}`);
+}
+

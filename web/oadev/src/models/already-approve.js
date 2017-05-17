@@ -28,12 +28,13 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/already-approve') {
-          dispatch({  
+          dispatch({
             type: 'query',
             payload: {
                 type: 2,
                 at: location.query.at == null? "" : location.query.at,
-                ob:location.query.ob == null? "" : location.query.ob
+                ob:location.query.ob == null? "" : location.query.ob,
+                page_size:10,
             },
           });
         }
@@ -52,13 +53,13 @@ export default {
           payload: {
               dataSource: data.data.res,
               total: data.data.page.totalCount,
-              current: data.data.page.currentPage
+              current: data.data.page.currentPage,
+              perPage:data.data.page.perPage
           },
         });
       }
     },
     *search({ payload },{ call,put }){
-        //console.log(payload);
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
             yield put({

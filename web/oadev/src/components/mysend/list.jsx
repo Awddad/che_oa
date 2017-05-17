@@ -20,6 +20,40 @@ const MysendList = React.createClass({
         }
         this.props.onSorting(sorting, filterType);
     },
+    paginationChange(page,pageNumber){
+        const { type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.mysend;
+        this.props.dispatch({
+            type:'mysend/query',
+            payload:{
+                type:type,
+                page:page,
+                page_size:perPage,
+                keywords:keywords,
+                start_time:start_time,
+                end_time:end_time,
+                ob:ob,
+                status:status,
+                at:at
+            }
+        })
+    },
+    onShowSizeChange(current,pageSize) {
+        const { type,keywords,start_time,end_time,ob,status,at }  = this.props.mysend;
+        this.props.dispatch({
+            type:'mysend/query',
+            payload:{
+                type:type,
+                page:current,
+                page_size:pageSize,
+                keywords:keywords,
+                start_time:start_time,
+                end_time:end_time,
+                ob:ob,
+                status:status,
+                at:at
+            }
+        })
+    },
     render(){
         const { dataSource,keywords,start_time,end_time,at,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sortingType,onPageChange,onDeleteItem,onShowSizeChange} = this.props.mysend;
             const columns = [{
@@ -99,21 +133,16 @@ const MysendList = React.createClass({
 
             return (
                 <div>
-                  <Table
-                    columns={columns}
-                    loading={loading}
-                    dataSource={dataSource}
-                    rowKey={record => record.id}
-                    onChange={this.handleChange}
-                    pagination={false}
-                    size="middle"
-                    bordered
-                  />
-                <Pagination
-                    showQuickJumper
-                    defaultCurrent={current}
-                    total={total}
-                    defaultPageSize={20} />
+                    <Table
+                        columns={columns}
+                        loading={loading}
+                        dataSource={dataSource}
+                        rowKey={record => record.id}
+                        onChange={this.handleChange}
+                        pagination={false}
+                        size="middle"
+                        bordered />
+                    <Pagination showQuickJumper current = { current } defaultPageSize={10} defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
 
                 </div>
             );

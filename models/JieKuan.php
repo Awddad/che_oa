@@ -92,7 +92,9 @@ class JieKuan extends \yii\db\ActiveRecord
         return
             [
                 'apply_id',
-                'get_money_time',
+                'get_money_time' => function ($model) {
+                    return Yii::$app->formatter->asDatetime($model->get_money_time);
+                },
                 'money' => function ($model) {
                     return Yii::$app->formatter->asCurrency($model->money);
                 },

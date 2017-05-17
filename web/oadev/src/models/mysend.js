@@ -1,17 +1,17 @@
-import { query,revoke } from '../services/mysend';
+import { query,revoke,GetUserInfo } from '../services/mysend';
 import { parse } from 'qs';
 import { message} from 'antd';
 
 export default {
   namespace: 'mysend',
   state: {
+    loading: false,
     dataSource: [],
     field: '',
     type:3,
     keywords: '',
     start_time:'',
     end_time:'',
-    loading: false,
     total: null,
     at:'',
     ob:'',
@@ -25,6 +25,7 @@ export default {
     currentItem: {},
     modalVisible: false,
     modalType: 'update',
+    personID:null,
   },
 
   subscriptions: {
@@ -38,6 +39,7 @@ export default {
                 at: location.query.at == null? "" : location.query.at,
                 ob:location.query.ob == null? "" : location.query.ob,
                 pageCount:location.query.pageCount == null? "" : location.query.pageCount,
+                page_size:10,
             },
           });
         }
@@ -53,29 +55,34 @@ export default {
         payload: { page: 1,},
       });
       const { data } = yield call(query, payload);
-
-      if (data && data.code == 200) {
+      const  response2 = yield call(GetUserInfo,{});
+      if (data && data.code == 200 && response2.data && response2.data.code == 200) {
         yield put({
           type: 'querySuccess',
           payload: {
               dataSource: data.data.res,
               total: data.data.page.totalCount,
               current: data.data.page.currentPage,
+              perPage:data.data.page.perPage,
+              personID:response2.data.data.userinfo.person_id,
           },
         });
       }
     },
     *search({ payload },{ call,put }){
-        //console.log(payload);
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
                 payload:{
+                    dataSource: data.data.res,
+                    total: data.data.page.totalCount,
+                    current: data.data.page.currentPage,
+                    perPage:data.data.page.perPage,
                     keywords: payload.keywords,
                     start_time: payload.start_time,
                     end_time: payload.end_time,
-                    dataSource:data.data.res
+                    current:1
                 }
             });
         }

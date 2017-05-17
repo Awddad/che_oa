@@ -11,7 +11,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
-            if (location.pathname === '/mysend') {
+            if (location.pathname === '/mysend' || location.pathname === '/reimbursedetail' || location.pathname === '/loanmentdetail' || location.pathname === '/repaymentdetail') {
               dispatch({
                 type: 'query',
               });
@@ -27,7 +27,7 @@ export default {
               type: 'querySuccess',
               payload: {
                     userInfo:data.data,
-                    personID:data.data.person_id
+                    personID:data.data.userinfo.person_id
               },
             });
           }

@@ -2,7 +2,7 @@
 import React,{ Component,PropTypes} from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover} from 'antd';
+import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover,Input,Modal} from 'antd';
 import Main from '../../components/home/main';
 import Pagetitle from '../../components/public/pagetitle';
 import StepDetail from '../../components/details/stepDetail';
@@ -23,6 +23,65 @@ const ReimburseDetail = React.createClass({
             ...this.props.Detail,
         };
     },
+    handlepass(event){
+        const {
+            getFieldDecorator,
+            validateFields,
+            getFieldsValue,
+            getFieldValue
+        } = this.props.form;
+
+      const { ApplyID,personID} = this.props.Detail;
+      const formdata = { ...getFieldsValue() };
+
+      let link = this.props;
+      validateFields((errors) => {
+            if (errors) {
+                return;
+            }else{
+                let status = event.target.getAttribute("data-Status") == null ? event.target.parentNode.getAttribute("data-Status") : event.target.getAttribute("data-Status");
+                switch(status){
+                    case '0':
+                        Modal.confirm({
+                            title: '确认不通过该申请吗？',
+                            content: '确认不通过后，会中止该申请的继续进行并通知申请人。',
+                            iconType:'close-circle',
+                            onOk() {
+                                link.dispatch({
+                                        type:'Detail/Approval',
+                                        payload:{
+                                            apply_id:ApplyID,
+                                            person_id:personID,
+                                            des:formdata.approval,
+                                            status:status,
+                                            url:'/loanment'
+                                        }
+                                });
+                            }
+                        });
+                    break;
+                    case '1':
+                        Modal.confirm({
+                            title: '通过该申请',
+                            content: '确定通过该用户的申请吗？',
+                            onOk() {
+                                link.dispatch({
+                                    type:'Detail/Approval',
+                                    payload:{
+                                        apply_id:ApplyID,
+                                        person_id:personID,
+                                        des:formdata.approval,
+                                        status:status,
+                                        url:'/loanment'
+                                    }
+                                });
+                            }
+                        });
+                    break;
+                }
+            }
+        });
+    },
     handleConfirmClick(){
         const { Loan_Detail } = this.props.Detail;
         this.props.dispatch({
@@ -35,20 +94,13 @@ const ReimburseDetail = React.createClass({
     },
     render(){
         const {isTitleStatus,Loan_Detail,isShowPaymentConfirm,ApplyID} = this.props.Detail;
-        let title=null,approval=null,confirm=null;
-        if(isTitleStatus == null){
-            title = '借款详情';
-            approval = '';
-        }else if(isTitleStatus == "approval"){
-            title = '借款审批';
-            approval = (<Approval ApplyID={ ApplyID } url="/loanment" />);
-        }else if(isTitleStatus == "confirm"){
-            title = '借款确认';
-            const GenTable = () => <ApplyTable tabledata={tabledata}/>;
-            confirm = (<ConfirmButton handleClick={this.handleConfirmClick} />);
-        }
+        const {
+            getFieldDecorator,
+            validateFields,
+            getFieldsValue,
+            getFieldValue
+        } = this.props.form;
 
-        const GenConfirm = () => <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm } details={Loan_Detail}/>;
         const formItemLayout = {
                               labelCol: {
                                 xs: { span: 24 },
@@ -61,7 +113,34 @@ const ReimburseDetail = React.createClass({
                               },
                             };
 
+        let title=null,approval=null,confirm=null;
+        if(isTitleStatus == null){
+            title = '借款详情';
+            approval = '';
+        }else if(isTitleStatus == "approval"){
+            title = '借款审批';
+            approval=(<div className={styles.postil}>
+                        <Form>
+                          <FormItem {...formItemLayout} label="审批备注">
+                            {getFieldDecorator('approval', {
+                              rules: [{ required: true, message: '请输入审批内容!'}]
+                            })(
+                              <Input type="text" placeholder="请输入" />
+                            )}
+                          </FormItem>
+                          <FormItem >
+                              <Button className={cs('ant-col-sm-offset-3','ant-col-md-offset-2','mr-md')} type="primary" data-Status="1" onClick={this.handlepass} >通过</Button>
+                              <Button data-Status="0" onClick={this.handlepass}>不通过</Button>
+                          </FormItem>
+                        </Form>
+                      </div>);
+        }else if(isTitleStatus == "confirm"){
+            title = '借款确认';
+            const GenTable = () => <ApplyTable tabledata={tabledata}/>;
+            confirm = (<ConfirmButton handleClick={this.handleConfirmClick} />);
+        }
 
+        const GenConfirm = () => <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm } details={Loan_Detail}/>;
 
             let name = '',bank_name='',bank_id='',bank_des='',money='',des='',tips='';
             if(Object.keys(Loan_Detail).length > 0){

@@ -129,6 +129,13 @@ export default {
             urltype:payload.urltype
           }
         }));
+        yield put({
+          type: 'hideModal1',
+          payload:{
+            constdata:[],
+            copydata:[]
+          }
+        });
       } else {
         message.error(data.content, 5);
       }
@@ -161,7 +168,7 @@ export default {
       return { ...state, ...action.payload};
     },
     hideModal1(state, action) {
-      return { ...state, isshowcardmodal:false, isshowconstmodal:false, isshowcopymodal:false ,issubmitmodal:false};
+      return { ...state,...action.payload, isshowcardmodal:false, isshowconstmodal:false, isshowcopymodal:false ,issubmitmodal:false};
     },
   }
 };

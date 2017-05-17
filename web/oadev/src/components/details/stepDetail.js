@@ -52,7 +52,7 @@ const StepDetails = React.createClass({
                             <Col xs={{ span: 5}} lg={{ span: 8}}>审批单编号：{ applyID }</Col>
                         </Row>
                     </div>
-                    <div className={styles.clear}></div>
+                    <div className="clearfix"></div>
                 </div>
                 <h2 className={cs('mt-lg','mb-md')}>审批进度</h2>
                 {resultSteps}

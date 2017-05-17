@@ -51,3 +51,14 @@ export async function Approval(params) {//审批
   });
 }
 
+export async function GetUserInfo(params) {//申请单号
+    return request('/oa_v1/default/get-user-info', {
+      method: 'post',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+      },
+      body: qs.stringify(params),
+    });
+}
+
+

@@ -40,7 +40,33 @@ const MakeCollectionsList = React.createClass({
             }
         });
     },
-
+    paginationChange(page,pageNumber){
+        const { perPage,keyword,begin_time,end_time }  = this.props.make_collections;
+        this.props.dispatch({
+            type:'make_collections/query',
+            payload:{
+                currentPage:page,
+                perPage:perPage,
+                keyword:keyword,
+                begin_time:begin_time,
+                end_time:end_time,
+            }
+        })
+    },
+    onShowSizeChange(current,pageSize) {
+        const { perPage,keyword,begin_time,end_time }  = this.props.make_collections;
+        console.log(keyword);
+        this.props.dispatch({
+            type:'make_collections/query',
+            payload:{
+                currentPage:current,
+                perPage:pageSize,
+                keyword:keyword,
+                begin_time:begin_time,
+                end_time:end_time,
+            }
+        })
+    },
     render(){
 
         const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sortingType} = this.props.make_collections;
@@ -111,11 +137,8 @@ const MakeCollectionsList = React.createClass({
                     rowKey={record => record.id}
                     pagination={false}
                     size="middle"
-                    bordered
-                />
-                <Pagination
-                    showQuickJumper
-                    defaultCurrent={current} total={total} defaultPageSize={20}/>
+                    bordered />
+               <Pagination showQuickJumper current = { current } defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
 
                <GenConfirm />
 
