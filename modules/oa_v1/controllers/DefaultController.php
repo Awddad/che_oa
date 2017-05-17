@@ -101,7 +101,7 @@ class DefaultController extends BaseController
             $session = Yii::$app->getSession();
             $session->set('role_id', $intRoleId);
             //设置权限成功 - 跳转到网站首页
-            header('Location: /index.html');
+            header('Location: /#/');
             exit();
         }
         else
