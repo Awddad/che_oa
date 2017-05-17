@@ -187,4 +187,14 @@ class Apply extends \yii\db\ActiveRecord
         $this->status = self::STATUS_OK;
         return $this->save();
     }
+
+    /**
+     * 报销单列表
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBaoXiaoList()
+    {
+        return $this->hasMany(BaoXiaoList::className(), ['apply_id' => 'apply_id']);
+    }
 }
