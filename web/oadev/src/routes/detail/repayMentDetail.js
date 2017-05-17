@@ -66,7 +66,7 @@ const RepayMentDetail = React.createClass({
                                             person_id:personID,
                                             des:formdata.approval,
                                             status:status,
-                                            url:'/repayment'
+                                            url:'/waitmeapprove'
                                         }
                                 });
                             }
@@ -84,7 +84,7 @@ const RepayMentDetail = React.createClass({
                                         person_id:personID,
                                         des:formdata.approval,
                                         status:status,
-                                        url:'/repayment'
+                                        url:'/waitmeapprove'
                                     }
                                 });
                             }

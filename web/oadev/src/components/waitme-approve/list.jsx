@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
+import { Link } from 'dva/router';
 
 const WaitmeList = React.createClass({
     // 筛选事件
@@ -116,16 +117,19 @@ const WaitmeList = React.createClass({
                     let url=null;
                     switch(record.type_value){
                         case '报销':
-                            url = "#/reimbursedetail?apply_id="+record.apply_id+"&type=approval";
+                            url = (<p><Link to={`/reimbursedetail?type=approval&apply_id=${record.apply_id}`}>审批</Link></p>);
+                           // "#/reimbursedetail?apply_id="+record.apply_id+"";
                         break;
                         case '借款':
-                            url = "#/loanmentdetail?apply_id="+record.apply_id+"&type=approval";
+                            url = (<p><Link to={`/loanmentdetail?type=approval&apply_id=${record.apply_id}`}>审批</Link></p>);
+                            //url = "#/loanmentdetail?apply_id="+record.apply_id+"&type=approval";
                         break;
                         case '还款':
-                            url = "#/repaymentdetail?apply_id="+record.apply_id+"&type=approval";
+                            url = (<p><Link to={`/repaymentdetail?type=approval&apply_id=${record.apply_id}`}>审批</Link></p>);
+                            //url = "#/repaymentdetail?apply_id="+record.apply_id+"&type=approval";
                         break;
                     }
-                    return (<p><a href={url}>审批</a></p>);
+                    return url;
                 }
             }]
             const pagination = {

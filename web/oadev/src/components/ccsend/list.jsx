@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
+import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 
 
@@ -133,13 +134,13 @@ const CcsendList = React.createClass({
                     let result=null;
                     switch(record.type_value){
                         case "报销":
-                            return result = (<p><a href={"#/reimbursedetail?apply_id="+record.apply_id}>详情</a></p>);
+                            return result = (<p><Link to={"/reimbursedetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                         case "借款":
-                            return result = (<p><a href={"#/loanmentdetail?apply_id="+record.apply_id}>详情</a></p>);
+                            return result = (<p><Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                         case "还款":
-                            return result = (<p><a href={"#/repaymentdetail?apply_id="+record.apply_id}>详情</a></p>);
+                            return result = (<p><Link to={"/repaymentdetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                     }
 
