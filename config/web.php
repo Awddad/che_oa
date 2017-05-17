@@ -21,7 +21,7 @@ $config = [
         'response' => [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
-                if(\Yii::$app->controller->id != 'site')//预留登录后门用
+                if (\Yii::$app->controller->id != 'site')//预留登录后门用
                 {
                     $response = $event->sender;
                     $response->data = [
@@ -68,6 +68,7 @@ $config = [
             ],
         ],
         'formatter' => [
+            'datetimeFormat' => 'php:Y-m-d H:i',
             'currencyCode' => 'CNY',
         ],
     ],
