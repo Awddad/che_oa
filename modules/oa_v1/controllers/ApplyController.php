@@ -287,6 +287,7 @@ class ApplyController extends BaseController
 	public function actionGetBankcard()
 	{
 		$cards = appmodel\PersonBankInfo::find() -> where(['person_id' => $this -> arrPersonInfo['person_id']]) -> asArray() -> all();
+		$data = [];
 		foreach($cards as $v){
 			$data[] = ['card_id'=>$v['bank_card_id'],'bank_name'=>$v['bank_name'],'bank_des'=>$v['bank_name_des']];
 		}

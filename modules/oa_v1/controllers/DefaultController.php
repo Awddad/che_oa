@@ -88,7 +88,7 @@ class DefaultController extends BaseController
         $intRoleId = intval(Yii::$app->request->get('role_id'));
         $arrRoleIds = explode(',', $this->arrPersonInfo->role_ids);
         //但用户只有一个角色的时候进入系统没有role_id参数
-        if(empty($intRoleId) && count($arrRoleIds) == 1)
+        if(empty($intRoleId) && count($arrRoleIds) >= 1)
         {
             $intRoleId = $arrRoleIds[0];
         }
