@@ -155,7 +155,7 @@ class BaoxiaoForm extends BaseForm
 			$model -> money = $data['money'];
 			$model -> type_name = $data['type_name'];
 			$model -> type = $data['type'];
-			$model -> des = $data['des'];
+			$model -> des = @$data['des'];
 		}elseif('approval_log' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> approval_person = $data['person_name'];
@@ -271,7 +271,7 @@ class BaoxiaoForm extends BaseForm
 			$arrInfo['list'][] = [
 					'type_name' => $v['type_name'],
 					'money' => $v['money'],
-					'detail' => $v['des']
+					'detail' => @$v['des']
 					];
 		}
 		$base_dir = str_replace('\\', '/', Yii::$app -> basePath);
