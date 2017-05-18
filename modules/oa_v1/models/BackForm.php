@@ -221,7 +221,7 @@ class BackForm extends BaseForm
         $model->bank_name = $this->bank_name;
         $model->bank_name_des = $this->bank_name_des ? : '';
         if (!$model->save()) {
-            throw new Exception('借款保存失败', $model->errors);
+            throw new Exception('还款保存失败', $model->errors);
         }
         return $model;
     }
