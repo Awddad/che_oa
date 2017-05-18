@@ -33,6 +33,7 @@ class BaoxiaoForm extends BaseForm
 				'required',
 				'message'=>'{attribute}不能为空'
 			],
+			['apply_id','unique','targetClass' => '\app\models\Apply', 'message' => '申请单已存在.'],
 			//['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
 			['approval_persons','validatePersons','params'=>'审批人'],
 			['copy_person','validatePersons','params'=>'抄送人'],
@@ -102,7 +103,7 @@ class BaoxiaoForm extends BaseForm
 			return false;
 		}catch(\Exception $e){
 			$transaction -> rollBack();
-			//$this->addError('',$e->getMessage());
+			$this->addError('',$e->getMessage());
 			return false;
 		}
 		
