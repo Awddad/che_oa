@@ -41,10 +41,10 @@ class PayConfirmController extends BaseController
     {
         $model = new PayConfirmForm();
         $post['PayConfirmForm'] = \Yii::$app->request->post();
-        $files = $model->saveUploadFile('pics');
-        if($files) {
-            $data['BackConfirmForm']['pics']  = $files;
-        }
+ //       $files = $model->saveUploadFile('pics');
+//        if($files) {
+//            $data['BackConfirmForm']['pics']  = $files;
+//        }
         if ($model->load($post) && $model->validate() && $model->saveConfirm()) {
             return $this->_return('');
         } else {
