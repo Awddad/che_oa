@@ -302,11 +302,11 @@ class ApplyController extends BaseController
 		$request = Yii::$app -> request;
 		if($request -> isPost){
 			$post = $request -> post();
-			if($post['card_id'] && $post['bank_name'] ){
+			if($post['card_id'] && $post['bank_name'] && $post['bank_des']){
 				$obj = new \app\logic\server\QuanXianServer();
         		$intPersonId = $this -> arrPersonInfo['person_id'];
 		        $strBankName = $post['bank_name'];
-		        $strBankNameDes = @$post['bank_des'];
+		        $strBankNameDes = $post['bank_des'];
 		        $strCardId = $post['card_id'];
 		        $res = $obj->curlAddUserBankList($intPersonId, $strBankName, $strBankNameDes, $strCardId);
 		        return $this -> _return(null,$res ? 200 : 404);
