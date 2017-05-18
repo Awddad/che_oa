@@ -37,7 +37,7 @@ class PayBack extends \yii\db\ActiveRecord
             [['money'], 'number'],
             [['apply_id'], 'string', 'max' => 20],
             [['jie_kuan_ids', 'bank_name', 'bank_name_des'], 'string', 'max' => 255],
-            [['bank_card_id'], 'string', 'max' => 16],
+            [['bank_card_id'], 'string', 'max' => 25],
         ];
     }
 
