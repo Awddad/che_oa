@@ -117,33 +117,15 @@ class BackConfirmForm extends CaiWuShouKuan
             $transaction->rollBack();
             throw $exception;
         }
-        if($apply->type == 2) {
-            $rst = ThirdServer::instance([
-                'token' => \Yii::$app->params['cai_wu']['token'],
-                'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-            ])->payment($param);
-            if($rst['success'] == 1) {
-                $this->is_told_cai_wu_success = 1;
-                $this->update();
-            }
-        } else {
-            $flag = true;
-            foreach ($apply->BaoXiaoList as $v) {
-                $param['tag_id'] = $v->type;
-                $param['money'] = $v->money;
-                $rst = ThirdServer::instance([
-                    'token' => \Yii::$app->params['cai_wu']['token'],
-                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-                ])->payment($param);
-                if(!$rst['success'] == 1) {
-                    $flag = false;
-                }
-            }
-            if($flag) {
-                $this->is_told_cai_wu_success = 1;
-                $this->update();
-            }
+        $rst = ThirdServer::instance([
+            'token' => \Yii::$app->params['cai_wu']['token'],
+            'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+        ])->payment($param);
+        if($rst['success'] == 1) {
+            $this->is_told_cai_wu_success = 1;
+            $this->update();
         }
+
         return true;
     }
 
