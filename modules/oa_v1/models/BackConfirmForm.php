@@ -42,7 +42,7 @@ class BackConfirmForm extends CaiWuShouKuan
             [['org_id', 'type', 'shou_kuan_time', 'create_cai_wu_log'], 'integer'],
             [['tips'], 'string'],
             [['apply_id', 'org_name', 'bank_name', 'bank_name_des', 'shou_kuan_id', 'pics'], 'string', 'max' => 255],
-            [['bank_card_id'], 'string', 'max' => 16],
+            [['bank_card_id'], 'string', 'max' => 25],
         ];
     }
 
