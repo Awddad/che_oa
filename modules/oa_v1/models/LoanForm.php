@@ -103,7 +103,7 @@ class LoanForm extends BaseForm
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'copy_person'],
+                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons'],
                 'required',
                 'message' => '缺少必填字段'
             ],

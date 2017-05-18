@@ -45,7 +45,7 @@ class DefaultController extends BaseController
     {
         $arrData = [
             'userinfo' => $this->arrPersonInfo->toArray(),
-            'menu' => $this->arrPersonRoleInfo['menu']
+//            'menu' => $this->arrPersonRoleInfo['menu']
         ];
         return $this->_return($arrData);
     }
@@ -88,7 +88,7 @@ class DefaultController extends BaseController
         $intRoleId = intval(Yii::$app->request->get('role_id'));
         $arrRoleIds = explode(',', $this->arrPersonInfo->role_ids);
         //但用户只有一个角色的时候进入系统没有role_id参数
-        if(empty($intRoleId) && count($arrRoleIds) == 1)
+        if(empty($intRoleId) && count($arrRoleIds) >= 1)
         {
             $intRoleId = $arrRoleIds[0];
         }
@@ -101,7 +101,7 @@ class DefaultController extends BaseController
             $session = Yii::$app->getSession();
             $session->set('role_id', $intRoleId);
             //设置权限成功 - 跳转到网站首页
-            header('Location: /#/');
+            header('Location: /oa/index.html');
             exit();
         }
         else
@@ -126,8 +126,7 @@ class DefaultController extends BaseController
     {
         //跳转到登出页面
         Yii::$app->getSession()->destroy();
-        header('Location: ' . Yii::$app->params['quan_xian']['auth_sso_login_url']);
-        exit();
+        return $this->_return(['login_url' => Yii::$app->params['quan_xian']['auth_sso_login_url']]);
     }
 
     /**

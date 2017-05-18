@@ -13,7 +13,7 @@ const app = dva({
         message.error('登录超时，请重新登录');
         setTimeout(function(){
           dispatch(routerRedux.push({
-            pathname: data.exceptionCode == 100?"/admin":"/login"
+            pathname: data.exceptionCode == 100?"/":"http://test.sso.checheng.net/login.php"
           }));
         },1500);
       });
@@ -32,7 +32,6 @@ const app = dva({
 app.use(createLoading());
 
 // 3. Model
-app.model(require('./models/adminLogin'));
 app.model(require('./models/adminHome'));
 app.model(require('./models/reimBurse'));
 app.model(require('./models/applyLoan'));
