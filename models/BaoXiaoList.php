@@ -31,7 +31,7 @@ class BaoXiaoList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'type', 'des'], 'required'],
+            [['apply_id', 'type'], 'required'],
             [['money'], 'number'],
             [['type'], 'integer'],
             [['des'], 'string'],
