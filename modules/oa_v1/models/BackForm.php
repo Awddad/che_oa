@@ -159,7 +159,7 @@ class BackForm extends BaseForm
             'person' => $user['person_name'],
             'bank_name' => $this->bank_name,
             'bank_card_id' => $this->bank_card_id,
-            'tips' => $this->tips,
+            'des' => $this->des,
             'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
             'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
         ]);

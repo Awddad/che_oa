@@ -269,7 +269,7 @@ TABLEHTML;
         <table>
             <tr>
                 <td>备注信息</td>
-                <td>{$arrInfo['tips']}</td>
+                <td>{$arrInfo['des']}</td>
             </tr>
         </table>
     </div>
