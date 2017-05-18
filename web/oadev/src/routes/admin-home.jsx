@@ -19,7 +19,6 @@ const AdminHome = React.createClass({
             modalVisible,
             homeshowpage
         } = this.props.adminHome;
-
         return (
             <Main location={location}>
                 <Row>
