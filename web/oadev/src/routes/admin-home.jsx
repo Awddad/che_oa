@@ -10,46 +10,47 @@ import {chkPms,chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock} from '../com
 
 const FormItem = Form.Item;
 
-function AdminHome({ location, dispatch, adminHome }) {
-  const {
-    data,
-    loanApply,
-    loading,
-    modalVisible,
-    personID,
-    userInfo
-  } = adminHome;
+const AdminHome = React.createClass({
+    render(){
+        const {
+            data,
+            loanApply,
+            loading,
+            modalVisible,
+            homeshowpage
+        } = this.props.adminHome;
 
-
-  return (
-  	<Main location={location}>
-  		<Row>
-	      <div className={styles.home_wrap}>
-            <h2 className={styles.mb_md}>报销相关</h2>
-            <Row className="home-wraplist">
-              <ul className="ant-col-md-12 ant-col-sm-24">
-                  <li className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
-                  <li className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
-                  <li className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
-              </ul>
-            </Row>
-	      </div>
-        <div style={{'display':'none'}}>
-            <h2>办公物品相关</h2>
-            <ul>
-                <li><a>申请报销</a></li>
-                <li><a>申请借款</a></li>
-                <li><a>申请还款</a></li>
-            </ul>
-        </div>
-     	</Row>
-    </Main>
-	);
-}
+        return (
+            <Main location={location}>
+              <Row>
+                <div className={styles.home_wrap}>
+                    <h2 className={styles.mb_md}>报销相关</h2>
+                    <Row className="home-wraplist">
+                      <ul className="ant-col-md-12 ant-col-sm-24">
+                          <li className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
+                          <li className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
+                          <li className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
+                      </ul>
+                    </Row>
+                </div>
+                <div style={{'display':'none'}}>
+                    <h2>办公物品相关</h2>
+                    <ul>
+                        <li><a>申请报销</a></li>
+                        <li><a>申请借款</a></li>
+                        <li><a>申请还款</a></li>
+                    </ul>
+                </div>
+              </Row>
+            </Main>
+        );
+    }
+});
 
 AdminHome.propTypes = {
   location: PropTypes.object,
-  UserInfo: PropTypes.object,
+  userinfo: PropTypes.object,
+  dispatch: PropTypes.func,
   adminHome:PropTypes.object,
 };
 

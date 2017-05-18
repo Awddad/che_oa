@@ -3,15 +3,15 @@ import { parse } from 'qs';
 import { message} from 'antd';
 
 export default {
-    namespace: 'UserInfo',
+    namespace: 'userinfo',
     state: {
         userInfo:{},
-        personID:null
+        personID:null,
     },
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
-            if (location.pathname === '/mysend' || location.pathname === '/reimbursedetail' || location.pathname === '/loanmentdetail' || location.pathname === '/repaymentdetail') {
+            if (location.pathname === '/') {
               dispatch({
                 type: 'query',
               });
@@ -21,16 +21,18 @@ export default {
     },
     effects: {
         *query({ payload }, { call, put }) {
-          const { data } = yield call(UserInfo);
-          if (data && data.code == 200) {
-            yield put({
-              type: 'querySuccess',
-              payload: {
-                    userInfo:data.data,
-                    personID:data.data.userinfo.person_id
-              },
-            });
-          }
+            const { data } = yield call(UserInfo);
+            if (data && data.code == 200) {
+               /* setCookie("username",data.data.userinfo.person_name);
+                setCookie("userID",data.data.userinfo.person_id);*/
+                yield put({
+                    type: 'querySuccess',
+                    payload: {
+                        userInfo:data.data,
+                        personID:data.data.userinfo.person_id
+                    },
+                });
+            }
         },
         reducers: {
             querySuccess(state, action) {
@@ -39,3 +41,6 @@ export default {
         },
     }
 }
+
+
+

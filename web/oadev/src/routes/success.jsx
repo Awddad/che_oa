@@ -8,21 +8,39 @@ import styles from './success.less';
 const Step = Steps.Step;
 
 const Success = React.createClass({
-    handleListClick(event){
-        dispatch(routerRedux.push({ pathname: 'mysend' }));
+    handleListClick(){
+        this.props.dispatch(routerRedux.push({
+            pathname: '/mysend'
+        }));
     },
     handleDetailClick(){
+        let { Detail,urltype } = this.props.success;
+        let applyid=null;
+        if(Object.keys(Detail).length > 0)
+        {
+            applyid = Detail.apply_id;
+        }
         let url = '';
+        switch(urltype){
+            case '1':
+                url = "/reimbursedetail?apply_id="+applyid;
+            break;
+            case '2':
+                url = "/loanmentdetail?apply_id="+applyid;
+            break;
+            case '3':
+                url = "/repaymentdetail?apply_id="+applyid;
+            break;
+        }
         this.props.dispatch(
             routerRedux.push({
-                pathname: ''
+                pathname: url
             })
         );
     },
     render(){
-        let { Detail } = this.props.success;
+        let { Detail,urltype } = this.props.success;
         Detail = Detail == null ? {}:Detail;
-        console.log(Detail);
         let title=null,applyid=null,copy_person=null,time=null,resultSteps=null,step=null;
         if(Object.keys(Detail).length > 0)
         {
