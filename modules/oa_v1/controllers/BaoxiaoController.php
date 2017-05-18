@@ -37,7 +37,7 @@ class BaoxiaoController extends BaseController
 					$model -> saveAccount($file_config['pdf']);
 					return $this -> _return($apply_id,200);
 				}else{
-					return $this -> _return(null,404);
+					return $this -> _return($model -> getErrors(),404);
 				}
 			}else{
 				return $this -> _return(current($model -> getErrors())[0],403);
