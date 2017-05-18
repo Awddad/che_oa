@@ -92,7 +92,7 @@ class BackForm extends BaseForm
     {
         return [
             [
-                ['bank_card_id', 'bank_name', 'apply_ids', 'approval_persons' , 'copy_person'],
+                ['bank_card_id', 'bank_name', 'apply_ids', 'approval_persons'],
                 'required'
             ],
             [
