@@ -56,9 +56,9 @@ class FileForm extends Model
     public function saveUploadFile($name = 'files')
     {
         $files = UploadedFile::getInstancesByName($name);
-//        if(empty($files)) {
-//            return false;
-//        }
+        if(empty($files)) {
+            return false;
+        }
         $basePath = \Yii::$app->basePath.'/web';
 
         $filePath = static::$FILES_PATH.date('Y-m-d').'/';
@@ -67,7 +67,7 @@ class FileForm extends Model
         $data = [];
         foreach ($files as  $file) {
             $ext = $file->getExtension();
-            if (!in_array($ext, ['doc','xlsx','pdf', 'xls'])) {
+            if (!in_array($ext, ['doc','xlsx','pdf', 'xls', 'docx'])) {
                 $this->addError($name, '格式错误');
                 return false;
             }
@@ -85,7 +85,7 @@ class FileForm extends Model
                 'url' => $filePath . $randName
             ];
         }
-        return json_encode($data);
+        return $data;
     }
 
     /**
