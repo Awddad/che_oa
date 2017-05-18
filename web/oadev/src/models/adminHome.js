@@ -1,10 +1,10 @@
-import { queryTotal,queryChoiceCom,analogLogin} from '../services/adminHome';
-import { UserInfo } from '../services/adminHome';
+import { queryTotal,queryChoiceCom,analogLogin,UserInfo} from '../services/adminHome';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage( window.sessionStorage || window.localStorage);
+import { setCookie } from '../components/common';
 
 export default {
     namespace: 'adminHome',
@@ -16,15 +16,17 @@ export default {
         loading: false,
         modalVisible: false,
         isLoginBefore:false,
+        homeshowpage:false
     },
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
-            if (location.pathname === '/') {
-              dispatch({
-                type: 'query',
-                payload: location.query,
-              });
+            //console.log(location);
+            if (location.pathname != null) {
+                dispatch({
+                    type: 'query',
+                    payload: location.query,
+                });
             }
           });
         },
@@ -33,18 +35,19 @@ export default {
         *query({ payload }, { call, put }) {
             yield put({ type: 'showLoading' });
             const { data } = yield call(UserInfo);
-            console.log(data);
             if (data && data.code == 200) {
                 yield put({
                     type: 'querySuccess',
                     payload: {
                         userInfo:data.data,
-                        personID:data.data.userinfo.person_id
+                        personID:data.data.userinfo.person_id,
+                        homeshowpage:true
                     },
                 })
+                setCookie("username",data.data.userinfo.person_name);
+                setCookie("userID",data.data.userinfo.person_id);
             }else if(data.code == 401 || data.code == 402){
                 window.location.href ="http://test.sso.checheng.net/login.php";
-                //yield put(routerRedux.push({pathname:''}));
             }
         }
     },

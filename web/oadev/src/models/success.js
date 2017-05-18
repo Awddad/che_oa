@@ -39,7 +39,6 @@ export default {
           response = yield call(RepayMentDetail, {'apply_id' : payload.apply_id});
           break;
       }
-      console.log(response);
       if (response.data && response.data.code === 200) {
         yield put({
           type: 'querySuccess',
