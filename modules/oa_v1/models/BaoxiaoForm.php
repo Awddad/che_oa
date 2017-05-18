@@ -33,7 +33,7 @@ class BaoxiaoForm extends BaseForm
 				'required',
 				'message'=>'{attribute}不能为空'
 			],
-			['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
+			//['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
 			['approval_persons','validatePersons','params'=>'审批人'],
 			['copy_person','validatePersons','params'=>'抄送人'],
 			['bao_xiao_list','validateList'],
