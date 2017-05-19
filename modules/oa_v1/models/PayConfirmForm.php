@@ -135,7 +135,7 @@ class PayConfirmForm extends CaiWuFuKuan
             }
         } else {
             $flag = true;
-            foreach ($apply->BaoXiaoList as $v) {
+            foreach ($apply->expense as $v) {
                 $param['tag_id'] = $v->type;
                 $param['money'] = $v->money;
                 $rst = ThirdServer::instance([
