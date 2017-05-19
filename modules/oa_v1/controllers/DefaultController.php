@@ -45,7 +45,7 @@ class DefaultController extends BaseController
     {
         $arrData = [
             'userinfo' => $this->arrPersonInfo,
-            'roleInfo' => $this->arrPersonRoleInfo['roleInfo']
+            'roleInfo' => (isset($this->arrPersonRoleInfo['roleInfo']) ? $this->arrPersonRoleInfo['roleInfo'] : []),
         ];
         return $this->_return($arrData);
     }
