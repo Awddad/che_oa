@@ -71,8 +71,8 @@ class FileForm extends Model
                 $this->addError($name, '格式错误');
                 return false;
             }
-
-            $randName = $file->name;
+            //去掉空格
+            $randName = trim($file->name);
             if (!file_exists($rootPath)) {
                 mkdir($rootPath, 0777, true);
             }
@@ -113,7 +113,8 @@ class FileForm extends Model
                 $this->addError($name, '格式错误');
                 return false;
             }
-            $randName = $file->name;
+            //去掉空格
+            $randName = trim($file->name);
             if (!file_exists($rootPath)) {
                 mkdir($rootPath, 0777, true);
             }

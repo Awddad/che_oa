@@ -23,12 +23,20 @@ class UploadController extends BaseController
     public function actionImage()
     {
         $model = new FileForm();
-        return $this->_return($model->saveUploadImg());
+        $img = $model->saveUploadImg();
+        if(!$img) {
+            return $this->_return($img, 1011);
+        }
+        return $this->_return($img);
     }
 
     public function actionFile()
     {
         $model = new FileForm();
-        return $this->_return($model->saveUploadFile());
+        $file = $model->saveUploadFile();
+        if(!$file) {
+            return $this->_return($file, 1012);
+        }
+        return $this->_return($file);
     }
 }
