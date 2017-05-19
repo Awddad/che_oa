@@ -43,9 +43,6 @@ const RepayMentDetail = React.createClass({
 
       const { ApplyID,personID } = this.props.Detail;
       const formdata = { ...getFieldsValue() };
-
-      console.log(ApplyID);
-
       let link = this.props;
       validateFields((errors) => {
             if (errors) {

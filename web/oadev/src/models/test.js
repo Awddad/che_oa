@@ -30,7 +30,6 @@ export default {
         *query({ payload }, { call, put }) {
             let response = null;
             response = yield call(BaoxiaoDetail, {'apply_id' : '2017051219002201327'});
-            console.log(response);
             if (response.data && response.data.code === 200) {
                 yield put({
                     type: 'querySuccess',
