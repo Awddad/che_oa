@@ -21,7 +21,6 @@ const AddCopyModal = React.createClass({
             }
 
             const copydata = { ...getFieldsValue() };
-            console.log(copydata);
             const name = (copydata.audit_personal.label).split(" ")[0];
             const row = {'id':copydata.audit_personal.key,'name':name}
             this.props.dispatch({

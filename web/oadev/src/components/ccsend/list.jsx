@@ -7,9 +7,6 @@ import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Ico
 const CcsendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
-        //console.log(filters);
-        //console.log(sorter);
         const { at,type,ob,status,onSorting }=this.props.ccsend;
         let sorting = "";
         let filterType = null;
@@ -24,7 +21,6 @@ const CcsendList = React.createClass({
         }
         if (sorter.order != undefined) {
           sorting = sorter.order != 'descend' ? 1:0;
-          //console.log(sorting);
         }
         this.props.onSorting(sorting, filterType, filterStatus);
     },
@@ -65,9 +61,7 @@ const CcsendList = React.createClass({
     render(){
 
         const { dataSource,keywords,start_time,end_time,at,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sortingType,showDetail} = this.props.ccsend;
-
-        //console.log(dataSource);
-            const columns = [{
+        const columns = [{
                 title: '序号',
                 dataIndex: 'id',
                 key: 'id',
@@ -130,7 +124,6 @@ const CcsendList = React.createClass({
                 title:'操作',
                 dataIndex:'operation',
                 render:(text,record)=> {
-                    //console.log(record);
                     let result=null;
                     switch(record.type_value){
                         case "报销":

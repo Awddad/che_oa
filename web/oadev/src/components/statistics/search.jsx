@@ -21,7 +21,6 @@ const LoadDetailSearch = React.createClass({
         } = this.props.form;
         e.preventDefault();
         const detail = {...getFieldsValue()};
-        //console.log(detail);
         validateFields((errors) => {
             if(!!errors){
                 return;
@@ -55,7 +54,7 @@ const LoadDetailSearch = React.createClass({
             sm: 8,
         }
 
-        
+
         const { MonthPicker, RangePicker } = DatePicker;
         const dateFormat = 'YYYY-MM-DD';
         const rangeConfig = {

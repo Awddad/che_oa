@@ -142,7 +142,6 @@ const Reimburse = React.createClass({
       }
 
       let files = CardDetail.file.fileList.map(data => data.response.data[0]);
-      console.log(files);
       let pic = CardDetail.pics.fileList.map(data => data.response.data);
       let pics = "";
       for(let i=0;i<pic.length;i++){
