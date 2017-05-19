@@ -149,7 +149,7 @@ class BaoxiaoForm extends BaseForm
 			$model -> money = $this -> money;
 			$model -> bank_card_id = $this -> bank_card_id;
 			$model -> bank_name = $this -> bank_name;
-			$model -> bank_name_des = $this -> bank_name_des?:''
+			$model -> bank_name_des = $this -> bank_name_des?:'';
 			$model -> files = json_encode($this -> fujian);
 			//$model -> pics = $this -> pics?implode(',',$this -> pics):'';
 			$model -> pics = $this -> pics ? : '';
