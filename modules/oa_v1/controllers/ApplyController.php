@@ -43,6 +43,24 @@ class ApplyController extends BaseController
 		return $this -> _return($data,200);
 		
 	} 
+	
+	public function actionGetInfo($type)
+	{
+		switch ($type)
+		{
+			case '1'://报销
+				return $this->actionGetBaoxiao();
+				break;
+			case '2'://借款
+				return $this -> actionGetJiekuan();
+				break;
+			case '3'://还款
+				return $this -> actionGetPayback();
+				break;
+			default:
+				return $this -> _return(null,403);
+		}
+	}
 	/**
 	 * 报销详情
 	 */
