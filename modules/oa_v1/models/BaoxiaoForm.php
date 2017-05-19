@@ -21,7 +21,7 @@ class BaoxiaoForm extends BaseForm
 	public $copy_person;//抄送人
 	public $cai_wu_need = 2;//需要财务确认
 	public $fujian;//附件
-	public $pic;//图片
+	public $pics;//图片
 	public $money = 0;//报效金额
 	public $create_time;//创建时间
 	public $title;//标题
@@ -38,6 +38,7 @@ class BaoxiaoForm extends BaseForm
 			['approval_persons','validatePersons','params'=>'审批人'],
 			['copy_person','validatePersons','params'=>'抄送人'],
 			['bao_xiao_list','validateList'],
+			[['fujian','pics'],'safe'],
 		];
 	}
 	public function validatePersons($attribute, $params)
@@ -150,7 +151,8 @@ class BaoxiaoForm extends BaseForm
 			$model -> bank_name = $this -> bank_name;
 			$model -> bank_name_des = $this -> bank_name_des?:'';
 			$model -> files = json_encode($this -> fujian);
-			$model -> pics = $this -> pic?implode(',',$this -> pic):'';
+			//$model -> pics = $this -> pics?implode(',',$this -> pics):'';
+			$model -> pics = $this -> pics ? : '';
 		}elseif('baoxiaolist' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> money = $data['money'];

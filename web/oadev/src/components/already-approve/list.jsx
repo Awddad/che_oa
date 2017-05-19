@@ -5,9 +5,6 @@ import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Ico
 const AlreadyApproveList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
-        //console.log(filters);
-        //console.log(sorter);
         const { at,type,onSorting }=this.props.alreadyApprove;
         let sorting = "";
         let filterType = null;
@@ -17,7 +14,6 @@ const AlreadyApproveList = React.createClass({
         }
         if (sorter.order != undefined) {
           sorting = sorter.order != 'descend' ? 1:0;
-          //console.log(sorting);
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -112,7 +108,6 @@ const AlreadyApproveList = React.createClass({
             title:'操作',
             dataIndex:'operation',
             render:(text,record)=> {
-                //console.log(record);
                 let result=null;
                 switch(record.type_value){
                     case "报销":

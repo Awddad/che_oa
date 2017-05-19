@@ -43,6 +43,15 @@ const Confirm = React.createClass({
             if (errors) {
                 return;
             }else{
+                let pic = paymentDetail.pics.fileList.map(data => data.response.data);
+                let pics = "";
+                for(let i=0;i<pic.length;i++){
+                      if(i == pic.length-1){
+                        pics += pic[i];
+                      }else{
+                        pics += pic[i]+','
+                      }
+                }
                 this.props.dispatch({
                     type: 'Detail/PayMentConfirm',
                     payload: {
@@ -54,7 +63,7 @@ const Confirm = React.createClass({
                         create_cai_wu_log:paymentDetail.flow,
                         fu_kuan_time:this.state.paymentTime,
                         type:paymentDetail.paymentType[paymentDetail.paymentType.length-1],
-                        pics:paymentDetail.pics,
+                        pics:pics,
                         tips:paymentDetail.tips
                     }
                 });
@@ -160,7 +169,7 @@ const Confirm = React.createClass({
                             </FormItem>
                             <FormItem {...formItemLayout} label="付款账号" hasFeedback>
                                 {getFieldDecorator('account', {
-                                    rules: [{required: true, message: '请选择付款账号',defaultValue:''}]
+                                    rules: [{required: true, message: '请选择付款账号'}]
                                 })(
                                     <Select className="t-l" labelInValue  placeholder="请选择" size="large" style={{ width: '100%' }}>
                                           {accountOptions}

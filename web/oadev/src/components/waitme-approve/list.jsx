@@ -6,9 +6,6 @@ import { Link } from 'dva/router';
 const WaitmeList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
-        //console.log(filters);
-        //console.log(sorter);
         const { at,type,onSorting }=this.props.waitme;
         let sorting = "";
         let filterType = null;
@@ -18,7 +15,6 @@ const WaitmeList = React.createClass({
         }
         if (sorter.order != undefined) {
           sorting = sorter.order != 'descend' ? 1:0;
-          //console.log(sorting);
         }
         this.props.onSorting(sorting, filterType);
     },

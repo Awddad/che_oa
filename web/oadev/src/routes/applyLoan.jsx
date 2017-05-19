@@ -181,7 +181,6 @@ const ApplyLoan = React.createClass({
     });
   },
   handleimgChange(info){
-    //console.log(info.fileList);
     this.setState({
         imgfileList:info.fileList
     });
