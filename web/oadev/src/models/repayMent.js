@@ -1,4 +1,4 @@
-import { constCard,constPersonal,addCard,constCanBack,constCreate } from '../services/repayMent';
+import { constCard,constPersonal,addCard,constCanBack,constCreate,GetApplyID } from '../services/repayMent';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
@@ -18,6 +18,9 @@ export default {
     bank_name:'',
     bank_id:'',
     selectrows:[],
+    addApplyID:null,//还款单ID
+    department:null,
+    bxname:null,
     loading: false,
     isshowconstmodal:false,
     isshowcopymodal:false,
@@ -134,10 +137,28 @@ export default {
             urltype:payload.urltype
           }
         }));
+        yield put({
+          type: 'hideModal1',
+          payload:{
+            constdata:[],
+            copydata:[]
+          }
+        });
       } else {
         message.error(data.message,5);
       }
-    }
+    },
+    *ApplyIDquery({ payload }, { call, put }) {
+      const  response  = yield call(GetApplyID, {type:payload.type});
+      if (response.data  && response.data.code == 200 ) {
+          yield put({
+            type: 'querySuccess',
+            payload:{...payload,
+              addApplyID:response.data.data.apply_id
+            }
+          });
+      }
+    },
   },
 
   reducers: {

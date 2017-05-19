@@ -85,10 +85,22 @@ export default {
 
         *PayMentConfirmQuery({ payload }, { call, put }) {//付款确认弹窗初始化
             const { data } = yield call(PayMentConfirmquery, payload);
-            if (data && data.code === 200) {
+            let response=null,dataname=null,Detail=null;
+            if(payload.type == 'bx'){
+                response = yield call(BaoxiaoDetail, payload);
+                Detail = response.data.data;
+                dataname = {'Baoxiao_Detail':Detail};
+            }else{
+                response = yield call(LoanDetail, payload);
+                Detail = response.data.data;
+                dataname = {'Loan_Detail':Detail};
+            }
+
+            if (data && data.code === 200 && response && response.data.code == 200) {
                 yield put({
                     type: 'refreshstaste',
                     payload:{
+                        ...dataname,
                         isShowPaymentConfirm:payload.isShowPaymentConfirm,
                         paymentDepartmentData:data.data.pay_org,
                         paymentaccountData:data.data.pay_bank,

@@ -90,7 +90,8 @@ const ReimburseDetail = React.createClass({
             type:'Detail/PayMentConfirmQuery',
             payload:{
                 isShowPaymentConfirm:true,
-                apply_id:Baoxiao_Detail.apply_id
+                apply_id:Baoxiao_Detail.apply_id,
+                type:'bx'
             }
         });
     },
@@ -142,7 +143,6 @@ const ReimburseDetail = React.createClass({
             confirm = (<ConfirmButton handleClick={this.handleConfirmClick} />);
         }
 
-        const GenConfirm = () => <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm }  details={Baoxiao_Detail}/>;
 
         let bxmx_columns = [{
                               title: '序号',
@@ -221,7 +221,7 @@ const ReimburseDetail = React.createClass({
                         <DetailImg imgdata={Baoxiao_Detail.pics} />
                         { approval }
                         { confirm }
-                        <GenConfirm />
+                        <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm }  details={Baoxiao_Detail}/>
                     </div>
                 </Row>
             </Main>

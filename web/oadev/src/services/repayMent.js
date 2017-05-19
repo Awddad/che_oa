@@ -31,7 +31,7 @@ export async function constPersonal(params) {
   });
 }
 
-export async function addCard(params) {
+export async function addCard(params) { //添加卡号
   return request('/oa_v1/apply/add-bankcard',{
     method: 'post',
     headers: {
@@ -41,7 +41,7 @@ export async function addCard(params) {
   });
 }
 
-export async function constCreate(params) {
+export async function constCreate(params) {//提交申请
   return request('/oa_v1/back',{
     method: 'post',
     headers: {
@@ -49,4 +49,8 @@ export async function constCreate(params) {
     },
     body: qs.stringify(params),
   });
+}
+
+export async function GetApplyID(params) {//申请单号
+    return request(`/oa_v1/default/get-apply-id?${qs.stringify(params)}`);
 }

@@ -91,7 +91,7 @@ const Left = React.createClass({
           selectedKeys={this.state.selectedKeys}
           mode="inline"
           >
-
+          <Menu.Item key="/" style={{paddingLeft:48}}>首页</Menu.Item>
           {chkPms(['18','23','32','37'])?
                   <SubMenu key="sub1" title={<span><Icon type="solution"/><span>报销管理</span></span>}>
                     <Menu.Item key="/reimburse" style={chkPmsForBlock(['18'])}>申请报销</Menu.Item>

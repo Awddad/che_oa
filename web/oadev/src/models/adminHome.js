@@ -21,7 +21,6 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
-            //console.log(location);
             if (location.pathname != null) {
                 dispatch({
                     type: 'query',
@@ -46,6 +45,7 @@ export default {
                 })
                 setCookie("username",data.data.userinfo.person_name);
                 setCookie("userID",data.data.userinfo.person_id);
+                setCookie("department",data.data.userinfo.org_full_name);
             }else if(data.code == 401 || data.code == 402){
                 window.location.href ="http://test.sso.checheng.net/login.php";
             }
