@@ -88,7 +88,8 @@ const ReimburseDetail = React.createClass({
             type:'Detail/PayMentConfirmQuery',
             payload:{
                 isShowPaymentConfirm:true,
-                apply_id:Loan_Detail.apply_id
+                apply_id:Loan_Detail.apply_id,
+                type:'loan'
             }
         });
     },
@@ -140,7 +141,6 @@ const ReimburseDetail = React.createClass({
             confirm = (<ConfirmButton handleClick={this.handleConfirmClick} />);
         }
 
-        const GenConfirm = () => <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm } details={Loan_Detail}/>;
 
             let name = '',bank_name='',bank_id='',bank_des='',money='',des='',tips='';
             if(Object.keys(Loan_Detail).length > 0){
@@ -181,7 +181,7 @@ const ReimburseDetail = React.createClass({
                         <DetailImg imgdata={Loan_Detail.pics} />
                         { approval }
                         { confirm }
-                        <GenConfirm />
+                        <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm } details={Loan_Detail}/>
                     </div>
                 </Row>
             </Main>

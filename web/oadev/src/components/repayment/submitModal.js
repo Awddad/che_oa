@@ -2,6 +2,7 @@ import { connect } from 'dva';
 import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
+import {getCoookie} from '../common';
 import cs from 'classnames';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -50,12 +51,14 @@ const SubmitModal = React.createClass({
           maskClosable:false
         };
 
-        const {carddata,constdata,copydata,CardDetail,bank_id,bank_name,selectedRows} = this.props.repayMent;
+        const {carddata,constdata,copydata,CardDetail,bank_id,bank_name,selectedRows,addApplyID} = this.props.repayMent;
         let constpersonal = constdata.map(data=>data.name.split(" ")[0]).join("、");
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
         let des = CardDetail.explain;
         const date = new Date();
         let  dateTime  = date.getFullYear() + '年' + (date.getMonth()+1) + '月' + date.getDay()+'日';
+        let name = getCoookie("username");
+        let department = getCoookie("department");
         let html =[],count = 0;
         if(selectedRows != undefined ){
             for(let i = 0; i < selectedRows.length; i++ ){
@@ -76,13 +79,13 @@ const SubmitModal = React.createClass({
                          <td className={styles.b_gray} width="100">日期</td>
                          <td className="t-l">{dateTime}</td>
                          <td className={styles.b_gray} width="100">单号</td>
-                         <td className="t-l">2017050401001</td>
+                         <td className="t-l">{addApplyID}</td>
                      </tr>
                      <tr>
                          <td className={styles.b_gray}>部门</td>
-                         <td className="t-l">南京汽车销售-中规车一区-涟水店</td>
+                         <td className="t-l">{ department }</td>
                          <td className={styles.b_gray}>报销人</td>
-                         <td className="t-l">马聪</td>
+                         <td className="t-l">{name}</td>
                      </tr>
                      <tr>
                          <td className={styles.b_gray}>开户行名称</td>

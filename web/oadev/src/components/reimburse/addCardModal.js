@@ -72,8 +72,12 @@ const AddCardModal = React.createClass({
                                     <Input placeholder="请输入" />
                                 )}
                             </FormItem>
-                            <FormItem {...formItemLayout} label="开户行">
-                                {getFieldDecorator('open_account')(
+                            <FormItem {...formItemLayout} label="开户行" hasFeedback>
+                                {getFieldDecorator('open_account',{
+                                    rules: [
+                                      {required: true, message: '请输入开户行!'}
+                                    ]
+                                })(
                                     <Input  placeholder="请输入"/>
                                 )}
                             </FormItem>
