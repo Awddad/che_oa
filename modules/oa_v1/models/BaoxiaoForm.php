@@ -29,10 +29,11 @@ class BaoxiaoForm extends BaseForm
 	public function rules(){
 		return [
 			[
-				['bank_card_id','bank_name','bao_xiao_list','approval_persons'],
+				['bank_card_id','bank_name','bao_xiao_list','approval_persons','apply_id'],
 				'required',
 				'message'=>'{attribute}不能为空'
 			],
+			['apply_id','unique','targetClass' => '\app\models\Apply', 'message' => '申请单已存在.'],
 			//['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
 			['approval_persons','validatePersons','params'=>'审批人'],
 			['copy_person','validatePersons','params'=>'抄送人'],
@@ -83,7 +84,7 @@ class BaoxiaoForm extends BaseForm
 	 */
 	public function saveBaoxiao()
 	{
-		$this -> apply_id = $this -> createId('apply');
+		$this -> apply_id = $this -> apply_id?:$this -> createId('apply');
 		$model_apply = new appmodel\Apply();
 		$this -> loadModel('apply',$model_apply);
 		$transaction = Yii::$app -> db -> beginTransaction();
@@ -191,8 +192,8 @@ class BaoxiaoForm extends BaseForm
 		$model_bao_xiao = new appmodel\BaoXiao();
 		$this -> loadModel('baoxiao',$model_bao_xiao);
 		if(!$model_bao_xiao -> insert()){
-			//throw new \Exception(current($model_bao_xiao->getErrors())[0]);
-			throw new \Exception('报销失败');
+			throw new \Exception(current($model_bao_xiao->getErrors())[0]);
+			//throw new \Exception('报销失败');
 		}
 	}
 	protected function approvalLog()

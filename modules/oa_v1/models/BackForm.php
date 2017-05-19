@@ -31,6 +31,7 @@ use yii\db\Exception;
  * @property integer $type
  * @property array $approval_persons
  * @property array $copy_person
+ * @property string $apply_id
  */
 class BackForm extends BaseForm
 {
@@ -84,6 +85,12 @@ class BackForm extends BaseForm
     public $type = 3;
 
     /**
+     * 申请ID
+     * @var
+     */
+    public $apply_id;
+
+    /**
      * 表单验证
      *
      * @return array
@@ -92,11 +99,11 @@ class BackForm extends BaseForm
     {
         return [
             [
-                ['bank_card_id', 'bank_name', 'apply_ids', 'approval_persons'],
+                ['bank_card_id', 'bank_name', 'apply_ids', 'approval_persons', 'apply_id'],
                 'required'
             ],
             [
-                ['bank_card_id', 'bank_name', 'bank_name_des', 'des'],
+                ['bank_card_id', 'bank_name', 'bank_name_des', 'des', 'apply_id'],
                 'string'
             ],
             [
@@ -107,7 +114,7 @@ class BackForm extends BaseForm
             [
                 ['apply_ids'],
                 'checkApplyIds',
-            ],
+            ]
         ];
     }
 
@@ -143,7 +150,7 @@ class BackForm extends BaseForm
      */
     public function save($user)
     {
-        $applyId = $this->createApplyId();
+        $applyId = $this->apply_id;
         $pdf = new  MyTcPdf();
         $basePath = \Yii::$app->basePath.'/web';
         $filePath = '/upload/pdf/payback/'.date('Y-m-d').'/';
@@ -159,7 +166,7 @@ class BackForm extends BaseForm
             'person' => $user['person_name'],
             'bank_name' => $this->bank_name,
             'bank_card_id' => $this->bank_card_id,
-            'tips' => $this->tips,
+            'des' => $this->des,
             'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
             'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
         ]);
@@ -221,7 +228,7 @@ class BackForm extends BaseForm
         $model->bank_name = $this->bank_name;
         $model->bank_name_des = $this->bank_name_des ? : '';
         if (!$model->save()) {
-            throw new Exception('借款保存失败', $model->errors);
+            throw new Exception('还款保存失败', $model->errors);
         }
         return $model;
     }

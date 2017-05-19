@@ -32,6 +32,7 @@ use yii\db\Exception;
  * @property array $approval_persons
  * @property array $copy_person
  * @property int $type
+ * @property string $apply_id
  */
 class LoanForm extends BaseForm
 {
@@ -96,6 +97,12 @@ class LoanForm extends BaseForm
     public $type = 2;
 
     /**
+     * 申请ID
+     * @var
+     */
+    public $apply_id;
+
+    /**
      * 表单验证
      * @return array
      */
@@ -103,7 +110,7 @@ class LoanForm extends BaseForm
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons'],
+                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'apply_id'],
                 'required',
                 'message' => '缺少必填字段'
             ],
@@ -116,7 +123,7 @@ class LoanForm extends BaseForm
                 ['pics'], 'string'
             ],
             [
-                ['money', 'bank_card_id', 'bank_name', 'bank_name_des','des', 'tips'],
+                ['money', 'bank_card_id', 'bank_name', 'bank_name_des','des', 'tips', 'apply_id'],
                 'string'
             ]
         ];
@@ -131,7 +138,7 @@ class LoanForm extends BaseForm
      */
     public function save($user)
     {
-        $applyId = $this->createApplyId();
+        $applyId = $this->apply_id;
         $pdf = new  MyTcPdf();
         $basePath = \Yii::$app->basePath.'/web';
         $filePath = '/upload/pdf/loan/'.date('Y-m-d').'/';

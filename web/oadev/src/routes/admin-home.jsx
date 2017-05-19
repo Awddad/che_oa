@@ -19,34 +19,35 @@ const AdminHome = React.createClass({
             modalVisible,
             homeshowpage
         } = this.props.adminHome;
-
         return (
             <Main location={location}>
-              <Row>
-                <div className={styles.home_wrap}>
-                    <h2 className={styles.mb_md}>报销相关</h2>
-                    <Row className="home-wraplist">
-                      <ul className="ant-col-md-12 ant-col-sm-24">
-                          <li className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
-                          <li className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
-                          <li className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
-                      </ul>
-                    </Row>
-                </div>
-                <div style={{'display':'none'}}>
-                    <h2>办公物品相关</h2>
-                    <ul>
-                        <li><a>申请报销</a></li>
-                        <li><a>申请借款</a></li>
-                        <li><a>申请还款</a></li>
-                    </ul>
-                </div>
-              </Row>
+                <Row>
+                    <div className={styles.home_wrap}>
+                        <h2 className={styles.mb_md}>报销相关</h2>
+                        <Row className="home-wraplist">
+                          <ul className="ant-col-md-12 ant-col-sm-24">
+                              <li className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
+                              <li className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
+                              <li className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
+                          </ul>
+                        </Row>
+                    </div>
+                    <div className={styles.home_office}>
+                        <h2 className={styles.mb_md}>办公物品相关</h2>
+                        <Row className="home-wraplist">
+                            <ul className="ant-col-md-24 ant-col-sm-24">
+                                <li className="ant-col-md-6"><a className={styles.demand}>发起采购需求</a></li>
+                                <li className="ant-col-md-6"><a className={styles.purchase}>申请采购</a></li>
+                                <li className="ant-col-md-6"><a className={styles.Release}>固定资产发放</a></li>
+                                <li className="ant-col-md-6"><a className={styles.Recover}>固定资产收回</a></li>
+                            </ul>
+                        </Row>
+                    </div>
+                </Row>
             </Main>
         );
     }
 });
-
 AdminHome.propTypes = {
   location: PropTypes.object,
   userinfo: PropTypes.object,
