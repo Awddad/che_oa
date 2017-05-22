@@ -32,10 +32,17 @@ class PayLogic extends BaseLogic
             'status' => 4
         ]);
         //筛选
-        if ($type && in_array($type, [1, 2])) {
-            $query->andWhere([
-                'type' => $type
-            ]);
+        if ($type) {
+            if(is_array($type)) {
+                $query->andWhere([
+                   'in', 'type', $type
+                ]);
+            } else {
+                $query->andWhere([
+                    'type' => $type
+                ]);
+            }
+            
         } else {
             $query->andWhere([
                 'in', 'type', [1, 2]
@@ -65,12 +72,8 @@ class PayLogic extends BaseLogic
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
         $order = 'create_time desc';
-        if (\Yii::$app->request->post('desc')) {
-            $order = \Yii::$app->request->post('desc') . ' desc';
-        }
-
-        if (\Yii::$app->request->post('asc')) {
-            $order = \Yii::$app->request->post('asc') . ' asc';
+        if (\Yii::$app->request->post('sort')) {
+            $order = 'create_time ' .\Yii::$app->request->post('sort');
         }
 
         //当前页

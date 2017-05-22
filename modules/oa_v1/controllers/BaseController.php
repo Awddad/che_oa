@@ -97,6 +97,17 @@ class BaseController extends Controller
                     }
                 }
                 $this->arrPersonInfo = $objPerson;
+                
+                //如果没选角色，默认一个角色
+                if(empty($this->arrPersonRoleInfo['roleInfo']) || $this->arrPersonRoleInfo['permissionOrgIds'] ) {
+                    $arrRoleIds = explode(',', $this->arrPersonInfo->role_ids);
+                    if(empty($intRoleId) && count($arrRoleIds) >= 1)
+                    {
+                        $intRoleId = $arrRoleIds[0];
+                    }
+                    $this->setUserRoleInfo($intRoleId);
+                }
+                
                 //设置角色信息
                 $session = Yii::$app->getSession();
                 if(isset($session['role_id']))
@@ -139,15 +150,6 @@ class BaseController extends Controller
             {
                 //目录权限
                 $arrMenuTmp = ArrayHelper::getColumn(json_decode($objRoleMod->permissions, true), 'slug');
-//                $menu = ArrayHelper::getColumn(Menu::find()->all(), 'slug');
-//                foreach($menu as $k => $val)
-//                {
-//                    if(in_array($val,$arrMenuTmp)) {
-//                        $this->arrPersonRoleInfo['roleInfo'][$val] = true;
-//                    } else {
-//                        $this->arrPersonRoleInfo['roleInfo'][$val] = false;
-//                    }
-//                }
                 //去重
                 $this->arrPersonRoleInfo['roleInfo'] = array_unique($arrMenuTmp);
                 //数据权限
