@@ -41,3 +41,7 @@ export async function constCreate(params) {
     body: qs.stringify(params),
   });
 }
+
+export async function GetApplyID(params) {//申请单号
+    return request(`/oa_v1/default/get-apply-id?${qs.stringify(params)}`);
+}

@@ -48,11 +48,11 @@ export default {
     *query({ payload }, { call, put }) {
       yield put({ type: 'showLoading' });
       const { data } = yield call(query, payload);
-      let total=null,perPage=null;
-      if(data.data.length > 0){
+      let total=0,perPage=null;
+      if(Object.keys(data.data).length > 0){
           total = data.data.pages.totalCount;
           perPage = data.data.pages.perPage;
-        }else{
+      }else{
           total = 0;
           perPage=10;
       }

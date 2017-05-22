@@ -89,7 +89,6 @@ export default {
           }else{
               data = payload.constPersonal;
           }
-          console.log(data);
           if (data) {
             yield put({
                 type: 'modelHandle1',
@@ -122,18 +121,13 @@ export default {
       });
     },
     *addcard({payload},{call,put}){//新增银行卡
-      const {data} = yield call(addCard, payload);
-      if(data && data.code === 200){
-        message.success("银行卡添加成功",2);
-        const {data} = yield call(constCard , payload);
-        if(data && data.code === 200){
-            yield put({
-              type: 'updateCard',
-              constCard: data.data
-            });
-        }
+      const response = yield call(addCard, payload);
+      const response1 = yield call(constCard , payload);
+      if(response && response.code === 200 && response1 && response1.code === 200){
+          message.success("银行卡添加成功",2);
+          yield put({type: 'updateCard', constCard: response1.data.data});
       }else{
-        message.error(data.message);
+        message.error(response.data.message);
       }
     },
     *addconst({payload},{call,put,select}){//添加审批人

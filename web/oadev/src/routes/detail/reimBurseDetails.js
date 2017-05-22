@@ -12,6 +12,7 @@ import DetailImg from '../../components/details/detailimg';
 import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmPayment';
+import { key,host,chkPms } from '../../components/common';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -90,7 +91,8 @@ const ReimburseDetail = React.createClass({
             type:'Detail/PayMentConfirmQuery',
             payload:{
                 isShowPaymentConfirm:true,
-                apply_id:Baoxiao_Detail.apply_id
+                apply_id:Baoxiao_Detail.apply_id,
+                type:'bx'
             }
         });
     },
@@ -118,7 +120,7 @@ const ReimburseDetail = React.createClass({
         if(isTitleStatus == null){
             title = '报销详情';
             approval = '';
-        }else if(isTitleStatus == "approval"){
+        }else if(isTitleStatus == "approval"  && chkPms(['shen_pi']) ){
             title = '报销审批';
             //approval = (<Approval url="/reimburse" handlepass = {this.handlepass}/>);
             approval=(<div className={styles.postil}>
@@ -142,7 +144,6 @@ const ReimburseDetail = React.createClass({
             confirm = (<ConfirmButton handleClick={this.handleConfirmClick} />);
         }
 
-        const GenConfirm = () => <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm }  details={Baoxiao_Detail}/>;
 
         let bxmx_columns = [{
                               title: '序号',
@@ -191,19 +192,20 @@ const ReimburseDetail = React.createClass({
                               dataIndex: 'option',
                               render: (text, record, index) => {
                                 return (
-                                  <a href="#">删除</a>
+                                  <a href={record.url !=null ? host+record.url:"javascript:;"}>下载</a>
                                 );
                               }
                             }];
 
-            let name = '',bank_name='',bank_id='',bank_des='';
+            let name = '',bank_name='',bank_id='',bank_des='',pics='',pdf='';
             if(Object.keys(Baoxiao_Detail).length > 0){
                 name = Baoxiao_Detail.person
                 bank_id = Baoxiao_Detail.info.bank_card_id;
                 bank_name = Baoxiao_Detail.info.bank_name;
                 bank_des = Baoxiao_Detail.info.bank_des;
+                pics = Baoxiao_Detail.info.pics;
+                pdf = Baoxiao_Detail.pdf;
             }
-
 
         return(
             <Main location={location}>
@@ -218,10 +220,10 @@ const ReimburseDetail = React.createClass({
                             <p>{ bank_des }</p>
                         </FormItem>
                         <Accessory columns={fj_columns} dataSource={Baoxiao_Detail.info} />
-                        <DetailImg imgdata={Baoxiao_Detail.pics} />
+                        <DetailImg imgdata={pics} />
                         { approval }
                         { confirm }
-                        <GenConfirm />
+                        <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm }  details={Baoxiao_Detail}/>
                     </div>
                 </Row>
             </Main>

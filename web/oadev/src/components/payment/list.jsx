@@ -4,6 +4,7 @@ import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import styles from './search.less';
 import Confirm from '../details/confirmPayment';
+import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
 
 
 const PaymentdList= React.createClass({
@@ -24,7 +25,6 @@ const PaymentdList= React.createClass({
         }
         if (sorter.order != undefined) {
           sorting = sorter.order != 'descend' ? 1:0;
-          //console.log(sorting);
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -33,18 +33,20 @@ const PaymentdList= React.createClass({
             status:1
         });
         let apply_id =event.target.getAttribute("data-applyid");
-        this.props.dispatch({
+        /*this.props.dispatch({
             type:'Detail/BaoxiaoDetails',
             payload:{
-                apply_id:apply_id
+                apply_id:apply_id,
+                isShowPaymentConfirm:true,
             }
-        });
+        });*/
 
         this.props.dispatch({
             type:'Detail/PayMentConfirmQuery',
             payload:{
                 isShowPaymentConfirm:true,
-                apply_id:apply_id
+                apply_id:apply_id,
+                type:'bx'
             }
         });
     },
@@ -54,24 +56,25 @@ const PaymentdList= React.createClass({
             status:2
         });
         let apply_id =event.target.getAttribute("data-applyid");
-        this.props.dispatch({
+        /*this.props.dispatch({
             type:'Detail/LoanDetails',
             payload:{
                 apply_id:apply_id
             }
-        });
+        });*/
 
         this.props.dispatch({
             type:'Detail/PayMentConfirmQuery',
             payload:{
                 isShowPaymentConfirm:true,
-                apply_id:apply_id
+                apply_id:apply_id,
+                type:'loan'
             }
         });
+
     },
    paginationChange(page,pageNumber){
         const { perPage,keyword,begin_time,end_time }  = this.props.payment;
-        console.log(perPage);
         this.props.dispatch({
             type:'payment/query',
             payload:{
@@ -154,8 +157,8 @@ const PaymentdList= React.createClass({
 
                 return (
                             <p>
-                                <Link className="mr-md" to={url}>详情</Link>
-                                <a data-applyid={record.apply_id} onClick={confirmclick}>付款确认</a>
+                                <Link className="mr-md" to={url} style={chkPmsForInlineBlock(['fu_kuan_que_ren_detail'])}>详情</Link>
+                                <a data-applyid={record.apply_id}  style={chkPmsForInlineBlock(['fu_kuan_que_ren'])} onClick={confirmclick}>付款确认</a>
                             </p>
                 )
 
@@ -169,14 +172,15 @@ const PaymentdList= React.createClass({
             onChange: ()=>{},
         };
 
-        const {Baoxiao_Detail,LoanMent_Detail,isShowPaymentConfirm} = this.props.Detail;
-        let details = this.state.status == 1 ? Baoxiao_Detail : LoanMent_Detail;
-        const GenConfirm = () => <Confirm isShowPaymentConfirm={ isShowPaymentConfirm } details={details}/>;
+        const {Baoxiao_Detail,Loan_Detail,isShowPaymentConfirm} = this.props.Detail;
+        let details = this.state.status == 1 ? Baoxiao_Detail : Loan_Detail;
+
+        //const GenConfirm = () => <Confirm isShowPaymentConfirm={ isShowPaymentConfirm } details={details}/>;
 
 
         return (
             <div>
-                <GenConfirm  />
+                <Confirm isShowPaymentConfirm={ isShowPaymentConfirm } details={details}/>
                 <Button type="primary" className={styles.mt_lg}>导出列表</Button>
                   <Table
                     columns={columns}

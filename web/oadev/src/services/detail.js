@@ -5,12 +5,8 @@ export async function PayMentConfirmquery(params) {//付款弹窗数据初始化
   return request(`/oa_v1/pay-confirm/form?${qs.stringify(params)}`);
 }
 
-export async function BaoxiaoDetail(params) {//报销详情
-  return request(`/oa_v1/apply/get-baoxiao?${qs.stringify(params)}`);
-}
-
-export async function LoanDetail(params) {//借款详情
-  return request(`/oa_v1/apply/get-jiekuan?${qs.stringify(params)}`);
+export async function Detail(params) {//报销详情
+  return request(`/oa_v1/apply/get-info?${qs.stringify(params)}`);
 }
 
 export async function PayMentConfirm(params) {//付款确认
@@ -21,10 +17,6 @@ export async function PayMentConfirm(params) {//付款确认
       },
       body: qs.stringify(params),
     });
-}
-
-export async function RepayMentDetail(params) {//还款详情
-  return request(`/oa_v1/apply/get-payback?${qs.stringify(params)}`);
 }
 
 export async function RepayMentConfirmquery(params) {//还款弹窗数据初始化

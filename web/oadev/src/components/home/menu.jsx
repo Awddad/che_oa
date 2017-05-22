@@ -3,7 +3,6 @@ import { Menu, Icon, Switch } from 'antd';
 import { Link } from 'dva/router';
 
 const LeftMenu = React.createClass({
-
   getInitialState() {//初始化
     return {
       selectedKeys: []

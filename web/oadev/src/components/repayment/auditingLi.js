@@ -37,7 +37,6 @@ const AuditingLi = React.createClass({
         });
     },
     render(){
-        console.log(this.props.imgvisiable);
         const style={
               display: this.props.imgvisiable ? "block" : "none"
             }

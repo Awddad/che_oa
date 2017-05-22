@@ -115,7 +115,7 @@ const Reimburse = React.createClass({
                           issubmitmodal:true,
                           modalIndex: 0,
                           CardDetail:CardDetail,
-                          fileList:CardDetail.fileList,
+                          fileList:CardDetail.file,
                           pics:CardDetail.pics,
                           bank_name:CardDetail.code.split(" ")[0],
                           bank_id:CardDetail.code.split(" ")[1],
@@ -131,16 +131,26 @@ const Reimburse = React.createClass({
   handleSubmit(){
       let { tabledata,CardDetail,constdata,copydata,addApplyID } = this.props.reimBurse;
 
-     const approval_persons = [],copy_person=[],approval_p={},copy_p={};
+      const approval_persons = [],copy_person=[],approval_p={},copy_p={};
 
-     for(let i =0; i<constdata.length;i++){
-        approval_persons.push({"person_id": constdata[i].id,"person_name":constdata[i].name,"steep":(i+1)});
-     }
+      for(let i =0; i<constdata.length;i++){
+          approval_persons.push({"person_id": constdata[i].id,"person_name":constdata[i].name,"steep":(i+1)});
+      }
 
-     for(let i =0; i<copydata.length;i++){
-        copy_person.push({"person_id": copydata[i].id,"person_name":copydata[i].name});
-     }
+      for(let i =0; i<copydata.length;i++){
+          copy_person.push({"person_id": copydata[i].id,"person_name":copydata[i].name});
+      }
 
+      let files = CardDetail.file.fileList.map(data => data.response.data[0]);
+      let pic = CardDetail.pics.fileList.map(data => data.response.data);
+      let pics = "";
+      for(let i=0;i<pic.length;i++){
+          if(i == pic.length-1){
+            pics += pic[i];
+          }else{
+            pics += pic[i]+','
+          }
+      }
       this.props.dispatch({
           type: 'reimBurse/create',
           payload: {
@@ -150,8 +160,8 @@ const Reimburse = React.createClass({
               bao_xiao_list:tabledata,
               approval_persons:approval_persons,
               copy_person:copy_person,
-              fujian:CardDetail.fileList,
-              pics:CardDetail.pics,
+              fujian:files,
+              pics:pics,
               apply_id:addApplyID,
               urltype:1
           }
@@ -259,8 +269,8 @@ const Reimburse = React.createClass({
     const GenTable = () => <ApplyTable tabledata={tabledata}/>;
 
     const fileuploadprops = {
-      action:'',
-      name: 'file',
+      action:'/oa_v1/upload/file',
+      name: 'files',
       multiple: true,
       listType: 'file',
       fileList: this.state.fileList,
@@ -353,7 +363,7 @@ const Reimburse = React.createClass({
                 <a className={cs('ml-sm','ant-col-sm-7')} href="javascript:;" onClick={this.showcardModal}>需要报销到其他银行卡？</a>
             </FormItem>
             <FormItem {...formItemLayout} label="上传文件" >
-                {getFieldDecorator('fileList')(
+                {getFieldDecorator('file')(
                 <Upload className="f-l" {...fileuploadprops}>
                     <Button>
                         <Icon type="upload" /> 上传文件
@@ -361,13 +371,13 @@ const Reimburse = React.createClass({
                 </Upload>
                 )}
                 <span className={cs('f-l','ml-sm')}>报销差旅费和接待费请上传报销明细。</span>
-                <a className={cs('f-l','ml-sm')} href="#">模板下载</a>
+                <a className={cs('f-l','ml-sm')} href="/template/车城体系财务模板.xlsx">模板下载</a>
             </FormItem>
             <FormItem {...formItemLayout} label="上传图片">
                 {getFieldDecorator('pics')(
                   <Upload
-                    action=""
-                    name="avatar"
+                    action="/oa_v1/upload/image"
+                    name="pics"
                     listType="picture-card"
                     fileList={imgfileList}
                     onPreview={this.handlePreview}

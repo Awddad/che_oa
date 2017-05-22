@@ -76,13 +76,14 @@ const ApplyLoan = React.createClass({
             }else{
                 if( CardDetail.money != undefined && CardDetail.code != undefined && CardDetail.des != undefined && constdata.length > 0 ){
                     this.props.dispatch({
-                        type: 'applyLoan/modelHandle',
+                        type: 'applyLoan/ApplyIDquery',
                         payload: {
                           issubmitmodal:true,
                           modalIndex: 0,
                           CardDetail:CardDetail,
                           bank_name:CardDetail.code.split(" ")[0],
                           bank_id:CardDetail.code.split(" ")[1],
+                          type:2,
                         }
                     });
                 }else{
@@ -91,11 +92,22 @@ const ApplyLoan = React.createClass({
             }
     });
   },
-  handleSubmit(){
-      let { CardDetail,constdata,copydata } = this.props.applyLoan;
+  handleSubmit(){//借款申请提交
+      let { CardDetail,constdata,copydata,addApplyID } = this.props.applyLoan;
+      let pic = CardDetail.pics.fileList.map(data => data.response.data);
+      let pics = "";
+      for(let i=0;i<pic.length;i++){
+          if(i == pic.length-1){
+            pics += pic[i];
+          }else{
+            pics += pic[i]+','
+          }
+      }
+
       this.props.dispatch({
           type: 'applyLoan/create',
           payload: {
+              apply_id:addApplyID,
               money:CardDetail.money,
               des:CardDetail.des,
               approval_persons:constdata.map(data => data.id),
@@ -103,7 +115,7 @@ const ApplyLoan = React.createClass({
               bank_card_id:(CardDetail.code).split(" ")[1],
               bank_name:(CardDetail.code).split(" ")[0],
               tips:CardDetail.tips,
-              pics:CardDetail.pics,
+              pics:pics,
               urltype:2
           }
       });
@@ -292,9 +304,11 @@ const ApplyLoan = React.createClass({
             <FormItem {...formItemLayout} label="上传图片">
                 {getFieldDecorator('pics')(
                   <Upload
-                    action=""
-                    name="avatar"
+                    action="/oa_v1/upload/image"
+                    name="pics"
+                    multiple={true}
                     listType="picture-card"
+                    supportServerRender={true}
                     fileList={imgfileList}
                     onPreview={this.handlePreview}
                     onChange={this.handleimgChange}

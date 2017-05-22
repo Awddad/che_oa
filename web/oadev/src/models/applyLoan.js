@@ -1,4 +1,4 @@
-import { constCard,constPersonal,constCreate,addCard } from '../services/applyLoan';
+import { constCard,constPersonal,constCreate,addCard,GetApplyID } from '../services/applyLoan';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
@@ -16,6 +16,9 @@ export default {
     CardDetail:{},
     bank_name:'',
     bank_id:'',
+    addApplyID:null,//借款单ID
+    department:null,
+    bxname:null,
     loading: false,
     isshowcardmodal:false,
     isshowconstmodal:false,
@@ -118,10 +121,9 @@ export default {
           }
       });
     },
-    *create({payload},{call,put}){//提交报销单
+    *create({payload},{call,put}){//提交借款单
       const { data } = yield call(constCreate, payload);
       if (data && data.code === 200) {
-        //message.success('借款申请提交成功!');
         yield put(routerRedux.push({
           pathname: '/success',
           query: {
@@ -139,7 +141,18 @@ export default {
       } else {
         message.error(data.content, 5);
       }
-    }
+    },
+    *ApplyIDquery({ payload }, { call, put }) {
+      const   response = yield call(GetApplyID, {type:payload.type});
+      if (response.data && response.data.code == 200 ) {
+          yield put({
+            type: 'querySuccess',
+            payload:{...payload,
+              addApplyID:response.data.data.apply_id,
+            }
+          });
+      }
+    },
   },
 
   reducers: {

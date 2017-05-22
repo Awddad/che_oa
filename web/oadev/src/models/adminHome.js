@@ -1,10 +1,11 @@
-import { queryTotal,queryChoiceCom,analogLogin,UserInfo} from '../services/adminHome';
+import { queryTotal,queryChoiceCom,analogLogin,UserInfo,Loginout} from '../services/adminHome';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
-import WebStorage from 'react-webstorage';
-const webStorage = new WebStorage( window.sessionStorage || window.localStorage);
 import { setCookie } from '../components/common';
+
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage( window.localStorage || window.sessionStorage);
 
 export default {
     namespace: 'adminHome',
@@ -13,15 +14,14 @@ export default {
         loanApply:{},
         personID:null,
         userInfo:null,
-        loading: false,
         modalVisible: false,
         isLoginBefore:false,
-        homeshowpage:false
+        homeshowpage:false,
+        loading: false,
     },
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
-            //console.log(location);
             if (location.pathname != null) {
                 dispatch({
                     type: 'query',
@@ -33,9 +33,11 @@ export default {
     },
     effects: {
         *query({ payload }, { call, put }) {
-            yield put({ type: 'showLoading' });
+            /*yield put({ type: 'showLoading' ,payload:{aa:"111111"}});
             const { data } = yield call(UserInfo);
+            yield put({ type: 'hideLoading' });
             if (data && data.code == 200) {
+                webStorage.setItem('adminPms',['shen_qing_bao_xiao','shen_qing_bao_xiao','shen_qing_huang_kuan','dai_wo_shen_pi','wo_yi_shen_pi','wo_fa_qi_de','chao_song_gei_wo']);
                 yield put({
                     type: 'querySuccess',
                     payload: {
@@ -46,14 +48,26 @@ export default {
                 })
                 setCookie("username",data.data.userinfo.person_name);
                 setCookie("userID",data.data.userinfo.person_id);
+                setCookie("department",data.data.userinfo.org_full_name);
+                //console.log(webStorage.getItem('adminPms'));
             }else if(data.code == 401 || data.code == 402){
                 window.location.href ="http://test.sso.checheng.net/login.php";
+            }*/
+        },
+        *loginout({ payload }, { call, put }) {
+            const { data } = yield call(Loginout);
+            if (data && data.code == 200) {
+                location.href = data.data.login_url;
             }
         }
+
     },
     reducers: {
-        showLoading(state) {
-          return { ...state, loading: true };
+        showLoading(state,action) {
+            return { ...state, loading: true };
+        },
+        hideLoading(state) {
+            return { ...state, loading: false };
         },
         querySuccess(state, action) {
           return { ...state, ...action.payload, loading: false };

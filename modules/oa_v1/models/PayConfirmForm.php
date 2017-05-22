@@ -43,7 +43,7 @@ class PayConfirmForm extends CaiWuFuKuan
             [['tips'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
             [['org_name', 'bank_name', 'bank_name_des', 'fu_kuan_id', 'pics'], 'string', 'max' => 255],
-            [['bank_card_id'], 'string', 'max' => 16],
+            [['bank_card_id'], 'string', 'max' => 25],
         ];
     }
 
@@ -124,13 +124,32 @@ class PayConfirmForm extends CaiWuFuKuan
             $transaction->rollBack();
             throw $exception;
         }
-        $rst = ThirdServer::instance([
-            'token' => \Yii::$app->params['cai_wu']['token'],
-            'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-        ])->payment($param);
-        if($rst['success'] == 1) {
-            $this->is_told_cai_wu_success = 1;
-            $this->update();
+        if($apply->type == 2) {
+            $rst = ThirdServer::instance([
+                'token' => \Yii::$app->params['cai_wu']['token'],
+                'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+            ])->payment($param);
+            if($rst['success'] == 1) {
+                $this->is_told_cai_wu_success = 1;
+                $this->update();
+            }
+        } else {
+            $flag = true;
+            foreach ($apply->expense as $v) {
+                $param['tag_id'] = $v->type;
+                $param['money'] = $v->money;
+                $rst = ThirdServer::instance([
+                    'token' => \Yii::$app->params['cai_wu']['token'],
+                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                ])->payment($param);
+                if(!$rst['success'] == 1) {
+                    $flag = false;
+                }
+            }
+            if($flag) {
+                $this->is_told_cai_wu_success = 1;
+                $this->update();
+            }
         }
         return true;
     }
