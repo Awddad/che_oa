@@ -23,11 +23,6 @@
 }
 
 .logo{
-  position: absolute;
-  left: 0;
-  top: -50px;
-  z-index: 1;
-  width: 246px;
   height:50px;
   padding: 0 20px;
   text-align: center;
@@ -51,14 +46,18 @@
 
 
 .Top_menu{
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
 	height:50px;
-  margin-left: 246px;
 	overflow: hidden;
 }
 .menu_left{
     position:fixed;
     top: 0;
     left: 0;
+    z-index: 1;
     float:left;
     width:246px;
     height: 100vh;
@@ -97,6 +96,7 @@
 .content_right{
     position: relative;
     margin-left: 246px;
+    padding-top: 50px;
     height: 100%;
     background: #fff;
 }
@@ -112,11 +112,21 @@
 
 
 @media (max-width: 641px){
+  .Top_menu{
+    position: relative;
+    height: auto;
+  }
+  .logo{
+      position: relative;
+      width: 100%;
+  }
   .menu_left{
       left: -246px;
   }
   .content_right{
       margin-left: 0;
+      padding-top: 0;
+      padding-bottom: 50px;
   }
   .ant-table-body{
     overflow-x: auto;

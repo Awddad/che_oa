@@ -1,4 +1,4 @@
-import { query,BaoxiaoDetail,LoanDetail,RepayMentDetail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery,PayMentConfirm,Approval,GetUserInfo } from '../services/detail';
+import { query,Detail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery,PayMentConfirm,Approval,GetUserInfo } from '../services/detail';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
@@ -53,7 +53,7 @@ export default {
     },
     effects: {
         *BaoxiaoDetails({ payload }, { call, put }) {//报销详情
-            const { data } = yield call(BaoxiaoDetail, payload);
+            const { data } = yield call(Detail,{...payload,type:1});
             const  response2 = yield call(GetUserInfo,{});
             if (data && data.code === 200 && response2.data && response2.data.code == 200) {
                 yield put({
@@ -68,7 +68,7 @@ export default {
             }
         },
         *LoanDetails({ payload }, { call, put }) {//借款详情
-            const { data } = yield call(LoanDetail, payload);
+            const { data } = yield call(Detail,{...payload,type:2});
             const  response2 = yield call(GetUserInfo,{});
             if (data && data.code === 200 && response2.data && response2.data.code == 200 ) {
                 yield put({
@@ -85,15 +85,15 @@ export default {
 
         *PayMentConfirmQuery({ payload }, { call, put }) {//付款确认弹窗初始化
             const { data } = yield call(PayMentConfirmquery, payload);
-            let response=null,dataname=null,Detail=null;
+            let response=null,dataname=null,detail=null;
             if(payload.type == 'bx'){
-                response = yield call(BaoxiaoDetail, payload);
-                Detail = response.data.data;
-                dataname = {'Baoxiao_Detail':Detail};
+                response = yield call(Detail,{...payload,type:1});
+                detail = response.data.data;
+                dataname = {'Baoxiao_Detail':detail};
             }else{
-                response = yield call(LoanDetail, payload);
-                Detail = response.data.data;
-                dataname = {'Loan_Detail':Detail};
+                response = yield call(Detail,{...payload,type:2});
+                detail = response.data.data;
+                dataname = {'Loan_Detail':detail};
             }
 
             if (data && data.code === 200 && response && response.data.code == 200) {
@@ -131,7 +131,7 @@ export default {
 
 
         *RepayMentDetails({ payload }, { call, put }) {//还款详情
-            const { data } = yield call(RepayMentDetail, payload);
+            const { data } = yield call(Detail,{...payload,type:3});
             const  response2 = yield call(GetUserInfo,{});
             if (data && data.code === 200 && response2.data && response2.data.code == 200) {
                 yield put({

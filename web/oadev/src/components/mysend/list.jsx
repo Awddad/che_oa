@@ -3,6 +3,10 @@ import { connect } from 'dva'
 import { routerRedux,Link } from 'dva/router';
 import styles from './search.less';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
+import { chkPmsForInlineBlock } from '../common';
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage );
+
 
 const MysendList = React.createClass({
     // 筛选事件
@@ -113,7 +117,7 @@ const MysendList = React.createClass({
                             url = "/reimbursedetail?apply_id="+record.apply_id;
                             break;
                         case "借款":
-                            url = "/loanmetdetail?apply_id="+record.apply_id;
+                            url = "/loanmentdetail?apply_id="+record.apply_id;
                             break;
                         case "还款":
                             url = "/repaymentdetail?apply_id="+record.apply_id;
@@ -121,14 +125,14 @@ const MysendList = React.createClass({
                     }
 
 
-                    return result = (<p><Link className="mr-md" to={url}>详情</Link>
-                                <span className={record.can_cancel==1?styles.show:styles.hide} data-applyid={record.apply_id} onClick={this.props.handleClick}>
+                    return result = (<p><Link className="mr-md" to={url} style={chkPmsForInlineBlock(["wo_fa_qi_de_detail"])}>详情</Link>
+                                <span className={record.can_cancel==1?styles.show:styles.hide} data-applyid={record.apply_id} style={chkPmsForInlineBlock("wo_fa_qi_de_cancel")} onClick={this.props.handleClick}>
                                     <a>撤销</a>
                                 </span>
                             </p>);
 
                 }
-            }]
+            }];
 
             return (
                 <div>

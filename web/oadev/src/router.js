@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route } from 'dva/router';
 
+import Loading from './routes/loading';
 import AdminHome from './routes/admin-home';
 import reimBurse from './routes/reimBurse';
 import ApplyLoan from './routes/applyLoan';
@@ -17,12 +18,13 @@ import makecollections from './routes/make_collections';
 import alreadyapprove from './routes/already-approve';
 import Statistics from './routes/statistics';
 import WaitmeApprove from './routes/waitme-approve';
-
+import Loginout from './routes/loginout';
 
 function RouterConfig({ history }) {
   return (
     <Router history={history}>
-      <Route path="/" component={AdminHome} />
+      <Route path="/" component={Loading} />
+      <Route path="/adminhome" component={AdminHome} />
       <Route path="/reimburse" component={reimBurse} />
       <Route path="/applyloan" component={ApplyLoan} />
       <Route path="/repayment" component={RepayMent} />
@@ -42,6 +44,7 @@ function RouterConfig({ history }) {
       <Route path="/already-approve" component={alreadyapprove} />
       <Route path="/statistics" component={Statistics} />
       <Route path="/waitmeapprove" component={WaitmeApprove} />
+      <Route path="/loginout" component={Loginout} />
     </Router>
   );
 }

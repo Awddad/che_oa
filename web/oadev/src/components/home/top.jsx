@@ -6,28 +6,42 @@ import { connect } from 'dva';
 import { Row, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'dva/router';
 import styles from './top.less';
+import cs from 'classnames';
+import { getCookie } from '../common';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
 
 const menu = (
   <Menu>
     <Menu.Item>
-      <a rel="noopener noreferrer" href="/oa_v1/default/login-out">退出</a>
+      <Link rel="noopener noreferrer" to="/loginout" className="t-c">退出</Link>
     </Menu.Item>
   </Menu>
 );
+
 const Top = React.createClass({
+    getInitialState(){
+        return {
+            is_sidebar:false
+        }
+    },
+    loginout(){
+        this.props.dispatch({
+            type:"adminHome/loginout"
+        });
+    },
     render(){
         return (
           	<Row>
                 <div className={styles.menu}>
-                  <div className={styles.sec_right}>{/*<a className={styles.reset}>修改密码</a>*/}
-                   <Dropdown overlay={menu}>
-              	    <a className="ant-dropdown-link" href="javascript:void(0);" style={{color:'#fff'}}>
-              	     <Icon type="user" style={{fontSize:16,color:'#eeeeee'}}/> {webStorage.getItem('name')} <Icon type="down" style={{paddingLeft:5}}/>
-              	    </a>
-              	  </Dropdown>
-                  </div>
+                    <Icon className={cs("trigger")} type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}  onClick={this.props.toggle} />
+                    <div className={styles.sec_right}>{/*<a className={styles.reset}>修改密码</a>*/}
+                        <Dropdown overlay={menu}>
+                      	    <a className="ant-dropdown-link" href="javascript:void(0);" style={{color:'#fff'}}>
+                      	        <Icon type="user" style={{fontSize:16,color:'#eeeeee'}}/> { getCookie('username') } <Icon type="down" style={{paddingLeft:5}}/>
+                      	    </a>
+                      	 </Dropdown>
+                    </div>
               	</div>
             </Row>
         );
@@ -36,11 +50,12 @@ const Top = React.createClass({
 
 Top.PropTypes = {
   location: PropTypes.object,
-  userinfo: PropTypes.object,
+  dispatch: PropTypes.func,
+   adminHome:PropTypes.object,
 };
 
-function mapStateToProps({ userinfo }) {
-  return { userinfo };
+function mapStateToProps({ adminHome}) {
+  return { adminHome };
 }
 
 export default connect(mapStateToProps)(Top);

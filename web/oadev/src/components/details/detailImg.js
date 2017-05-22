@@ -2,13 +2,33 @@
 import React,{ Component,PropTypes} from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover,Table } from 'antd';
-
+import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover,Table,Modal } from 'antd';
+import { key } from '../../components/common';
+import styles from '../../routes/style.less';
 import cs from 'classnames';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
 const DetailImg = React.createClass({
+    getInitialState(){
+      return {
+        previewVisible: false,
+        previewImage:''
+      }
+    },
+    handleimgclick(event){
+        let src =  event.target.parentNode.firstChild.src != null ? event.target.parentNode.firstChild.src : event.target.parentNode.parentNode.firstChild.src;
+        this.setState({
+            previewVisible:true,
+            previewImage:src
+        })
+        console.log(this.state.previewImage);
+    },
+    handleCancel(){
+        this.setState({
+            previewVisible:false,
+        })
+    },
     render(){
         const formItemLayout = {
           labelCol: {
@@ -25,13 +45,22 @@ const DetailImg = React.createClass({
         const imgdata = this.props.imgdata || [];
         let imgli = '';
         if(imgdata.length > 0){
-            imgli = imgdata.map(data => (<li><img src={data.url} alt={data.alt} /></li>));
+            imgli = imgdata.map(data =>
+                (<li key={key} style={{marginRight:10}}>
+                    <img width="100" height="120" src={"http://192.168.1.128:8010"+ data} />
+                    <a href="javascript:;" onClick={this.handleimgclick}><Icon type="eye-o" /></a>
+                </li>)
+            );
         }
+
         return(
             <FormItem {...formItemLayout}  label="图片">
-                <ul>
+                <ul className={styles.listimgbox}>
                     {imgli}
                 </ul>
+                <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+                </Modal>
             </FormItem>
         );
     }

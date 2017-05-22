@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
+import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
 
 const AlreadyApproveList = React.createClass({
     // 筛选事件
@@ -111,13 +112,13 @@ const AlreadyApproveList = React.createClass({
                 let result=null;
                 switch(record.type_value){
                     case "报销":
-                        return result = (<p><a href={"#/reimbursedetail?apply_id="+record.apply_id}>详情</a></p>);
+                        return result = (<p><a style={chkPmsForInlineBlock(['wo_yi_shen_pi_detail'])} href={"#/reimbursedetail?apply_id="+record.apply_id}>详情</a></p>);
                         break;
                     case "借款":
-                        return result = (<p><a href={"#/loanmentdetail?apply_id="+record.apply_id}>详情</a></p>);
+                        return result = (<p><a style={chkPmsForInlineBlock(['wo_yi_shen_pi_detail'])} href={"#/loanmentdetail?apply_id="+record.apply_id}>详情</a></p>);
                         break;
                     case "还款":
-                        return result = (<p><a href={"#/repaymentdetail?apply_id="+record.apply_id}>详情</a></p>);
+                        return result = (<p><a style={chkPmsForInlineBlock(['wo_yi_shen_pi_detail'])} href={"#/repaymentdetail?apply_id="+record.apply_id}>详情</a></p>);
                         break;
                 }
 

@@ -371,7 +371,7 @@ const Reimburse = React.createClass({
                 </Upload>
                 )}
                 <span className={cs('f-l','ml-sm')}>报销差旅费和接待费请上传报销明细。</span>
-                <a className={cs('f-l','ml-sm')} href="#">模板下载</a>
+                <a className={cs('f-l','ml-sm')} href="/template/车城体系财务模板.xlsx">模板下载</a>
             </FormItem>
             <FormItem {...formItemLayout} label="上传图片">
                 {getFieldDecorator('pics')(

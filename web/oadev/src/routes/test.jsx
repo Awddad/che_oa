@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { routerRedux,Link } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message} from 'antd';
-import cs from 'classnames'
+import cs from 'classnames';
 import Main from '../components/home/main';
 
 

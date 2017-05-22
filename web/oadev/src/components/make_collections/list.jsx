@@ -110,8 +110,8 @@ const MakeCollectionsList = React.createClass({
             dataIndex:'operation',
             render:(text,record)=> (
                 <p>
-                    <a className="mr-md" href={"/repaymentdetail?apply_id="+record.apply_id+"&type=confirm"}>详情</a>
-                    <a data-applyid={record.apply_id} onClick={this.ConfirmClick}>收款确认</a>
+                    <a className="mr-md" style={chkPmsForInlineBlock(['shou_kuan_que_ren_detail'])} href={"/repaymentdetail?apply_id="+record.apply_id+"&type=confirm"}>详情</a>
+                    <a data-applyid={record.apply_id} style={chkPmsForInlineBlock(['shou_kuan_que_ren'])} onClick={this.ConfirmClick}>收款确认</a>
                 </p>
             )
         }]

@@ -4,7 +4,6 @@ import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
 
-
 export default {
     namespace: 'test',
     state: {

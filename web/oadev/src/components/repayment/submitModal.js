@@ -2,7 +2,7 @@ import { connect } from 'dva';
 import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
-import {getCoookie} from '../common';
+import {getCookie} from '../common';
 import cs from 'classnames';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -57,8 +57,8 @@ const SubmitModal = React.createClass({
         let des = CardDetail.explain;
         const date = new Date();
         let  dateTime  = date.getFullYear() + '年' + (date.getMonth()+1) + '月' + date.getDay()+'日';
-        let name = getCoookie("username");
-        let department = getCoookie("department");
+        let name = getCookie("username");
+        let department = getCookie("department");
         let html =[],count = 0;
         if(selectedRows != undefined ){
             for(let i = 0; i < selectedRows.length; i++ ){

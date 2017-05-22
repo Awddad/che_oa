@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'dva'
 import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
-
+import { chkPmsForBlock,chkPmsForInlineBlock } from '../common';
 
 const CcsendList = React.createClass({
     // 筛选事件
@@ -127,13 +127,13 @@ const CcsendList = React.createClass({
                     let result=null;
                     switch(record.type_value){
                         case "报销":
-                            return result = (<p><Link to={"/reimbursedetail?apply_id="+record.apply_id}>详情</Link></p>);
+                            return result = (<p style={chkPmsForInlineBlock(["chao_song_gei_wo_detal"])} ><Link to={"/reimbursedetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                         case "借款":
-                            return result = (<p><Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link></p>);
+                            return result = (<p style={chkPmsForInlineBlock(["chao_song_gei_wo_detal"])}><Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                         case "还款":
-                            return result = (<p><Link to={"/repaymentdetail?apply_id="+record.apply_id}>详情</Link></p>);
+                            return result = (<p style={chkPmsForInlineBlock(["chao_song_gei_wo_detal"])}><Link to={"/repaymentdetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                     }
 

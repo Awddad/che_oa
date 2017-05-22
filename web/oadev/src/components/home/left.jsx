@@ -87,38 +87,39 @@ const Left = React.createClass({
       <Menu theme={this.state.theme}
           onClick={this.handleClick}
           defaultOpenKeys={['sub1','sub2','sub3','sub4']}
-          defaultSelectedKeys={['/adminHome']}
+          defaultSelectedKeys={['/adminhome']}
           selectedKeys={this.state.selectedKeys}
           mode="inline"
           >
-          <Menu.Item key="/" style={{paddingLeft:48}}>首页</Menu.Item>
-          {chkPms(['18','23','32','37'])?
+
+          <Menu.Item key="/adminhome" ><span style={{"padding-left":24}}>首页</span></Menu.Item>
+          {chkPms(['shen_qing_bao_xiao','shen_qing_bao_xiao','shen_qing_huang_kuan'])?
                   <SubMenu key="sub1" title={<span><Icon type="solution"/><span>报销管理</span></span>}>
-                    <Menu.Item key="/reimburse" style={chkPmsForBlock(['18'])}>申请报销</Menu.Item>
-                    <Menu.Item key="/applyloan" style={chkPmsForBlock(['23'])}>申请借款</Menu.Item>
-                    <Menu.Item key="/repayment" style={chkPmsForBlock(['32'])}>申请还款</Menu.Item>
+                    <Menu.Item key="/reimburse" style={chkPmsForBlock(['shen_qing_bao_xiao'])}>申请报销</Menu.Item>
+                    <Menu.Item key="/applyloan" style={chkPmsForBlock(['shen_qing_jie_kuan'])}>申请借款</Menu.Item>
+                    <Menu.Item key="/repayment" style={chkPmsForBlock(['shen_qing_huang_kuan'])}>申请还款</Menu.Item>
                   </SubMenu>
           :null}
 
-          {chkPms(['18','23','32','37'])?
+          {chkPms(['dai_wo_shen_pi','wo_yi_shen_pi','wo_fa_qi_de','chao_song_gei_wo'])?
                   <SubMenu key="sub2" title={<span><Icon type="solution"/><span>审批管理</span></span>}>
-                    <Menu.Item key="/waitmeapprove" style={chkPmsForBlock(['18'])}>待我审批</Menu.Item>
-                    <Menu.Item key="/already-approve" style={chkPmsForBlock(['23'])}>我已审批</Menu.Item>
-                    <Menu.Item key="/mysend" style={chkPmsForBlock(['32'])}>我发起的</Menu.Item>
-                    <Menu.Item key="/ccsend" style={chkPmsForBlock(['32'])}>抄送给我</Menu.Item>
+                    <Menu.Item key="/waitmeapprove" style={chkPmsForBlock(['dai_wo_shen_pi'])}>待我审批</Menu.Item>
+                    <Menu.Item key="/already-approve" style={chkPmsForBlock(['wo_yi_shen_pi'])}>我已审批</Menu.Item>
+                    <Menu.Item key="/mysend" style={chkPmsForBlock(['wo_fa_qi_de'])}>我发起的</Menu.Item>
+                    <Menu.Item key="/ccsend" style={chkPmsForBlock(['chao_song_gei_wo'])}>抄送给我</Menu.Item>
                   </SubMenu>
           :null}
 
-          {chkPms(['18','23','32','37'])?
+          {chkPms(['fu_kuan_que_ren','shou_kuan_que_ren'])?
                   <SubMenu key="sub3" title={<span><Icon type="solution"/><span>财务管理</span></span>}>
-                    <Menu.Item key="/payment" style={chkPmsForBlock(['18'])}>付款确认</Menu.Item>
-                    <Menu.Item key="/make_collections" style={chkPmsForBlock(['23'])}>收款确认</Menu.Item>
+                    <Menu.Item key="/payment" style={chkPmsForBlock(['fu_kuan_que_ren'])}>付款确认</Menu.Item>
+                    <Menu.Item key="/make_collections" style={chkPmsForBlock(['shou_kuan_que_ren'])}>收款确认</Menu.Item>
                   </SubMenu>
           :null}
 
-          {chkPms(['18','23','32','37'])?
+          {chkPms(['yuan_gong_jie_kuan_ming_xi_biao'])?
                   <SubMenu key="sub4" title={<span><Icon type="solution"/><span>统计分析</span></span>}>
-                    <Menu.Item key="/statistics" style={chkPmsForBlock(['18'])}>在借款员工明细表</Menu.Item>
+                    <Menu.Item key="/statistics" style={chkPmsForBlock(['yuan_gong_jie_kuan_ming_xi_biao'])}>在借款员工明细表</Menu.Item>
                   </SubMenu>
           :null}
 

@@ -4,6 +4,7 @@ import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import styles from './search.less';
 import Confirm from '../details/confirmPayment';
+import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
 
 
 const PaymentdList= React.createClass({
@@ -156,8 +157,8 @@ const PaymentdList= React.createClass({
 
                 return (
                             <p>
-                                <Link className="mr-md" to={url}>详情</Link>
-                                <a data-applyid={record.apply_id} onClick={confirmclick}>付款确认</a>
+                                <Link className="mr-md" to={url} style={chkPmsForInlineBlock(['fu_kuan_que_ren_detail'])}>详情</Link>
+                                <a data-applyid={record.apply_id}  style={chkPmsForInlineBlock(['fu_kuan_que_ren'])} onClick={confirmclick}>付款确认</a>
                             </p>
                 )
 

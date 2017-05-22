@@ -12,6 +12,7 @@ import DetailImg from '../../components/details/detailimg';
 import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmPayment';
+import { chkPms } from '../../components/common';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -118,7 +119,7 @@ const ReimburseDetail = React.createClass({
         if(isTitleStatus == null){
             title = '借款详情';
             approval = '';
-        }else if(isTitleStatus == "approval"){
+        }else if(isTitleStatus == "approval" && chkPms(['shen_pi'])){
             title = '借款审批';
             approval=(<div className={styles.postil}>
                         <Form>
@@ -142,7 +143,7 @@ const ReimburseDetail = React.createClass({
         }
 
 
-            let name = '',bank_name='',bank_id='',bank_des='',money='',des='',tips='';
+            let name = '',bank_name='',bank_id='',bank_des='',money='',des='',tips='',pics=null,pdf=null;
             if(Object.keys(Loan_Detail).length > 0){
                 money = Loan_Detail.info.money;
                 name = Loan_Detail.person
@@ -151,8 +152,9 @@ const ReimburseDetail = React.createClass({
                 bank_des = Loan_Detail.info.bank_des;
                 des = Loan_Detail.info.des;
                 tips = Loan_Detail.info.tips;
+                pics = Loan_Detail.info.pics;
+                pdf = Loan_Detail.pdf;
             }
-
 
         return(
             <Main location={location}>
@@ -160,7 +162,7 @@ const ReimburseDetail = React.createClass({
                     <div className={styles.home_wrap}>
                         <Pagetitle title={title} />
                         <StepDetail stepdata={Loan_Detail} />
-                        <h2 className={cs('mt-lg','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href="#">下载审批</a></h2>
+                        <h2 className={cs('mt-lg','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href={pdf}>下载审批</a></h2>
                         <FormItem {...formItemLayout}  label="借款金额" className="mb-sm">
                             <p style={{marginTop:5}}>{ money }元</p>
                         </FormItem>
@@ -178,7 +180,7 @@ const ReimburseDetail = React.createClass({
                           </FormItem>)
                           :''
                         }
-                        <DetailImg imgdata={Loan_Detail.pics} />
+                        <DetailImg imgdata={pics} />
                         { approval }
                         { confirm }
                         <Confirm handleClick={this.handleConfirmClick} isShowPaymentConfirm = { isShowPaymentConfirm } details={Loan_Detail}/>
