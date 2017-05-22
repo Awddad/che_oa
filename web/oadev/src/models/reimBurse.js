@@ -122,10 +122,17 @@ export default {
     },
     *addcard({payload},{call,put}){//新增银行卡
       const response = yield call(addCard, payload);
-      const response1 = yield call(constCard , payload);
-      if(response && response.code === 200 && response1 && response1.code === 200){
+      if(response && response.data.code === 200){
           message.success("银行卡添加成功",2);
-          yield put({type: 'updateCard', constCard: response1.data.data});
+          const response1 = yield call(constCard , payload);
+          if(response1 && response1.data.code === 200){
+              yield put({
+                type: 'updateCard',
+                payload:{
+                    constCard: response1.data.data
+                }
+              });
+          }
       }else{
         message.error(response.data.message);
       }

@@ -14,7 +14,6 @@ const AuditingLi = React.createClass({
         const index = e.target.getAttribute("data-id");
         const { constdata,constPersonal } = this.props.reimBurse;
         constdata.splice(index,1);
-        alert(0);
         this.props.dispatch({
           type: 'reimBurse/addconst',
           payload: {
