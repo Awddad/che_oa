@@ -19,11 +19,9 @@ const StepDetails = React.createClass({
         let step = '',resultSteps = '';
         let name='',copypersonal='',createTime='',des='',applyID='';
         if(Object.keys(stepdata).length > 0){
-            step = stepdata.approval.map(data => <Step key={Math.floor(Math.random()*100000)} title={data.person} description={ data.des } /> );
+            step = stepdata.flow.map(data => <Step key={Math.floor(Math.random()*1000000)} title={data.title} description={ data.name +"  "+ data.date + data.org + data.diff_time } /> );
             resultSteps =   (<Steps current={1} progressDot>
-                                <Step title="发起申请" key="00001" description={ stepdata.person +" "+ stepdata.create_time +" 南京汽车销售-中规车一区-南京店" } />
                                 {step}
-                                <Step title="完成" key="10000" description="" />
                             </Steps>);
 
             name = stepdata.person;
