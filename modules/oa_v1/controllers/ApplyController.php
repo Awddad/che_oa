@@ -246,7 +246,7 @@ class ApplyController extends BaseController
 	{
 		$data = [];
 		//申请
-		$data[] = $this -> _getFlowData($this -> apply_status[0], $apply['person'], $apply['create_time'], $apply['person_id'], '', 2);
+		$data[] = $this -> _getFlowData($this -> apply_status[0], $apply['person'], $apply['create_time'], $apply['person_id'], '', 2,$apply['create_time']);
 		$time = $apply['create_time'];
 		//审核
 		foreach($apply['approval'] as $v){
@@ -255,38 +255,57 @@ class ApplyController extends BaseController
 											$v['approval_time'],
 											$v['approval_person_id'],
 											$v['des'],
-											$v['result'] ==0 ? (int)$v['is_to_me_now'] : $v['result']+1
+											$v['result'] ==0 ? (int)$v['is_to_me_now'] : $v['result']+1,
+											$time
 											);
 			$time = $v['approval_time'] ?  : $time;
 		}
 		//财务
-		if($apply['cai_wu_need'] == 2 && $apply['status'] == 4){
-			$data[] = $this -> _getFlowData($this -> caiwu_status[1],null,null,null,null,1);
-		}elseif($apply['cai_wu_need'] == 2 && $apply['status'] == 99){
+		if($apply['cai_wu_need'] == 2 && $apply['status'] == 4){//需要财务确认 并且轮到财务确认
+			$data[] = $this -> _getFlowData($this -> caiwu_status[1],null,null,null,null,1,$time);
+		}elseif($apply['cai_wu_need'] == 2 && $apply['status'] == 99){//需要财务确认 并且申请完成
 			$data[] = $this -> _getFlowData($this -> caiwu_status[2],
 			 								$apply['cai_wu_person'],
 											$apply['cai_wu_time'],
 											$apply['cai_wu_person_id'],
 											'',
-											2
+											2,
+											$time
 											);
 			$time = $apply['cai_wu_time'] ?  : $time;
-		}elseif($apply['cai_wu_need'] == 2){
-			$data[] = $this -> _getFlowData($this -> caiwu_status[0],null,null,null,null, 0);
+		}elseif($apply['cai_wu_need'] == 2){//需要财务确认 并且未轮到财务确认
+			$data[] = $this -> _getFlowData($this -> caiwu_status[0],null,null,null,null, 0,$time);
 		}
 		//完成
-		$data[] = $this -> _getFlowData($this -> apply_status[1],null,$time,null,null,$apply['status'] == 99 ? 2:0);
+		$data[] = $this -> _getFlowData($this -> apply_status[1],null,$time,null,null,$apply['status'] == 99 ? 2:0,$apply['create_time']);
 		
 		return $data;
 	}
-	protected function _getFlowData($title,$name,$time,$person_id,$des,$status)
+	protected function _getFlowData($title,$name,$time,$person_id,$des,$status,$prev_time)
 	{
+		switch ($status){
+			case 1://进行中
+				$diff_time = time() - $prev_time;
+				break;
+			case 2://通过
+				$diff_time = $time - $prev_time;
+				break;
+			case 3://未通过
+				$diff_time = $time - $prev_time;
+				break;
+			default://未到
+				$diff_time = 0;
+				break;
+				
+		}
+		
 		$data = [
 				'title' => $title,
 				'name' => $name,
 				'date' => $time ? date('Y-m-d h:i:s',$time) : '',
 				'org' => $person_id ? PersonLogic::instance() -> getOrgNameByPersonId($person_id) : '',
-				'status' => $status
+				'status' => $status,
+				'diff_time' => $diff_time, 
 				];
 		return $data;
 	}
