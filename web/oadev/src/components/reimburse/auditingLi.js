@@ -14,7 +14,6 @@ const AuditingLi = React.createClass({
         const index = e.target.getAttribute("data-id");
         const { constdata,constPersonal } = this.props.reimBurse;
         constdata.splice(index,1);
-        alert(0);
         this.props.dispatch({
           type: 'reimBurse/addconst',
           payload: {
@@ -39,7 +38,6 @@ const AuditingLi = React.createClass({
         });
     },
     render(){
-        //console.log(this.props.imgvisiable);
         const style={
               display: this.props.imgvisiable ? "block" : "none"
             }

@@ -6,7 +6,7 @@ import cs from 'classnames'
 import Main from '../components/home/main';
 import styles from './admin-home.less';
 
-import {chkPms,chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock} from '../components/common';
+import {chkPms,chkPmsForBlock} from '../components/common';
 
 const FormItem = Form.Item;
 
@@ -19,19 +19,24 @@ const AdminHome = React.createClass({
             modalVisible,
             homeshowpage
         } = this.props.adminHome;
+
+
         return (
             <Main location={location}>
                 <Row>
-                    <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>报销相关</h2>
-                        <Row className="home-wraplist">
-                          <ul className="ant-col-md-12 ant-col-sm-24">
-                              <li className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
-                              <li className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
-                              <li className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
-                          </ul>
-                        </Row>
-                    </div>
+                    {chkPms(['shen_qing_bao_xiao','shen_qing_jie_kuan','shen_qing_huang_kuan']) ?
+                      (<div className={styles.home_wrap}>
+                          <h2 className={styles.mb_md}>报销相关</h2>
+                          <Row className="home-wraplist">
+                            <ul className="ant-col-md-12 ant-col-sm-24">
+                                <li style={chkPmsForBlock(['shen_qing_bao_xiao'])} className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
+                                <li style={chkPmsForBlock(['shen_qing_jie_kuan'])} className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
+                                <li style={chkPmsForBlock(['shen_qing_huang_kuan'])} className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
+                            </ul>
+                          </Row>
+                      </div>)
+                      : (<h1>欢迎进入OA系统!</h1>)
+                    }
                     <div className={styles.home_office}>
                         <h2 className={styles.mb_md}>办公物品相关</h2>
                         <Row className="home-wraplist">

@@ -9,10 +9,12 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\models\Menu;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\web\Response;
 use Jasny\SSO\Broker;
@@ -121,12 +123,13 @@ class BaseController extends Controller
      */
     protected function setUserRoleInfo($intRoleId, $strOs = 'web', $blnForce = false)
     {
+
         $result = false;
         $personId = $this->arrPersonInfo->person_id;
         $strCacheKey = 'role_info_' . $strOs . '_' . $intRoleId . '_' . $personId;
         if($blnForce == false)//不强制刷新的时候 从缓存中获取
         {
-            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
+            //$this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
         }
         
         if(empty($this->arrPersonRoleInfo))
@@ -135,13 +138,18 @@ class BaseController extends Controller
             if($objRoleMod)
             {
                 //目录权限
-                $arrMenuTmp = json_decode($objRoleMod->permissions, true);
-                foreach($arrMenuTmp as $val)
-                {
-                    $this->arrPersonRoleInfo['menu'][] = $val['slug'];
-                }
+                $arrMenuTmp = ArrayHelper::getColumn(json_decode($objRoleMod->permissions, true), 'slug');
+//                $menu = ArrayHelper::getColumn(Menu::find()->all(), 'slug');
+//                foreach($menu as $k => $val)
+//                {
+//                    if(in_array($val,$arrMenuTmp)) {
+//                        $this->arrPersonRoleInfo['roleInfo'][$val] = true;
+//                    } else {
+//                        $this->arrPersonRoleInfo['roleInfo'][$val] = false;
+//                    }
+//                }
                 //去重
-                $this->arrPersonRoleInfo['menu'] = array_unique($this->arrPersonRoleInfo['menu']);
+                $this->arrPersonRoleInfo['roleInfo'] = array_unique($arrMenuTmp);
                 //数据权限
                 $objRoleOrgMod = RoleOrgPermission::findOne(['person_id' => $personId, 'role_id' => $intRoleId]);
                 if($objRoleOrgMod)//设置过数据权限
@@ -208,6 +216,8 @@ class BaseController extends Controller
         403 => '参数错误',
         404 => '系统错误',
         1010 => '申请ID不能确认，请求不合法',
+        1011 => '图片上传失败',
+        1012 => '文件上传失败',
         2001 => '当前状态，无法执行该操作',
         2002 => '审批人错误',
         2101 => '您无权撤销该申请',

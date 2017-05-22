@@ -1,4 +1,4 @@
-import { constCard,constPersonal,addCard,constCanBack,constCreate } from '../services/repayMent';
+import { constCard,constPersonal,addCard,constCanBack,constCreate,GetApplyID } from '../services/repayMent';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
@@ -18,6 +18,9 @@ export default {
     bank_name:'',
     bank_id:'',
     selectrows:[],
+    addApplyID:null,//还款单ID
+    department:null,
+    bxname:null,
     loading: false,
     isshowconstmodal:false,
     isshowcopymodal:false,
@@ -85,18 +88,20 @@ export default {
       }
     },
     *addcard({payload},{call,put}){//新增银行卡
-      const {data} = yield call(addCard, payload);
-      if(data && data.code === 200){
-        message.success("银行卡添加成功",2);
-        const {data} = yield call(constCard , payload);
-        if(data && data.code === 200){
-            yield put({
-              type: 'updateCard',
-              constCard: data.data
-            });
-        }
+      const response = yield call(addCard, payload);
+      if(response && response.data.code === 200){
+          message.success("银行卡添加成功",2);
+          const response1 = yield call(constCard , payload);
+          if(response1 && response1.data.code === 200){
+              yield put({
+                type: 'updateCard',
+                payload:{
+                    constCard: response1.data.data
+                }
+              });
+          }
       }else{
-        message.error(data.message);
+        message.error(response.data.message);
       }
     },
     *addconst({payload},{call,put,select}){//添加审批人
@@ -134,10 +139,28 @@ export default {
             urltype:payload.urltype
           }
         }));
+        yield put({
+          type: 'hideModal1',
+          payload:{
+            constdata:[],
+            copydata:[]
+          }
+        });
       } else {
         message.error(data.message,5);
       }
-    }
+    },
+    *ApplyIDquery({ payload }, { call, put }) {
+      const  response  = yield call(GetApplyID, {type:payload.type});
+      if (response.data  && response.data.code == 200 ) {
+          yield put({
+            type: 'querySuccess',
+            payload:{...payload,
+              addApplyID:response.data.data.apply_id
+            }
+          });
+      }
+    },
   },
 
   reducers: {

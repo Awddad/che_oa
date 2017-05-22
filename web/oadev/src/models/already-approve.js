@@ -22,8 +22,6 @@ export default {
     modalVisible: false,
     modalType: 'update',
   },
-
-
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {

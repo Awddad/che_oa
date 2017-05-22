@@ -111,7 +111,6 @@ export default {
       return { ...state, loading: true };
     },
     querySuccess(state, action) {
-        //console.log(action.payload);
       return { ...state, ...action.payload, loading: false };
     },
     showModal(state, action) {

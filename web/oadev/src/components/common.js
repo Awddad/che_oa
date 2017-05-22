@@ -3,9 +3,9 @@ import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
 
 export const chkPms = (pids)=>{
-  return true;
+  //return true;
   let hasPms = false;
-  let _value = webStorage.getItem('adminPms');
+  let _value = getCookie('adminPms') || webStorage.getItem('adminPms');
   if(!(pids instanceof Array)) return hasPms;
   if(_value==undefined || _value==null || _value.length==0) return hasPms;
   let adminPms = _value.split(',');
@@ -60,7 +60,7 @@ export const setCookie = (name,value) =>{
  * Cookie
  * 读取Cookie内容
  */
-export const getCoookie = (name)=>{
+export const getCookie = (name)=>{
     let arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
         if(arr=document.cookie.match(reg))
             return unescape(arr[2]);
@@ -77,3 +77,14 @@ export const delCookie = (name)=>{
     let cval=getCookie(name);
         if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }
+
+export const key = ()=>{
+    let key = "key"+Math.floor(Math.random()*500000);
+    return key;
+}
+
+export const host = ()=>{
+    let host = "http://192.168.1.128:8010";
+    return host;
+}
+

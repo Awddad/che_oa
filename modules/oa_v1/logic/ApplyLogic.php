@@ -33,13 +33,13 @@ class ApplyLogic extends BaseLogic
 			$query = $approval_model::find()
 			-> andWhere(['approval_person_id'=>$user['person_id'],'is_to_me_now'=>1])
 			-> andWhere(['or', 'status=1', 'status=11'])
-			-> joinWith('apply a')
+			-> joinWith('apply a',true,'RIGHT JOIN')
 			-> orderBy('create_time');;
 		}elseif(2 == $type){//我已审批
 			$approval_model = new appmodel\ApprovalLog();
 			$query = $approval_model::find()
 			-> andWhere(['approval_person_id'=>$user['person_id'],'result'=>1])
-			-> joinWith('apply a')
+			-> joinWith('apply a',true,'RIGHT JOIN')
 			-> orderBy('create_time');
 		}elseif(3 == $type){//我发起的
 			$apply_model = new appmodel\Apply();
@@ -50,7 +50,7 @@ class ApplyLogic extends BaseLogic
 		}elseif(4 == $type){//抄送给我的
 			$copy_model = new appmodel\ApplyCopyPerson();
 			$query = $copy_model::find()
-			-> joinWith('apply a')
+			-> joinWith('apply a',true,'RIGHT JOIN')
 			-> Where(['copy_person_id'=>$user['person_id']])
 			-> orderBy('create_time');
 		}else{

@@ -12,6 +12,7 @@ import DetailImg from '../../components/details/detailimg';
 import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmRepayment';
+import { chkPms } from '../../components/common';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -43,9 +44,6 @@ const RepayMentDetail = React.createClass({
 
       const { ApplyID,personID } = this.props.Detail;
       const formdata = { ...getFieldsValue() };
-
-      console.log(ApplyID);
-
       let link = this.props;
       validateFields((errors) => {
             if (errors) {
@@ -117,7 +115,7 @@ const RepayMentDetail = React.createClass({
         if(isTitleStatus == null){
             title = '还款详情';
             approval = '';
-        }else if(isTitleStatus == "approval"){
+        }else if(isTitleStatus == "approval" && chkPms(['shen_pi']) ){
             title = '还款审批';
             approval=(<div className={styles.postil}>
                         <Form>
@@ -165,7 +163,7 @@ const RepayMentDetail = React.createClass({
                             }];
 
 
-            let name = '',bank_name='',bank_id='',bank_des='',money='',des='',tips='';
+            let name = '',bank_name='',bank_id='',bank_des='',money='',des='',tips='',pics='',pdf='';
             if(Object.keys(RepayMent_Detail).length > 0){
                 money = RepayMent_Detail.info.money;
                 name = RepayMent_Detail.person
@@ -174,10 +172,9 @@ const RepayMentDetail = React.createClass({
                 bank_des = RepayMent_Detail.info.bank_des;
                 des = RepayMent_Detail.info.des;
                 tips = RepayMent_Detail.info.tips;
+                pics = RepayMent_Detail.info.pics;
+                pdf = RepayMent_Detail.pdf;
             }
-
-
-
 
         return(
             <Main location={location}>
@@ -185,9 +182,7 @@ const RepayMentDetail = React.createClass({
                     <div className={styles.home_wrap}>
                         <Pagetitle title={title} />
                         <StepDetail stepdata={RepayMent_Detail} />
-                        <BxDetail columns={bxmx_columns} dataSource={RepayMent_Detail.info} label="还款列表" />
-
-                        <h2 className={cs('mt-md','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href="#">下载审批</a></h2>
+                        <BxDetail columns={bxmx_columns} pdf={pdf} dataSource={RepayMent_Detail.info} label="还款列表" />
                         <FormItem {...formItemLayout}  label="借款金额" className="mb-sm">
                             <p style={{marginTop:5}}>{ money }元</p>
                         </FormItem>
@@ -202,7 +197,7 @@ const RepayMentDetail = React.createClass({
                             </FormItem>)
                             : ''
                         }
-                        <DetailImg imgdata={ RepayMent_Detail.pics } />
+                        <DetailImg imgdata={ pics } />
                         { approval }
                         { confirm }
                         <GenConfirm />

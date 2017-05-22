@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
+import { routerRedux,Link } from 'dva/router';
 import styles from './search.less';
 
 
@@ -69,7 +70,7 @@ const LoadDetailsList= React.createClass({
             dataIndex:'operation',
             render:(text,record)=>(
                 <p>
-                    <a onClick={() => {showDetail(record.apply_id)}}>详情</a>
+                    <Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link>
                 </p>
             )
         }]

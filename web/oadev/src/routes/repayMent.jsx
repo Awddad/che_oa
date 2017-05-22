@@ -53,7 +53,7 @@ const RepayMent = React.createClass({
         }
     });
   },
-  //提交报销
+  //提交还款按钮显示弹窗
   showsubmitModal(){
     const {
         getFieldDecorator,
@@ -72,13 +72,14 @@ const RepayMent = React.createClass({
 
                 if( selectedRows != undefined && CardDetail.code != undefined && constdata.length > 0 ){
                     this.props.dispatch({
-                        type: 'repayMent/modelHandle',
+                        type: 'repayMent/ApplyIDquery',
                         payload: {
                           issubmitmodal:true,
                           modalIndex: 0,
                           CardDetail:CardDetail,
                           bank_name:CardDetail.code.split(" ")[0],
                           bank_id:CardDetail.code.split(" ")[1],
+                          type:3,
                         }
                     });
                 }else{
@@ -87,18 +88,19 @@ const RepayMent = React.createClass({
             }
     });
   },
-  handleSubmit(){
-      let { CardDetail,constdata,copydata,selectedRows }  = this.props.repayMent;
+  handleSubmit(){//还款申请提交
+      let { CardDetail,constdata,copydata,selectedRows,addApplyID }  = this.props.repayMent;
       this.props.dispatch({
           type: 'repayMent/create',
           payload: {
+              apply_id:addApplyID,
               approval_persons:constdata.map(data => data.id),
               copy_person:copydata.map(data => data.id),
               bank_card_id:(CardDetail.code).split(" ")[1],
               bank_name:(CardDetail.code).split(" ")[0],
               apply_ids:selectedRows.map(data => data.apply_id),
               des:CardDetail.explain,
-              urltype:3
+              urltype:3,
           }
       });
   },
@@ -152,8 +154,8 @@ const RepayMent = React.createClass({
           width:120,
         }, {
           title: '借款时间',
-          key:'time',
-          dataIndex: 'time',
+          key:'get_money_time',
+          dataIndex: 'get_money_time',
         },{
           title: '事由',
           key:'des',

@@ -8,6 +8,9 @@
   <meta name="description" content="">
   <link rel="stylesheet" href="index.css" />
   <style type="text/css">
+    .warpper{
+      height: 100vh;
+    }
     .ant-advanced-search-form {
       padding: 24px !important;
       background: #fbfbfb !important;
@@ -34,6 +37,9 @@
     .ant-calendar-picker{
       width: 100%;
     }
+    .ant-menu-inline{
+      border: 0;
+    }
     .ant-menu-inline .ant-menu-item{
       left: 0;
     }
@@ -41,6 +47,10 @@
       margin:0 -8px;
     }
     .ant-steps .ant-steps-title{ background: none; }
+    .ant-layout-header{ height: 50px; line-height: 50px;}
+    .ant-layout-content{
+      overflow: initial;
+    }
 
     .page-title{font-size: 0;}
     .page-title strong{
@@ -101,11 +111,57 @@
     .clearfix{ clear: both; }
 
     @media(max-width:640px){
+        body{overflow-x:hidden; }
         .ant-table-content{ overflow-x: auto; }
         .ant-table-footer{}
         .ant-table table{
           min-width: 800px;
         }
+    }
+
+    .ant-steps-dot .ant-steps-item .ant-steps-step{
+      width: 80%;
+      text-align: left;
+    }
+    .ant-steps-dot .ant-steps-item:last-child .ant-steps-step{
+      text-align: center;
+    }
+    .ant-steps-dot .ant-steps-item:last-child .ant-steps-step .ant-steps-icon-dot{
+      margin-left: -10px
+    }
+    .ant-steps-dot .ant-steps-tail{
+      margin: 0;
+      padding: 0 !important;
+    }
+    .ant-steps-horizontal .ant-steps-description{
+      max-width: 80%;
+    }
+    .ant-layout-header .trigger {
+      font-size: 28px;
+      line-height: 50px;
+      padding: 0 16px;
+      cursor: pointer;
+      color: #fff;
+      transition: color .3s;
+    }
+
+    .ant-layout-header .trigger:hover {
+      color: #fff;
+    }
+
+    .ant-layout-header .logo {
+      height: 32px;
+      background: #333;
+      border-radius: 6px;
+      margin: 16px;
+    }
+
+    .ant-layout-header .ant-layout-sider-collapsed .anticon {
+      font-size: 16px;
+    }
+
+    .ant-layout-header .ant-layout-sider-collapsed .nav-text {
+      display: none;
     }
   </style>
 </head>

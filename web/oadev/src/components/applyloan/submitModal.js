@@ -2,6 +2,7 @@ import { connect } from 'dva';
 import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
+import { getCookie } from '../common';
 import cs from 'classnames';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -37,32 +38,35 @@ const SubmitModal = React.createClass({
           maskClosable:false
         };
 
-        const {carddata,constdata,copydata,CardDetail,bank_id,bank_name} = this.props.applyLoan;
+        const {carddata,constdata,copydata,CardDetail,bank_id,bank_name,addApplyID} = this.props.applyLoan;
+
         let constpersonal = constdata.map(data=>data.name.split(" ")[0]).join("、");
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
         let des = CardDetail.des;
         let money = CardDetail.money;
         let tips = CardDetail.tips;
+        let name = getCookie("username") || '';
+        let department = getCookie("department") || '';
         const date = new Date();
         let  dateTime  = date.getFullYear() + '年' + (date.getMonth()+1) + '月' + date.getDay()+'日';
 
         return(
             <Modal title="申请借款确认"  {...modalOpts} >
                 <div className={cs(styles.const_wrap,'mb-md')}>
-                  <h1 className="mb-md">报销单</h1>
+                  <h1 className="mb-md">借款单</h1>
                   <table>
                     <tbody>
                          <tr>
                              <td className={styles.b_gray} width="100">日期</td>
                              <td className="t-l">{dateTime}</td>
                              <td className={styles.b_gray} width="100">单号</td>
-                             <td className="t-l">2017050401001</td>
+                             <td className="t-l">{addApplyID}</td>
                          </tr>
                          <tr>
                              <td className={styles.b_gray}>部门</td>
-                             <td className="t-l">南京汽车销售-中规车一区-涟水店</td>
+                             <td className="t-l">{ department }</td>
                              <td className={styles.b_gray}>报销人</td>
-                             <td className="t-l">马聪</td>
+                             <td className="t-l">{name}</td>
                          </tr>
                          <tr>
                              <td className={styles.b_gray}>开户行名称</td>

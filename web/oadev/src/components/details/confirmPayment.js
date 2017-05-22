@@ -43,6 +43,15 @@ const Confirm = React.createClass({
             if (errors) {
                 return;
             }else{
+                let pic = paymentDetail.pics.fileList.map(data => data.response.data);
+                let pics = "";
+                for(let i=0;i<pic.length;i++){
+                      if(i == pic.length-1){
+                        pics += pic[i];
+                      }else{
+                        pics += pic[i]+','
+                      }
+                }
                 this.props.dispatch({
                     type: 'Detail/PayMentConfirm',
                     payload: {
@@ -54,10 +63,11 @@ const Confirm = React.createClass({
                         create_cai_wu_log:paymentDetail.flow,
                         fu_kuan_time:this.state.paymentTime,
                         type:paymentDetail.paymentType[paymentDetail.paymentType.length-1],
-                        pics:paymentDetail.pics,
+                        pics:pics,
                         tips:paymentDetail.tips
                     }
                 });
+                this.props.form.resetFields();
             }
         });
     },
@@ -68,6 +78,7 @@ const Confirm = React.createClass({
                 isShowPaymentConfirm:false
             }
         });
+        this.props.form.resetFields();
     },
     handleimgChange(info){
         this.setState({
@@ -86,15 +97,18 @@ const Confirm = React.createClass({
         });
     },
     render(){
-        const { paymentDepartmentData,paymentaccountData,paymentType,paymentFlowaccount,paymentTime } = this.props.Detail;
+        const { paymentDepartmentData,paymentaccountData,paymentType,paymentFlowaccount,paymentTime} = this.props.Detail;
         const { getFieldDecorator } = this.props.form;
         const { previewVisible, previewImage, imgfileList } = this.state;
 
+        const submitmodalProps = Math.floor(Math.random()*500000);
         const modalOpts = {
           visible:this.props.isShowPaymentConfirm,
           onOk: this.handleSubmit,
           onCancel: this.onCancel,
         };
+
+
 
         const formItemLayout = {
           labelCol: {
@@ -125,8 +139,8 @@ const Confirm = React.createClass({
                             </div>
                         );
         const imguploadprops = {
-          action:'',
-          name: 'avatar',
+          action:'/oa_v1/upload/image',
+          name: 'pics',
           listType:"picture-card",
           fileList: this.state.imgfileList,
           onChange: this.handleimgChange,
@@ -134,6 +148,7 @@ const Confirm = React.createClass({
 
         const details = this.props.details || {};
         let name=null,bank_name=null,bank_id=null,bank_des=null;
+
         if(Object.keys(details).length > 0){
             name = details.person
             bank_id = details.info.bank_card_id;
@@ -141,7 +156,7 @@ const Confirm = React.createClass({
             bank_des = details.info.bank_des;
         }
         return(
-                <Modal title="还款确认"  {...modalOpts} >
+                <Modal title="付款确认"  {...modalOpts} >
                         <Form>
                             <FormItem {...formItemLayout} label="付款部门" hasFeedback>
                                 {getFieldDecorator('department', {
@@ -154,7 +169,7 @@ const Confirm = React.createClass({
                             </FormItem>
                             <FormItem {...formItemLayout} label="付款账号" hasFeedback>
                                 {getFieldDecorator('account', {
-                                    rules: [{required: true, message: '请选择付款账号',}]
+                                    rules: [{required: true, message: '请选择付款账号'}]
                                 })(
                                     <Select className="t-l" labelInValue  placeholder="请选择" size="large" style={{ width: '100%' }}>
                                           {accountOptions}
@@ -165,16 +180,12 @@ const Confirm = React.createClass({
                                 {getFieldDecorator('paymentType', {
                                     rules: [{required: true, message: '请选择收款类型',}]
                                 })(
-                                    <Cascader
-                                        options={TypeOptions}
-                                        placeholder="请选择"
-                                        showSearch
-                                    />
+                                    <Cascader options={TypeOptions}  placeholder="请选择" showSearch />
                                 )}
                             </FormItem>
                             <FormItem {...formItemLayout} label="流水号" hasFeedback>
                                 {getFieldDecorator('flowaccount', {
-                                    rules: [{required: true, message: '请输入流水号',}]
+                                    rules: [{required: true, message: '请输入流水号',initialValue:''}]
                                 })(
                                     <Input type="text" placeholder="请输入" />
                                 )}
@@ -192,15 +203,16 @@ const Confirm = React.createClass({
                                 <p>{ bank_des }</p>
                             </FormItem>
                             <FormItem {...formItemLayout} label="备注">
-                                {getFieldDecorator('tips')(
+                                {getFieldDecorator('tips',{defaultValue:''})(
                                     <Input type="textarea" placeholder="请输入备注" />
                                 )}
                             </FormItem>
-                            <FormItem {...formItemLayout} label="财务流水" hasFeedback>
+                            <FormItem {...formItemLayout} label="财务流水">
                                 {getFieldDecorator('flow', {
-                                    rules: [{required: true, message: '请选择财务流水',}]
+                                    rules: [{required: true, message: '请选择财务流水'}],
+                                    initialValue:1
                                     })(
-                                    <RadioGroup onChange={this.handleflowChange} value={this.state.flowvalue}>
+                                    <RadioGroup onChange={this.handleflowChange}>
                                         <Radio value={1}>自动生成</Radio>
                                         <Radio value={0}>不生成</Radio>
                                     </RadioGroup>

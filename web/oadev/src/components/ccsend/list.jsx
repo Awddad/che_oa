@@ -2,14 +2,11 @@ import React, { PropTypes } from 'react';
 import { connect } from 'dva'
 import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
-
+import { chkPmsForBlock,chkPmsForInlineBlock } from '../common';
 
 const CcsendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
-        //console.log(filters);
-        //console.log(sorter);
         const { at,type,ob,status,onSorting }=this.props.ccsend;
         let sorting = "";
         let filterType = null;
@@ -24,7 +21,6 @@ const CcsendList = React.createClass({
         }
         if (sorter.order != undefined) {
           sorting = sorter.order != 'descend' ? 1:0;
-          //console.log(sorting);
         }
         this.props.onSorting(sorting, filterType, filterStatus);
     },
@@ -65,9 +61,7 @@ const CcsendList = React.createClass({
     render(){
 
         const { dataSource,keywords,start_time,end_time,at,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sortingType,showDetail} = this.props.ccsend;
-
-        //console.log(dataSource);
-            const columns = [{
+        const columns = [{
                 title: '序号',
                 dataIndex: 'id',
                 key: 'id',
@@ -130,17 +124,16 @@ const CcsendList = React.createClass({
                 title:'操作',
                 dataIndex:'operation',
                 render:(text,record)=> {
-                    //console.log(record);
                     let result=null;
                     switch(record.type_value){
                         case "报销":
-                            return result = (<p><Link to={"/reimbursedetail?apply_id="+record.apply_id}>详情</Link></p>);
+                            return result = (<p style={chkPmsForInlineBlock(["chao_song_gei_wo_detal"])} ><Link to={"/reimbursedetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                         case "借款":
-                            return result = (<p><Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link></p>);
+                            return result = (<p style={chkPmsForInlineBlock(["chao_song_gei_wo_detal"])}><Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                         case "还款":
-                            return result = (<p><Link to={"/repaymentdetail?apply_id="+record.apply_id}>详情</Link></p>);
+                            return result = (<p style={chkPmsForInlineBlock(["chao_song_gei_wo_detal"])}><Link to={"/repaymentdetail?apply_id="+record.apply_id}>详情</Link></p>);
                             break;
                     }
 

@@ -4,6 +4,7 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover,Table } from 'antd';
 import styles from '../../routes/style.less';
+import { host } from '../common';
 import cs from 'classnames';
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -34,7 +35,7 @@ const BxDetail = React.createClass({
 
         return(
             <div>
-                <h2 className={cs('mt-md','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href="#">下载审批</a></h2>
+                <h2 className={cs('mt-md','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href={this.props.pdf !=null ? host+this.props.pdf:"javascript:;"}>下载审批</a></h2>
                 <FormItem {...formItemLayout}  label={label}>
                     <Table size="middle" columns={columns} dataSource={datasource} pagination={false} footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
                 </FormItem>

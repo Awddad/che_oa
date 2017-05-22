@@ -1,8 +1,9 @@
 import './index.html';
 import './index.css';
+import 'babel-polyfill'
 import dva from 'dva';
-import { routerRedux } from 'dva/router';
 import createLoading from 'dva-loading';
+import { routerRedux,browserHistory } from 'dva/router';
 import { message} from 'antd';
 
 // 1. Initialize
@@ -27,11 +28,16 @@ const app = dva({
   },
 });
 
+/*var opts = {};
+opts.effects = function(){
+  console.log(123121321321);
+};*/
 // 2. Plugins
 // app.use({});
 app.use(createLoading());
 
 // 3. Model
+app.model(require('./models/Loading'));
 app.model(require('./models/adminHome'));
 app.model(require('./models/reimBurse'));
 app.model(require('./models/applyLoan'));

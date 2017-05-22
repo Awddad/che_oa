@@ -62,7 +62,6 @@ const Ccsend = React.createClass({
                 });
             },
         }
-        //console.log(ccsendListProps);
         // 查询控件
         const ccsendSearchProps = {
             handleSearch:(fieldsValue)=>{
