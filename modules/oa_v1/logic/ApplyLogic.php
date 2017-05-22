@@ -25,7 +25,7 @@ class ApplyLogic extends BaseLogic
 		$page_size = @$search['page_size'] ? : 20;
 		$keywords = iconv(mb_detect_encoding(@$search['keywords'],"UTF-8,GB2312,GBK"),"UTF-8//IGNORE",@$search['keywords']);
 		$keywords = trim($keywords);
-		$apply_type = (int)@$search['at'];
+		$apply_type = (array)@$search['at'];
 		
 		$query ;
 		
@@ -93,7 +93,7 @@ class ApplyLogic extends BaseLogic
 		}
 		//类型
 		if($apply_type){
-			$query -> andWhere(['a.type' => $apply_type]);
+			$query -> andWhere(['in','a.type' , $apply_type]);
 		}
 		
 		$_query = clone $query;
@@ -106,8 +106,8 @@ class ApplyLogic extends BaseLogic
 		//每页显示条数
 		$pagination->setPageSize($page_size, true);
 		//排序
-		switch(@$search['ob']){
-			case 1://时间顺序
+		switch(@$search['sort']){
+			case 'asc'://时间顺序
 				$orderBy = ['create_time'=>SORT_ASC];
 				break;
 			default://时间倒序
