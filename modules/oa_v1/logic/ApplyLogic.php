@@ -24,6 +24,7 @@ class ApplyLogic extends BaseLogic
 		$page = isset($search['page']) ? (1 <= $search['page'] ? (int)$search['page'] : 1) : 1;
 		$page_size = @$search['page_size'] ? : 20;
 		$keywords = iconv(mb_detect_encoding(@$search['keywords'],"UTF-8,GB2312,GBK"),"UTF-8//IGNORE",@$search['keywords']);
+		$keywords = trim($keywords);
 		$apply_type = (int)@$search['at'];
 		
 		$query ;

@@ -301,7 +301,7 @@ class ApplyController extends BaseController
 		
 		$data = [
 				'title' => $title,
-				'name' => $name,
+				'name' => $name?:'',
 				'date' => $time ? date('Y-m-d h:i:s',$time) : '',
 				'org' => $person_id ? PersonLogic::instance() -> getOrgNameByPersonId($person_id) : '',
 				'status' => $status,
