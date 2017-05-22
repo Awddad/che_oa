@@ -41,7 +41,7 @@ class PayLogic extends BaseLogic
                 'in', 'type', [1, 2]
             ]);
         }
-        $keyword = \Yii::$app->request->post('keyword');
+        $keyword = trim(\Yii::$app->request->post('keyword'));
 
         if ($keyword) {
             $query->andFilterWhere([
@@ -97,7 +97,7 @@ class PayLogic extends BaseLogic
                 }
 
                 $data[] = [
-                    'create_time' => date('Y-m-d H:i'),
+                    'create_time' => date('Y-m-d H:i', $model->create_time),
                     'type_name' => $typeName,
                     'apply_id' => $model->apply_id,
                     'title' => $model->title,

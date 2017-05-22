@@ -139,7 +139,7 @@ class BackLogic extends BaseLogic
                 }
 
                 $data[] = [
-                    'create_time' => date('Y-m-d H:i'),
+                    'create_time' => date('Y-m-d H:i', $model->create_time),
                     'type_name' => $typeName,
                     'apply_id' => $model->apply_id,
                     'title' => $model->title,
