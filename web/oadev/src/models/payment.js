@@ -1,6 +1,7 @@
 import { query } from '../services/payment';
 import { parse } from 'qs';
 import { message} from 'antd';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'payment',
@@ -30,6 +31,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/payment') {
+          userLogin();
           dispatch({
             type: 'query',
             payload: {

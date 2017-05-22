@@ -7,20 +7,20 @@ import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../c
 const WaitmeList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        const { at,type,onSorting }=this.props.waitme;
-        let sorting = "";
+        //const { at,type,onSorting }=this.props.waitme;
+        let sorting = null;
         let filterType = null;
 
         if (filters.type_value.length > 0) {
-            filterType  = filters.type_value[0];
+            filterType  = filters.type_value;
         }
-        if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+        if (sorter.order != null) {
+          sorting = sorter.order != 'descend' ? 'desc':'asc';
         }
         this.props.onSorting(sorting, filterType);
     },
     paginationChange(page,pageNumber){
-        const { type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.waitme;
+        const { type,perPage,keywords,start_time,end_time,sort,status,at }  = this.props.waitme;
         this.props.dispatch({
             type:'waitme/query',
             payload:{
@@ -30,14 +30,14 @@ const WaitmeList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
+                sort:sort,
                 status:status,
                 at:at
             }
         })
     },
     onShowSizeChange(current,pageSize) {
-        const { type,keywords,start_time,end_time,ob,status,at }  = this.props.waitme;
+        const { type,keywords,start_time,end_time,sort,status,at }  = this.props.waitme;
         this.props.dispatch({
             type:'waitme/query',
             payload:{
@@ -47,7 +47,7 @@ const WaitmeList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
+                sort:sort,
                 status:status,
                 at:at
             }
@@ -55,14 +55,23 @@ const WaitmeList = React.createClass({
     },
     render(){
 
-        const { dataSource,keywords,start_time,end_time,at,type,current,repayment,loading,total,sortingType} = this.props.waitme;
+        const { dataSource,keywords,start_time,end_time,type,current,loading,total,sort,at} = this.props.waitme;
+        let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }else{
+                sortingType = false;
+            }
+
             const columns = [{
                 title: '序号',
                 dataIndex: 'id',
                 key: 'id',
-                        render:(text, row, index)=>(
-                                        index+1
-                                    ),
+                    render:(text, row, index)=>(
+                        index+1
+                    ),
             },{
                 title: '申请时间',
                 dataIndex: 'date',
@@ -71,7 +80,7 @@ const WaitmeList = React.createClass({
                     return record.date;
                 },
                 sorter: (a, b) => a.date - b.date,
-                sortOrder:sortingType == "date" ? sorting : "",
+                sortOrder: sortingType,
             },{
                 title: '审批单编号',
                 dataIndex: 'apply_id',
@@ -85,7 +94,7 @@ const WaitmeList = React.createClass({
                     {text:'借款', value:'2'},
                     {text:'还款', value:'3'},
                 ],
-                filteredValue: repayment,
+                filteredValue: at,
             },{
                 title:'标题',
                 dataIndex:'title',
@@ -98,7 +107,6 @@ const WaitmeList = React.createClass({
                 title:'审批人',
                 dataIndex:'approval_persons',
                 key:'approval_persons'
-
             },{
                 title:'抄送人',
                 dataIndex:'copy_person',
@@ -126,11 +134,12 @@ const WaitmeList = React.createClass({
                     return url;
                 }
             }]
-            const pagination = {
+            /*const pagination = {
                 total,
                 current,
                 onChange: ()=>{},
             };
+*/
 
             return (
                 <div>

@@ -2,6 +2,8 @@ import { query,Detail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
+import { userLogin } from '../components/common';
+
 
 export default {
     namespace: 'Detail',
@@ -32,6 +34,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
+            userLogin();
             if (location.pathname === '/reimbursedetail') {
                 dispatch({
                     type: 'BaoxiaoDetails',

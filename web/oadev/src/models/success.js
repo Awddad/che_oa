@@ -3,6 +3,7 @@ import { parse } from 'qs';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'success',
@@ -14,6 +15,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/success') {
+          userLogin();
           dispatch({
             type: 'query',
             payload: {

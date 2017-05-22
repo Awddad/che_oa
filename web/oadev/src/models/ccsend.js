@@ -1,6 +1,7 @@
 import { query } from '../services/ccsend';
 import { parse } from 'qs';
 import { message} from 'antd';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'ccsend',
@@ -31,6 +32,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/ccsend') {
+          userLogin();
           dispatch({
             type: 'query',
             payload: {

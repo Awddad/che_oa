@@ -88,3 +88,10 @@ export const host = ()=>{
     return host;
 }
 
+export const userLogin = () =>{
+    let username = getCookie("username");
+    if(username == null){
+        window.location.href ="http://test.sso.checheng.net/login.php";
+    }
+}
+
