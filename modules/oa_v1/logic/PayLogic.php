@@ -46,8 +46,8 @@ class PayLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['apply_id' => $keyword],
-                ['title' => $keyword]
+                ['like', 'apply_id' , $keyword],
+                ['like','title', $keyword]
             ]);
         }
 
