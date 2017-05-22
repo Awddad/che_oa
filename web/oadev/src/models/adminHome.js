@@ -57,7 +57,7 @@ export default {
         *loginout({ payload }, { call, put }) {
             const { data } = yield call(Loginout);
             if (data && data.code == 200) {
-                location.href = data.data.login_url;
+                window.location.href = data.data.login_url;
             }
         }
 
