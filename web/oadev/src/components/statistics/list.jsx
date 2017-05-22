@@ -3,7 +3,7 @@ import { connect } from 'dva'
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import { routerRedux,Link } from 'dva/router';
 import styles from './search.less';
-
+import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
 
 const LoadDetailsList= React.createClass({
     paginationChange(page,pageNumber){
@@ -70,7 +70,7 @@ const LoadDetailsList= React.createClass({
             dataIndex:'operation',
             render:(text,record)=>(
                 <p>
-                    <Link to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link>
+                    <Link style={chkPmsForInlineBlock(['yuan_gong_jie_kuan_ming_xi_biao_detail'])} to={"/loanmentdetail?apply_id="+record.apply_id}>详情</Link>
                 </p>
             )
         }]
