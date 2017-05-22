@@ -97,11 +97,7 @@ class BaseController extends Controller
                     }
                 }
                 $this->arrPersonInfo = $objPerson;
-                if(empty($this->arrPersonRoleInfo['roleInfo']) || $this->arrPersonRoleInfo['permissionOrgIds'] ) {
-                    //失败，跳到登录页面,重新选择权限
-                    header('Location: ' . Yii::$app->params['quan_xian']['auth_sso_login_url']);
-                    exit();
-                }
+                
                 //设置角色信息
                 $session = Yii::$app->getSession();
                 if(isset($session['role_id']))
