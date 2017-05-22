@@ -32,8 +32,8 @@ class JiekuanController extends BaseController
         $orgId = Yii::$app->request->get('orgId');
         $time = Yii::$app->request->get('time');
         $pageSize = Yii::$app->request->get('pageSize', 20);
-        $order = Yii::$app->request->get('order', 'd');
-        $order = (($order == 'd') ? 'DESC' : 'ASC');
+        $sort = Yii::$app->request->get('sort', 'desc');
+        $sort = (($sort == 'asc') ? 'ASC' : 'DESC');
 
         // 查询结构
         $query = JieKuan::find()->where(['is_pay_back' => false]);
@@ -75,7 +75,7 @@ class JiekuanController extends BaseController
             'totalCount' => $query->count(),
         ]);
 
-        $data = $query->orderBy("get_money_time {$order}")
+        $data = $query->orderBy("get_money_time {$sort}")
             ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();

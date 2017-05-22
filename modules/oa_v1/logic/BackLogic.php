@@ -105,12 +105,8 @@ class BackLogic extends BaseLogic
         }
 
         $order = 'create_time desc';
-        if(\Yii::$app->request->post('desc')) {
-            $order = \Yii::$app->request->post('desc') .' desc';
-        }
-
-        if(\Yii::$app->request->post('asc')) {
-            $order = \Yii::$app->request->post('asc') .' asc';
+        if (\Yii::$app->request->post('sort')) {
+            $order = 'create_time ' .\Yii::$app->request->post('sort');
         }
 
         $countQuery = clone $query;
