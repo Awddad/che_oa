@@ -34,7 +34,7 @@ class ApplyController extends BaseController
 						'title' => $v['title'],//标题
 						'person' => $v['person'],//发起人
 						'approval_persons' => str_replace(',', ' -> ', $v['approval_persons']),//审批人
-						'copy_person' => $v['copy_person'],//抄送人
+						'copy_person' => $v['copy_person']?:'--',//抄送人
 						'status' => $v['status'],//状态
 						'next_des' => $v['next_des'],//下步说明
 						'can_cancel' => in_array($v['status'], [1,11]) ? 1 : 0,//是否可以撤销
