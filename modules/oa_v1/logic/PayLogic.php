@@ -22,9 +22,10 @@ use yii\data\Pagination;
 class PayLogic extends BaseLogic
 {
     /**
-     * 待确认付款列表
+     * @param array $orgIds
+     * @return array
      */
-    public function canConfirmList()
+    public function canConfirmList($orgIds)
     {
         $type = \Yii::$app->request->post('type');
 
@@ -67,7 +68,9 @@ class PayLogic extends BaseLogic
                 ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
-
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
