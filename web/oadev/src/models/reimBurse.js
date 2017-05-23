@@ -163,6 +163,7 @@ export default {
       });
     },
     *create({payload},{call,put}){//提交报销单
+      console.log(payload);
       const { data } = yield call(constCreate, payload);
       if (data && data.code === 200) {
         yield put({

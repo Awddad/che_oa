@@ -7,7 +7,6 @@ import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../c
 const WaitmeList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        //const { at,type,onSorting }=this.props.waitme;
         let sorting = null;
         let filterType = null;
 

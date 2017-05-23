@@ -11,7 +11,8 @@ const webStorage = new WebStorage(window.localStorage || window.sessionStorage )
 const MysendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        const { at,type,onSorting }=this.props.mysend;
+            console.log(filters);
+
         let sorting = "";
         let filterType = null;
 
@@ -24,7 +25,7 @@ const MysendList = React.createClass({
         this.props.onSorting(sorting, filterType);
     },
     paginationChange(page,pageNumber){
-        const { type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.mysend;
+        const { type,perPage,keywords,start_time,end_time,sort,status,at }  = this.props.mysend;
         this.props.dispatch({
             type:'mysend/query',
             payload:{
@@ -34,14 +35,14 @@ const MysendList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
+                sort:sort,
                 status:status,
                 at:at
             }
         })
     },
     onShowSizeChange(current,pageSize) {
-        const { type,keywords,start_time,end_time,ob,status,at }  = this.props.mysend;
+        const { type,keywords,start_time,end_time,sort,status,at }  = this.props.mysend;
         this.props.dispatch({
             type:'mysend/query',
             payload:{
@@ -51,14 +52,22 @@ const MysendList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
+                sort:sort,
                 status:status,
                 at:at
             }
         })
     },
     render(){
-        const { dataSource,keywords,start_time,end_time,at,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sortingType,onPageChange,onDeleteItem,onShowSizeChange} = this.props.mysend;
+        const { dataSource,keywords,start_time,end_time,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sort,at,onPageChange,onDeleteItem,onShowSizeChange} = this.props.mysend;
+            let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }else{
+                sortingType = false;
+            }
             const columns = [{
                 title: '序号',
                 dataIndex: 'id',
@@ -71,7 +80,7 @@ const MysendList = React.createClass({
                 dataIndex: 'date',
                 key: 'date',
                 sorter: (a, b) => a.date - b.date,
-                sortOrder:sortingType == "date" ? sorting : "",
+                sortOrder:sortingType,
             },{
                 title: '审批单编号',
                 dataIndex: 'apply_id',
@@ -85,7 +94,7 @@ const MysendList = React.createClass({
                     {text:'借款', value:'2'},
                     {text:'还款', value:'3'},
                 ],
-                filteredValue: repayment == null ? []:repayment,
+                filteredValue: at,
             },{
                 title:'标题',
                 dataIndex:'title',
@@ -107,6 +116,12 @@ const MysendList = React.createClass({
                 title:'状态',
                 dataIndex:'next_des',
                 key:'next_des',
+                filters:[
+                    {text:'待审批', value:'1'},
+                    {text:'完成', value:'2'},
+                    {text:'撤销', value:'3'},
+                ],
+                filteredValue: at,
             },{
                 title:'操作',
                 dataIndex:'operation',
