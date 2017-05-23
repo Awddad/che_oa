@@ -14,7 +14,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/reimburse' || location.pathname === '/locnment' || location.pathname === '/repayment') {
-          userLogin();
           dispatch({
             type: 'ApplyIDquery',
             payload:location.query

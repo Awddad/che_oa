@@ -31,7 +31,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/applyloan') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: location.query,

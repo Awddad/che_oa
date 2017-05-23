@@ -15,7 +15,7 @@ export default {
     loading: false,
     total: null,
     at:'',
-    ob:'',
+    sort:'',
     sortingType:'',
     repayment:[],
     current: 1,
@@ -27,13 +27,12 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/already-approve') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: {
                 type: 2,
                 at: location.query.at == null? "" : location.query.at,
-                ob:location.query.ob == null? "" : location.query.ob,
+                sort:location.query.sort == null? "" : location.query.sort,
                 page_size:10,
             },
           });

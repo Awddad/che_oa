@@ -15,7 +15,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/success') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: {

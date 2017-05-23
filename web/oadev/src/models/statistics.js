@@ -29,7 +29,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/statistics') {
-            userLogin();
           dispatch({
             type: 'query',
             payload: {

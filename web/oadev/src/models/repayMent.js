@@ -33,7 +33,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/repayment') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: location.query,
