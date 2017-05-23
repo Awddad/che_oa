@@ -19,7 +19,9 @@ const LoadDetail = React.createClass({
             key,
             time,
             department,
+            xz_department,
             currentPage,
+            perPage,
             modalVisible,
             modalType,
             sorging,
@@ -33,21 +35,28 @@ const LoadDetail = React.createClass({
             time:time,
             department:department,
             dataSource:info,
-            onPageChange(currentPage){
+           /* onPageChange(currentPage){
                 dispatch(routerRedux.push({
                     pathname: '/statistics',
                     query: {
                         currentPage:currentPage,
                     },
                   }));
-                },
+            },*/
             onSorting(sorting){
-                dispatch(routerRedux.push({
-                    pathname: '/statistics',
-                    query: {
-                        currentPage:currentPage,
-                    },
-                  }));
+                let payload =   {
+                                    key: key,
+                                    xz_department:xz_department,
+                                    time:time,
+                                    total:total,
+                                    current:current,
+                                    sort:sorting,
+                                    pageSize:perPage,
+                                };
+                this.dispatch({
+                    type: 'Statistics/filtersort',
+                    payload: payload
+                });
             },
         }
       // 查询控件

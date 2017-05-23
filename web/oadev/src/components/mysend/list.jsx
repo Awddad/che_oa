@@ -11,16 +11,14 @@ const webStorage = new WebStorage(window.localStorage || window.sessionStorage )
 const MysendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-            console.log(filters);
-
         let sorting = "";
         let filterType = null;
 
-        if (filters.type_value.length > 0) {
-            filterType  = filters.type_value[0];
+        if (Object.keys(filters).length > 0) {
+            filterType  = filters.type_value;
         }
         if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -158,6 +156,7 @@ const MysendList = React.createClass({
                         rowKey={record => record.id}
                         onChange={this.handleChange}
                         pagination={false}
+                        filterMultiple={true}
                         size="middle"
                         bordered />
                     <Pagination showQuickJumper current = { current } defaultPageSize={10} defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>

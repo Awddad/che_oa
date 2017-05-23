@@ -49,6 +49,7 @@ import ConfirmPayment from '../components/details/confirmPayment';
               }));
             },
         onSorting(sorting){
+            console.log(sorting);
             this.dispatch({
                 type: 'make_collections/filtersort',
                 payload: {
@@ -69,7 +70,7 @@ import ConfirmPayment from '../components/details/confirmPayment';
 
     }
 
-    console.log(makeListProps);
+
   // 查询控件
     const makeSearchProps = {
         handleSearch:(fieldsValue)=>{

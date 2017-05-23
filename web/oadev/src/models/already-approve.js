@@ -18,6 +18,7 @@ export default {
     sort:'',
     sortingType:'',
     current: 1,
+    perPage:'',
     currentItem: {},
     modalVisible: false,
     modalType: 'update',
@@ -85,6 +86,7 @@ export default {
                     total:data.data.page.totalCount,
                     perPage:data.data.page.perPage,
                     dataSource:data.data.res,
+                    sort:payload.sort,
                     at:payload.at
                 }
             });

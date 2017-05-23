@@ -17,6 +17,7 @@ export default {
     create_time:'',
     type_name:'',
     money:'',
+    sort:'',
     keyword:'',
     begin_time:'',
     start_time:'',
@@ -102,7 +103,6 @@ export default {
     *filtersort({ payload },{ call,put }){
         const { data } = yield call(query,payload);
         if(data && data.code === 200){
-          console.log(data.data.data);
             yield put({
                 type: 'querySuccess',
                 payload:{
@@ -112,6 +112,7 @@ export default {
                     current: data.data.pages.currentPage,
                     total:data.data.pages.totalCount,
                     perPage:data.data.pages.perPage,
+                    sort:payload.sort
                 }
             });
         }

@@ -24,6 +24,7 @@ const AlreadyApprove =React.createClass({
             start_time,
             end_time,
             currentPage,
+            perPage,
             modalVisible,
             modalType,
             sorging,
@@ -39,8 +40,6 @@ const AlreadyApprove =React.createClass({
             start_time:start_time,
             end_time:end_time,
             dataSource:res,
-            filteredValue:at,
-            sortOrder:sort,
             onPageChange(currentPage){
                 dispatch(routerRedux.push({
                     pathname: '/already-approve',
@@ -58,6 +57,7 @@ const AlreadyApprove =React.createClass({
                                         start_time: start_time,
                                         end_time: end_time,
                                         sort:sorting,
+                                        page_size:perPage,
                                         at:filterType
                                     };
 
