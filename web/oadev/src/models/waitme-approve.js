@@ -1,6 +1,7 @@
 import { query } from '../services/waitme-approve';
 import { parse } from 'qs';
 import { message} from 'antd';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'waitme',
@@ -14,9 +15,8 @@ export default {
         loading: false,
         total: null,
         at:'',
-        ob:'',
+        sort:'',
         sortingType:'',
-        repayment:[],
         current: 1,
         currentItem: {},
         modalVisible: false,
@@ -31,8 +31,6 @@ export default {
             type: 'query',
             payload: {
                 type: 1,
-                at: location.query.at == null? "" : location.query.at,
-                ob: location.query.ob == null? "" : location.query.ob,
                 page_size:10,
             },
           });
@@ -43,9 +41,8 @@ export default {
 
     effects: {
         *query({ payload }, { call, put }) {
-          yield put({ type: 'showLoading' });
+          userLogin();
           const { data } = yield call(query, payload);
-
           if (data && data.code == 200) {
             yield put({
               type: 'querySuccess',
@@ -86,7 +83,9 @@ export default {
                         start_time: payload.start_time,
                         end_time: payload.end_time,
                         dataSource:data.data.res,
-                        at:payload.at
+                        total:data.data.page.totalCount,
+                        at:payload.at,
+                        sort:payload.sort,
                     }
                 });
             }

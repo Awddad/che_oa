@@ -2,6 +2,7 @@ import { constType,constCard,constPersonal,constCreate,addCard,GetApplyID,GetUse
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'reimBurse',
@@ -34,6 +35,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/reimburse') {
+          userLogin();
           dispatch({
             type: 'query',
             payload: location.query,
