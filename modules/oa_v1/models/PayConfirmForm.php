@@ -136,7 +136,7 @@ class PayConfirmForm extends CaiWuFuKuan
         } else {
             $flag = true;
             foreach ($apply->expense as $v) {
-                $param['tag_id'] = $v->type;
+//                $param['tag_id'] = $v->type;  //没有 type字段呀
                 $param['money'] = $v->money;
                 $rst = ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
