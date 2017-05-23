@@ -189,6 +189,7 @@ class BackForm extends BaseForm
         $apply->copy_person = $this->getPerson('copy_person');
         $apply->org_id = $user['org_id'];
         $apply->apply_list_pdf = $pdfUrl;
+        $apply->cai_wu_need = 2;
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
