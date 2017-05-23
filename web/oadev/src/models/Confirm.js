@@ -2,7 +2,7 @@ import { constCard } from '../services/applyLoan';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
-
+import { userLogin } from '../components/common';
 
 export default {
     namespace: 'Confirm',

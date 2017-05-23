@@ -1,6 +1,7 @@
 import { query } from '../services/already-approve';
 import { parse } from 'qs';
 import { message} from 'antd';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'alreadyApprove',
@@ -26,6 +27,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/already-approve') {
+          userLogin();
           dispatch({
             type: 'query',
             payload: {
@@ -42,7 +44,6 @@ export default {
 
   effects: {
     *query({ payload }, { call, put }) {
-      yield put({ type: 'showLoading' });
       const { data } = yield call(query, payload);
 
       if (data && data.code == 200) {

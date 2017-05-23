@@ -1,7 +1,7 @@
 import { GetApplyID } from '../services/applyIDuserInfo';
 import { parse } from 'qs';
 import { message} from 'antd';
-
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'ApplyIDuserInfo',
@@ -14,6 +14,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/reimburse' || location.pathname === '/locnment' || location.pathname === '/repayment') {
+          userLogin();
           dispatch({
             type: 'ApplyIDquery',
             payload:location.query

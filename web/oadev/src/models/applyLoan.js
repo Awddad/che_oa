@@ -2,6 +2,7 @@ import { constCard,constPersonal,constCreate,addCard,GetApplyID } from '../servi
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
+import { userLogin } from '../components/common';
 
 export default {
   namespace: 'applyLoan',
@@ -30,6 +31,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/applyloan') {
+          userLogin();
           dispatch({
             type: 'query',
             payload: location.query,

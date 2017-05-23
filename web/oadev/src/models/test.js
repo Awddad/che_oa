@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import pathToRegexp from 'path-to-regexp';
 
+
 export default {
     namespace: 'test',
     state: {
@@ -14,6 +15,7 @@ export default {
         setup({ dispatch, history }) {
           history.listen(location => {
             if (location.pathname === '/test') {
+                userLogin();
               dispatch({
                 type: 'query',
                 payload: {

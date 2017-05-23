@@ -22,9 +22,10 @@ use yii\data\Pagination;
 class PayLogic extends BaseLogic
 {
     /**
-     * 待确认付款列表
+     * @param array $orgIds
+     * @return array
      */
-    public function canConfirmList()
+    public function canConfirmList($orgIds)
     {
         $type = \Yii::$app->request->post('type');
 
@@ -32,10 +33,17 @@ class PayLogic extends BaseLogic
             'status' => 4
         ]);
         //筛选
-        if ($type && in_array($type, [1, 2])) {
-            $query->andWhere([
-                'type' => $type
-            ]);
+        if ($type) {
+            if(is_array($type)) {
+                $query->andWhere([
+                   'in', 'type', $type
+                ]);
+            } else {
+                $query->andWhere([
+                    'type' => $type
+                ]);
+            }
+            
         } else {
             $query->andWhere([
                 'in', 'type', [1, 2]
@@ -60,17 +68,15 @@ class PayLogic extends BaseLogic
                 ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
-
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
         $order = 'create_time desc';
-        if (\Yii::$app->request->post('desc')) {
-            $order = \Yii::$app->request->post('desc') . ' desc';
-        }
-
-        if (\Yii::$app->request->post('asc')) {
-            $order = \Yii::$app->request->post('asc') . ' asc';
+        if (\Yii::$app->request->post('sort')) {
+            $order = 'create_time ' .\Yii::$app->request->post('sort');
         }
 
         //当前页
