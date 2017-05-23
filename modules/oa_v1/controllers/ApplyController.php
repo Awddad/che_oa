@@ -28,7 +28,7 @@ class ApplyController extends BaseController
 		foreach($res['data'] as $v){
 			$data['res'][] = [
 						'apply_id' => $v['apply_id'],//审批单编号
-						'date' => date('Y-m-d H:i:s',$v['create_time']),//创建时间
+						'date' => date('Y-m-d H:i',$v['create_time']),//创建时间
 						'type' => $v['type'] ,//类型
 						'type_value' => $this -> type[$v['type']],//类型值
 						'title' => $v['title'],//标题
@@ -158,7 +158,7 @@ class ApplyController extends BaseController
 		foreach($apply['info']['list'] as $v){
 			$data['info']['list'][] = [
 				'money' => $v['money'],
-				'time' => date('Y-m-d H:i:s',$v['get_money_time']),
+				'time' => date('Y-m-d H:i',$v['get_money_time']),
 				'des' => $v['des']
 			];
 		}
@@ -181,7 +181,7 @@ class ApplyController extends BaseController
 		$time;
 		$data = [
 				'apply_id' => $apply['apply_id'],
-				'create_time' => date('Y-m-d H:i:s',$apply['create_time']),
+				'create_time' => date('Y-m-d H:i',$apply['create_time']),
 				'next_des' => $apply['next_des'],
 				'title' => $apply['title'],
 				'type' => $apply['type'],
@@ -205,7 +205,7 @@ class ApplyController extends BaseController
 									'person' => $v['approval_person'],
 									'steep'	=> $v['steep'],
 									'result' => $v['result'],
-									'time' => $v['approval_time']? date('Y-m-d H:i:s',$v['approval_time']):'',
+									'time' => $v['approval_time']? date('Y-m-d H:i',$v['approval_time']):'',
 									'des' => $v['des'],
 								];
 		}
@@ -222,7 +222,7 @@ class ApplyController extends BaseController
 		$data = [
 				'org_name' => $apply['caiwu']['fukuan']['org_name'],
 				'des' => $apply['caiwu']['fukuan']['tips'],
-				'time' => date('Y-m-d H:i:s',$apply['caiwu']['fukuan']['fu_kuan_time']),
+				'time' => date('Y-m-d H:i',$apply['caiwu']['fukuan']['fu_kuan_time']),
 				];
 		return $data;
 	}
@@ -234,7 +234,7 @@ class ApplyController extends BaseController
 	{
 		$data = [
 			'org_name' => $apply['caiwu']['shoukuan']['org_name'],
-			'time' => date('Y-m-d H:i:s',$apply['caiwu']['shoukuan']['shou_kuan_time']),
+			'time' => date('Y-m-d H:i',$apply['caiwu']['shoukuan']['shou_kuan_time']),
 			'tips' => $apply['caiwu']['shoukuan']['tips'],
 		];
 	}
@@ -302,7 +302,7 @@ class ApplyController extends BaseController
 		$data = [
 				'title' => $title,
 				'name' => $name?:'',
-				'date' => $time ? date('Y-m-d H:i:s',$time) : '',
+				'date' => $time ? date('Y-m-d H:i',$time) : '',
 				'org' => $person_id ? PersonLogic::instance() -> getOrgNameByPersonId($person_id) : '',
 				'status' => $status,
 				'diff_time' => $diff_time, 

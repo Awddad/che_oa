@@ -177,6 +177,7 @@ class LoanForm extends BaseForm
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
         $apply->apply_list_pdf = $pdfUrl;
+        $apply->cai_wu_need = 2;
         $apply->org_id = $user['org_id'];
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
