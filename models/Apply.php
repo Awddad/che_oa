@@ -164,6 +164,7 @@ class Apply extends \yii\db\ActiveRecord
     public function approvalPass($person)
     {
         $this->next_des = "待 {$person} 审批";
+        $this->status = self::STATUS_ING;
         return $this->save();
     }
 
