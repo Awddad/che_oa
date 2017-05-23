@@ -15,9 +15,8 @@ export default {
     end_time:'',
     total: null,
     at:'',
-    ob:'',
+    sort:'',
     sortingType:'',
-    repayment:[],
     current: 1,
     perPage:'',
     currentPage:'',
@@ -37,8 +36,7 @@ export default {
             payload: {
                 type: 4,
                 at: location.query.at == null? "" : location.query.at,
-                ob:location.query.ob == null? "" : location.query.ob,
-                status:location.query.status == null? "" : location.query.status,
+                sort:location.query.sort == null? "" : location.query.sort,
                 pageCount:location.query.pageCount == null? "" : location.query.pageCount,
                 page_size:10,
             },
@@ -53,18 +51,30 @@ export default {
         yield put({ type: 'showLoading' });
         yield put({
             type: 'updateQueryKey',
-            payload: { page: 1,},
+            payload: {
+              page: 1
+            },
         });
         const { data } = yield call(query, payload);
 
         if (data && data.code == 200) {
+            let total=null,current=null,perPage=null;
+            if(Object.keys(data.data).length > 0){
+                total = data.data.page.totalCount;
+                current = data.data.page.currentPage;
+                perPage = data.data.page.perPage;
+            }else{
+                total = 0;
+                current = 1;
+                perPage=10;
+            }
             yield put({
                type: 'querySuccess',
                payload: {
                   dataSource: data.data.res,
-                  total: data.data.page.totalCount,
-                  current: data.data.page.currentPage,
-                  perPage:data.data.page.perPage
+                  total: total,
+                  current: current,
+                  perPage:perPage
                },
            });
         }
@@ -97,9 +107,11 @@ export default {
                     start_time: payload.start_time,
                     end_time: payload.end_time,
                     dataSource:data.data.res,
+                    total: data.data.page.totalCount,
+                    current: data.data.page.currentPage,
+                    perPage:data.data.page.perPage,
                     at:payload.at,
-                    ob:payload.ob,
-                    status:payload.status,
+                    sort:payload.sort,
                 }
             });
         }

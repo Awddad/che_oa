@@ -94,15 +94,18 @@ const ApplyLoan = React.createClass({
   },
   handleSubmit(){//借款申请提交
       let { CardDetail,constdata,copydata,addApplyID } = this.props.applyLoan;
-      let pic = CardDetail.pics.fileList.map(data => data.response.data);
-      let pics = "";
-      for(let i=0;i<pic.length;i++){
-          if(i == pic.length-1){
-            pics += pic[i];
-          }else{
-            pics += pic[i]+','
+      let pic = null, pics = "";
+      if(CardDetail.pics != null){
+          pic = CardDetail.pics.fileList.map(data => data.response.data);
+          for(let i=0;i<pic.length;i++){
+              if(i == pic.length-1){
+                pics += pic[i];
+              }else{
+                pics += pic[i]+','
+              }
           }
       }
+
 
       this.props.dispatch({
           type: 'applyLoan/create',

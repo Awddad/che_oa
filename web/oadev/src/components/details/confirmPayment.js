@@ -43,7 +43,10 @@ const Confirm = React.createClass({
             if (errors) {
                 return;
             }else{
-                let pic = paymentDetail.pics.fileList.map(data => data.response.data);
+                let pic ="";
+                if(paymentDetail.pics != null){
+                    let pic = paymentDetail.pics.fileList.map(data => data.response.data);
+                }
                 let pics = "";
                 for(let i=0;i<pic.length;i++){
                       if(i == pic.length-1){

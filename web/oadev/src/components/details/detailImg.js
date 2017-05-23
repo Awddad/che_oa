@@ -3,7 +3,7 @@ import React,{ Component,PropTypes} from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button,Select, Row, Col,message, Steps,Popover,Table,Modal } from 'antd';
-import { key } from '../../components/common';
+import { key,host } from '../../components/common';
 import styles from '../../routes/style.less';
 import cs from 'classnames';
 const Option = Select.Option;
@@ -22,7 +22,6 @@ const DetailImg = React.createClass({
             previewVisible:true,
             previewImage:src
         })
-        console.log(this.state.previewImage);
     },
     handleCancel(){
         this.setState({
@@ -45,11 +44,11 @@ const DetailImg = React.createClass({
         const imgdata = this.props.imgdata || [];
         let imgli = '';
         if(imgdata.length > 0){
-            imgli = imgdata.map(data =>
+            imgli = imgdata.map(data =>  data.length > 0 ?
                 (<li key={key} style={{marginRight:10}}>
-                    <img width="100" height="120" src={"http://192.168.1.128:8010"+ data} />
+                    <img width="100" height="120" src={host + data} />
                     <a href="javascript:;" onClick={this.handleimgclick}><Icon type="eye-o" /></a>
-                </li>)
+                </li>) : ''
             );
         }
 

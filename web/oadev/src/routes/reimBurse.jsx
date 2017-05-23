@@ -141,16 +141,23 @@ const Reimburse = React.createClass({
           copy_person.push({"person_id": copydata[i].id,"person_name":copydata[i].name});
       }
 
-      let files = CardDetail.file.fileList.map(data => data.response.data[0]);
-      let pic = CardDetail.pics.fileList.map(data => data.response.data);
-      let pics = "";
-      for(let i=0;i<pic.length;i++){
-          if(i == pic.length-1){
-            pics += pic[i];
-          }else{
-            pics += pic[i]+','
+      let files=null,file=null,pics = '',pic=null;
+      if(CardDetail.file != null){
+          files = CardDetail.file.fileList.map(data => data.response.data[0]);
+      }
+      if(CardDetail.pics != null){
+
+          pic = CardDetail.pics.fileList.map(data => data.response.data);
+
+          for(let i=0;i<pic.length;i++){
+              if(i == pic.length-1){
+                pics += pic[i];
+              }else{
+                pics += pic[i]+','
+              }
           }
       }
+
       this.props.dispatch({
           type: 'reimBurse/create',
           payload: {

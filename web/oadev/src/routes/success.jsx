@@ -73,7 +73,7 @@ const Success = React.createClass({
                         { resultSteps }
                     </div>
                     <div className={cs('t-c','mt-md')}>
-                        <Button type="primary" className="mr-md" size="large" onClick={this.handleListClick}>进入项目</Button>
+                        <Button type="primary" className="mr-md" size="large" onClick={this.handleListClick}>进入列表</Button>
                         <Button size="large" onClick={this.handleDetailClick} >查看项目</Button>
                     </div>
                 </div>

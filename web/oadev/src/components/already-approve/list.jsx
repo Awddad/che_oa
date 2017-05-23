@@ -6,15 +6,14 @@ import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../c
 const AlreadyApproveList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        const { at,type,onSorting }=this.props.alreadyApprove;
-        let sorting = "";
+        let sorting = null;
         let filterType = null;
 
         if (filters.type_value.length > 0) {
-            filterType  = filters.type_value[0];
+            filterType  = filters.type_value;
         }
-        if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+        if (sorter.order != null) {
+          sorting = sorter.order != 'descend' ? 'desc':'asc';
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -54,7 +53,15 @@ const AlreadyApproveList = React.createClass({
     },
     render(){
 
-        const { dataSource,keywords,start_time,end_time,at,type,current,repayment,loading,total,sortingType} = this.props.alreadyApprove;
+        const { dataSource,keywords,start_time,end_time,type,current,repayment,loading,total,sort,at} = this.props.alreadyApprove;
+        let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }else{
+                sortingType = false;
+            }
 
         const columns = [{
             title: '序号',
@@ -68,7 +75,7 @@ const AlreadyApproveList = React.createClass({
             dataIndex: 'date',
             key: 'date',
             sorter: (a, b) => a.date - b.date,
-            sortOrder:sortingType == "date" ? sorting : "",
+            sortOrder:sortingType,
         },{
             title: '审批单编号',
             dataIndex: 'apply_id',
@@ -82,7 +89,7 @@ const AlreadyApproveList = React.createClass({
                 {text:'借款', value:'2'},
                 {text:'还款', value:'3'},
             ],
-            filteredValue: repayment == null ? []:repayment,
+            filteredValue:at,
         },{
             title:'标题',
             dataIndex:'title',
@@ -125,12 +132,12 @@ const AlreadyApproveList = React.createClass({
             }
 
         }]
-        const pagination = {
+        /*const pagination = {
             total,
             current,
             pageSize: 20,
             onChange: ()=>{},
-        };
+        };*/
         return (
             <div>
               <Table

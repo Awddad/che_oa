@@ -7,25 +7,22 @@ import { chkPmsForBlock,chkPmsForInlineBlock } from '../common';
 const CcsendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        const { at,type,ob,status,onSorting }=this.props.ccsend;
         let sorting = "";
         let filterType = null;
-        let filterStatus = null;
 
         if (filters.type_value.length > 0) {
-            filterType  = filters.type_value[0];
+            filterType  = filters.type_value;
+        }else{
+            filterType  = [];
         }
 
-        if (filters.next_des.length > 0) {
-            filterStatus  = filters.next_des[0];
-        }
         if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+          sorting = sorter.order != 'descend' ? 'desc':'asc';
         }
-        this.props.onSorting(sorting, filterType, filterStatus);
+        this.props.onSorting(sorting, filterType);
     },
     paginationChange(page,pageNumber){
-        const { type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.ccsend;
+        const { type,perPage,keywords,start_time,end_time,sort,at }  = this.props.ccsend;
         this.props.dispatch({
             type:'ccsend/query',
             payload:{
@@ -35,14 +32,13 @@ const CcsendList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
-                status:status,
+                sort:sort,
                 at:at
             }
         })
     },
     onShowSizeChange(current,pageSize){
-        const {type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.ccsend;
+        const {type,perPage,keywords,start_time,end_time,sort,at }  = this.props.ccsend;
         this.props.dispatch({
             type:'ccsend/query',
             payload:{
@@ -52,15 +48,22 @@ const CcsendList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
-                status:status,
+                sort:sort,
                 at:at
             }
         })
     },
     render(){
 
-        const { dataSource,keywords,start_time,end_time,at,type,current,pageSize,pageCount,perPage,currentPage,repayment,loading,total,sortingType,showDetail} = this.props.ccsend;
+        const { dataSource,keywords,start_time,end_time,at,sort,type,current,pageSize,pageCount,perPage,currentPage,loading,total,showDetail} = this.props.ccsend;
+        let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }else{
+                sortingType = false;
+            }
         const columns = [{
                 title: '序号',
                 dataIndex: 'id',
@@ -76,7 +79,7 @@ const CcsendList = React.createClass({
                     return record.date;
                 },
                 sorter: (a, b) => a.date - b.date,
-                sortOrder:sortingType == "date" ? sorting : "",
+                sortOrder:sortingType,
             },{
                 title: '审批单编号',
                 dataIndex: 'apply_id',
@@ -90,7 +93,7 @@ const CcsendList = React.createClass({
                     {text:'借款', value:'2'},
                     {text:'还款', value:'3'},
                 ],
-                filteredValue: repayment == null ? []:repayment,
+                filteredValue:at,
             },{
                 title:'标题',
                 dataIndex:'title',
@@ -112,14 +115,6 @@ const CcsendList = React.createClass({
                 title:'状态',
                 dataIndex:'next_des',
                 key:'next_des',
-                filters:[
-                    {text:'审核中', value:'1'},
-                    {text:'财务确认中', value:'2'},
-                    {text:'撤销', value:'3'},
-                    {text:'审核不通过 ', value:'4'},
-                    {text:'完成', value:'5'},
-                ],
-                filteredValue: repayment == null ? []:repayment,
             },{
                 title:'操作',
                 dataIndex:'operation',
