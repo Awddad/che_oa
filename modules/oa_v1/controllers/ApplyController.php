@@ -313,6 +313,7 @@ class ApplyController extends BaseController
 				'status' => $status,
 				'diff_time' => $diff_time, 
 				];
+        $data['status'] < 2 && $data['date'] = '';
 		return $data;
 	}
 	
