@@ -28,13 +28,13 @@ class ApplyController extends BaseController
 		foreach($res['data'] as $v){
 			$data['res'][] = [
 						'apply_id' => $v['apply_id'],//审批单编号
-						'date' => date('Y-m-d H:i:s',$v['create_time']),//创建时间
+						'date' => date('Y-m-d H:i',$v['create_time']),//创建时间
 						'type' => $v['type'] ,//类型
 						'type_value' => $this -> type[$v['type']],//类型值
 						'title' => $v['title'],//标题
 						'person' => $v['person'],//发起人
 						'approval_persons' => str_replace(',', ' -> ', $v['approval_persons']),//审批人
-						'copy_person' => $v['copy_person'],//抄送人
+						'copy_person' => $v['copy_person']?:'--',//抄送人
 						'status' => $v['status'],//状态
 						'next_des' => $v['next_des'],//下步说明
 						'can_cancel' => in_array($v['status'], [1,11]) ? 1 : 0,//是否可以撤销
@@ -158,7 +158,7 @@ class ApplyController extends BaseController
 		foreach($apply['info']['list'] as $v){
 			$data['info']['list'][] = [
 				'money' => $v['money'],
-				'time' => date('Y-m-d H:i:s',$v['get_money_time']),
+				'time' => date('Y-m-d H:i',$v['get_money_time']),
 				'des' => $v['des']
 			];
 		}
@@ -181,7 +181,7 @@ class ApplyController extends BaseController
 		$time;
 		$data = [
 				'apply_id' => $apply['apply_id'],
-				'create_time' => date('Y-m-d H:i:s',$apply['create_time']),
+				'create_time' => date('Y-m-d H:i',$apply['create_time']),
 				'next_des' => $apply['next_des'],
 				'title' => $apply['title'],
 				'type' => $apply['type'],
@@ -205,12 +205,13 @@ class ApplyController extends BaseController
 									'person' => $v['approval_person'],
 									'steep'	=> $v['steep'],
 									'result' => $v['result'],
-									'time' => $v['approval_time']? date('Y-m-d H:i:s',$v['approval_time']):'',
+									'time' => $v['approval_time']? date('Y-m-d H:i',$v['approval_time']):'',
 									'des' => $v['des'],
 								];
 		}
 		//流程
 		$data['flow'] = $this -> getFlowData($apply);
+        $data['step'] = $apply['step'];
 		return $data;
 	}
 	/**
@@ -222,7 +223,7 @@ class ApplyController extends BaseController
 		$data = [
 				'org_name' => $apply['caiwu']['fukuan']['org_name'],
 				'des' => $apply['caiwu']['fukuan']['tips'],
-				'time' => date('Y-m-d H:i:s',$apply['caiwu']['fukuan']['fu_kuan_time']),
+				'time' => date('Y-m-d H:i',$apply['caiwu']['fukuan']['fu_kuan_time']),
 				];
 		return $data;
 	}
@@ -234,7 +235,7 @@ class ApplyController extends BaseController
 	{
 		$data = [
 			'org_name' => $apply['caiwu']['shoukuan']['org_name'],
-			'time' => date('Y-m-d H:i:s',$apply['caiwu']['shoukuan']['shou_kuan_time']),
+			'time' => date('Y-m-d H:i',$apply['caiwu']['shoukuan']['shou_kuan_time']),
 			'tips' => $apply['caiwu']['shoukuan']['tips'],
 		];
 	}
@@ -242,12 +243,13 @@ class ApplyController extends BaseController
 	 * 审批流程数据
 	 * @param  $apply
 	 */
-	protected function getFlowData($apply)
+	protected function getFlowData(&$apply)
 	{
 		$data = [];
 		//申请
 		$data[] = $this -> _getFlowData($this -> apply_status[0], $apply['person'], $apply['create_time'], $apply['person_id'], '', 2,$apply['create_time']);
 		$time = $apply['create_time'];
+        $apply['step'] = 0;
 		//审核
 		foreach($apply['approval'] as $v){
 			$data[] = $this -> _getFlowData(sprintf($this->approval_status[$v['is_to_me_now'] ? 3: $v['result']],$v['approval_person']),
@@ -255,14 +257,16 @@ class ApplyController extends BaseController
 											$v['approval_time'],
 											$v['approval_person_id'],
 											$v['des'],
-											$v['result'] ==0 ? (int)$v['is_to_me_now'] : $v['result']+1,
+											$step = $v['result'] ==0 ? (int)$v['is_to_me_now'] : $v['result']+1,
 											$time
 											);
 			$time = $v['approval_time'] ?  : $time;
+            $step > 0 && $apply['step']++;
 		}
 		//财务
 		if($apply['cai_wu_need'] == 2 && $apply['status'] == 4){//需要财务确认 并且轮到财务确认
 			$data[] = $this -> _getFlowData($this -> caiwu_status[1],null,null,null,null,1,$time);
+            $apply['step']++;
 		}elseif($apply['cai_wu_need'] == 2 && $apply['status'] == 99){//需要财务确认 并且申请完成
 			$data[] = $this -> _getFlowData($this -> caiwu_status[2],
 			 								$apply['cai_wu_person'],
@@ -273,12 +277,14 @@ class ApplyController extends BaseController
 											$time
 											);
 			$time = $apply['cai_wu_time'] ?  : $time;
+            $apply['step']++;
 		}elseif($apply['cai_wu_need'] == 2){//需要财务确认 并且未轮到财务确认
 			$data[] = $this -> _getFlowData($this -> caiwu_status[0],null,null,null,null, 0,$time);
 		}
 		//完成
 		$data[] = $this -> _getFlowData($this -> apply_status[1],null,$time,null,null,$apply['status'] == 99 ? 2:0,$apply['create_time']);
-		
+		$apply['status'] == 99 && $apply['step']++;
+        
 		return $data;
 	}
 	protected function _getFlowData($title,$name,$time,$person_id,$des,$status,$prev_time)
@@ -302,11 +308,13 @@ class ApplyController extends BaseController
 		$data = [
 				'title' => $title,
 				'name' => $name?:'',
-				'date' => $time ? date('Y-m-d H:i:s',$time) : '',
+				'date' => $time ? date('Y-m-d H:i',$time) : '',
 				'org' => $person_id ? PersonLogic::instance() -> getOrgNameByPersonId($person_id) : '',
+                'des' => $des ?:'',
 				'status' => $status,
 				'diff_time' => $diff_time, 
 				];
+        $data['status'] < 2 && $data['date'] = '';
 		return $data;
 	}
 	
