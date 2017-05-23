@@ -8,9 +8,11 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\models\Role;
 use app\modules\oa_v1\logic\PayLogic;
 use Yii;
 use app\modules\oa_v1\models\PayConfirmForm;
+use yii\web\HttpException;
 
 
 /**
@@ -21,6 +23,27 @@ use app\modules\oa_v1\models\PayConfirmForm;
  */
 class PayConfirmController extends BaseController
 {
+    /**
+     * 权限控制
+     *
+     * @param $action
+     * @return bool
+     * @throws HttpException
+     */
+    public function beforeAction($action)
+    {
+        parent::beforeAction($action);
+        $roleIds = explode(',', $this->arrPersonInfo['role_ids']);
+        if(in_array($this->roleId, $roleIds)){
+            $role = Role::findOne($this->roleId);
+            if ($role->slug != 'caiwu') {
+                throw new HttpException(401, '无权访问', 401);
+            }
+        }
+        return true;
+    }
+    
+    
     /**
      * 付款确认表单
      */
@@ -41,10 +64,6 @@ class PayConfirmController extends BaseController
     {
         $model = new PayConfirmForm();
         $post['PayConfirmForm'] = \Yii::$app->request->post();
- //       $files = $model->saveUploadFile('pics');
-//        if($files) {
-//            $data['BackConfirmForm']['pics']  = $files;
-//        }
         if ($model->load($post) && $model->validate() && $model->saveConfirm()) {
             return $this->_return('');
         } else {
@@ -57,7 +76,7 @@ class PayConfirmController extends BaseController
      */
     public function actionList()
     {
-        $pay = PayLogic::instance()->canConfirmList();
+        $pay = PayLogic::instance()->canConfirmList($this->arrPersonRoleInfo['permissionOrgIds']);
         return $this->_return($pay);
     }
 
