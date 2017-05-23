@@ -47,6 +47,7 @@ const Mysend=React.createClass({
             start_time,
             end_time,
             currentPage,
+            perPage,
             pageCount,
             modalVisible,
             modalType,
@@ -72,11 +73,15 @@ const Mysend=React.createClass({
                 }));
             },
             onSorting(sorting,filterType){
-                let payload = filterType == null ? '': {
-                                            type:3,
-                                            ob:'',
-                                            at:filterType
-                                        };
+                let payload = {
+                                    type:type,
+                                    keyword: keywords,
+                                    start_time: start_time,
+                                    end_time: end_time,
+                                    sort:sorting,
+                                    at:filterType,
+                                    page_size:perPage,
+                                };
 
                 this.dispatch({
                     type: 'mysend/filtersort',

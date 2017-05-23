@@ -6,6 +6,14 @@ import styles from './search.less';
 import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
 
 const LoadDetailsList= React.createClass({
+    // 筛选事件
+    handleChange(pagination, filters, sorter) {
+        let sorting = null;
+        if (sorter.order != null) {
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
+        }
+        this.props.onSorting(sorting);
+    },
     paginationChange(page,pageNumber){
         const { perPage,key,time }  = this.props.Statistics;
         this.props.dispatch({
@@ -19,6 +27,7 @@ const LoadDetailsList= React.createClass({
         })
     },
     onShowSizeChange(current,pageSize){
+        //console.log(pageSize);
         const { key,time }  = this.props.Statistics;
         this.props.dispatch({
             type:'Statistics/query',
@@ -33,7 +42,13 @@ const LoadDetailsList= React.createClass({
 
     render(){
 
-        const { dataSource,keyword,time,type,current,totalCount,pageSize,pageCount,perPage,currentPage,loading,total,sortingType} = this.props.Statistics;
+        const { dataSource,keyword,time,type,current,totalCount,pageSize,pageCount,perPage,currentPage,loading,total,sort} = this.props.Statistics;
+            let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }
 
         const columns = [{
             title: '序号',
@@ -47,7 +62,7 @@ const LoadDetailsList= React.createClass({
             dataIndex: 'get_money_time',
             key: 'get_money_time',
             sorter: (a, b) => a.get_money_time - b.get_money_time,
-                sortOrder:sortingType == "date" ? sorting : "",
+            sortOrder:sortingType,
         },{
             title: '借款人',
             dataIndex: 'person',
@@ -74,12 +89,12 @@ const LoadDetailsList= React.createClass({
                 </p>
             )
         }]
-        const pagination = {
+        /*const pagination = {
             total,
             current,
             pageSize: 20,
             onChange: ()=>{},
-        };
+        };*/
 
         return (
             <div>
@@ -89,6 +104,7 @@ const LoadDetailsList= React.createClass({
                         loading={loading}
                         dataSource={dataSource}
                         rowKey={record => record.id}
+                        onChange = {this.handleChange}
                         pagination={false}
                         size="middle"
                         bordered

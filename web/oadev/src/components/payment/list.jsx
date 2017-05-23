@@ -17,13 +17,13 @@ const PaymentdList= React.createClass({
     handleChange(pagination, filters, sorter) {
         let sorting = null;
         let filterType = null;
-        if (filters != null) {
+        if (Object.keys(filters).length > 0) {
             filterType  = filters.type_name[0];
         }else{
             filterType = '';
         }
         if (sorter.order != null) {
-          sorting = sorter.order != 'descend' ? 'desc':'asc';
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -92,9 +92,8 @@ const PaymentdList= React.createClass({
                 sortingType = "ascend";
             }else if(sort == "desc"){
                 sortingType = "descend";
-            }else{
-                sortingType = false;
             }
+
         const columns = [{
             title: '序号',
             dataIndex: 'id',
@@ -181,7 +180,6 @@ const PaymentdList= React.createClass({
                     rowKey={record => record.id}
                     onChange={this.handleChange}
                     pagination={false}
-                    filterMultiple={false}
                     size="middle"
                     bordered />
                   <Pagination showQuickJumper current = { current } defaultPageSize={10} defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>

@@ -51,13 +51,13 @@ const Payment =React.createClass({
             },
             onSorting(sorting,filterType){
                 let payload =   {
-                                        type:filterType,
-                                        keyword: keyword,
-                                        begin_time: begin_time,
-                                        end_time: end_time,
-                                        sort:sorting,
-                                        type:filterType,
-                                        perPage:perPage,
+                                    type:filterType,
+                                    keyword: keyword,
+                                    begin_time: begin_time,
+                                    end_time: end_time,
+                                    sort:sorting,
+                                    type:filterType,
+                                    perPage:perPage,
                                 };
 
                 this.dispatch({

@@ -9,11 +9,11 @@ const AlreadyApproveList = React.createClass({
         let sorting = null;
         let filterType = null;
 
-        if (filters.type_value.length > 0) {
+        if (Object.keys(filters).length > 0) {
             filterType  = filters.type_value;
         }
         if (sorter.order != null) {
-          sorting = sorter.order != 'descend' ? 'desc':'asc';
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -59,10 +59,7 @@ const AlreadyApproveList = React.createClass({
                 sortingType = "ascend";
             }else if(sort == "desc"){
                 sortingType = "descend";
-            }else{
-                sortingType = false;
             }
-
         const columns = [{
             title: '序号',
             dataIndex: 'id',

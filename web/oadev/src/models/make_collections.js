@@ -19,7 +19,7 @@ export default {
     keyword:'',
     money:'',
     type:'',
-    sort:false,
+    sort:'',
     dataSource:[],
     perPage:null,
     modalVisible: false,

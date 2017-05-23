@@ -10,14 +10,14 @@ const CcsendList = React.createClass({
         let sorting = "";
         let filterType = null;
 
-        if (filters.type_value.length > 0) {
+        if (Object.keys(filters).length > 0) {
             filterType  = filters.type_value;
         }else{
             filterType  = [];
         }
 
         if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 'desc':'asc';
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
         this.props.onSorting(sorting, filterType);
     },

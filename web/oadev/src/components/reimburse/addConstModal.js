@@ -7,6 +7,11 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 const AddConstModal = React.createClass({
+    getInitialState(){
+        return {
+          index:null
+        };
+    },
     handleonOK(){
         const {
             getFieldDecorator,
@@ -28,9 +33,15 @@ const AddConstModal = React.createClass({
               payload: {
                     row:row,
                     type:1,
+                    index:this.state.index,
                     constPersonal:constPersonal
                 }
             });
+        });
+    },
+    hanleSelect(value, option){
+        this.setState({
+            index:option.props.index
         });
     },
     onCancel(){
@@ -61,7 +72,11 @@ const AddConstModal = React.createClass({
 
         const { getFieldDecorator,getFieldsValue } = this.props.form;
         const {constPersonal} = this.props.reimBurse;
-        const  personalOptions = constPersonal.map(data =><Option key={data.id}>{data.name}</Option>);
+        let personalOptions ="";
+        if(constPersonal != null){
+            personalOptions = constPersonal.map(data => <Option key={data.id}>{data.name}</Option>);
+        }
+
 
         return(
                 <Modal {...modalOpts} >
@@ -70,7 +85,7 @@ const AddConstModal = React.createClass({
                                     {getFieldDecorator('audit_personal', {
                                         rules: [{ required: true, message: '请选择审核人!' }]
                                     })(
-                                        <Select className="t-l" labelInValue placeholder="请选择" size="large" style={{ width: '100%' }}>
+                                        <Select className="t-l" labelInValue placeholder="请选择" size="large" style={{ width: '100%' }} onSelect = {this.hanleSelect}>
                                             {personalOptions}
                                         </Select>
                                     )}

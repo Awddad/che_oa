@@ -9,15 +9,9 @@ import Confirm from '../details/confirmRepayment';
 const MakeCollectionsList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
         let sorting = "";
-        let filterType = null;
-
-        /*if (filters != null) {
-            filterType  = filters.type_name[0];
-        }*/
         if (sorter.order != undefined) {
-          sorting = sorter.order;
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
         this.props.onSorting(sorting);
     },
@@ -66,7 +60,15 @@ const MakeCollectionsList = React.createClass({
     },
     render(){
 
-        const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sortingType} = this.props.make_collections;
+        const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sort} = this.props.make_collections;
+        let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }else{
+                sortingType = false;
+            }
 
         const columns = [{
             title: '序号',
@@ -80,7 +82,7 @@ const MakeCollectionsList = React.createClass({
             dataIndex: 'create_time',
             key: 'create_time',
             sorter: (a, b) => a.create_time - b.create_time,
-            filteredValue: repayment == null ? []:repayment,
+            sortOrder:sortingType
         },{
             title:'类型',
             dataIndex:'type_name',
@@ -122,9 +124,7 @@ const MakeCollectionsList = React.createClass({
         };
 
         const {RepayMent_Detail,isShowRepaymentConfirm} = this.props.Detail;
-        const { sort } = this.props.make_collections;
         const GenConfirm = () => <Confirm isShowRepaymentConfirm={ isShowRepaymentConfirm } details={RepayMent_Detail}/>;
-        console.log(this.props.make_collections);
         return (
             <div>
                 <Button type="primary" className={styles.mt_lg}>导出列表</Button>
@@ -134,7 +134,6 @@ const MakeCollectionsList = React.createClass({
                     dataSource={dataSource}
                     rowKey={record => record.id}
                     onChange={this.handleChange}
-                    sortOrder = {sort}
                     pagination={false}
                     size="middle"
                     bordered />
