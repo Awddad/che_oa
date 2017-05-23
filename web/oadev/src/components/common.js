@@ -83,9 +83,33 @@ export const key = ()=>{
     return key;
 }
 
-export const host = ()=>{
-    let host = "http://192.168.1.128:8010";
-    return host;
+export const host = "http://192.168.1.128:8010";
+
+export const deff_time = (time)=> {
+    let s = time % 60;
+    let m = Math.floor((time/60)%60);
+    let h = Math.floor((time/3600)%24);
+    let d = Math.floor((time/3600)/24);
+    let result_time=null;
+    if(d <= 0){
+      if(h<=0){
+        if(m>0){
+            result_time =  m + "分" + s +'秒';
+        }else{
+            if(s>0){
+              result_time = s +'秒';
+            }else{
+              result_time = 0;
+            }
+        }
+      }else{
+        result_time = h + "小时" + m + "分" + s +'秒';
+      }
+    }else{
+      result_time =d + "天"+ h + "小时" + m + "分" + s +'秒';
+    }
+
+    return result_time;
 }
 
 export const userLogin = () =>{

@@ -29,6 +29,7 @@ const Waitme = React.createClass({
             sorging,
         } = this.props.waitme;
 
+
         const WaitmeListProps ={
             total:total,
             current:current,

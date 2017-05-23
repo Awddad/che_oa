@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
-
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
+import {chkPms,chkPmsForBlock,chkPmsForInlineBlock} from '../common';
 import styles from './search.less';
 import Confirm from '../details/confirmRepayment';
 
@@ -10,17 +10,16 @@ const MakeCollectionsList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
 
-        const { type,onSorting }=this.props.payment;
         let sorting = "";
         let filterType = null;
 
-        if (filters.type_name.length > 0) {
+        /*if (filters != null) {
             filterType  = filters.type_name[0];
-        }
+        }*/
         if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+          sorting = sorter.order;
         }
-        this.props.onSorting(sorting, filterType);
+        this.props.onSorting(sorting);
     },
     ConfirmClick(event){
         let apply_id =event.target.getAttribute("data-applyid");
@@ -86,12 +85,12 @@ const MakeCollectionsList = React.createClass({
             title:'类型',
             dataIndex:'type_name',
             key:'type_name',
-            filters:[
+           /* filters:[
                 {text:'报销', value:'1'},
                 {text:'借款', value:'2'},
                 {text:'还款', value:'3'},
             ],
-            filteredValue: repayment,
+            filteredValue: repayment,*/
         },{
             title: '审批单编号',
             dataIndex: 'apply_id',
@@ -123,8 +122,9 @@ const MakeCollectionsList = React.createClass({
         };
 
         const {RepayMent_Detail,isShowRepaymentConfirm} = this.props.Detail;
+        const { sort } = this.props.make_collections;
         const GenConfirm = () => <Confirm isShowRepaymentConfirm={ isShowRepaymentConfirm } details={RepayMent_Detail}/>;
-
+        console.log(this.props.make_collections);
         return (
             <div>
                 <Button type="primary" className={styles.mt_lg}>导出列表</Button>
@@ -133,6 +133,8 @@ const MakeCollectionsList = React.createClass({
                     loading={loading}
                     dataSource={dataSource}
                     rowKey={record => record.id}
+                    onChange={this.handleChange}
+                    sortOrder = {sort}
                     pagination={false}
                     size="middle"
                     bordered />

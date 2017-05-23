@@ -5,8 +5,10 @@ import { connect } from 'dva';
 import { Icon, Button, Row, Col,message,Steps} from 'antd';
 import Pagetitle from '../public/pagetitle';
 import styles from '../../routes/style.less';
+import { deff_time } from '../common';
 import cs from 'classnames';
 const Step = Steps.Step;
+
 
 const StepDetails = React.createClass({
     getInitialState(){
@@ -14,13 +16,22 @@ const StepDetails = React.createClass({
 
         };
     },
+    Des(a,b,c){
+
+    },
     render(){
         const stepdata = this.props.stepdata;
         let step = '',resultSteps = '';
         let name='',copypersonal='',createTime='',des='',applyID='';
         if(Object.keys(stepdata).length > 0){
-            step = stepdata.flow.map(data => <Step key={Math.floor(Math.random()*1000000)} title={data.title} description={ data.name +"  "+ data.date + data.org + data.diff_time } /> );
-            resultSteps =   (<Steps current={1} progressDot>
+            step = stepdata.flow.map(data => <Step key={Math.floor(Math.random()*1000000)} title={data.title} description={
+                (<div>
+                    <div>{data.name+ "  " + data.date}</div>
+                    <div>{data.org}</div>
+                    <div>{data.status == 3 ? data.diff_time==0?'':"耗费："+ deff_time(data.diff_time) : data.diff_time==0?'':"已等待："+ deff_time(data.diff_time)}</div>
+                    <div>{ data.des==''?'':"说明："+ data.des}</div>
+                </div>)} /> );
+            resultSteps =   (<Steps current={stepdata.step} progressDot>
                                 {step}
                             </Steps>);
 

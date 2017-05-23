@@ -17,7 +17,6 @@ export default {
     at:'',
     sort:'',
     sortingType:'',
-    repayment:[],
     current: 1,
     currentItem: {},
     modalVisible: false,
@@ -31,8 +30,6 @@ export default {
             type: 'query',
             payload: {
                 type: 2,
-                at: location.query.at == null? "" : location.query.at,
-                sort:location.query.sort == null? "" : location.query.sort,
                 page_size:10,
             },
           });
@@ -66,7 +63,11 @@ export default {
                     keywords: payload.keywords,
                     start_time: payload.start_time,
                     end_time: payload.end_time,
-                    dataSource:data.data.res
+                    total: data.data.page.totalCount,
+                    current: data.data.page.currentPage,
+                    perPage:data.data.page.perPage,
+                    dataSource:data.data.res,
+                    current:1
                 }
             });
         }
@@ -80,6 +81,9 @@ export default {
                     keywords: payload.keywords,
                     start_time: payload.start_time,
                     end_time: payload.end_time,
+                    current: data.data.page.currentPage,
+                    total:data.data.page.totalCount,
+                    perPage:data.data.page.perPage,
                     dataSource:data.data.res,
                     at:payload.at
                 }

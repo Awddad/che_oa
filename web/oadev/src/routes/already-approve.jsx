@@ -18,6 +18,7 @@ const AlreadyApprove =React.createClass({
             current,
             currentItem,
             at,
+            sort,
             type,
             keywords,
             start_time,
@@ -28,6 +29,7 @@ const AlreadyApprove =React.createClass({
             sorging,
         } = this.props.alreadyApprove;
 
+
         const alreadyListProps ={
             total:total,
             current:current,
@@ -37,6 +39,8 @@ const AlreadyApprove =React.createClass({
             start_time:start_time,
             end_time:end_time,
             dataSource:res,
+            filteredValue:at,
+            sortOrder:sort,
             onPageChange(currentPage){
                 dispatch(routerRedux.push({
                     pathname: '/already-approve',
@@ -47,11 +51,15 @@ const AlreadyApprove =React.createClass({
                   }));
                 },
                 onSorting(sorting,filterType){
-                    let payload = filterType == null ? '': {
-                                                type:2,
-                                                ob:'',
-                                                at:filterType
-                                            };
+                    filterType = filterType || [];
+                    let payload =   {
+                                        type:type,
+                                        keywords: keywords,
+                                        start_time: start_time,
+                                        end_time: end_time,
+                                        sort:sorting,
+                                        at:filterType
+                                    };
 
                     this.dispatch({
                         type: 'alreadyApprove/filtersort',
@@ -74,7 +82,10 @@ const AlreadyApprove =React.createClass({
                     payload: {
                         type: 2,
                         keywords:fieldsValue.keywords,
-                        sorging:sorging,
+                        sort:sort,
+                        at:at,
+                        page:1,
+                        page_size:perPage,
                         start_time:start_time,
                         end_time:end_time,
                     },
