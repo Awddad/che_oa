@@ -19,7 +19,7 @@ const AlreadyApproveList = React.createClass({
         this.props.onSorting(sorting, filterType);
     },
     paginationChange(page,pageNumber){
-        const { type,perPage,keywords,start_time,end_time,ob,status,at }  = this.props.alreadyApprove;
+        const { type,perPage,keywords,start_time,end_time,sort,status,at }  = this.props.alreadyApprove;
         this.props.dispatch({
             type:'alreadyApprove/query',
             payload:{
@@ -29,14 +29,14 @@ const AlreadyApproveList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
+                sort:sort,
                 status:status,
                 at:at
             }
         })
     },
     onShowSizeChange(current,pageSize) {
-        const { type,keywords,start_time,end_time,ob,status,at }  = this.props.alreadyApprove;
+        const { type,keywords,start_time,end_time,sort,status,at }  = this.props.alreadyApprove;
         this.props.dispatch({
             type:'alreadyApprove/query',
             payload:{
@@ -46,7 +46,7 @@ const AlreadyApproveList = React.createClass({
                 keywords:keywords,
                 start_time:start_time,
                 end_time:end_time,
-                ob:ob,
+                sort:sort,
                 status:status,
                 at:at
             }

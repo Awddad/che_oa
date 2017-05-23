@@ -35,7 +35,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/reimburse') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: location.query,

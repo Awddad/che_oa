@@ -32,7 +32,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/ccsend') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: {

@@ -34,7 +34,6 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
           history.listen(location => {
-            userLogin();
             if (location.pathname === '/reimbursedetail') {
                 dispatch({
                     type: 'BaoxiaoDetails',

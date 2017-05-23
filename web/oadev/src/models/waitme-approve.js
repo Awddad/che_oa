@@ -41,7 +41,6 @@ export default {
 
     effects: {
         *query({ payload }, { call, put }) {
-          userLogin();
           const { data } = yield call(query, payload);
           if (data && data.code == 200) {
             yield put({
