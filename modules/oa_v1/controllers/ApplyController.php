@@ -211,6 +211,7 @@ class ApplyController extends BaseController
 		}
 		//流程
 		$data['flow'] = $this -> getFlowData($apply);
+        $data['step'] = $apply['step'];
 		return $data;
 	}
 	/**
@@ -242,12 +243,13 @@ class ApplyController extends BaseController
 	 * 审批流程数据
 	 * @param  $apply
 	 */
-	protected function getFlowData($apply)
+	protected function getFlowData(&$apply)
 	{
 		$data = [];
 		//申请
 		$data[] = $this -> _getFlowData($this -> apply_status[0], $apply['person'], $apply['create_time'], $apply['person_id'], '', 2,$apply['create_time']);
 		$time = $apply['create_time'];
+        $apply['step'] = 0;
 		//审核
 		foreach($apply['approval'] as $v){
 			$data[] = $this -> _getFlowData(sprintf($this->approval_status[$v['is_to_me_now'] ? 3: $v['result']],$v['approval_person']),
@@ -255,14 +257,16 @@ class ApplyController extends BaseController
 											$v['approval_time'],
 											$v['approval_person_id'],
 											$v['des'],
-											$v['result'] ==0 ? (int)$v['is_to_me_now'] : $v['result']+1,
+											$step = $v['result'] ==0 ? (int)$v['is_to_me_now'] : $v['result']+1,
 											$time
 											);
 			$time = $v['approval_time'] ?  : $time;
+            $step > 0 && $apply['step']++;
 		}
 		//财务
 		if($apply['cai_wu_need'] == 2 && $apply['status'] == 4){//需要财务确认 并且轮到财务确认
 			$data[] = $this -> _getFlowData($this -> caiwu_status[1],null,null,null,null,1,$time);
+            $apply['step']++;
 		}elseif($apply['cai_wu_need'] == 2 && $apply['status'] == 99){//需要财务确认 并且申请完成
 			$data[] = $this -> _getFlowData($this -> caiwu_status[2],
 			 								$apply['cai_wu_person'],
@@ -273,12 +277,14 @@ class ApplyController extends BaseController
 											$time
 											);
 			$time = $apply['cai_wu_time'] ?  : $time;
+            $apply['step']++;
 		}elseif($apply['cai_wu_need'] == 2){//需要财务确认 并且未轮到财务确认
 			$data[] = $this -> _getFlowData($this -> caiwu_status[0],null,null,null,null, 0,$time);
 		}
 		//完成
 		$data[] = $this -> _getFlowData($this -> apply_status[1],null,$time,null,null,$apply['status'] == 99 ? 2:0,$apply['create_time']);
-		
+		$apply['status'] == 99 && $apply['step']++;
+        
 		return $data;
 	}
 	protected function _getFlowData($title,$name,$time,$person_id,$des,$status,$prev_time)
