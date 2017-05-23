@@ -36,6 +36,8 @@ class BaseController extends Controller
     
     public $arrPersonRoleInfo = [];//用户的角色和权限信息 - 菜单权限 - 数据权限
     
+    public $roleId ;//用户的角色 数据权限
+    
     /**
      *不做登录校验的请求的白名单 controller/action格式
      * @var array 
@@ -136,6 +138,7 @@ class BaseController extends Controller
     {
 
         $result = false;
+        $this->roleId = $intRoleId;
         $personId = $this->arrPersonInfo->person_id;
         $strCacheKey = 'role_info_' . $strOs . '_' . $intRoleId . '_' . $personId;
         if($blnForce == false)//不强制刷新的时候 从缓存中获取

@@ -33,7 +33,6 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/mysend') {
-          userLogin();
           dispatch({
             type: 'query',
             payload: {

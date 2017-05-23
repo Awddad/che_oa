@@ -6,6 +6,7 @@ import Top from './Top';
 import Left from './Left';
 import Menu from './Menu';
 import Bottom from './Bottom';
+import { userLogin } from '../common';
 const { Header, Content, Footer, Sider } = Layout;
 
 class Main extends React.Component {
@@ -23,6 +24,7 @@ class Main extends React.Component {
         });
     }
     render(){
+        userLogin();
         const children = this.props.children;
         return (
                 <Layout className="warpper">
