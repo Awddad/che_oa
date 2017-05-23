@@ -100,6 +100,7 @@ class ApprovalLog extends \yii\db\ActiveRecord
      */
     public function setApprovalPerson()
     {
+        Yii::error('11111111');
         $this->is_to_me_now = true;
         return $this->save();
     }
@@ -118,11 +119,13 @@ class ApprovalLog extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
+            Yii::error(print_r($this->scenario,true));
+
             switch ($this->scenario) {
                 case self::SCENARIO_FAIL;
                     return $this->apply->approvalFail();
                     break;
-                case self::STATUS_PASS;
+                case self::SCENARIO_PASS;
                     $nextApproval = $this->nextApprovalLog;
                     return ($nextApproval->setApprovalPerson() && $this->apply->approvalPass($nextApproval->approval_person));
                     break;
