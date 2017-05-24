@@ -80,7 +80,7 @@ class BackConfirmForm extends CaiWuShouKuan
         return implode(",", $data);
     }
 
-    public function saveConfirm()
+    public function saveConfirm($person)
     {
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
@@ -92,6 +92,9 @@ class BackConfirmForm extends CaiWuShouKuan
             }
             $apply = Apply::findOne($this->apply_id);
             $apply->status = 99; //订单完成
+            $apply->cai_wu_person_id = $person['person_id'];
+            $apply->cai_wu_time = time();
+            $apply->cai_wu_person = $person['person_name'];
             $apply->save();
             $person = Person::findOne($apply->person_id);
             $param = [];
