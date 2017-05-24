@@ -120,7 +120,7 @@ const RepayMent = React.createClass({
     //审核人
     const auditingLi =  constdata.map(function(data,index) {
                               return (
-                                  <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" name={data.name} />
+                                  <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" data-key="" name={data.name} />
                               );
                           });
     //抄送人

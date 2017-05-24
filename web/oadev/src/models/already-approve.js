@@ -16,6 +16,7 @@ export default {
     total: null,
     at:'',
     sort:'',
+    status:'',
     sortingType:'',
     current: 1,
     perPage:'',

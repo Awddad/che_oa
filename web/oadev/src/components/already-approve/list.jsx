@@ -6,16 +6,16 @@ import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../c
 const AlreadyApproveList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        let sorting = null;
-        let filterType = null;
+        let sorting = null,filterType = null,filterStatus = null;
 
         if (Object.keys(filters).length > 0) {
             filterType  = filters.type_value;
+            filterStatus = filters.next_des;
         }
         if (sorter.order != null) {
           sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
-        this.props.onSorting(sorting, filterType);
+        this.props.onSorting(sorting, filterType ,filterStatus);
     },
     paginationChange(page,pageNumber){
         const { type,perPage,keywords,start_time,end_time,sort,status,at }  = this.props.alreadyApprove;
@@ -108,7 +108,13 @@ const AlreadyApproveList = React.createClass({
             title:'状态',
             dataIndex:'next_des',
             key:'next_des',
-
+            filters:[
+                {text:'审核中', value:'1'},
+                {text:'财务确认中', value:'2'},
+                {text:'撤销', value:'3'},
+                {text:'审核不通过', value:'4'},
+                {text:'完成', value:'5'},
+            ],
         },{
             title:'操作',
             dataIndex:'operation',

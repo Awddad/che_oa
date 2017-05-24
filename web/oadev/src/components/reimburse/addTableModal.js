@@ -78,7 +78,8 @@ const AddTableModal = React.createClass({
                             <FormItem {...formItemLayout} label="报销金额" hasFeedback>
                                 {getFieldDecorator('money', {
                                     rules: [
-                                    {required: true, message: '请输入报销金额!'}
+                                    {required: true, message: '请输入报销金额!'},
+                                    { pattern:/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,message:'金额格式错误!'},
                                     ]
                                 })(
                                     <Input placeholder="请输入金额" />

@@ -9,17 +9,12 @@ import { message} from 'antd';
 // 1. Initialize
 const app = dva({
   onError(error,dispatch) {
-    if(error.response && error.response.status==401){
-      error.response.json().then(function(data) {
+    if(error.response && error.response.code==401){
         message.error('登录超时，请重新登录');
         setTimeout(function(){
-          dispatch(routerRedux.push({
-            pathname: data.exceptionCode == 100?"/":"http://test.sso.checheng.net/login.php"
-          }));
-        },1500);
-      });
-    }else if(error.response && error.response.status==403){
-      //message.destroy();
+          window.location.href=error.response.data.login_url;
+        },800);
+    }else if(error.response && error.response.code==403){
       message.error('没有 '+error.response.url+' 权限，请联系管理员',4);
     }else{
       console.log(error);

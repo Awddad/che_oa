@@ -128,7 +128,7 @@ const ApplyLoan = React.createClass({
       });
   },
   beforeImgUpload(file,fileList) {
-    const size = 2097152;
+    const size = 20971520;
     const fileName = file.name;
     const type = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
     const types = acceptImgFormat.toString().split(',');
@@ -141,39 +141,12 @@ const ApplyLoan = React.createClass({
         }
       }
       if (b === false) {
-        message.error(`上传文件格式错误!只支持[${acceptImgFormat}]`);
+        message.error(`上传文件格式错误!只支持[${acceptImgFormat}]`,4);
         return false;
       }
 
       if (file.size > size) {
-        message.error('上传图片大小超过限制!最多2M');
-        return false;
-      }
-      return true;
-    }
-    message.error('上传文件格式错误!');
-    return false;
-  },
-  beforeFileUpload(file,fileList) {
-    const size = 5242880;
-    const fileName = file.name;
-    const type = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-    const types = acceptImgFormat.toString().split(',');
-    if (types.length > 0) {
-      let b = false;
-      for (let i = 0; i < types.length; i++) {
-        if (types[i] === type) {
-          b = true;
-          break;
-        }
-      }
-      if (b === false) {
-        message.error(`上传文件格式错误!只支持[${acceptImgFormat}]`);
-        return false;
-      }
-
-      if (file.size > size) {
-        message.error('上传文件大小超过限制!最多5M');
+        message.error('上传图片大小超过限制!最多20M');
         return false;
       }
       return true;
@@ -280,7 +253,8 @@ const ApplyLoan = React.createClass({
                     valuePropName:'value',
                     rules: [
                       { required: true, message: '请输入借款金额!'},
-                      { pattern:/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,message:'金额格式错误!'}
+                      { pattern:/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,message:'金额格式错误!'},
+                      { max:13, message:'金额格式错误!'}
                     ]
                 })(
                     <Input placeholder="请输入" />
@@ -294,18 +268,25 @@ const ApplyLoan = React.createClass({
                         {cardOptions}
                     </Select>
                 )}
-                <a className={cs('ml-md','ant-col-sm-7')} href="javascript:;" onClick={this.showcardModal}>需要借款到其他银行卡？</a>
+                <div className={cs('ml-md','ant-col-sm-7')}><a href="javascript:;" onClick={this.showcardModal}>需要借款到其他银行卡？</a></div>
             </FormItem>
             <FormItem {...formItemLayout} label="事由">
                 {getFieldDecorator('des',{
-                    rules: [{ required: true, message: '请输入事由!'}]
+                    rules: [
+                      { required: true, message: '请输入事由!'},
+                      { max:600, message:'输入字数超过最大限制!'}
+                    ]
                 })(
                    <Input placeholder="请输入事由" type="textarea" rows="4" />
                 )}
             </FormItem>
-            <FormItem {...formItemLayout} label="注备">
-                {getFieldDecorator('tips')(
-                   <Input placeholder="请输入注备" type="textarea" rows="4" />
+            <FormItem {...formItemLayout} label="备注">
+                {getFieldDecorator('tips',{
+                  rules: [
+                      { max:600, message:'输入字数超过最大限制!'}
+                  ]
+                })(
+                   <Input placeholder="请输入备注" type="textarea" rows="4" />
                 )}
             </FormItem>
             <FormItem {...formItemLayout} label="上传图片">
@@ -316,11 +297,13 @@ const ApplyLoan = React.createClass({
                     multiple={true}
                     listType="picture-card"
                     supportServerRender={true}
+                    accept='jpg,png,gif'
                     fileList={imgfileList}
+                    beforeUpload={this.beforeImgUpload}
                     onPreview={this.handlePreview}
                     onChange={this.handleimgChange}
                   >
-                    {imgfileList.length >= 5 ? null : uploadButton}
+                    {imgfileList.length >= 7 ? null : uploadButton}
                   </Upload>
                 )}
                 <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>

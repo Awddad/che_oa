@@ -3,7 +3,7 @@ import { connect } from 'dva'
 import { routerRedux,Link } from 'dva/router';
 import styles from './search.less';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
-import { chkPmsForInlineBlock } from '../common';
+import { chkPms,chkPmsForInlineBlock } from '../common';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.localStorage || window.sessionStorage );
 
@@ -11,16 +11,15 @@ const webStorage = new WebStorage(window.localStorage || window.sessionStorage )
 const MysendList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-        let sorting = "";
-        let filterType = null;
-
+        let sorting = null,filterType = null,filterStatus = null;
         if (Object.keys(filters).length > 0) {
             filterType  = filters.type_value;
+            filterStatus = filters.next_des;
         }
         if (sorter.order != undefined) {
           sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
-        this.props.onSorting(sorting, filterType);
+        this.props.onSorting(sorting, filterType,filterStatus);
     },
     paginationChange(page,pageNumber){
         const { type,perPage,keywords,start_time,end_time,sort,status,at }  = this.props.mysend;
@@ -115,11 +114,13 @@ const MysendList = React.createClass({
                 dataIndex:'next_des',
                 key:'next_des',
                 filters:[
-                    {text:'待审批', value:'1'},
-                    {text:'完成', value:'2'},
+                    {text:'审核中', value:'1'},
+                    {text:'财务确认中', value:'2'},
                     {text:'撤销', value:'3'},
+                    {text:'审核不通过', value:'4'},
+                    {text:'完成', value:'5'},
                 ],
-                filteredValue: at,
+                filteredValue: status,
             },{
                 title:'操作',
                 dataIndex:'operation',
@@ -139,7 +140,7 @@ const MysendList = React.createClass({
 
 
                     return result = (<p><Link className="mr-md" to={url} style={chkPmsForInlineBlock(["wo_fa_qi_de_detail"])}>详情</Link>
-                                <span className={record.can_cancel==1?styles.show:styles.hide} data-applyid={record.apply_id} style={chkPmsForInlineBlock("wo_fa_qi_de_cancel")} onClick={this.props.handleClick}>
+                                <span className={record.can_cancel==1 && chkPms(["wo_fa_qi_de_cancel"]) ?styles.show:styles.hide} data-applyid={record.apply_id} onClick={this.props.handleClick}>
                                     <a>撤销</a>
                                 </span>
                             </p>);

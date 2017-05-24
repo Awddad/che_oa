@@ -24,7 +24,7 @@ class Main extends React.Component {
         });
     }
     render(){
-        userLogin();
+        //userLogin();
         const children = this.props.children;
         return (
                 <Layout className="warpper">
