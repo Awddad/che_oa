@@ -229,7 +229,7 @@ class ApplyLogic extends BaseLogic
 	public function getApproval($apply_id)
 	{
 		$model = new appmodel\ApprovalLog();
-		$approval = $model::find() -> where(['apply_id' => $apply_id]) -> asArray() -> all();
+		$approval = $model::find() -> where(['apply_id' => $apply_id]) -> orderBy('steep') -> asArray() -> all();
 		return $approval;
 	}
 	/**
