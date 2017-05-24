@@ -13,7 +13,9 @@ export default {
     copyPersonal:null,//抄送联系人
     carddata:[],//选择的的银行卡
     constdata:[],//选择的审批人
+    constdisabled:[],//审核人已选择的
     copydata:[],//选择的抄送人
+    copydisabled:[],//抄送人已选择的
     resultbxtype:[],
     CardDetail:{},
     BackList:[],
@@ -137,7 +139,7 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
-      payload.constPersonal.splice(payload.index,1);
+      //payload.constPersonal.splice(payload.index,1);
       yield put({
           type: 'updateConst',
           payload: {
@@ -151,7 +153,7 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
-      payload.copyPersonal.splice(payload.index,1);
+      //payload.copyPersonal.splice(payload.index,1);
       yield put({
           type: 'updateCopy',
           payload: {

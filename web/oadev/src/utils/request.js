@@ -5,11 +5,11 @@ function parseJSON(response) {
 }
 
 function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.code==200){
     return response;
-}
-
-  const error = new Error(response.statusText);
+  }
+  //console.log(response);
+  const error = new Error(response);
   error.response = response;
   throw error;
 }
@@ -25,8 +25,8 @@ export default function request(url, options) {
   options = options || {};
   options = {...options,credentials: 'same-origin'};
   return fetch(url, options)
-    .then(checkStatus)
     .then(parseJSON)
+    .then(checkStatus)
     .then(data => ({ data }))
     //.catch(err => ({ err }));
 }

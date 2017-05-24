@@ -12,7 +12,7 @@ const confirm = Modal.confirm;
 const Mysend=React.createClass({
     // 撤销
     showConfirm(event) {
-        let { personID,ob,at,total,perPage } = this.props.mysend;
+        let { personID,status,at,sort,total,perPage } = this.props.mysend;
         let apply_id = event.target.getAttribute("data-applyid") == null ? event.target.parentNode.getAttribute("data-applyid") : event.target.getAttribute("data-applyid");
         const link = this.props;
         confirm({
@@ -26,7 +26,8 @@ const Mysend=React.createClass({
                         person_id:personID,
                         type:3,
                         at:at,
-                        ob:ob,
+                        sort:sort,
+                        status:status,
                         pageCount:total,
                         page_size:10
                     }
@@ -42,6 +43,8 @@ const Mysend=React.createClass({
             current,
             currentItem,
             at,
+            sort,
+            status,
             type,
             keywords,
             start_time,
@@ -72,7 +75,7 @@ const Mysend=React.createClass({
                     },
                 }));
             },
-            onSorting(sorting,filterType){
+            onSorting(sorting,filterType,filterStatus){
                 let payload = {
                                     type:type,
                                     keyword: keywords,
@@ -80,9 +83,9 @@ const Mysend=React.createClass({
                                     end_time: end_time,
                                     sort:sorting,
                                     at:filterType,
+                                    status:filterStatus,
                                     page_size:perPage,
                                 };
-
                 this.dispatch({
                     type: 'mysend/filtersort',
                     payload: payload
@@ -111,8 +114,9 @@ const Mysend=React.createClass({
                     payload: {
                         type:type,
                         keywords:fieldsValue.keywords,
-                        ob:ob,
+                        sort:sort,
                         at:at,
+                        status:status,
                         page:1,
                         page_size:perPage,
                         start_time:start_time,

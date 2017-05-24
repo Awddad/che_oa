@@ -5,7 +5,7 @@ const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
 export const chkPms = (pids)=>{
   //return true;
   let hasPms = false;
-  let _value = getCookie('adminPms') || webStorage.getItem('adminPms');
+  let _value = webStorage.getItem('adminPms') || getCookie('adminPms');
   if(!(pids instanceof Array)) return hasPms;
   if(_value==undefined || _value==null || _value.length==0) return hasPms;
   let adminPms = _value.split(',');
@@ -78,8 +78,8 @@ export const delCookie = (name)=>{
         if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }
 
-export const key = ()=>{
-    let key = "key"+Math.floor(Math.random()*500000);
+export const key = (a)=>{
+    let key = "key"+Math.floor(Math.random()*a);
     return key;
 }
 

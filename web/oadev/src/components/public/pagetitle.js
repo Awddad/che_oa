@@ -14,7 +14,7 @@ const Pagetitle = React.createClass({
     }
     return(
       <h1 className='page-title'>
-        <a onClick={this.handlelocation}>{icon}</a>
+        <a onClick={this.handlelocation} style={{fontSize:30}}>{icon}</a>
         <strong>{this.props.title}</strong>
       </h1>
     )

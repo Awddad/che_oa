@@ -42,13 +42,13 @@ const DetailImg = React.createClass({
         };
 
         const imgdata = this.props.imgdata || [];
-        let imgli = '';
+        let imgli = '--';
         if(imgdata.length > 0){
-            imgli = imgdata.map(data =>  data.length > 0 ?
-                (<li key={key} style={{marginRight:10}}>
+            imgli = imgdata.map(data =>
+                (<li key={key(500000)} style={{marginRight:10}}>
                     <img width="100" height="120" src={host + data} />
                     <a href="javascript:;" onClick={this.handleimgclick}><Icon type="eye-o" /></a>
-                </li>) : ''
+                </li>)
             );
         }
 

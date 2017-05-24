@@ -24,13 +24,36 @@ const StepDetails = React.createClass({
         let step = '',resultSteps = '';
         let name='',copypersonal='',createTime='',des='',applyID='';
         if(Object.keys(stepdata).length > 0){
-            step = stepdata.flow.map(data => <Step key={Math.floor(Math.random()*1000000)} title={data.title} description={
-                (<div>
-                    <div>{data.name+ "  " + data.date}</div>
-                    <div>{data.org}</div>
-                    <div>{data.status == 3 ? data.diff_time==0?'':"耗费："+ deff_time(data.diff_time) : data.diff_time==0?'':"已等待："+ deff_time(data.diff_time)}</div>
-                    <div>{ data.des==''?'':"说明："+ data.des}</div>
-                </div>)} /> );
+            let status = stepdata.status;
+            step = stepdata.flow.map(data =>
+                <Step key={Math.floor(Math.random()*1000000)} title={
+                        data.status == 1 && status == 3 ?
+                            (<div className="cred">{data.title}</div>)
+                        :
+                            (<div>{data.title}</div>)
+                    }
+                    description={
+                        status != 3 ?
+                            (<div>
+                                <div>{data.name+ "  " + data.date}</div>
+                                <div>{data.org}</div>
+                                <div>{
+                                    data.status == '1' ?
+                                    data.diff_time==0 ? '':"已等待："+ deff_time(data.diff_time)
+                                    :
+                                    data.diff_time==0 ? '':"耗费："+ deff_time(data.diff_time)
+                                }</div>
+                                <div>{ data.des==''?'':"说明："+ data.des}</div>
+                            </div>)
+                        :
+                                    data.status != 1 ?
+                                        (<div><div>{data.name+ "  " + data.date}</div>
+                                            <div>{data.org}</div></div>)
+                                    :
+                                        (<div><div>{data.name+ "  " + data.date}</div>
+                                        <div>{data.org}</div>
+                                        <div className="cred">申请人撤销申请</div></div>)
+                } />);
             resultSteps =   (<Steps current={stepdata.step} progressDot>
                                 {step}
                             </Steps>);
