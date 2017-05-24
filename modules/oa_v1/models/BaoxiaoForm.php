@@ -1,6 +1,8 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use yii\helpers\ArrayHelper;
+
 use Yii;
 use app\models as appmodel;
 use yii\web\UploadedFile;
@@ -44,10 +46,10 @@ class BaoxiaoForm extends BaseForm
 	public function validatePersons($attribute, $params)
 	{
 		if (!$this->hasErrors()) {
-			foreach($this->$attribute as $k=>$v){
-				$tmp[$k] = @$v['steep'];
+			if($attribute == 'approval_persons'){
+				$this->$attribute = ArrayHelper::index($this->$attribute,'steep');
+				ksort($this->$attribute);
 			}
-			array_multisort($this->$attribute, $tmp);
 			$validator = new \yii\validators\NumberValidator();
 			$validator -> integerOnly = true;
 			foreach($this->$attribute as &$v){
