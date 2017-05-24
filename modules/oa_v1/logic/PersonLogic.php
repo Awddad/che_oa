@@ -55,7 +55,7 @@ class PersonLogic extends BaseLogic
     
     /**
      * @param Person $person
-     * @return string
+     * @return array
      */
     public function getOrgName($person)
     {
