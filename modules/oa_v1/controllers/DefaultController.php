@@ -33,7 +33,7 @@ class DefaultController extends BaseController
      */
     public function actionGetPerson()
     {
-        $person = PersonLogic::instance()->getSelectPerson();
+        $person = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo['person_id']);
         return $this->_return($person);
     }
 

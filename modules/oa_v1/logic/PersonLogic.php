@@ -33,10 +33,14 @@ class PersonLogic extends BaseLogic
 
     /**
      * 获取筛选
+     *
+     * @param $personId
+     *
+     * @return array
      */
-    public function getSelectPerson()
+    public function getSelectPerson($personId)
     {
-        $persons = Person::find()->orderBy('person_id desc')->all();
+        $persons = Person::find()->where(['!=', 'person_id', $personId])->orderBy('person_id desc')->all();
         $data = [];
         foreach ($persons as $person) {
             $orgArr = $this->getOrgName($person);
