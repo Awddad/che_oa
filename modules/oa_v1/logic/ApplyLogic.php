@@ -133,7 +133,7 @@ class ApplyLogic extends BaseLogic
 		}
 		
 		$_query = clone $query;
-		var_dump($_query -> createCommand()->getRawSql());die();
+		//var_dump($_query -> createCommand()->getRawSql());die();
 		$total = $_query -> count();
 		//var_dump($total);die();
 		$pagination = new Pagination(['totalCount' => $total]);
