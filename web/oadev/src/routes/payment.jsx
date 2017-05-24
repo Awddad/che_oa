@@ -19,10 +19,12 @@ const Payment =React.createClass({
             currentItem,
             type,
             keyword,
+            sort,
             begin_time,
             end_time,
             repayment,
             currentPage,
+            perPage,
             modalVisible,
             modalType,
             sorging,
@@ -33,9 +35,11 @@ const Payment =React.createClass({
         current:current,
         loading:loading,
         keyword:keyword,
+        sortOrder:sort,
         begin_time:begin_time,
         end_time:end_time,
         dataSource:list,
+
         onPageChange(currentPage){
             dispatch(routerRedux.push({
                 pathname: '/payment',
@@ -46,10 +50,15 @@ const Payment =React.createClass({
               }));
             },
             onSorting(sorting,filterType){
-                let payload = filterType == null ? '': {
-                                            ob:'',
-                                            type:filterType
-                                        };
+                let payload =   {
+                                    type:filterType,
+                                    keyword: keyword,
+                                    begin_time: begin_time,
+                                    end_time: end_time,
+                                    sort:sorting,
+                                    type:filterType,
+                                    perPage:perPage,
+                                };
 
                 this.dispatch({
                     type: 'payment/filtersort',

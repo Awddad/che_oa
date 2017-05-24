@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
-
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
+import {chkPms,chkPmsForBlock,chkPmsForInlineBlock} from '../common';
 import styles from './search.less';
 import Confirm from '../details/confirmRepayment';
 
@@ -9,18 +9,11 @@ import Confirm from '../details/confirmRepayment';
 const MakeCollectionsList = React.createClass({
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
-        const { type,onSorting }=this.props.payment;
         let sorting = "";
-        let filterType = null;
-
-        if (filters.type_name.length > 0) {
-            filterType  = filters.type_name[0];
-        }
         if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
-        this.props.onSorting(sorting, filterType);
+        this.props.onSorting(sorting);
     },
     ConfirmClick(event){
         let apply_id =event.target.getAttribute("data-applyid");
@@ -67,7 +60,15 @@ const MakeCollectionsList = React.createClass({
     },
     render(){
 
-        const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sortingType} = this.props.make_collections;
+        const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sort} = this.props.make_collections;
+        let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }else{
+                sortingType = false;
+            }
 
         const columns = [{
             title: '序号',
@@ -81,17 +82,17 @@ const MakeCollectionsList = React.createClass({
             dataIndex: 'create_time',
             key: 'create_time',
             sorter: (a, b) => a.create_time - b.create_time,
-            filteredValue: repayment == null ? []:repayment,
+            sortOrder:sortingType
         },{
             title:'类型',
             dataIndex:'type_name',
             key:'type_name',
-            filters:[
+           /* filters:[
                 {text:'报销', value:'1'},
                 {text:'借款', value:'2'},
                 {text:'还款', value:'3'},
             ],
-            filteredValue: repayment,
+            filteredValue: repayment,*/
         },{
             title: '审批单编号',
             dataIndex: 'apply_id',
@@ -124,7 +125,6 @@ const MakeCollectionsList = React.createClass({
 
         const {RepayMent_Detail,isShowRepaymentConfirm} = this.props.Detail;
         const GenConfirm = () => <Confirm isShowRepaymentConfirm={ isShowRepaymentConfirm } details={RepayMent_Detail}/>;
-
         return (
             <div>
                 <Button type="primary" className={styles.mt_lg}>导出列表</Button>
@@ -133,6 +133,7 @@ const MakeCollectionsList = React.createClass({
                     loading={loading}
                     dataSource={dataSource}
                     rowKey={record => record.id}
+                    onChange={this.handleChange}
                     pagination={false}
                     size="middle"
                     bordered />

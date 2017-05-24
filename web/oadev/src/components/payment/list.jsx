@@ -15,16 +15,15 @@ const PaymentdList= React.createClass({
     },
     // 筛选事件
     handleChange(pagination, filters, sorter) {
-
-        const { type,onSorting }=this.props.payment;
-        let sorting = "";
+        let sorting = null;
         let filterType = null;
-
-        if (filters.type_name.length > 0) {
+        if (Object.keys(filters).length > 0) {
             filterType  = filters.type_name[0];
+        }else{
+            filterType = '';
         }
-        if (sorter.order != undefined) {
-          sorting = sorter.order != 'descend' ? 1:0;
+        if (sorter.order != null) {
+          sorting = sorter.order != 'descend' ? 'asc':'desc';
         }
         this.props.onSorting(sorting, filterType);
     },
@@ -33,14 +32,6 @@ const PaymentdList= React.createClass({
             status:1
         });
         let apply_id =event.target.getAttribute("data-applyid");
-        /*this.props.dispatch({
-            type:'Detail/BaoxiaoDetails',
-            payload:{
-                apply_id:apply_id,
-                isShowPaymentConfirm:true,
-            }
-        });*/
-
         this.props.dispatch({
             type:'Detail/PayMentConfirmQuery',
             payload:{
@@ -56,13 +47,6 @@ const PaymentdList= React.createClass({
             status:2
         });
         let apply_id =event.target.getAttribute("data-applyid");
-        /*this.props.dispatch({
-            type:'Detail/LoanDetails',
-            payload:{
-                apply_id:apply_id
-            }
-        });*/
-
         this.props.dispatch({
             type:'Detail/PayMentConfirmQuery',
             payload:{
@@ -74,10 +58,11 @@ const PaymentdList= React.createClass({
 
     },
    paginationChange(page,pageNumber){
-        const { perPage,keyword,begin_time,end_time }  = this.props.payment;
+        const { perPage,keyword,begin_time,end_time,sort,type}  = this.props.payment;
         this.props.dispatch({
             type:'payment/query',
             payload:{
+                type:type,
                 currentPage:page,
                 perPage:perPage,
                 keyword:keyword,
@@ -101,7 +86,13 @@ const PaymentdList= React.createClass({
     },
     render(){
 
-        const { dataSource,keyword,begin_time,end_time,at,type,current,repayment,loading,total,sortingType,onPageChange} = this.props.payment;
+        const { dataSource,keyword,begin_time,end_time,at,sort,type,current,repayment,loading,total,onPageChange} = this.props.payment;
+        let sortingType = null;
+            if(sort == "asc"){
+                sortingType = "ascend";
+            }else if(sort == "desc"){
+                sortingType = "descend";
+            }
 
         const columns = [{
             title: '序号',
@@ -115,7 +106,7 @@ const PaymentdList= React.createClass({
             dataIndex: 'create_time',
             key: 'create_time',
             sorter: (a, b) => a.create_time - b.create_time,
-            sortOrder:sortingType == "date" ? sorting : "",
+            sortOrder:sortingType,
         },{
             title:'类型',
             dataIndex:'type_name',
@@ -124,7 +115,7 @@ const PaymentdList= React.createClass({
                 {text:'报销', value:'1'},
                 {text:'借款', value:'2'},
             ],
-            filteredValue: repayment,
+            filteredValue: at,
         },{
             title: '审批单编号',
             dataIndex: 'apply_id',

@@ -9,7 +9,8 @@ export default {
   state: {
     constCard:[],//初始化银行卡信息
     constType:[],//报销类型
-    constPersonal:[],//初始化审核/抄送联系人
+    constPersonal:null,//初始化审核
+    copyPersonal:null,//抄送联系人
     tabledata:[],//新增的报销明细
     carddata:[],//新增的银行卡
     constdata:[],//审批人
@@ -83,8 +84,8 @@ export default {
           }
           break;
         case 2:
-          let data = null;
-          if(payload.constPersonal == null || payload.constPersonal.length == 0){
+          let data = null,data1 = null;
+          if( typeof(payload.constPersonal) != Array && payload.constPersonal == null ){
               response = yield call(constPersonal, payload);
               data = response.data.data;
           }else{
@@ -95,7 +96,24 @@ export default {
                 type: 'modelHandle1',
                 payload:{
                   ...payload,
-                  constPersonal: data
+                  constPersonal: data,
+                }
+            });
+          }
+        break;
+        case 3:
+          if( typeof(payload.copyPersonal) != Array && payload.copyPersonal == null ){
+              response = yield call(constPersonal, payload);
+              data1 = response.data.data;
+          }else{
+              data1 = payload.copyPersonal;
+          }
+          if (data1) {
+            yield put({
+                type: 'modelHandle1',
+                payload:{
+                  ...payload,
+                  copyPersonal:data1
                 }
             });
           }
@@ -143,10 +161,12 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+      payload.constPersonal.splice(payload.index,1);
       yield put({
           type: 'updateConst',
           payload: {
-              constdata : data
+              constdata : data,
+              constPersonal:payload.constPersonal
           }
       });
     },
@@ -155,14 +175,18 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+
+      payload.copyPersonal.splice(payload.index,1);
       yield put({
           type: 'updateCopy',
           payload: {
-              copydata : data
+              copydata : data,
+              copyPersonal:payload.copyPersonal
           }
       });
     },
     *create({payload},{call,put}){//提交报销单
+      console.log(payload);
       const { data } = yield call(constCreate, payload);
       if (data && data.code === 200) {
         yield put({

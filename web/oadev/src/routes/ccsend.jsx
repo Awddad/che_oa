@@ -18,6 +18,7 @@ const Ccsend = React.createClass({
             current,
             currentItem,
             at,
+            sort,
             type,
             status,
             keywords,
@@ -38,6 +39,8 @@ const Ccsend = React.createClass({
             keywords:keywords,
             start_time:start_time,
             end_time:end_time,
+            filteredValue:at,
+            sortOrder:sort,
             dataSource:res,
             onPageChange(currentPage){
                 dispatch(routerRedux.push({
@@ -48,13 +51,15 @@ const Ccsend = React.createClass({
                     },
                 }));
             },
-            onSorting(sorting,filterType,filterStatus){
-                let payload = filterType == null ? '': {
-                                            type:4,
-                                            ob:'',
-                                            at:filterType,
-                                            status:filterStatus,
-                                        };
+            onSorting(sorting,filterType){
+                let payload =   {
+                                    type:type,
+                                    keywords: keywords,
+                                    start_time: start_time,
+                                    end_time: end_time,
+                                    sort:sorting,
+                                    at:filterType,
+                                };
 
                 this.dispatch({
                     type: 'ccsend/filtersort',
@@ -77,7 +82,9 @@ const Ccsend = React.createClass({
                     payload: {
                         type: 4,
                         keywords:fieldsValue.keywords,
-                        sorging:sorging,
+                        sort:sort,
+                        at:at,
+                        page:1,
                         start_time:start_time,
                         end_time:end_time,
                         page_size:perPage

@@ -15,9 +15,7 @@ export default {
     end_time:'',
     total: null,
     at:'',
-    ob:'',
-    sortingType:'',
-    repayment:[],
+    sort:'',
     current: 1,
     perPage:'',
     currentPage:'',
@@ -38,7 +36,7 @@ export default {
             payload: {
                 type: 3,
                 at: location.query.at == null? "" : location.query.at,
-                ob:location.query.ob == null? "" : location.query.ob,
+                sort:location.query.sort == null? "" : location.query.sort,
                 pageCount:location.query.pageCount == null? "" : location.query.pageCount,
                 page_size:10,
             },
@@ -98,6 +96,9 @@ export default {
                     start_time: payload.start_time,
                     end_time: payload.end_time,
                     dataSource:data.data.res,
+                    perPage:payload.page_size,
+                    total: data.data.page.totalCount,
+                    sort:payload.sort,
                     at:payload.at
                 }
             });

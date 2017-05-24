@@ -8,14 +8,14 @@ export default {
   state: {
     dataSource: [],
     department:null,
+    xz_department:'',
     field: '',
     keywords: '',
     start_time:'',
     end_time:'',
     loading: false,
     total: null,
-    sortingType:'',
-    repayment:[],
+    sort:'',
     current: 1,
     perPage:'',
     currentPage:'',
@@ -81,11 +81,30 @@ export default {
                     time: payload.time,
                     dataSource:data.data.info,
                     current:data.data.pages.currentPage,
-                    total:data.data.pages.totalCount
+                    total:data.data.pages.totalCount,
+                    xz_department:payload.orgId
                 }
             });
         }
     },
+    *filtersort({ payload },{ call,put }){
+        const { data } = yield call(query,payload);
+        if(data && data.code === 200){
+            yield put({
+                type: 'querySuccess',
+                payload:{
+                    key: payload.key,
+                    xz_department:payload.xz_department,
+                    time: payload.time,
+                    dataSource:data.data.info,
+                    current:data.data.pages.currentPage,
+                    total:data.data.pages.totalCount,
+                    sort:payload.sort,
+                    perPage:payload.pageSize
+                }
+            });
+        }
+    }
   },
 
 

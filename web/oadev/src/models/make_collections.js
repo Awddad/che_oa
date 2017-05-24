@@ -16,8 +16,10 @@ export default {
     apply_id:'',
     create_time:'',
     type_name:'',
+    keyword:'',
     money:'',
     type:'',
+    sort:'',
     dataSource:[],
     perPage:null,
     modalVisible: false,
@@ -96,15 +98,16 @@ export default {
         },
         *filtersort({ payload },{ call,put }){
             const { data } = yield call(query,payload);
+            console.log(payload.sort);
             if(data && data.code === 200){
                 yield put({
                     type: 'querySuccess',
                     payload:{
-                        keyword: payload.keywords,
+                        keyword: payload.keyword,
                         begin_time: payload.begin_time,
                         end_time: payload.end_time,
                         dataSource:data.data.data,
-                        type:payload.type
+                        sort:payload.sort
                     }
                 });
             }

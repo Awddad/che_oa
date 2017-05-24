@@ -72,24 +72,26 @@ const Reimburse = React.createClass({
 
   //审批人选择弹窗
   showconstModal(){
-    const { constPersonal } = this.props.reimBurse;
+    const { constPersonal,copyPersonal } = this.props.reimBurse;
     this.props.dispatch({
         type: 'reimBurse/modelHandle',
         payload: {
           isshowconstmodal:true,
           modalIndex: 2,
-          constPersonal:constPersonal
+          constPersonal:constPersonal,
         }
     });
   },
 
   //抄送人选择弹窗
   showcopyModal(){
+    const { copyPersonal,constPersonal } = this.props.reimBurse;
     this.props.dispatch({
         type: 'reimBurse/modelHandle',
         payload: {
           isshowcopymodal:true,
-          modalIndex: 2
+          modalIndex: 3,
+          copyPersonal:copyPersonal,
         }
     });
   },
@@ -141,16 +143,23 @@ const Reimburse = React.createClass({
           copy_person.push({"person_id": copydata[i].id,"person_name":copydata[i].name});
       }
 
-      let files = CardDetail.file.fileList.map(data => data.response.data[0]);
-      let pic = CardDetail.pics.fileList.map(data => data.response.data);
-      let pics = "";
-      for(let i=0;i<pic.length;i++){
-          if(i == pic.length-1){
-            pics += pic[i];
-          }else{
-            pics += pic[i]+','
+      let files=null,file=null,pics = '',pic=null;
+      if(CardDetail.file != null){
+          files = CardDetail.file.fileList.map(data => data.response.data[0]);
+      }
+      if(CardDetail.pics != null){
+
+          pic = CardDetail.pics.fileList.map(data => data.response.data);
+
+          for(let i=0;i<pic.length;i++){
+              if(i == pic.length-1){
+                pics += pic[i];
+              }else{
+                pics += pic[i]+','
+              }
           }
       }
+
       this.props.dispatch({
           type: 'reimBurse/create',
           payload: {

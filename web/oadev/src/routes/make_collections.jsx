@@ -19,15 +19,18 @@ import ConfirmPayment from '../components/details/confirmPayment';
             current,
             currentItem,
             at,
+            sort,
             type,
             keyword,
             begin_time,
             end_time,
             currentPage,
+            perPage,
             modalVisible,
             modalType,
             sorging,
         } = this.props.make_collections;
+
     const makeListProps ={
             total:total,
             current:current,
@@ -46,12 +49,17 @@ import ConfirmPayment from '../components/details/confirmPayment';
               }));
             },
         onSorting(sorting){
-            dispatch(routerRedux.push({
-                pathname: '/make_collections',
-                query: {
-                    currentPage:currentPage,
+            console.log(sorting);
+            this.dispatch({
+                type: 'make_collections/filtersort',
+                payload: {
+                    keyword:keyword,
+                    current:current,
+                    total: total,
+                    perPage:perPage,
+                    sort:sorting
                 },
-              }));
+              });
         },
         showDetail(apply_id){
             dispatch(routerRedux.push({
@@ -61,6 +69,8 @@ import ConfirmPayment from '../components/details/confirmPayment';
         },
 
     }
+
+
   // 查询控件
     const makeSearchProps = {
         handleSearch:(fieldsValue)=>{
