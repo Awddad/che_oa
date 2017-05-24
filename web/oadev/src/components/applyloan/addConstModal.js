@@ -23,13 +23,21 @@ const AddConstModal = React.createClass({
             const name = (constdata.audit_personal.label).split("-")[0];
             const row = {'id':constdata.audit_personal.key,'name':name};
 
+            const { constPersonal } = this.props.applyLoan;
             this.props.dispatch({
               type: 'applyLoan/addconst',
               payload: {
-                row:row,
-                type:1
+                    row:row,
+                    type:1,
+                    index:this.state.index,
+                    constPersonal:constPersonal
                 }
             });
+        });
+    },
+    hanleSelect(value, option){
+        this.setState({
+            index:option.props.index
         });
     },
     onCancel(){
@@ -61,8 +69,10 @@ const AddConstModal = React.createClass({
 
         const { getFieldDecorator,getFieldsValue } = this.props.form;
         const {constPersonal} = this.props.applyLoan;
-        const  personalOptions = constPersonal.map(data =><Option key={data.id}>{data.name}</Option>);
-        //const  personalOptions = [];
+        let personalOptions ="";
+        if(constPersonal != null){
+            personalOptions = constPersonal.map(data => <Option key={data.id}>{data.name}</Option>);
+        }
 
         return(
                 <Modal {...modalOpts} >
@@ -71,7 +81,7 @@ const AddConstModal = React.createClass({
                                     {getFieldDecorator('audit_personal', {
                                         rules: [{ required: true, message: '请选择审核人!' }]
                                     })(
-                                        <Select className="t-l" labelInValue placeholder="请选择" size="large" style={{ width: '100%' }}>
+                                        <Select className="t-l" labelInValue placeholder="请选择" size="large" style={{ width: '100%' }} onSelect = {this.hanleSelect}>
                                             {personalOptions}
                                         </Select>
                                     )}

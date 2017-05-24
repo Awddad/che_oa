@@ -83,7 +83,9 @@ export const key = ()=>{
     return key;
 }
 
-export const host = "http://192.168.1.128:8010";
+
+
+export const host = window.location.host== "localhost:8989" ? "http://192.168.1.128:8010" : '';
 
 export const deff_time = (time)=> {
     let s = time % 60;

@@ -9,7 +9,8 @@ export default {
 
   state: {
     constCard:[],//初始银行卡选项
-    constPersonal:[],//审核人抄送人选项
+    constPersonal:null,//初始化审核
+    copyPersonal:null,//抄送联系人
     carddata:[],//选择的的银行卡
     constdata:[],//选择的审批人
     copydata:[],//选择的抄送人
@@ -78,11 +79,37 @@ export default {
           }
           break;
         case 2:
-          const  response2  = yield call(constPersonal, payload);
-          if (response2) {
+          let data = null,data1 = null;
+          if( typeof(payload.constPersonal) != Array && payload.constPersonal == null ){
+              const response = yield call(constPersonal, payload);
+              data = response.data.data;
+          }else{
+              data = payload.constPersonal;
+          }
+          if (data) {
             yield put({
                 type: 'modelHandle1',
-                payload:{...payload,constPersonal: response2.data.data}
+                payload:{
+                  ...payload,
+                  constPersonal: data,
+                }
+            });
+          }
+        break;
+        case 3:
+          if( typeof(payload.copyPersonal) != Array && payload.copyPersonal == null ){
+              const response2 = yield call(constPersonal, payload);
+              data1 = response2.data.data;
+          }else{
+              data1 = payload.copyPersonal;
+          }
+          if (data1) {
+            yield put({
+                type: 'modelHandle1',
+                payload:{
+                  ...payload,
+                  copyPersonal:data1
+                }
             });
           }
           break;
@@ -110,10 +137,12 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+      payload.constPersonal.splice(payload.index,1);
       yield put({
           type: 'updateConst',
           payload: {
-              constdata : data
+              constdata : data,
+              constPersonal:payload.constPersonal
           }
       });
     },
@@ -122,10 +151,12 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+      payload.copyPersonal.splice(payload.index,1);
       yield put({
           type: 'updateCopy',
           payload: {
-              copydata : data
+              copydata : data,
+              copyPersonal:payload.copyPersonal
           }
       });
     },

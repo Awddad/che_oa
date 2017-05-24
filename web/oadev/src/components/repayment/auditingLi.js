@@ -12,7 +12,7 @@ const AuditingLi = React.createClass({
     },
     handleconstClick(e){
         const index = e.target.getAttribute("data-id");
-        const { constdata } = this.props.repayMent;
+        const { constdata,constPersonal } = this.props.repayMent;
         constdata.splice(index,1);
 
         this.props.dispatch({
@@ -25,7 +25,7 @@ const AuditingLi = React.createClass({
     },
     handlecopyClick(e){
         const index = e.target.getAttribute("data-id");
-        const { copydata } = this.props.repayMent;
+        const { copydata,copyPersonal} = this.props.repayMent;
         copydata.splice(index,1);
 
         this.props.dispatch({
@@ -44,7 +44,7 @@ const AuditingLi = React.createClass({
         return(
             <li>
                 <div className={styles.approval_left}>
-                    <span>{this.props.name}</span>
+                    <span data-key={this.props.name}>{this.props.name}</span>
                     <a href="javascript:;" data-id={this.props.dataid} onClick={this.props.litype==1 ? this.handleconstClick : this.handlecopyClick}>删除</a>
                 </div>
                 <div style={style} className={styles.approval_right}>

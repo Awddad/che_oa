@@ -23,13 +23,21 @@ const AddCopyModal = React.createClass({
             const copydata = { ...getFieldsValue() };
             const name = (copydata.audit_personal.label).split("-")[0];
             const row = {'id':copydata.audit_personal.key,'name':name}
+            const { copyPersonal } = this.props.applyLoan;
             this.props.dispatch({
               type: 'applyLoan/addcopy',
               payload: {
                 row:row,
-                type:1
+                type:1,
+                index:this.state.index,
+                copyPersonal:copyPersonal
               }
             });
+        });
+    },
+    hanleSelect(value, option){
+        this.setState({
+            index:option.props.index
         });
     },
     onCancel(){
@@ -59,9 +67,11 @@ const AddCopyModal = React.createClass({
         };
 
         const { getFieldDecorator } = this.props.form;
-        const {constPersonal} = this.props.applyLoan;
-        const  personalOptions = constPersonal.map(data =><Option key={data.id}>{data.name}</Option>);
-
+        const {copyPersonal} = this.props.applyLoan;
+        let  personalOptions = "";
+        if(copyPersonal != null){
+            personalOptions = copyPersonal.map(data =><Option key={data.id}>{data.name}</Option>);
+        }
         return(
                 <Modal {...modalOpts} >
                         <Form>
@@ -69,7 +79,7 @@ const AddCopyModal = React.createClass({
                                     {getFieldDecorator('audit_personal', {
                                         rules: [{ required: true, message: '请选择抄送人!' }]
                                     })(
-                                      <Select className="t-l" labelInValue  placeholder="请选择" size="large" style={{ width: '100%' }}>
+                                      <Select className="t-l" labelInValue  placeholder="请选择" size="large" style={{ width: '100%' }} onSelect = {this.hanleSelect}>
                                           {personalOptions}
                                       </Select>
                                     )}
