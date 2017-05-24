@@ -108,6 +108,20 @@ const RepayMent = React.createClass({
           }
       });
   },
+  btnhandleCancel(){
+      this.props.form.resetFields();
+      const {constdata,copydata} = this.props.repayMent;
+      constdata.length = 0;
+      copydata.length = 0;
+      this.props.dispatch({
+          type:'repayMent/modelHandle',
+          payload:{
+              modalIndex:0,
+              constdata:constdata,
+              copydata:copydata
+          }
+      })
+  },
   render(){
     const cardmodalProps = Math.floor(Math.random()*200000);
     const constmodalProps = Math.floor(Math.random()*300000);
@@ -210,7 +224,7 @@ const RepayMent = React.createClass({
             <Pagetitle isback='true' title = '申请还款'/>
             <h3 className={cs("mt-md","mb-md")}>还款申请表</h3>
             <FormItem {...formItemLayout} className="labelt" label="选择待还借款">
-                <Table className={cs("ant-col-sm-24")} size="middle" rowSelection={rowSelection} columns={columns} dataSource={dataSource} pagination={false} rowKey={record => record.index} footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
+                <Table className={cs("ant-col-sm-24","zxtable")} size="middle" rowSelection={rowSelection} columns={columns} dataSource={dataSource} pagination={false} rowKey={record => record.index} footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
             </FormItem>
             <FormItem {...formItemLayout} label="还款银行卡">
                 {getFieldDecorator('code', {
@@ -250,7 +264,7 @@ const RepayMent = React.createClass({
             </FormItem>
             <FormItem>
                    <Button className={cs('mt-md','mb-md','ant-col-sm-offset-2')} type="primary" onClick={this.showsubmitModal}>确定</Button>
-                   <Button className={cs('mt-md','mb-md','ml-md')} >取消</Button>
+                   <Button className={cs('mt-md','mb-md','ml-md')} onClick={this.btnhandleCancel}>取消</Button>
             </FormItem>
           </Form>
         </Row>

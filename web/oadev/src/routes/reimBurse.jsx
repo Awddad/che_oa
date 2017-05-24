@@ -254,6 +254,23 @@ const Reimburse = React.createClass({
       previewVisible: false
     });
   },
+  btnhandleCancel(){
+      this.props.form.resetFields();
+      const {constdata,copydata,tabledata} = this.props.reimBurse;
+      tabledata.length = 0;
+      constdata.length = 0;
+      copydata.length = 0;
+
+      this.props.dispatch({
+          type:'reimBurse/modelHandle',
+          payload:{
+              modalIndex:0,
+              tabledata:tabledata,
+              constdata:constdata,
+              copydata:copydata
+          }
+      })
+  },
   render(){
     const tablemodalProps = Math.floor(Math.random()*100000);
     const cardmodalProps = Math.floor(Math.random()*200000);
@@ -399,7 +416,7 @@ const Reimburse = React.createClass({
             </FormItem>
             <FormItem>
                    <Button className={cs('mt-md','mb-md','ant-col-sm-offset-2')} type="primary" onClick={this.showsubmitModal}>确定</Button>
-                   <Button className={cs('mt-md','mb-md','ml-md')} >取消</Button>
+                   <Button className={cs('mt-md','mb-md','ml-md')} onClick={this.btnhandleCancel} >取消</Button>
             </FormItem>
           </Form>
         </Row>
