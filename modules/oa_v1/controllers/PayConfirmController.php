@@ -64,7 +64,7 @@ class PayConfirmController extends BaseController
     {
         $model = new PayConfirmForm();
         $post['PayConfirmForm'] = \Yii::$app->request->post();
-        if ($model->load($post) && $model->validate() && $model->saveConfirm()) {
+        if ($model->load($post) && $model->validate() && $model->saveConfirm($this->arrPersonInfo)) {
             return $this->_return('');
         } else {
             return $this->_return($model->errors, 400);

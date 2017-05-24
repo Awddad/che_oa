@@ -178,6 +178,14 @@ class ApplyController extends BaseController
 	 */
 	protected function getData($apply)
 	{
+		$status_map = [ '1'	=>'1',//审批中
+						'11'=>'1',//审批中
+						'2'	=>'4',//审批不通过
+						'3'	=>'3',//撤销
+						'4'	=>'2',//财务确认
+						'99'=>'5',//完成
+		];
+		
 		$time;
 		$data = [
 				'apply_id' => $apply['apply_id'],
@@ -188,7 +196,7 @@ class ApplyController extends BaseController
 				'type_value' => $this -> type[$apply['type']],
 				'person' => $apply['person'],
 				//'person_id' => $apply['person_id'],
-				'status' => $apply['status'],
+				'status' => $status_map[$apply['status']],
 				'copy_person' => [],
 				'approval' => [],
 				'pdf' => $apply['apply_list_pdf'],
