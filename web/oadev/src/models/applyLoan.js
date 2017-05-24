@@ -9,7 +9,8 @@ export default {
 
   state: {
     constCard:[],
-    constPersonal:[],
+    constPersonal:null,
+    copyPersonal:null,
     carddata:[],
     constdata:[],
     copydata:[],
@@ -75,11 +76,40 @@ export default {
           }
           break;
         case 2:
-          const  response2  = yield call(constPersonal, payload);
+            let data = null;
+            if( typeof(payload.constPersonal) != Array && payload.constPersonal == null ){
+                const response = yield call(constPersonal, payload);
+                data = response.data.data;
+            }else{
+                data = payload.constPersonal;
+            }
+            if (data) {
+              yield put({
+                  type: 'modelHandle1',
+                  payload:{
+                    ...payload,
+                    constPersonal: data,
+                  }
+              });
+            }
+        break;
+        case 3:
+          let data1 = null;
+          if( typeof(payload.copyPersonal) != Array && payload.copyPersonal == null ){
+              const response2 = yield call(constPersonal, payload);
+              data1 = response2.data.data;
+          }else{
+              data1 = payload.copyPersonal;
+          }
+          if (data1) {
             yield put({
                 type: 'modelHandle1',
-                payload:{...payload,constPersonal:response2.data.data}
+                payload:{
+                  ...payload,
+                  copyPersonal:data1
+                }
             });
+          }
           break;
       }
     },
@@ -105,10 +135,12 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+      payload.constPersonal.splice(payload.index,1);
       yield put({
           type: 'updateConst',
           payload: {
-              constdata : data
+              constdata : data,
+              constPersonal:payload.constPersonal
           }
       });
     },
@@ -117,10 +149,12 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
+      payload.copyPersonal.splice(payload.index,1);
       yield put({
           type: 'updateCopy',
           payload: {
-              copydata : data
+              copydata : data,
+              copyPersonal:payload.copyPersonal
           }
       });
     },

@@ -34,22 +34,26 @@ const RepayMent = React.createClass({
 
   //审批人选择弹窗
   showconstModal(){
+    const { constPersonal } = this.props.repayMent;
     this.props.dispatch({
         type: 'repayMent/modelHandle',
         payload: {
           isshowconstmodal:true,
-          modalIndex: 2
+          modalIndex: 2,
+          constPersonal:constPersonal
         }
     });
   },
 
   //抄送人选择弹窗
   showcopyModal(){
+    const { copyPersonal } = this.props.repayMent;
     this.props.dispatch({
         type: 'repayMent/modelHandle',
         payload: {
           isshowcopymodal:true,
-          modalIndex: 2
+          modalIndex: 3,
+          copyPersonal:copyPersonal,
         }
     });
   },

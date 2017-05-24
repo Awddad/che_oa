@@ -40,22 +40,26 @@ const ApplyLoan = React.createClass({
 
   //审批人选择弹窗
   showconstModal(){
+    const { constPersonal } = this.props.applyLoan;
     this.props.dispatch({
         type: 'applyLoan/modelHandle',
         payload: {
           isshowconstmodal:true,
-          modalIndex: 2
+          modalIndex: 2,
+          constPersonal:constPersonal,
         }
     });
   },
 
   //抄送人选择弹窗
   showcopyModal(){
+    const { copyPersonal } = this.props.applyLoan;
     this.props.dispatch({
         type: 'applyLoan/modelHandle',
         payload: {
           isshowcopymodal:true,
-          modalIndex: 2
+          modalIndex: 3,
+          copyPersonal:copyPersonal,
         }
     });
   },

@@ -86,8 +86,8 @@ export default {
         case 2:
           let data = null,data1 = null;
           if( typeof(payload.constPersonal) != Array && payload.constPersonal == null ){
-              response = yield call(constPersonal, payload);
-              data = response.data.data;
+              const response1 = yield call(constPersonal, payload);
+              data = response1.data.data;
           }else{
               data = payload.constPersonal;
           }
@@ -103,8 +103,8 @@ export default {
         break;
         case 3:
           if( typeof(payload.copyPersonal) != Array && payload.copyPersonal == null ){
-              response = yield call(constPersonal, payload);
-              data1 = response.data.data;
+              const response2 = yield call(constPersonal, payload);
+              data1 = response2.data.data;
           }else{
               data1 = payload.copyPersonal;
           }
