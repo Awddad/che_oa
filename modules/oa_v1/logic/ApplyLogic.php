@@ -76,24 +76,56 @@ class ApplyLogic extends BaseLogic
 			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
 		}
 		//状态
-		switch(@$search['status']){
-			case 1://审核中
-				$query -> andWhere(['in','status',[1,11]]);
-				break;
-			case 2://财务确认中
-				$query -> andWhere(['status'=>4]);
-				break;
-			case 3://撤销
-				$query -> andWhere(['status'=>3]);
-				break;
-			case 4://审核不通过
-				$query -> andWhere(['status'=>2]);
-				break;
-			case 5://完成
-				$query -> andWhere(['status'=>99]);
-				break;
-			default:
-				break;
+		if(isset($search['status']) && $search['status']){
+			
+			/*
+			switch($search['status']){
+				case 1://审核中
+					$query -> andWhere(['in','status',[1,11]]);
+					break;
+				case 2://财务确认中
+					$query -> andWhere(['status'=>4]);
+					break;
+				case 3://撤销
+					$query -> andWhere(['status'=>3]);
+					break;
+				case 4://审核不通过
+					$query -> andWhere(['status'=>2]);
+					break;
+				case 5://完成
+					$query -> andWhere(['status'=>99]);
+					break;
+				default:
+					break;
+			}
+			*/
+			$arr_status = [];
+			foreach($search['status'] as $v){
+				switch($v){
+					case 1://审核中
+						array_push($arr_status ,1,11);
+						break;
+					case 2://财务确认中
+						array_push($arr_status ,4);
+						break;
+					case 3://撤销
+						array_push($arr_status ,3);
+						break;
+					case 4://审核不通过
+						array_push($arr_status ,2);
+						break;
+					case 5://完成
+						array_push($arr_status ,99);
+						break;
+					default:
+						break;
+				}
+			}
+			if(count($arr_status) == 1){
+				$query -> andWhere(['status'=>$arr_status[0]]);
+			}elseif(count($arr_status) > 1){
+				$query -> andWhere(['in','status',$arr_status]);
+			}
 		}
 		//类型
 		if($apply_type){
@@ -101,7 +133,7 @@ class ApplyLogic extends BaseLogic
 		}
 		
 		$_query = clone $query;
-		//var_dump($_query -> createCommand()->getRawSql());die();
+		var_dump($_query -> createCommand()->getRawSql());die();
 		$total = $_query -> count();
 		//var_dump($total);die();
 		$pagination = new Pagination(['totalCount' => $total]);
