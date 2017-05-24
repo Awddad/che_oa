@@ -61,7 +61,7 @@ class PersonLogic extends BaseLogic
     {
         $org = Org::findOne($person->org_id);
         if($org->pid == 0) {
-            return $org->org_short_name ?  : $org->org_name;
+            return [$org->org_short_name] ?  : [$org->org_name];
         }
         $arr = $org->org_short_name ? [$org->org_short_name] : [$org->org_name];
         $orgArr =  $this->getParentOrg($org, $arr);
