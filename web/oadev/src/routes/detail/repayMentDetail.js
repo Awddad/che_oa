@@ -180,7 +180,7 @@ const RepayMentDetail = React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <Pagetitle title={title} />
+                        <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={RepayMent_Detail} />
                         <BxDetail columns={bxmx_columns} pdf={pdf} dataSource={RepayMent_Detail.info} label="还款列表" />
                         <FormItem {...formItemLayout}  label="借款金额" className="mb-sm">

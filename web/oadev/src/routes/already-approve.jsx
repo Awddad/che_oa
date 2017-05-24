@@ -19,6 +19,7 @@ const AlreadyApprove =React.createClass({
             currentItem,
             at,
             sort,
+            status,
             type,
             keywords,
             start_time,
@@ -49,7 +50,7 @@ const AlreadyApprove =React.createClass({
                     },
                   }));
                 },
-                onSorting(sorting,filterType){
+                onSorting(sorting,filterType,filterStatus){
                     filterType = filterType || [];
                     let payload =   {
                                         type:type,
@@ -58,7 +59,8 @@ const AlreadyApprove =React.createClass({
                                         end_time: end_time,
                                         sort:sorting,
                                         page_size:perPage,
-                                        at:filterType
+                                        at:filterType,
+                                        status:filterStatus
                                     };
 
                     this.dispatch({
@@ -84,6 +86,7 @@ const AlreadyApprove =React.createClass({
                         keywords:fieldsValue.keywords,
                         sort:sort,
                         at:at,
+                        status:status,
                         page:1,
                         page_size:perPage,
                         start_time:start_time,

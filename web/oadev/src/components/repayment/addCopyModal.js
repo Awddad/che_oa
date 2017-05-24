@@ -1,4 +1,5 @@
 import { connect } from 'dva';
+import _ from 'underscore';
 import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
@@ -72,10 +73,25 @@ const AddCopyModal = React.createClass({
         };
 
         const { getFieldDecorator } = this.props.form;
-        const {copyPersonal} = this.props.repayMent;
-        let  personalOptions = "";
+        const {copyPersonal,copydata} = this.props.repayMent;
+        let personalOptions =[],constid = [];
+        if(copydata.length>0){constid = copydata.map(data => parseInt(data.id));}
         if(copyPersonal != null){
-            personalOptions = copyPersonal.map(data =><Option key={data.id}>{data.name}</Option>);
+
+            //personalOptions = copyPersonal.map(data => <Option key={data.id}>{data.name}</Option>);
+            for(let i=0;i<copyPersonal.length;i++){
+                if(copydata.length>0){
+                    let personid=[];
+                    personid.push(copyPersonal[i].id);
+                    if(_.intersection(constid,personid).length>0){
+                        personalOptions.push(<Option key={copyPersonal[i].id} disabled>{copyPersonal[i].name}</Option>);
+                    }else{
+                        personalOptions.push(<Option key={copyPersonal[i].id}>{copyPersonal[i].name}</Option>);
+                    }
+                }else{
+                    personalOptions.push(<Option key={copyPersonal[i].id}>{copyPersonal[i].name}</Option>);
+                }
+            }
         }
 
         return(

@@ -1,4 +1,5 @@
 import { connect } from 'dva';
+import _ from 'underscore';
 import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
@@ -71,11 +72,27 @@ const AddConstModal = React.createClass({
         };
 
         const { getFieldDecorator,getFieldsValue } = this.props.form;
-        const {constPersonal} = this.props.repayMent;
-        let personalOptions ="";
+        const {constPersonal,constdata} = this.props.repayMent;
+        let personalOptions =[],constid = [];
+        if(constdata.length>0){constid = constdata.map(data => parseInt(data.id));}
         if(constPersonal != null){
-            personalOptions = constPersonal.map(data => <Option key={data.id}>{data.name}</Option>);
+
+            //personalOptions = constPersonal.map(data => <Option key={data.id}>{data.name}</Option>);
+            for(let i=0;i<constPersonal.length;i++){
+                if(constdata.length>0){
+                    let personid=[];
+                    personid.push(constPersonal[i].id);
+                    if(_.intersection(constid,personid).length>0){
+                        personalOptions.push(<Option key={constPersonal[i].id} disabled>{constPersonal[i].name}</Option>);
+                    }else{
+                        personalOptions.push(<Option key={constPersonal[i].id}>{constPersonal[i].name}</Option>);
+                    }
+                }else{
+                    personalOptions.push(<Option key={constPersonal[i].id}>{constPersonal[i].name}</Option>);
+                }
+            }
         }
+
 
         return(
                 <Modal {...modalOpts} >

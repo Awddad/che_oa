@@ -135,7 +135,7 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
-      payload.constPersonal.splice(payload.index,1);
+      //payload.constPersonal.splice(payload.index,1);
       yield put({
           type: 'updateConst',
           payload: {
@@ -149,7 +149,7 @@ export default {
       if(payload.type == 1){
         data.push(payload.row);
       }
-      payload.copyPersonal.splice(payload.index,1);
+      //payload.copyPersonal.splice(payload.index,1);
       yield put({
           type: 'updateCopy',
           payload: {

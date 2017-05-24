@@ -16,10 +16,6 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 
 
-
-const acceptImgFormat = 'jpg,jpeg,png,gif,bmp';   //上传图片格式
-const acceptFileFormat = 'doc,pdf,xls,xlsx,txt';   //上传图片格式
-
 const Reimburse = React.createClass({
   getInitialState(){
     return {
@@ -177,9 +173,10 @@ const Reimburse = React.createClass({
       });
   },
   beforeImgUpload(file,fileList) {
-    const size = 2097152;
+    const size = 20971520;//20M
     const fileName = file.name;
     const type = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+    const acceptImgFormat = 'jpg,png,gif';   //上传图片格式
     const types = acceptImgFormat.toString().split(',');
     if (types.length > 0) {
       let b = false;
@@ -190,12 +187,12 @@ const Reimburse = React.createClass({
         }
       }
       if (b === false) {
-        message.error(`上传文件格式错误!只支持[${acceptImgFormat}]`);
+        message.error(`上传文件格式错误!只支持[${acceptImgFormat}]`,4);
         return false;
       }
 
       if (file.size > size) {
-        message.error('上传图片大小超过限制!最多2M');
+        message.error('上传图片大小超过限制!最多20M');
         return false;
       }
       return true;
@@ -204,10 +201,11 @@ const Reimburse = React.createClass({
     return false;
   },
   beforeFileUpload(file,fileList) {
-    const size = 5242880;
+    const size = 20971520; //20M
     const fileName = file.name;
     const type = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-    const types = acceptImgFormat.toString().split(',');
+    const acceptFileFormat = 'doc,docx,pdf,xls,xlsx';   //上传文件格式
+    const types = acceptFileFormat.toString().split(',');
     if (types.length > 0) {
       let b = false;
       for (let i = 0; i < types.length; i++) {
@@ -217,12 +215,12 @@ const Reimburse = React.createClass({
         }
       }
       if (b === false) {
-        message.error(`上传文件格式错误!只支持[${acceptImgFormat}]`);
+        message.error(`上传文件格式错误!只支持[${acceptFileFormat}]`,4);
         return false;
       }
 
       if (file.size > size) {
-        message.error('上传文件大小超过限制!最多5M');
+        message.error('上传文件大小超过限制!最多20M');
         return false;
       }
       return true;
@@ -232,23 +230,13 @@ const Reimburse = React.createClass({
   },
   handlefileChange(info) {
     let fileList = info.fileList;
-    /*const file = info.file;
-    const status = info.file.status;
-    const resp = info.file.response;
-    console.log(status);
-    if (status === 'done') {
-      if (resp && resp.statusCode !== 1) {
-        message.error('上传失败');
-        fileList = fileList.filter((f) => {
-          const thisFileResp = f.response;
-          return thisFileResp.content && thisFileResp.statusCode === 1;
+    if(fileList.length > 7){
+        message.error('上传文件数量已达上限!');
+    }else{
+        this.setState({
+            fileList:fileList
         });
-      }
-    }*/
-
-    this.setState({
-        fileList:fileList
-    });
+    }
   },
   handleimgChange(info){
     this.setState({
@@ -283,6 +271,7 @@ const Reimburse = React.createClass({
       multiple: true,
       listType: 'file',
       fileList: this.state.fileList,
+      beforeUpload:this.beforeFileUpload,
       onChange: this.handlefileChange,
     };
 
@@ -389,10 +378,11 @@ const Reimburse = React.createClass({
                     name="pics"
                     listType="picture-card"
                     fileList={imgfileList}
+                    beforeUpload={this.beforeImgUpload}
                     onPreview={this.handlePreview}
                     onChange={this.handleimgChange}
                   >
-                    {imgfileList.length >= 5 ? null : uploadButton}
+                    {imgfileList.length >= 7 ? null : uploadButton}
                   </Upload>
                 )}
                   <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>

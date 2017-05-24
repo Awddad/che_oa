@@ -211,7 +211,7 @@ const ReimburseDetail = React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <Pagetitle title={title} />
+                        <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={Baoxiao_Detail} />
                         <BxDetail columns={bxmx_columns} dataSource={Baoxiao_Detail.info} label="报销明细" />
                         <FormItem {...formItemLayout}  label="报销卡号">

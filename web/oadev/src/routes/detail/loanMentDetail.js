@@ -160,7 +160,7 @@ const ReimburseDetail = React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <Pagetitle title={title} />
+                        <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={Loan_Detail} />
                         <h2 className={cs('mt-lg','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href={pdf}>下载审批</a></h2>
                         <FormItem {...formItemLayout}  label="借款金额" className="mb-sm">

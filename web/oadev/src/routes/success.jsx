@@ -4,6 +4,7 @@ import {Form,Icon,Button,Steps,message,Row,Col } from 'antd';
 import { routerRedux } from 'dva/router';
 import cs from 'classnames';
 import Main from '../components/home/main';
+import { deff_time } from '../components/common';
 import styles from './success.less';
 const Step = Steps.Step;
 
@@ -48,11 +49,45 @@ const Success = React.createClass({
             applyid = Detail.apply_id;
             time = Detail.create_time;
             copy_person=Detail.copy_person.map(data => data.person).join("、");
-            step = Detail.approval.map(data => <Step key={Math.floor(Math.random()*100000)} title={data.person} description={ data.des } /> );
-            resultSteps =   (<Steps current={1} progressDot>
-                                <Step title="发起申请" key="00001" description={ Detail.person +" "+ Detail.create_time +" 南京汽车销售-中规车一区-南京店" } />
+            /*step = Detail.flow.map(data => <Step key={Math.floor(Math.random()*1000000)} title={data.title} description={
+                (<div>
+                    <div>{data.name+ "  " + data.date}</div>
+                    <div>{data.org}</div>
+                    <div>{data.status == 3 ? data.diff_time==0?'':"耗费："+ deff_time(data.diff_time) : data.diff_time==0?'':"已等待："+ deff_time(data.diff_time)}</div>
+                    <div>{ data.des==''?'':"说明："+ data.des}</div>
+                </div>)} /> );*/
+
+            step = Detail.flow.map(data =>
+                <Step key={Math.floor(Math.random()*1000000)} title={
+                        data.status == 1 && status == 3 ?
+                            (<div className="cred">{data.title}</div>)
+                        :
+                            (<div>{data.title}</div>)
+                    }
+                    description={
+                        status != 3 ?
+                            (<div>
+                                <div>{data.name+ "  " + data.date}</div>
+                                <div>{data.org}</div>
+                                <div>{
+                                    data.status == '1' ?
+                                    data.diff_time==0 ? '':"已等待："+ deff_time(data.diff_time)
+                                    :
+                                    data.diff_time==0 ? '':"耗费："+ deff_time(data.diff_time)
+                                }</div>
+                                <div>{ data.des==''?'':"说明："+ data.des}</div>
+                            </div>)
+                        :
+                                    data.status != 1 ?
+                                        (<div><div>{data.name+ "  " + data.date}</div>
+                                            <div>{data.org}</div></div>)
+                                    :
+                                        (<div><div>{data.name+ "  " + data.date}</div>
+                                        <div>{data.org}</div>
+                                        <div className="cred">申请人撤销申请</div></div>)
+                } />);
+            resultSteps =   (<Steps className="success_step" current={Detail.step} progressDot>
                                 {step}
-                                <Step title="完成" key="10000" description="" />
                             </Steps>);
         }
         return(

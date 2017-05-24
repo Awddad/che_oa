@@ -16,6 +16,7 @@ export default {
     total: null,
     at:'',
     sort:'',
+    status:'',
     current: 1,
     perPage:'',
     currentPage:'',
@@ -35,9 +36,6 @@ export default {
             type: 'query',
             payload: {
                 type: 3,
-                at: location.query.at == null? "" : location.query.at,
-                sort:location.query.sort == null? "" : location.query.sort,
-                pageCount:location.query.pageCount == null? "" : location.query.pageCount,
                 page_size:10,
             },
           });
@@ -99,7 +97,8 @@ export default {
                     perPage:payload.page_size,
                     total: data.data.page.totalCount,
                     sort:payload.sort,
-                    at:payload.at
+                    at:payload.at,
+                    status:payload.status
                 }
             });
         }
