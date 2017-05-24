@@ -3,6 +3,7 @@ import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
 import cs from 'classnames';
+import { DateTime } from '../common'
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -12,7 +13,7 @@ const RepayMent_Tr =  React.createClass({
             <tr>
                 <td className="t-c"> {this.props.type_name} </td>
                 <td className="t-r">¥ {(this.props.money*1).toFixed(2)} </td>
-                <td className="t-l"> {this.props.des} </td>
+                <td className="t-l"> {this.props.des ==''?'--':this.props.des} </td>
             </tr>
         );
     }
@@ -55,8 +56,6 @@ const SubmitModal = React.createClass({
         const {tabledata,carddata,constdata,copydata,CardDetail,bank_id,bank_name,addApplyID,bxname,department } = this.props.reimBurse;
         let constpersonal = constdata.map(data=>data.name.split(" ")[0]).join("、");
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
-        const date = new Date();
-        let  dateTime  = date.getFullYear() + '年' + (date.getMonth()+1) + '月' + date.getDay()+'日';
 
 
         let html =[],count = 0;
@@ -77,7 +76,7 @@ const SubmitModal = React.createClass({
                     <tbody>
                      <tr>
                          <td className={styles.b_gray} width="100">日期</td>
-                         <td className="t-l">{dateTime}</td>
+                         <td className="t-l">{DateTime()}</td>
                          <td className={styles.b_gray} width="100">单号</td>
                          <td className="t-l">{ addApplyID }</td>
                      </tr>
@@ -116,9 +115,9 @@ const SubmitModal = React.createClass({
                          <td className={styles.b_gray} width="66">审批人</td>
                          <td className="t-l" width="200">{constpersonal}</td>
                          <td className={styles.b_gray} width="66">抄送人</td>
-                         <td className="t-l" width="200">{copypersonal}</td>
+                         <td className="t-l" width="200">{copypersonal==''?'--':copypersonal}</td>
                          <td className={styles.b_gray} width="80">财务确认</td>
-                         <td className="t-l">&nbsp;</td>
+                         <td className="t-l">财务确认</td>
                      </tr>
                     </tbody>
                 </table>
