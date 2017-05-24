@@ -52,35 +52,35 @@ class PersonLogic extends BaseLogic
         }
         return $data;
     }
-
+    
     /**
      * @param Person $person
-     * @return array
+     * @return string
      */
     public function getOrgName($person)
     {
         $org = Org::findOne($person->org_id);
         if($org->pid == 0) {
-            return [$org->org_name];
-        } else {
-            $arr = [$org->org_name];
-            $orgArr =  $this->getParentOrg($org, $arr);
-            rsort($orgArr);
-            return $orgArr;
+            return $org->org_short_name ?  : $org->org_name;
         }
+        $arr = $org->org_short_name ? [$org->org_short_name] : [$org->org_name];
+        $orgArr =  $this->getParentOrg($org, $arr);
+        krsort($orgArr);
+        return $orgArr;
+        
     }
 
     /**
      * @param $org
      * @param $result
-     * @return string
+     * @return array
      */
     public function getParentOrg($org, &$result)
     {
         $parent = Org::findOne($org->pid);
-        $result[] = $parent->org_name;
         if($parent->pid != 0 ){
             $this->getParentOrg($parent, $result);
+            $result[] = $parent->org_short_name ? : $parent->org_name;
         }
         return $result;
     }
