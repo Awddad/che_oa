@@ -37,7 +37,7 @@ class PayConfirmController extends BaseController
         if(in_array($this->roleId, $roleIds)){
             $role = Role::findOne($this->roleId);
             if ($role->slug != 'caiwu') {
-                throw new HttpException(401, '无权访问', 401);
+                throw new HttpException(403, '无权访问', 403);
             }
         }
         return true;

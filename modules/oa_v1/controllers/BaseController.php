@@ -9,7 +9,6 @@
 namespace app\modules\oa_v1\controllers;
 
 
-use app\models\Menu;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
@@ -20,7 +19,6 @@ use yii\web\Response;
 use Jasny\SSO\Broker;
 use Yii;
 use app\models\Person;
-use app\models\Org;
 use app\models\Role;
 use app\models\RoleOrgPermission;
 
@@ -106,9 +104,18 @@ class BaseController extends Controller
                     if(empty($intRoleId) && count($arrRoleIds) >= 1)
                     {
                         $intRoleId = $arrRoleIds[0];
+                        $this->roleId = $intRoleId;
                     }
                     $this->setUserRoleInfo($intRoleId);
                 }
+                //权限 @TODO
+//                $roleInfo = Role::findOne($this->roleId);
+//                $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
+//                if(!in_array($_SERVER['REQUEST_URI'], $roleArr) && Yii::$app->controller->id != 'default'){
+//                    header("Content-type: application/json");
+//                    echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
+//                    die();
+//                }
                 
                 //设置角色信息
                 $session = Yii::$app->getSession();
@@ -116,6 +123,7 @@ class BaseController extends Controller
                 {
                     $this->setUserRoleInfo($session['role_id']);
                 }
+                
             }
         }
         else
@@ -239,7 +247,7 @@ class BaseController extends Controller
      */
     public function _return($data, $code = 200, $message = 'success')
     {
-        $message = isset(static::$code[$code]) ? static::$code[$code] : $message;
+        $message = (!$message) ? static::$code[$code] : $message;
         return compact('data', 'message', 'code');
     }
 
