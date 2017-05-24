@@ -365,7 +365,7 @@ class ApplyController extends BaseController
 	 */
 	public function actionGetUserList()
 	{
-		$data = PersonLogic::instance() -> getSelectPerson();
+		$data = PersonLogic::instance() -> getSelectPerson($this->arrPersonInfo['person_id']);
 		return $this -> _return($data,200);
 	}
 
