@@ -10,7 +10,7 @@ export async function Detail(params) {//报销详情
 }
 
 export async function PayMentConfirm(params) {//付款确认
-    return request('/oa_v1/pay-confirm', {
+    return request('/oa_v1/pay-confirm/index', {
       method: 'post',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
@@ -24,7 +24,7 @@ export async function RepayMentConfirmquery(params) {//还款弹窗数据初始�
 }
 
 export async function RepayMentConfirm(params) {//还款确认
-    return request('/oa_v1/back-confirm', {
+    return request('/oa_v1/back-confirm/index', {
       method: 'post',
       headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
