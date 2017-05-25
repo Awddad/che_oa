@@ -3,6 +3,8 @@ import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
 import { userLogin } from '../components/common';
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 export default {
   namespace: 'reimBurse',
@@ -19,10 +21,11 @@ export default {
     CardDetail:{},//提交申请返回的必填字段数据
     fileList:{},//上传文件数据
     pics:{},//上传图片数据
+    bank:null,//银行全信息
     bank_name:null,
     bank_id:null,
     addApplyID:null,//报销单ID
-    department:null,
+    department:null,//组织架构
     bxname:null,
     loading: false,
     isshowtablemodal:false,
@@ -139,16 +142,18 @@ export default {
           }
       });
     },
-    *addcard({payload},{call,put}){//新增银行卡
+    *addcard({payload,bank},{call,put}){//新增银行卡
       const response = yield call(addCard, payload);
       if(response && response.data.code === 200){
           message.success("银行卡添加成功",2);
           const response1 = yield call(constCard , payload);
+
           if(response1 && response1.data.code === 200){
               yield put({
                 type: 'updateCard',
                 payload:{
-                    constCard: response1.data.data
+                    constCard: response1.data.data,
+                    bank:bank
                 }
               });
           }

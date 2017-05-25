@@ -23,10 +23,10 @@ const AddCardModal = React.createClass({
             }
             const carddata = { ...getFieldsValue() };
             const row = {bank_name:carddata.bank,card_id:carddata.code,bank_des:carddata.open_account}
-            this.props.dispatch({
+            /*this.props.dispatch({
               type: 'repayMent/addcard',
               payload: row
-            });
+            });*/
         });
     },
     onCancel(){
@@ -58,9 +58,28 @@ const AddCardModal = React.createClass({
                         <Form>
                             <FormItem {...formItemLayout} label="银行" hasFeedback>
                                 {getFieldDecorator('bank', {
-                                    rules: [{required: true, message: '请输入银行名称!',}]
+                                    rules: [{required: true, message: '请选择银行名称!',}]
                                 })(
-                                    <Input placeholder="请输入" />
+                                    <Select placeholder="请选择">
+                                        <Option value="中国工商银行">中国工商银行</Option>
+                                        <Option value="中国建设银行">中国建设银行</Option>
+                                        <Option value="中国银行">中国银行</Option>
+                                        <Option value="中国农业银行">中国农业银行</Option>
+                                        <Option value="交通银行">交通银行</Option>
+                                        <Option value="中国邮政储蓄银行">中国邮政储蓄银行</Option>
+                                        <Option value="招商银行">招商银行</Option>
+                                        <Option value="浦发银行">浦发银行</Option>
+                                        <Option value="中信银行">中信银行</Option>
+                                        <Option value="中国光大银行">中国光大银行</Option>
+                                        <Option value="华夏银行">华夏银行</Option>
+                                        <Option value="中国民生银行">中国民生银行</Option>
+                                        <Option value="广发银行">广发银行</Option>
+                                        <Option value="兴业银行">兴业银行</Option>
+                                        <Option value="平安银行">平安银行</Option>
+                                        <Option value="恒丰银行">恒丰银行</Option>
+                                        <Option value="浙商银行">浙商银行</Option>
+                                        <Option value="渤海银行">渤海银行</Option>
+                                    </Select>
                                 )}
                             </FormItem>
                             <FormItem {...formItemLayout} label="卡号" hasFeedback>

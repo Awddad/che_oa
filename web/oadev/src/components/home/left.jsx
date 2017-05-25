@@ -8,7 +8,7 @@ import styles from './left.less';
 import {chkPms,chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock} from '../common';
 
 import WebStorage from 'react-webstorage';
-const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 const SubMenu = Menu.SubMenu;
 let _theme = 'light';
@@ -92,7 +92,8 @@ const Left = React.createClass({
           mode="inline"
           >
 
-          <Menu.Item key="/adminhome" ><span style={{"padding-left":24}}>首页</span></Menu.Item>
+            <Menu.Item key="/adminhome" style={chkPmsForBlock(['index'])}><span style={{"padding-left":24}}>首页</span></Menu.Item>
+
           {chkPms(['shen_qing_bao_xiao','shen_qing_bao_xiao','shen_qing_huang_kuan'])?
                   <SubMenu key="sub1" title={<span><Icon type="solution"/><span>报销管理</span></span>}>
                     <Menu.Item key="/reimburse" style={chkPmsForBlock(['shen_qing_bao_xiao'])}>申请报销</Menu.Item>
