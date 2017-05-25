@@ -41,9 +41,9 @@ class JieKuan extends \yii\db\ActiveRecord
             [['apply_id', 'bank_card_id', 'bank_name', 'get_money_time', 'pay_back_time', 'is_pay_back', 'status'], 'required'],
             [['get_money_time', 'pay_back_time', 'is_pay_back', 'status'], 'integer'],
             [['money'], 'number'],
-            [['des', 'tips'], 'string'],
+            [['des', 'tips', 'pics'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['bank_name', 'bank_name_des', 'pics'], 'string', 'max' => 255],
+            [['bank_name', 'bank_name_des'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 25],
         ];
     }

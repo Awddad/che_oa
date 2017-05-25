@@ -36,9 +36,9 @@ class BaoXiao extends \yii\db\ActiveRecord
         return [
             [['apply_id', 'bao_xiao_list_ids', 'bank_card_id', 'bank_name'], 'required'],
             [['money'], 'number'],
-            [['files'], 'string'],
+            [['files', 'pics'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['bao_xiao_list_ids', 'bank_name', 'bank_name_des', 'pics'], 'string', 'max' => 255],
+            [['bao_xiao_list_ids', 'bank_name', 'bank_name_des'], 'string', 'max' => 255],
             //[['bank_card_id'], 'string', 'max' => 16],
         ];
     }
