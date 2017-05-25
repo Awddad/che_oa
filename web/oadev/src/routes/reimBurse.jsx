@@ -307,14 +307,14 @@ const Reimburse = React.createClass({
     let auditingLi=null,copyLi=null;
     const uploadButton = (
                             <div>
-                              <Icon type="plus" />
+                              <Icon type="plus" style={{fontSize:30}} />
                               <div className="ant-upload-text">上传</div>
                             </div>
                         );
 
 
     if( constdata.length > 0 ){
-      //审核人
+      //审批人
       auditingLi =  constdata.map(function(data,index) {
                                 return (
                                     <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" name={data.name} />
@@ -332,8 +332,7 @@ const Reimburse = React.createClass({
     const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
-            sm: { span: 3 },
-            md: { span: 2 },
+            sm: { span: 2 },
           },
           wrapperCol: {
             xs: { span: 24 },
@@ -350,7 +349,7 @@ const Reimburse = React.createClass({
         <Row>
           <AddTableModal key={tablemodalProps} isshowtablemodal = {isshowtablemodal} />
           <AddCardModal key={cardmodalProps} isshowcardmodal = {isshowcardmodal} />
-          <AddConstModal key={constmodalProps} title="审核人" isshowconstmodal = {isshowconstmodal}/>
+          <AddConstModal key={constmodalProps} title="审批人" isshowconstmodal = {isshowconstmodal}/>
           <AddCopyModal key={copymodalProps} title="抄送人" isshowcopymodal = {isshowcopymodal} />
           <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
 
@@ -394,6 +393,7 @@ const Reimburse = React.createClass({
                     action="/oa_v1/upload/image"
                     name="pics"
                     listType="picture-card"
+                    multiple={true}
                     fileList={imgfileList}
                     beforeUpload={this.beforeImgUpload}
                     onPreview={this.handlePreview}
@@ -405,8 +405,9 @@ const Reimburse = React.createClass({
                   <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                     <img alt="example" style={{ width: '100%' }} src={previewImage} />
                   </Modal>
-                 <p className={cs("clear")}>请拍照并上传发票等文件</p>
+                  <p className={cs("clearfix")}>请拍照并上传发票等文件</p>
             </FormItem>
+
             <h3 className={cs("mt-md","mb-lg")}>审批人和抄送人</h3>
             <FormItem {...formItemLayout} label="审批人" className="labelt">
                 <GenconstPerson />

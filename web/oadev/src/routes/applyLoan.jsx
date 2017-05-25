@@ -201,7 +201,7 @@ const ApplyLoan = React.createClass({
     //const GenTable = () => <ApplyTable tabledata={tabledata}/>;
 
     const GenAddCardModal = () => <AddCardModal isshowcardmodal = {isshowcardmodal} />;
-    const GenAddConstModal = () => <AddConstModal key={constmodalProps} title="审核人" isshowconstmodal = {isshowconstmodal}/>
+    const GenAddConstModal = () => <AddConstModal key={constmodalProps} title="审批人" isshowconstmodal = {isshowconstmodal}/>
 
 
     const imguploadprops = {
@@ -222,7 +222,7 @@ const ApplyLoan = React.createClass({
                             </div>
                         );
 
-    //审核人
+    //审批人
     const auditingLi =  constdata.map(function(data,index) {
                               return (
                                   <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" name={data.name} />
@@ -238,8 +238,7 @@ const ApplyLoan = React.createClass({
     const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
-            sm: { span: 3 },
-            md: { span: 2 },
+            sm: { span: 2 },
           },
           wrapperCol: {
             xs: { span: 24 },
@@ -249,6 +248,8 @@ const ApplyLoan = React.createClass({
 
 
     const { getFieldDecorator } = this.props.form;
+    const GenconstPerson = () => <ApprovalPerson handleClick={this.showconstModal} approvalPerson={auditingLi} />;
+    const GencopyPerson = () => <ApprovalPerson handleClick={this.showcopyModal} approvalPerson={copyLi} />;
 
     return (
       <Main location={location}>
@@ -324,7 +325,7 @@ const ApplyLoan = React.createClass({
                     <img alt="example" style={{ width: '100%' }} src={previewImage} />
                 </Modal>
             </FormItem>
-            <h3 className={cs("mt-md","mb-md")}>审批人和抄送人</h3>
+            {/*<h3 className={cs("mt-md","mb-md")}>审批人和抄送人</h3>
             <FormItem>
                 <span className={cs('ant-col-md-2','ant-col-sm-3','t-r')}><label className="labelt">审批人： </label></span>
                 <div className={styles.approval_wrap} >
@@ -346,6 +347,13 @@ const ApplyLoan = React.createClass({
                         </li>
                       </ul>
                 </div>
+            </FormItem>*/}
+            <h3 className={cs("mt-md","mb-lg")}>审批人和抄送人</h3>
+            <FormItem {...formItemLayout} label="审批人" className="labelt">
+                <GenconstPerson />
+            </FormItem>
+            <FormItem {...formItemLayout} label="抄送人" >
+                <GencopyPerson />
             </FormItem>
             <FormItem>
                    <Button className={cs('mt-md','mb-md','ant-col-sm-offset-2')} type="primary" onClick={this.showsubmitModal}>确定</Button>
@@ -356,6 +364,21 @@ const ApplyLoan = React.createClass({
       </Main>
     )
   }
+});
+
+const ApprovalPerson = React.createClass({
+    render(){
+        return (
+            <div className={styles.approval_wrap} >
+                <ul>
+                  {this.props.approvalPerson}
+                  <li className={styles.add_approval} onClick={this.props.handleClick} >
+                      <Icon type="plus" />
+                  </li>
+                 </ul>
+            </div>
+        )
+    }
 });
 
 ApplyLoan.propTypes = {

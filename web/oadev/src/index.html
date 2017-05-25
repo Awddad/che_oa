@@ -8,6 +8,10 @@
   <meta name="description" content="">
   <link rel="stylesheet" href="index.css" />
   <style type="text/css">
+    h3{ font-size: 16px;}
+    .ant-steps .ant-steps-main{
+        display: block;
+    }
     .warpper{
       height: 100vh;
     }
@@ -53,9 +57,20 @@
     }
 
     .zstable .ant-table-middle .ant-table-thead > tr > th:not(.ant-table-selection-column),
+    .zstable .ant-table-middle .ant-table-thead > tr > th,
     .zstable .ant-table-middle .ant-table-tbody > tr > td,
-    .zstable .ant-table-middle .ant-table-title, .ant-table-middle .ant-table-footer{ padding: 0 8px !important;}
+    .zstable .ant-table-middle .ant-table-title, .ant-table-middle .ant-table-footer{ padding:3px 8px !important;}
     .zstable .ant-table-placeholder{padding: 8px ;}
+
+    .anticon-caret-right:before{
+                font-size:14px;
+                color: #ccc;
+            }
+
+    @media(min-width: 768px){
+      .ant-col-sm-2{ min-width: 76px; width: 76px;}
+      .ant-col-sm-offset-2{ margin-left: 76px;}
+    }
     .page-title{font-size: 0;}
     .page-title strong{
       display: inline-block;

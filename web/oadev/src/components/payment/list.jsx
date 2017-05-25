@@ -4,7 +4,7 @@ import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import styles from './search.less';
 import Confirm from '../details/confirmPayment';
-import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
+import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms,host } from '../common';
 
 
 const PaymentdList= React.createClass({
@@ -41,7 +41,6 @@ const PaymentdList= React.createClass({
             }
         });
     },
-
     loanConfirmClick(event){
         this.setState({
             status:2
@@ -83,6 +82,11 @@ const PaymentdList= React.createClass({
                 end_time:end_time,
             }
         })
+    },
+    handleClick(){
+        const { keyword,begin_time,end_time }  = this.props.payment;
+        let endtime = end_time == null?'':end_time;
+        window.location.href = host + "/oa_v1/pay-confirm/export?keyword="+keyword+"&begin_time="+begin_time+"&end_time="+endtime ;
     },
     render(){
 
@@ -172,7 +176,7 @@ const PaymentdList= React.createClass({
         return (
             <div>
                 <Confirm isShowPaymentConfirm={ isShowPaymentConfirm } details={details}/>
-                <Button type="primary" className={styles.mt_lg}>导出列表</Button>
+                <Button type="primary" className={styles.mt_lg} onClick={this.handleClick}>导出列表</Button>
                   <Table
                     columns={columns}
                     loading={loading}

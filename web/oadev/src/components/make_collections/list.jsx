@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
-import {chkPms,chkPmsForBlock,chkPmsForInlineBlock} from '../common';
+import {chkPms,chkPmsForBlock,chkPmsForInlineBlock,host} from '../common';
 import styles from './search.less';
 import Confirm from '../details/confirmRepayment';
 
@@ -57,6 +57,11 @@ const MakeCollectionsList = React.createClass({
                 end_time:end_time,
             }
         })
+    },
+    handleClick(){
+        const { keyword,begin_time,end_time }  = this.props.make_collections;
+        let endtime = end_time == null?'':end_time;
+        window.location.href = host + "/oa_v1/back-confirm/export?keyword="+keyword+"&begin_time="+begin_time+"&end_time="+endtime ;
     },
     render(){
 
@@ -127,7 +132,7 @@ const MakeCollectionsList = React.createClass({
         const GenConfirm = () => <Confirm isShowRepaymentConfirm={ isShowRepaymentConfirm } details={RepayMent_Detail}/>;
         return (
             <div>
-                <Button type="primary" className={styles.mt_lg}>导出列表</Button>
+                <Button type="primary" className={styles.mt_lg} onClick={this.handleClick}>导出列表</Button>
                 <Table
                     columns={columns}
                     loading={loading}

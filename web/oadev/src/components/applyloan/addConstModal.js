@@ -93,7 +93,7 @@ const AddConstModal = React.createClass({
                         <Form>
                             <FormItem {...formItemLayout} label={this.props.title} hasFeedback>
                                     {getFieldDecorator('audit_personal', {
-                                        rules: [{ required: true, message: '请选择审核人!' }]
+                                        rules: [{ required: true, message: '请选择审批人!' }]
                                     })(
                                         <Select className="t-l" labelInValue placeholder="请选择" size="large" style={{ width: '100%' }} onSelect = {this.hanleSelect}>
                                             {personalOptions}
