@@ -40,7 +40,7 @@ class CaiWuShouKuan extends \yii\db\ActiveRecord
         return [
             [['apply_id', 'org_id', 'org_name', 'bank_card_id', 'bank_name', 'bank_name_des', 'shou_kuan_id'], 'required'],
             [['org_id', 'type', 'shou_kuan_time', 'create_cai_wu_log', 'is_told_cai_wu_success'], 'integer'],
-            [['tips'], 'string'],
+            [['tips', 'pics'], 'string'],
             [['apply_id', 'org_name', 'bank_name', 'bank_name_des', 'shou_kuan_id', 'pics'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 25],
         ];

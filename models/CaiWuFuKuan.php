@@ -41,9 +41,9 @@ class CaiWuFuKuan extends \yii\db\ActiveRecord
         return [
             [['apply_id', 'org_id', 'org_name', 'bank_card_id', 'fu_kuan_id', 'fu_kuan_time'], 'required'],
             [['org_id', 'type', 'fu_kuan_time', 'create_time', 'is_told_cai_wu_success'], 'integer'],
-            [['tips'], 'string'],
+            [['tips', 'pics'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['org_name', 'bank_name', 'bank_name_des', 'fu_kuan_id', 'pics'], 'string', 'max' => 255],
+            [['org_name', 'bank_name', 'bank_name_des', 'fu_kuan_id'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 25],
         ];
     }
