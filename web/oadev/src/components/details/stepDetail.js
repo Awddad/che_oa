@@ -23,17 +23,19 @@ const StepDetails = React.createClass({
         const stepdata = this.props.stepdata;
         let step = '',resultSteps = '';
         let name='',copypersonal='',createTime='',des='',applyID='';
+
         if(Object.keys(stepdata).length > 0){
             let status = stepdata.status;
             step = stepdata.flow.map(data =>
                 <Step key={Math.floor(Math.random()*1000000)} title={
-                        data.status == 1 && status == 3 ?
+                        data.status == 1 && status == 3 || data.status ==3 && status == 4
+                        ?
                             (<div className="cred">{data.title}</div>)
                         :
                             (<div>{data.title}</div>)
                     }
                     description={
-                        status != 3 ?
+                        status != 3?
                             (<div>
                                 <div>{data.name+ "  " + data.date}</div>
                                 <div>{data.org}</div>
@@ -54,7 +56,8 @@ const StepDetails = React.createClass({
                                         <div>{data.org}</div>
                                         <div className="cred">申请人撤销申请</div></div>)
                 } />);
-            resultSteps =   (<Steps current={stepdata.step} progressDot>
+//debugger
+            resultSteps =   (<Steps current={stepdata.step}>
                                 {step}
                             </Steps>);
 

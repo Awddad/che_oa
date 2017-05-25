@@ -13,8 +13,7 @@ const Accessory = React.createClass({
         const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
-            sm: { span: 3 },
-            md: { span: 2 },
+            sm: { span: 2 },
           },
           wrapperCol: {
             xs: { span: 24 },
@@ -33,7 +32,7 @@ const Accessory = React.createClass({
         return(
             <div>
                 <FormItem {...formItemLayout}  label="附件">
-                    <Table size="middle" columns={columns} dataSource={datasource} pagination={false} />
+                    <Table className="zstable" size="middle" bordered columns={columns} dataSource={datasource} pagination={false} />
                 </FormItem>
             </div>
         );

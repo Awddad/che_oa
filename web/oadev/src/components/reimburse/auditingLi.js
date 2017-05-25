@@ -45,6 +45,7 @@ const AuditingLi = React.createClass({
         return(
             <li>
                 <div className={styles.approval_left}>
+                    <img src={require('../../assets/avarter.png')} width="58" height="58" />
                     <span>{this.props.name}</span>
                     <a href="javascript:;" data-id={this.props.dataid} onClick={this.props.litype==1 ? this.handleconstClick : this.handlecopyClick}>删除</a>
                 </div>

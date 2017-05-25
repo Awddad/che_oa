@@ -17,8 +17,7 @@ const BxDetail = React.createClass({
         const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
-            sm: { span: 3 },
-            md: { span: 2 },
+            sm: { span: 2 },
           },
           wrapperCol: {
             xs: { span: 24 },
@@ -32,12 +31,12 @@ const BxDetail = React.createClass({
                 count = count + datasource[i].money*1;
             }
         }
-
+        console.log(datasource);
         return(
             <div>
                 <h2 className={cs('mt-md','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href={this.props.pdf !=null ? host+this.props.pdf:"javascript:;"}>下载审批</a></h2>
                 <FormItem {...formItemLayout}  label={label}>
-                    <Table size="middle" columns={columns} dataSource={datasource} pagination={false} footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
+                    <Table className="zstable" columns={columns} dataSource={datasource} pagination={false} size="middle" bordered footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
                 </FormItem>
             </div>
         );
