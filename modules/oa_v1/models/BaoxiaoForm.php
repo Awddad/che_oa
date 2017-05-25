@@ -50,6 +50,10 @@ class BaoxiaoForm extends BaseForm
 				$this->$attribute = ArrayHelper::index($this->$attribute,'steep');
 				ksort($this->$attribute);
 			}
+			if (count($this->$attribute) > 7) {
+				$this->addError($attribute, "{$params}人数超过限制！");
+				return;
+			}
 			$validator = new \yii\validators\NumberValidator();
 			$validator -> integerOnly = true;
 			foreach($this->$attribute as &$v){
