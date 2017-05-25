@@ -75,7 +75,7 @@ const StepDetails = React.createClass({
                         <h2>{stepdata.title}</h2>
                         <Row>
                             <Col xs={{ span: 5}} lg={{ span: 8}}>发起人：{ name }</Col>
-                            <Col xs={{ span: 11}} lg={{ span: 8}}>抄送人：{ copypersonal }</Col>
+                            <Col xs={{ span: 11}} lg={{ span: 8}}>抄送人：{ copypersonal==''? '--':copypersonal }</Col>
                             <Col xs={{ span: 5}} lg={{ span: 8}}></Col>
                         </Row>
                         <Row>

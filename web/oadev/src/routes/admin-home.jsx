@@ -5,12 +5,20 @@ import { Form, Icon, Button, Row, Col,message} from 'antd';
 import cs from 'classnames'
 import Main from '../components/home/main';
 import styles from './admin-home.less';
-
-import {chkPms,chkPmsForBlock} from '../components/common';
+import {chkPms,chkPmsForBlock,currentPage} from '../components/common';
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 const FormItem = Form.Item;
 
 const AdminHome = React.createClass({
+    contextTypes: {
+      router: React.PropTypes.object
+    },
+    currentPage(e){
+          let item = "/"+e.target.getAttribute("href").split("/")[1];
+          webStorage.setItem("menuKey", item);
+    },
     render(){
         const {
             data,
@@ -20,7 +28,6 @@ const AdminHome = React.createClass({
             homeshowpage
         } = this.props.adminHome;
 
-
         return (
             <Main location={location}>
                 <Row>
@@ -29,9 +36,9 @@ const AdminHome = React.createClass({
                           <h2 className={styles.mb_md}>报销相关</h2>
                           <Row className="home-wraplist">
                             <ul className="ant-col-md-12 ant-col-sm-24">
-                                <li style={chkPmsForBlock(['shen_qing_bao_xiao'])} className="ant-col-md-8"><Link to="/reimBurse">申请报销</Link></li>
-                                <li style={chkPmsForBlock(['shen_qing_jie_kuan'])} className="ant-col-md-8"><Link to="/applyloan">申请借款</Link></li>
-                                <li style={chkPmsForBlock(['shen_qing_huang_kuan'])} className="ant-col-md-8"><Link to="/repayment">申请还款</Link></li>
+                                <li style={chkPmsForBlock(['shen_qing_bao_xiao'])} className="ant-col-md-8"><Link to="/reimburse" onClick = {this.currentPage}>申请报销</Link></li>
+                                <li style={chkPmsForBlock(['shen_qing_jie_kuan'])} className="ant-col-md-8"><Link to="/applyloan" onClick = {this.currentPage}>申请借款</Link></li>
+                                <li style={chkPmsForBlock(['shen_qing_huang_kuan'])} className="ant-col-md-8"><Link to="/repayment" onClick = {this.currentPage}>申请还款</Link></li>
                             </ul>
                           </Row>
                       </div>)
@@ -58,6 +65,7 @@ AdminHome.propTypes = {
   userinfo: PropTypes.object,
   dispatch: PropTypes.func,
   adminHome:PropTypes.object,
+  router: React.PropTypes.object
 };
 
 function mapStateToProps({ adminHome}) {
