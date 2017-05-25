@@ -63,6 +63,19 @@ class BaseForm extends Model
         2 => '借款',
         3 => '还款'
     ];
+    
+    
+    /**
+     * @param $attribute
+     */
+    public function checkTotal($attribute) {
+        if (count($this->$attribute) > 7) {
+            if($attribute == 'approval_persons')
+                $this->addError($attribute, '审批人不能超过7个');
+            else
+                $this->addError($attribute, '抄送人不能超过7个');
+        }
+    }
 
 
     /**

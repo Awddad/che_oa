@@ -43,20 +43,21 @@ class ApplyLogic extends BaseLogic
 		}elseif(2 == $type){//我已审批
 			$approval_model = new appmodel\ApprovalLog();
 			$query = $approval_model::find()
-			-> andWhere(['approval_person_id'=>$user['person_id'],'result'=>1])
+			->where(['approval_person_id' => $user['person_id']])
+			-> andWhere(['>', 'result', 0])
 			-> joinWith('apply a',true,'RIGHT JOIN')
 			-> orderBy('create_time');
 		}elseif(3 == $type){//我发起的
 			$apply_model = new appmodel\Apply();
 			$query = $apply_model::find()
 			-> alias('a')
-			-> Where(['person_id'=>$user['person_id']])
+			-> where(['person_id'=>$user['person_id']])
 			-> orderBy('create_time');
 		}elseif(4 == $type){//抄送给我的
 			$copy_model = new appmodel\ApplyCopyPerson();
 			$query = $copy_model::find()
 			-> joinWith('apply a',true,'RIGHT JOIN')
-			-> Where(['copy_person_id'=>$user['person_id']])
+			-> where(['copy_person_id'=>$user['person_id']])
 			-> orderBy('create_time');
 		}else{
 			return false;

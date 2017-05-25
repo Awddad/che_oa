@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\models;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\CaiWuShouKuan;
+use app\models\JieKuan;
 use app\models\Org;
 use app\models\Person;
 use yii\db\Exception;
@@ -106,11 +107,16 @@ class BackConfirmForm extends CaiWuShouKuan
             $param['remark'] = $this->tips;
 
             //收入 可为空
-            //if($apply->type == 3) {
+            if($apply->type == 3) {
+                //借款单操作
+                $jieKuan = JieKuan::findOne($this->apply_id);
+                $jieKuan->pay_back_time = time();
+                $jieKuan->is_pay_back = 1;
+                $jieKuan->save();
             //    $param['other_name'] = $person->person_name;
             //    $param['other_card'] = $apply->payBack->bank_card_id;
             //    $param['other_bank'] = $apply->payBack->bank_name;
-            //}
+            }
 
             $param['trade_number'] = $this->shou_kuan_id;
             $param['order_number'] = $this->apply_id;
