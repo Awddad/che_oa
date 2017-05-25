@@ -105,7 +105,7 @@ class ApplyController extends BaseController
 				'money' => $v ['money'],
 				'type_name' => $v ['type_name'],
 				'type' => $v ['type'],
-				'desc' => $v ['des']
+				'des' => $v ['des']
 			];
 		}
 		if ($apply ['caiwu'] ['fukuan']) {
