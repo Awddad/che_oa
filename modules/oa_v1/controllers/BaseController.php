@@ -43,7 +43,7 @@ class BaseController extends Controller
      * Yii::$app->controller->id            控制器名称
      * Yii::$app->controller->action->id    方法名称
      */
-    private static $arrWhiteList  = [
+    protected static $arrWhiteList  = [
         '/default/get-user-info',
         '/oa_v1/apply/get-bankcard',
         '/oa_v1/apply/get-user-list',
@@ -117,7 +117,7 @@ class BaseController extends Controller
                     }
                     $this->setUserRoleInfo($intRoleId);
                 }
-                //权限 @TODO
+                //权限
                 $roleInfo = Role::findOne($this->roleId);
                 $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
                 if (!in_array($_SERVER['REQUEST_URI'], static::$arrWhiteList)) {
