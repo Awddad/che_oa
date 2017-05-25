@@ -44,7 +44,16 @@ class BaseController extends Controller
      * Yii::$app->controller->action->id    方法名称
      */
     private static $arrWhiteList  = [
-        'default/get-user-info',
+        '/default/get-user-info',
+        '/oa_v1/apply/get-bankcard',
+        '/oa_v1/apply/get-user-list',
+        '/oa_v1/apply/get-type',
+        '/oa_v1/apply/add-bankcard',
+        '/oa_v1/pay-confirm/form',
+        '/oa_v1/back-confirm/form',
+        '/oa_v1/back/can-back',
+        '/oa_v1/pay-confirm/export',
+        '/oa_v1/back-confirm/export'
     ];
 
 
@@ -109,13 +118,15 @@ class BaseController extends Controller
                     $this->setUserRoleInfo($intRoleId);
                 }
                 //权限 @TODO
-//                $roleInfo = Role::findOne($this->roleId);
-//                $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-//                if(!in_array($_SERVER['REQUEST_URI'], $roleArr) && Yii::$app->controller->id != 'default'){
-//                    header("Content-type: application/json");
-//                    echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
-//                    die();
-//                }
+                $roleInfo = Role::findOne($this->roleId);
+                $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
+                if (!in_array($_SERVER['REQUEST_URI'], static::$arrWhiteList)) {
+                    if (!in_array($_SERVER['REQUEST_URI'], $roleArr) && !in_array(Yii::$app->controller->id, ['default', 'upload'])) {
+                        header("Content-type: application/json");
+                        echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
+                        die();
+                    }
+                }
                 
                 //设置角色信息
                 $session = Yii::$app->getSession();

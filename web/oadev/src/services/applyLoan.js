@@ -33,7 +33,7 @@ export async function addCard(params) {
 }
 
 export async function constCreate(params) {
-  return request('/oa_v1/loan',{
+  return request('/oa_v1/loan/index',{
     method: 'post',
     headers: {
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"

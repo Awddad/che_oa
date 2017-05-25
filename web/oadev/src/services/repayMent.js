@@ -42,7 +42,7 @@ export async function addCard(params) { //添加卡号
 }
 
 export async function constCreate(params) {//提交申请
-  return request('/oa_v1/back',{
+  return request('/oa_v1/back/index',{
     method: 'post',
     headers: {
       "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
