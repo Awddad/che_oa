@@ -176,6 +176,20 @@ const ApplyLoan = React.createClass({
       previewVisible: false
     });
   },
+  btnhandleCancel(){
+      this.props.form.resetFields();
+      const {constdata,copydata} = this.props.applyLoan;
+      constdata.length = 0;
+      copydata.length = 0;
+      this.props.dispatch({
+          type:'applyLoan/modelHandle',
+          payload:{
+              modalIndex:0,
+              constdata:constdata,
+              copydata:copydata
+          }
+      })
+  },
   render(){
     const cardmodalProps = Math.floor(Math.random()*200000);
     const constmodalProps = Math.floor(Math.random()*300000);
@@ -335,7 +349,7 @@ const ApplyLoan = React.createClass({
             </FormItem>
             <FormItem>
                    <Button className={cs('mt-md','mb-md','ant-col-sm-offset-2')} type="primary" onClick={this.showsubmitModal}>确定</Button>
-                   <Button className={cs('mt-md','mb-md','ml-md')} >取消</Button>
+                   <Button className={cs('mt-md','mb-md','ml-md')} onClick={this.btnhandleCancel} >取消</Button>
             </FormItem>
           </Form>
         </Row>

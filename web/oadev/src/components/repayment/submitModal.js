@@ -2,7 +2,7 @@ import { connect } from 'dva';
 import React,{ Component,PropTypes} from 'react';
 import {Form,Icon,Button,Input,Checkbox,Select,Upload,Row,Col,Modal } from 'antd';
 import styles from '../../routes/reimburse.less';
-import {getCookie} from '../common';
+import {getCookie,DateTime} from '../common';
 import cs from 'classnames';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -55,8 +55,7 @@ const SubmitModal = React.createClass({
         let constpersonal = constdata.map(data=>data.name.split(" ")[0]).join("、");
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
         let des = CardDetail.explain;
-        const date = new Date();
-        let  dateTime  = date.getFullYear() + '年' + (date.getMonth()+1) + '月' + date.getDay()+'日';
+
         let name = getCookie("username");
         let department = getCookie("department");
         let html =[],count = 0;
@@ -77,7 +76,7 @@ const SubmitModal = React.createClass({
                     <tbody>
                      <tr>
                          <td className={styles.b_gray} width="100">日期</td>
-                         <td className="t-l">{dateTime}</td>
+                         <td className="t-l">{DateTime()}</td>
                          <td className={styles.b_gray} width="100">单号</td>
                          <td className="t-l">{addApplyID}</td>
                      </tr>
@@ -110,7 +109,7 @@ const SubmitModal = React.createClass({
                      </tr>
                      <tr>
                          <td className={cs(styles.b_gray,"t-c")}>备注</td>
-                         <td className="t-l" colSpan="2">{des}</td>
+                         <td className="t-l" colSpan="2">{des==null?'--':des}</td>
                      </tr>
                     </tbody>
                 </table>
@@ -120,9 +119,9 @@ const SubmitModal = React.createClass({
                          <td className={styles.b_gray} width="66">审批人</td>
                          <td className="t-l" width="200">{constpersonal}</td>
                          <td className={styles.b_gray} width="66">抄送人</td>
-                         <td className="t-l" width="200">{copypersonal}</td>
-                         <td className={styles.b_gray} width="财务确认">抄送人</td>
-                         <td className="t-l">&nbsp;</td>
+                         <td className="t-l" width="200">{copypersonal==''?'--':copypersonal}</td>
+                         <td className={styles.b_gray} >财务确认</td>
+                         <td className="t-l">财务确认</td>
                      </tr>
                     </tbody>
                 </table>
