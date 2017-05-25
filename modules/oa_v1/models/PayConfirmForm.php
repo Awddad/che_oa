@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\models;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\CaiWuFuKuan;
+use app\models\JieKuan;
 use app\models\Org;
 use app\models\Person;
 use yii\db\Exception;
@@ -115,6 +116,10 @@ class PayConfirmForm extends CaiWuFuKuan
             }
 
             if($apply->type == 2) {
+                //借款单操作
+                $jieKuan = JieKuan::findOne($this->apply_id);
+                $jieKuan->get_money_time = time();
+                $jieKuan->save();
                 $param['other_name'] = $person->person_name;
                 $param['other_card'] = $apply->loan->bank_card_id;
                 $param['other_bank'] = $apply->loan->bank_name;
