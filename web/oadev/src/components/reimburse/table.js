@@ -73,7 +73,16 @@ class ApplyTable extends React.Component{
 
         return (
           <div>
-            <Table className={cs("ant-col-sm-24","zstable")} size="middle" columns={columns} dataSource={this.props.tabledata} pagination={false} rowKey={record => record.index} footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
+            <Table
+                className={cs("ant-col-sm-24","zstable")}
+                columns={columns}
+                dataSource={this.props.tabledata}
+                pagination={false}
+                size="middle"
+                bordered
+                rowKey={record => record.index}
+                footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)}
+            />
 
           </div>
         );

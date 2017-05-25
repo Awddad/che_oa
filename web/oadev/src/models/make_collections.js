@@ -72,7 +72,7 @@ export default {
         },
         *search({ payload },{ call,put }){
             const { data } = yield call(query,payload);
-            let total=null,perPage=null,current=null;
+            let total=null,perPage=null,current=null,dataSource='',list='';
             if(data && data.code === 200){
                 if(Object.keys(data.data).length > 0 ){
                     total = data.data.pages.totalCount;

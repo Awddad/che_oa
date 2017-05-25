@@ -106,8 +106,7 @@ const ReimburseDetail = React.createClass({
         const formItemLayout = {
                               labelCol: {
                                 xs: { span: 24 },
-                                sm: { span: 3 },
-                                md: { span: 2 },
+                                sm: { span: 2 },
                               },
                               wrapperCol: {
                                 xs: { span: 24 },

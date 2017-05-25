@@ -30,6 +30,7 @@ export default {
         paymentFlowaccount:[],
         paymentTime:null,
         paymentFlow:null,
+        bxType:''
     },
     subscriptions: {
         setup({ dispatch, history }) {
@@ -87,7 +88,7 @@ export default {
 
         *PayMentConfirmQuery({ payload }, { call, put }) {//付款确认弹窗初始化
             const { data } = yield call(PayMentConfirmquery, payload);
-            let response=null,dataname=null,detail=null;
+            let response=null,dataname=null,detail=null,bxType="";
             if(payload.type == 'bx'){
                 response = yield call(Detail,{...payload,type:1});
                 detail = response.data.data;
@@ -107,7 +108,8 @@ export default {
                         paymentDepartmentData:data.data.pay_org,
                         paymentaccountData:data.data.pay_bank,
                         paymentType:data.data.tags,
-                        ApplyID:payload.apply_id
+                        ApplyID:payload.apply_id,
+                        bxType:payload.type
                     }
                 });
             }else{
@@ -124,7 +126,7 @@ export default {
                     }
                 });
                 message.success("确认成功!",3);
-                yield put(routerRedux.push({ pathname: '#/payment' }));
+                yield put(routerRedux.push({ pathname: '/payment' }));
             }else{
                 message.error(data.message,3);
             }
@@ -176,7 +178,7 @@ export default {
                     }
                 });
                 message.success("确认成功!",3);
-                yield put(routerRedux.push({ pathname: '#/make_collections' }));
+                yield put(routerRedux.push({ pathname: '/make_collections' }));
             }else{
                 message.error(data.message,3);
             }

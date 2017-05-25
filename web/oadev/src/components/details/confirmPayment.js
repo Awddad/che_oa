@@ -38,7 +38,8 @@ const Confirm = React.createClass({
             getFieldValue
         } = this.props.form;
         const paymentDetail = { ...getFieldsValue() };
-        const { paymentDepartmentData,paymentaccountData,paymentType,ApplyID } = this.props.Detail;
+        const { paymentDepartmentData,paymentaccountData,paymentType,ApplyID,bxType } = this.props.Detail;
+
         validateFields((errors) => {
             if (errors) {
                 return;
@@ -65,7 +66,7 @@ const Confirm = React.createClass({
                         fu_kuan_id:paymentDetail.flowaccount,
                         create_cai_wu_log:paymentDetail.flow,
                         fu_kuan_time:this.state.paymentTime,
-                        type:paymentDetail.paymentType[paymentDetail.paymentType.length-1],
+                        type: bxType =='bx' ? 7 : paymentDetail.paymentType[paymentDetail.paymentType.length-1],
                         pics:pics,
                         tips:paymentDetail.tips
                     }
@@ -100,7 +101,7 @@ const Confirm = React.createClass({
         });
     },
     render(){
-        const { paymentDepartmentData,paymentaccountData,paymentType,paymentFlowaccount,paymentTime} = this.props.Detail;
+        const { paymentDepartmentData,paymentaccountData,paymentType,paymentFlowaccount,paymentTime,bxType} = this.props.Detail;
         const { getFieldDecorator } = this.props.form;
         const { previewVisible, previewImage, imgfileList } = this.state;
 
@@ -132,7 +133,7 @@ const Confirm = React.createClass({
         }
         if(paymentaccountData.length > 0){
             accountOptions = paymentaccountData.map(data => <Option key={data.name+' '+data.number}>{data.name_short}</Option>);
-            TypeOptions = TypeOptions = paymentType;
+            TypeOptions = paymentType;
         }
 
         const uploadButton = (
@@ -158,6 +159,24 @@ const Confirm = React.createClass({
             bank_name = details.info.bank_name;
             bank_des = details.info.bank_des;
         }
+
+        let html ="";
+        if(bxType =='bx'){
+            html = (<FormItem {...formItemLayout} label="收款类型" hasFeedback>
+                                {getFieldDecorator('paymentType')(
+                                    <Cascader options={TypeOptions}  placeholder="自动生成，无需选择"  disabled showSearch />
+                                )}
+                            </FormItem>)
+        }else{
+            html = (<FormItem {...formItemLayout} label="收款类型" hasFeedback>
+                                {getFieldDecorator('paymentType', {
+                                    rules: [{required: true, message: '请选择收款类型',}]
+                                })(
+                                    <Cascader options={TypeOptions}  placeholder="请选择" showSearch />
+                                )}
+                            </FormItem>)
+        }
+
         return(
                 <Modal title="付款确认"  {...modalOpts} >
                         <Form>
@@ -179,13 +198,7 @@ const Confirm = React.createClass({
                                     </Select>
                                 )}
                             </FormItem>
-                            <FormItem {...formItemLayout} label="收款类型" hasFeedback>
-                                {getFieldDecorator('paymentType', {
-                                    rules: [{required: true, message: '请选择收款类型',}]
-                                })(
-                                    <Cascader options={TypeOptions}  placeholder="请选择" showSearch />
-                                )}
-                            </FormItem>
+                            {html}
                             <FormItem {...formItemLayout} label="流水号" hasFeedback>
                                 {getFieldDecorator('flowaccount', {
                                     rules: [{required: true, message: '请输入流水号',initialValue:''}]

@@ -15,7 +15,7 @@ export default {
     copyPersonal:null,//抄送联系人
     carddata:[],//选择的的银行卡
     constdata:[],//选择的审批人
-    constdisabled:[],//审核人已选择的
+    constdisabled:[],//审批人已选择的
     copydata:[],//选择的抄送人
     copydisabled:[],//抄送人已选择的
     resultbxtype:[],
