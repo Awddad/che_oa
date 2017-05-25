@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import WebStorage from 'react-webstorage';
-const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 export const chkPms = (pids)=>{
   //return true;

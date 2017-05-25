@@ -278,7 +278,7 @@ const Reimburse = React.createClass({
     const copymodalProps = Math.floor(Math.random()*400000);
     const submitmodalProps = Math.floor(Math.random()*500000);
 
-    const {isshowtablemodal,isshowcardmodal,isshowconstmodal,isshowcopymodal,issubmitmodal,tabledata,constCard,constdata,copydata} = this.props.reimBurse;
+    const {isshowtablemodal,isshowcardmodal,isshowconstmodal,isshowcopymodal,issubmitmodal,tabledata,constCard,constdata,copydata,bank} = this.props.reimBurse;
 
     const GenTable = () => <ApplyTable tabledata={tabledata}/>;
 
@@ -300,7 +300,8 @@ const Reimburse = React.createClass({
       onChange: this.handleimgChange,
     };
 
-    const  cardOptions = constCard.map(data =><Option key={tablemodalProps} value={data.bank_name+" "+data.card_id +" "+data.bank_des}>{data.bank_name+'-'+data.card_id}</Option>);
+    const  cardOptions = constCard.map( data => <Option key={cardmodalProps} value={data.bank_name+" "+data.card_id +" "+data.bank_des}>{data.bank_name+'-'+data.card_id}</Option>);
+
 
     const { previewVisible, previewImage, imgfileList } = this.state;
     let auditingLi=null,copyLi=null;
@@ -340,7 +341,6 @@ const Reimburse = React.createClass({
           },
         };
 
-    //console.log(tabledata);
     const { getFieldDecorator } = this.props.form;
     const GenconstPerson = () => <ApprovalPerson handleClick={this.showconstModal} approvalPerson={auditingLi} />;
     const GencopyPerson = () => <ApprovalPerson handleClick={this.showcopyModal} approvalPerson={copyLi} />;
