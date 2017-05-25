@@ -163,7 +163,7 @@ class Apply extends \yii\db\ActiveRecord
      */
     public function approvalPass($person)
     {
-        $this->next_des = "待 {$person} 审批";
+        $this->next_des = "等待 {$person} 审批";
         $this->status = self::STATUS_ING;
         return $this->save();
     }
@@ -173,7 +173,7 @@ class Apply extends \yii\db\ActiveRecord
      */
     public function approvalConfirm()
     {
-        $this->next_des = '待财务部门确认';
+        $this->next_des = '等待财务部门确认';
         $this->status = self::STATUS_CONFIRM;
         return $this->save();
     }
