@@ -120,8 +120,10 @@ class BaseController extends Controller
                 //权限
                 $roleInfo = Role::findOne($this->roleId);
                 $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-                if (!in_array($_SERVER['REQUEST_URI'], static::$arrWhiteList)) {
-                    if (!in_array($_SERVER['REQUEST_URI'], $roleArr) && !in_array(Yii::$app->controller->id, ['default', 'upload'])) {
+                $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
+                if (!in_array($requestUrlArr['0'], static::$arrWhiteList)
+                    && !in_array(Yii::$app->controller->id, ['default', 'upload'])) {
+                    if (!in_array($requestUrlArr['0'], $roleArr) ) {
                         header("Content-type: application/json");
                         echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
                         die();
