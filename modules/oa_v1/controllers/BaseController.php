@@ -53,7 +53,8 @@ class BaseController extends Controller
         '/oa_v1/back-confirm/form',
         '/oa_v1/back/can-back',
         '/oa_v1/pay-confirm/export',
-        '/oa_v1/back-confirm/export'
+        '/oa_v1/back-confirm/export',
+        '/oa_v1/approval-log/update'
     ];
 
 
