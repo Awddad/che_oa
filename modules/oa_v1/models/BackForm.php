@@ -112,6 +112,9 @@ class BackForm extends BaseForm
                 'rule' => ['integer']
             ],
             [
+                ['approval_persons', 'copy_person'], 'checkTotal'
+            ],
+            [
                 ['apply_ids'],
                 'checkApplyIds',
             ]
