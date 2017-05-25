@@ -1,4 +1,4 @@
-import { query } from '../services/payment';
+import { query,Export } from '../services/payment';
 import { parse } from 'qs';
 import { message} from 'antd';
 import { userLogin } from '../components/common';

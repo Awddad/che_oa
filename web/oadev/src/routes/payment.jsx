@@ -83,13 +83,13 @@ const Payment =React.createClass({
                   begin_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
                   end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
                 }
-
+                console.log(end_time);
                 this.props.dispatch({
                     type:'payment/search',
                     payload: {
                         keyword:fieldsValue.keyword,
-                        begin_time:begin_time,
-                        end_time:end_time,
+                        begin_time:begin_time==null?'':begin_time,
+                        end_time: end_time == null?'':end_time,
                         currentPage:1,
                         perPage:perPage,
                     },

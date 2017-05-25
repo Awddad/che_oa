@@ -192,12 +192,12 @@ class ApplyController extends BaseController
 	 */
 	protected function getData($apply) {
 		$status_map = [
-			'1' => '1', // 审批中
-			'11' => '1', // 审批中
-			'2' => '4', // 审批不通过
-			'3' => '3', // 撤销
-			'4' => '2', // 财务确认
-			'99' => '5', // 完成
+			'1' => 1, // 审批中
+			'11' => 1, // 审批中
+			'2' => 4, // 审批不通过
+			'3' => 3, // 撤销
+			'4' => 2, // 财务确认
+			'99' => 5, // 完成
 		];
 
 		$data = [
@@ -205,7 +205,7 @@ class ApplyController extends BaseController
 			'create_time' => date('Y-m-d H:i', $apply ['create_time']),
 			'next_des' => $apply ['next_des'],
 			'title' => $apply ['title'],
-			'type' => $apply ['type'],
+			'type' => (int)$apply ['type'],
 			'type_value' => $this->type [$apply ['type']],
 			'person' => $apply ['person'],
 			// 'person_id' => $apply['person_id'],

@@ -163,32 +163,41 @@ export default {
     },
     *addconst({payload},{call,put,select}){//添加审批人
       const data = yield select(({ reimBurse }) => reimBurse.constdata );
-      if(payload.type == 1){
-        data.push(payload.row);
-      }
-      //payload.constPersonal.splice(payload.index,1);
-      yield put({
-          type: 'updateConst',
-          payload: {
-              constdata : data,
-              constPersonal:payload.constPersonal
+      console.log(data.length);
+      if(data.length<7){
+          if(payload.type == 1){
+            data.push(payload.row);
           }
-      });
+          //payload.constPersonal.splice(payload.index,1);
+          yield put({
+              type: 'updateConst',
+              payload: {
+                  constdata : data,
+                  constPersonal:payload.constPersonal
+              }
+          });
+        }else{
+          message.error("添加的审批人个数已达上限!",3);
+        }
     },
     *addcopy({payload},{call,put,select}){//添加抄送人
       const  data  = yield select(({ reimBurse }) => reimBurse.copydata );
-      if(payload.type == 1){
-        data.push(payload.row);
-      }
-
-      //payload.copyPersonal.splice(payload.index,1);
-      yield put({
-          type: 'updateCopy',
-          payload: {
-              copydata : data,
-              copyPersonal:payload.copyPersonal
+      if(data.length<7){
+          if(payload.type == 1){
+            data.push(payload.row);
           }
-      });
+
+          //payload.copyPersonal.splice(payload.index,1);
+          yield put({
+              type: 'updateCopy',
+              payload: {
+                  copydata : data,
+                  copyPersonal:payload.copyPersonal
+              }
+          });
+      }else{
+          message.error("添加的抄送人个数已达上限!",3);
+      }
     },
     *create({payload},{call,put}){//提交报销单
       console.log(payload);

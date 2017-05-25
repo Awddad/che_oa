@@ -131,7 +131,7 @@ const RepayMent = React.createClass({
     const { isshowcardmodal,isshowconstmodal,isshowcopymodal,issubmitmodal,constCard,constdata,copydata,selectedRows,BackList } = this.props.repayMent;
     const  cardOptions = constCard.map(data =><Option key={cardmodalProps} value={ data.bank_name + " " +data.card_id+" "+data.bank_des}>{data.bank_name+'-'+data.card_id}</Option>);
 
-    //审核人
+    //审批人
     const auditingLi =  constdata.map(function(data,index) {
                               return (
                                   <AuditingLi key={index} dataid={index} id={data.id} imgvisiable={true} litype="1" data-key="" name={data.name} />
@@ -147,8 +147,7 @@ const RepayMent = React.createClass({
     const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
-            sm: { span: 3 },
-            md: { span: 2 },
+            sm: { span: 2 },
           },
           wrapperCol: {
             xs: { span: 24 },
@@ -170,6 +169,7 @@ const RepayMent = React.createClass({
           key:'money',
           dataIndex: 'money',
           width:120,
+          className:cs("t-r"),
         }, {
           title: '借款时间',
           key:'get_money_time',
@@ -216,7 +216,7 @@ const RepayMent = React.createClass({
       <Main location={location}>
         <Row>
           <AddCardModal key={cardmodalProps} isshowcardmodal = {isshowcardmodal} />
-          <AddConstModal key={constmodalProps} title="审核人" isshowconstmodal = {isshowconstmodal}/>
+          <AddConstModal key={constmodalProps} title="审批人" isshowconstmodal = {isshowconstmodal}/>
           <AddCopyModal key={copymodalProps} title="抄送人" isshowcopymodal = {isshowcopymodal} />
           <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
 
@@ -224,7 +224,7 @@ const RepayMent = React.createClass({
             <Pagetitle isback='true' title = '申请还款'/>
             <h3 className={cs("mt-md","mb-md")}>还款申请表</h3>
             <FormItem {...formItemLayout} className="labelt" label="选择待还借款">
-                <Table className={cs("ant-col-sm-24","zxtable")} size="middle" rowSelection={rowSelection} columns={columns} dataSource={dataSource} pagination={false} rowKey={record => record.index} footer={() => (<table><tbody><tr><td width="60">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
+                <Table className={cs("ant-col-sm-24","zstable")} size="middle" bordered rowSelection={rowSelection} columns={columns} dataSource={dataSource} pagination={false} rowKey={record => record.index} footer={() => (<table><tbody><tr><td width="122">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
             </FormItem>
             <FormItem {...formItemLayout} label="还款银行卡">
                 {getFieldDecorator('code', {
