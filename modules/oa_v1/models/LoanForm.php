@@ -120,6 +120,9 @@ class LoanForm extends BaseForm
                 'rule' => ['integer']
             ],
             [
+                ['approval_persons', 'copy_person'], 'checkTotal'
+            ],
+            [
                 ['pics'], 'string'
             ],
             [
