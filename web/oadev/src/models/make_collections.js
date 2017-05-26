@@ -46,6 +46,7 @@ export default {
         *query({ payload }, { call, put }) {
           yield put({ type: 'showLoading' });
           const { data } = yield call(query, payload);
+          yield put({ type: 'hideLoading' });
           if (data && data.code == 200) {
             let total='',current='',perPage='';
             if(Object.keys(data.data).length > 0 ){
@@ -71,7 +72,9 @@ export default {
           }
         },
         *search({ payload },{ call,put }){
+            yield put({ type: 'showLoading' });
             const { data } = yield call(query,payload);
+            yield put({ type: 'hideLoading' });
             let total=null,perPage=null,current=null,dataSource='',list='';
             if(data && data.code === 200){
                 if(Object.keys(data.data).length > 0 ){
@@ -97,8 +100,9 @@ export default {
             }
         },
         *filtersort({ payload },{ call,put }){
+            yield put({ type: 'showLoading' });
             const { data } = yield call(query,payload);
-            console.log(payload.sort);
+            yield put({ type: 'hideLoading' });
             if(data && data.code === 200){
                 yield put({
                     type: 'querySuccess',
@@ -118,6 +122,9 @@ export default {
   reducers: {
     showLoading(state) {
       return { ...state, loading: true };
+    },
+    hideLoading(state) {
+      return { ...state, loading: false };
     },
     querySuccess(state, action) {
       return { ...state, ...action.payload, loading: false };

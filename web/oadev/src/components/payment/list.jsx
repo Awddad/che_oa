@@ -141,11 +141,11 @@ const PaymentdList= React.createClass({
                 let result=null,url=null,confirmclick=null;
                 switch(record.type_name){
                     case '申请报销':
-                        url = "/reimbursedetail?apply_id="+record.apply_id+"&type=confirm";
+                        url = "/reimbursedetail?type=confirm&apply_id="+record.apply_id;
                         confirmclick = this.bxConfirmClick;
                     break;
                     case '申请借款':
-                        url = "/loanmentdetail?apply_id="+record.apply_id+"&type=confirm";
+                        url = "/loanmentdetail?type=confirm&apply_id="+record.apply_id;
                         confirmclick = this.loanConfirmClick;
                     break;
                 }

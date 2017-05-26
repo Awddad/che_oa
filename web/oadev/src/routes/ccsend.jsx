@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message} from 'antd';
-
+import cs from 'classnames';
 import styles from './style.less';
 import Main from '../components/home/main';
 import CcsendSearch from '../components/ccsend/search';
 import CcsendList from '../components/ccsend/list';
+import Pagetitle from '../components/public/pagetitle';
 
 
 const Ccsend = React.createClass({
@@ -99,7 +100,7 @@ const Ccsend = React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>抄送给我</h2>
+                        <Pagetitle title = '抄送给我'/>
                         <CcsendSearch {...ccsendSearchProps}/>
                         <CcsendList {...ccsendListProps}/>
                     </div>

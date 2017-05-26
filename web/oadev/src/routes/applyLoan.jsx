@@ -8,10 +8,14 @@ import AddConstModal from '../components/applyloan/addConstModal';
 import AddCopyModal from '../components/applyloan/addCopyModal';
 import AuditingLi from '../components/applyloan/auditingLi';
 import SubmitModal from '../components/applyloan/submitModal';
+import {Bread} from '../components/common';
+import { routerRedux } from 'dva/router';
 import styles from './reimburse.less';
 import cs from 'classnames';
 const Option = Select.Option;
 const FormItem = Form.Item;
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 
 
@@ -19,12 +23,17 @@ const acceptImgFormat = 'jpg,jpeg,png,gif'; //上传图片格式
 
 const ApplyLoan = React.createClass({
   getInitialState(){
+    //Bread("报销管理","OneCrumb");
+    Bread("申请借款","OneCrumb");
     return {
       ...this.props.applyLoan,
       imgfileList:[],
       previewVisible: false,
       previewImage: '',
     };
+  },
+  componentDidMount() {
+
   },
 
   //银行卡添加弹窗
@@ -188,7 +197,9 @@ const ApplyLoan = React.createClass({
               constdata:constdata,
               copydata:copydata
           }
-      })
+      });
+      webStorage.setItem("menuKey", "/adminhome");
+      this.props.dispatch(routerRedux.push("/adminhome"));
   },
   render(){
     const cardmodalProps = Math.floor(Math.random()*200000);
@@ -260,8 +271,7 @@ const ApplyLoan = React.createClass({
           <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
 
           <Form>
-            <Pagetitle isback='true' title = '申请借款'/>
-            <h3 className={cs("mt-md","mb-md")}>借款申请表</h3>
+            <Pagetitle isback='true' title = '借款申请表'/>
             <FormItem {...formItemLayout} label="借款金额">
                 {getFieldDecorator('money', {
                     validateTrigger:['onBlur','onFocus'],

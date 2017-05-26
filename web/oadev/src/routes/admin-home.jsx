@@ -5,13 +5,19 @@ import { Form, Icon, Button, Row, Col,message} from 'antd';
 import cs from 'classnames'
 import Main from '../components/home/main';
 import styles from './admin-home.less';
-import {chkPms,chkPmsForBlock,currentPage} from '../components/common';
+import {chkPms,chkPmsForBlock,currentPage,Bread} from '../components/common';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 const FormItem = Form.Item;
 
 const AdminHome = React.createClass({
+    getInitialState(){
+          Bread("首页","OneCrumb");
+          Bread("","TwoCrumb");
+          Bread("","ThreeCrumb");
+          return{}
+    },
     contextTypes: {
       router: React.PropTypes.object
     },
@@ -33,7 +39,7 @@ const AdminHome = React.createClass({
                 <Row>
                     {chkPms(['shen_qing_bao_xiao','shen_qing_jie_kuan','shen_qing_huang_kuan']) ?
                       (<div className={styles.home_wrap}>
-                          <h2 className={styles.mb_md}>报销相关</h2>
+                          <h3 className={cs("mt-md","mb-md")}>报销相关</h3>
                           <Row className="home-wraplist">
                             <ul className="ant-col-md-12 ant-col-sm-24">
                                 <li style={chkPmsForBlock(['shen_qing_bao_xiao'])} className="ant-col-md-8"><Link to="/reimburse" onClick = {this.currentPage}>申请报销</Link></li>

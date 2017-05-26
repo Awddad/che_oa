@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message} from 'antd';
-
+import cs from 'classnames';
 import styles from './style.less';
 import Main from '../components/home/main';
 import PaymentSearch from '../components/payment/search';
 import PaymentList from '../components/payment/list';
-// import PaymentModal from '../components/payment/paymentModal';
+import Pagetitle from '../components/public/pagetitle';
 
 const Payment =React.createClass({
    render(){
@@ -101,7 +101,7 @@ const Payment =React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>付款确认</h2>
+                        <Pagetitle title = '付款确认'/>
                         <PaymentSearch {...paymentSearchProps}/>
                         <PaymentList {...paymentListProps}/>
                     </div>
