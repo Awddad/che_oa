@@ -42,8 +42,9 @@ export default {
 
   effects: {
     *query({ payload }, { call, put }) {
+      yield put({ type: 'showLoading' });
       const { data } = yield call(query, payload);
-
+      yield put({ type: 'hideLoading' });
       if (data && data.code == 200) {
         yield put({
           type: 'querySuccess',
@@ -57,7 +58,9 @@ export default {
       }
     },
     *search({ payload },{ call,put }){
+        yield put({ type: 'showLoading' });
         const { data } = yield call(query,payload);
+        yield put({ type: 'hideLoading' });
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
@@ -75,7 +78,9 @@ export default {
         }
     },
     *filtersort({ payload },{ call,put }){
+        yield put({ type: 'showLoading' });
         const { data } = yield call(query,payload);
+        yield put({ type: 'hideLoading' });
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
@@ -98,6 +103,9 @@ export default {
 
   reducers: {
     showLoading(state) {
+      return { ...state, loading: true };
+    },
+    hideLoading(state) {
       return { ...state, loading: true };
     },
     querySuccess(state, action) {

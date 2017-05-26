@@ -8,19 +8,27 @@ import AddCardModal from '../components/repayment/addCardModal';
 import AddConstModal from '../components/repayment/addConstModal';
 import AddCopyModal from '../components/repayment/addCopyModal';
 import SubmitModal from '../components/repayment/submitModal';
+import {Bread} from '../components/common';
+import { routerRedux } from 'dva/router';
 import styles from './reimburse.less';
 import cs from 'classnames';
 const Option = Select.Option;
 const FormItem = Form.Item;
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 const RepayMent = React.createClass({
   getInitialState(){
+    //Bread("报销管理","OneCrumb");
+    Bread("申请还款","OneCrumb");
     return {
       ...this.props.repayMent,
       selectedRows:[]
     };
   },
+  componentDidMount() {
 
+  },
     //银行卡添加弹窗
   showcardModal(){
     this.props.dispatch({
@@ -120,7 +128,9 @@ const RepayMent = React.createClass({
               constdata:constdata,
               copydata:copydata
           }
-      })
+      });
+      webStorage.setItem("menuKey", "/adminhome");
+      this.props.dispatch(routerRedux.push("/adminhome"));
   },
   render(){
     const cardmodalProps = Math.floor(Math.random()*200000);
@@ -221,8 +231,7 @@ const RepayMent = React.createClass({
           <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
 
           <Form>
-            <Pagetitle isback='true' title = '申请还款'/>
-            <h3 className={cs("mt-md","mb-md")}>还款申请表</h3>
+            <Pagetitle isback='true' title = '还款申请表'/>
             <FormItem {...formItemLayout} className="labelt" label="选择待还借款">
                 <Table className={cs("ant-col-sm-24","zstable")} size="middle" bordered rowSelection={rowSelection} columns={columns} dataSource={dataSource} pagination={false} rowKey={record => record.index} footer={() => (<table><tbody><tr><td width="122">合计</td><td width="104" className="t-r">{count.toFixed(2)}</td><td colSpan="3"></td></tr></tbody></table>)} />
             </FormItem>

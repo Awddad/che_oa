@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message,Modal} from 'antd';
-
+import cs from 'classnames';
 import styles from './style.less';
 import Main from '../components/home/main';
 import MysendSearch from '../components/mysend/search';
 import MysendList from '../components/mysend/list';
+import Pagetitle from '../components/public/pagetitle';
 
 const confirm = Modal.confirm;
 const Mysend=React.createClass({
@@ -131,7 +132,7 @@ const Mysend=React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>我发起的</h2>
+                        <Pagetitle title = '我发起的'/>
                         <MysendSearch {...mysendSearchProps}/>
                         <MysendList {...mysendListProps} handleClick = {this.showConfirm}/>
                     </div>

@@ -46,9 +46,15 @@ const Left = React.createClass({
   handleClick(item) {
     this.context.router.push(item.key);
     webStorage.setItem("menuKey", item.key);
-    webStorage.setItem("OneCrumb", _keypath[item.keyPath[1]]);
-    webStorage.setItem("TwoCrumb", item.item.props.children);
-    webStorage.setItem("ThreeCrumb","");
+    if(typeof(item.item.props.children) == "object" && item.item.props.children.props.children == "首页"){
+      webStorage.setItem("OneCrumb","首页");
+      webStorage.setItem("TwoCrumb", "");
+      webStorage.setItem("ThreeCrumb","");
+    }else{
+      webStorage.setItem("OneCrumb", _keypath[item.keyPath[1]]);
+      webStorage.setItem("TwoCrumb", item.item.props.children);
+      webStorage.setItem("ThreeCrumb","");
+    }
   },
   getSelectedKeys(){
     let key = webStorage.getItem('menuKey');
@@ -92,15 +98,14 @@ const Left = React.createClass({
           mode="inline"
           >
 
-            <Menu.Item key="/adminhome" style={chkPmsForBlock(['index'])}><span style={{"padding-left":24}}>首页</span></Menu.Item>
-
-          {chkPms(['shen_qing_bao_xiao','shen_qing_bao_xiao','shen_qing_huang_kuan'])?
+          <Menu.Item key="/adminhome" style={chkPmsForBlock(['index'])}><span style={{paddingLeft:24}}>首页</span></Menu.Item>
+          {/*chkPms(['shen_qing_bao_xiao','shen_qing_bao_xiao','shen_qing_huang_kuan'])?
                   <SubMenu key="sub1" title={<span><Icon type="solution"/><span>报销管理</span></span>}>
                     <Menu.Item key="/reimburse" style={chkPmsForBlock(['shen_qing_bao_xiao'])}>申请报销</Menu.Item>
                     <Menu.Item key="/applyloan" style={chkPmsForBlock(['shen_qing_jie_kuan'])}>申请借款</Menu.Item>
                     <Menu.Item key="/repayment" style={chkPmsForBlock(['shen_qing_huang_kuan'])}>申请还款</Menu.Item>
                   </SubMenu>
-          :null}
+          :null*/}
 
           {chkPms(['dai_wo_shen_pi','wo_yi_shen_pi','wo_fa_qi_de','chao_song_gei_wo'])?
                   <SubMenu key="sub2" title={<span><Icon type="solution"/><span>审批管理</span></span>}>

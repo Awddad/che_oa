@@ -130,3 +130,7 @@ export const DateTime =() =>{
     const dateTime = year + month + day;
     return dateTime;
 }
+
+export const Bread = (item,cc) =>{
+  webStorage.setItem(cc,item);
+}

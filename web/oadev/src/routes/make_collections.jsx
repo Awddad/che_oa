@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message} from 'antd';
-
+import cs from 'classnames';
 import styles from './style.less';
 import Main from '../components/home/main';
 import MakeCollectionSearch from '../components/make_collections/search';
 import MakeCollectionsList from '../components/make_collections/list';
 import ConfirmPayment from '../components/details/confirmPayment';
+import Pagetitle from '../components/public/pagetitle';
 
  const MakeCollection= React.createClass({
 
@@ -98,7 +99,7 @@ import ConfirmPayment from '../components/details/confirmPayment';
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>收款确认</h2>
+                        <Pagetitle title = '收款确认'/>
                         <MakeCollectionSearch {...makeSearchProps}/>
                         <MakeCollectionsList {...makeListProps}/>
                     </div>

@@ -12,7 +12,7 @@ import DetailImg from '../../components/details/detailimg';
 import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmRepayment';
-import { chkPms } from '../../components/common';
+import { chkPms,Bread } from '../../components/common';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -20,6 +20,11 @@ const FormItem = Form.Item;
 
 const RepayMentDetail = React.createClass({
     getInitialState(){
+        if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "approval"){
+          Bread("还款审批","ThreeCrumb");
+        }else{
+          Bread("还款详情","ThreeCrumb");
+        }
         return {
             ...this.props.Detail,
         };
@@ -182,10 +187,10 @@ const RepayMentDetail = React.createClass({
                         <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={RepayMent_Detail} />
                         <BxDetail columns={bxmx_columns} pdf={pdf} dataSource={RepayMent_Detail.info} label="还款列表" />
-                        <FormItem {...formItemLayout}  label="借款金额" className="mb-sm">
+                        <FormItem {...formItemLayout}  label="还款金额" className="mb-sm">
                             <p style={{marginTop:5}}>{ money }元</p>
                         </FormItem>
-                        <FormItem {...formItemLayout}  label="借款到" className="mb-sm">
+                        <FormItem {...formItemLayout}  label="还款银行卡" className="mb-sm">
                             <p style={{marginTop:5}}>{ name }&nbsp;&nbsp;&nbsp;{ bank_name }</p>
                             <p>{ bank_id }</p>
                             <p>{ bank_des }</p>
@@ -196,7 +201,6 @@ const RepayMentDetail = React.createClass({
                             </FormItem>)
                             : ''
                         }
-                        <DetailImg imgdata={ pics } />
                         { approval }
                         { confirm }
                         <GenConfirm />

@@ -2,9 +2,10 @@ import React, { PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message} from 'antd';
-
+import cs from 'classnames';
 import styles from './style.less';
 import Main from '../components/home/main';
+import Pagetitle from '../components/public/pagetitle';
 import AlreadyApproveSearch from '../components/already-approve/search';
 import AlreadyApproveList from '../components/already-approve/list';
 
@@ -102,7 +103,7 @@ const AlreadyApprove =React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>我已审批</h2>
+                        <Pagetitle title="我已审批" />
                         <AlreadyApproveSearch {...alreadySearchProps}/>
                         <AlreadyApproveList {...alreadyListProps}/>
                     </div>
