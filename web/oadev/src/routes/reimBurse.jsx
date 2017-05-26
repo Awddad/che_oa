@@ -9,15 +9,21 @@ import AddCardModal from '../components/reimburse/addCardModal';
 import AddConstModal from '../components/reimburse/addConstModal';
 import AddCopyModal from '../components/reimburse/addCopyModal';
 import SubmitModal from '../components/reimburse/submitModal';
+import {Bread} from '../components/common';
 import Main from '../components/home/main';
+import { routerRedux } from 'dva/router';
 import styles from './reimburse.less';
 import cs from 'classnames';
 const Option = Select.Option;
 const FormItem = Form.Item;
+import WebStorage from 'react-webstorage';
+const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 
 const Reimburse = React.createClass({
   getInitialState(){
+    //Bread("报销管理","OneCrumb");
+    Bread("申请报销","OneCrumb");
     return {
       ...this.props.reimBurse,
       fileList: [],
@@ -43,6 +49,7 @@ const Reimburse = React.createClass({
     });*/
   },
   componentDidMount() {
+
   },
   //表格添加弹窗
   showtableModal(){
@@ -269,7 +276,10 @@ const Reimburse = React.createClass({
               constdata:constdata,
               copydata:copydata
           }
-      })
+      });
+
+      webStorage.setItem("menuKey", "/adminhome");
+      this.props.dispatch(routerRedux.push("/adminhome"));
   },
   render(){
     const tablemodalProps = Math.floor(Math.random()*100000);
@@ -354,8 +364,7 @@ const Reimburse = React.createClass({
           <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
 
           <Form>
-            <Pagetitle isback='true' title = '申请报销'/>
-            <h3 className={cs("mt-md","mb-md")}>报销申请表</h3>
+            <Pagetitle title = '报销申请表'/>
             <FormItem {...formItemLayout} label="报销明细" className="labelt" >
                <GenTable/>
             </FormItem>

@@ -12,7 +12,7 @@ import DetailImg from '../../components/details/detailimg';
 import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmPayment';
-import { key,host,chkPms } from '../../components/common';
+import { key,host,chkPms,Bread } from '../../components/common';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -20,6 +20,11 @@ const FormItem = Form.Item;
 
 const ReimburseDetail = React.createClass({
     getInitialState(){
+        if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "approval"){
+          Bread("报销审批","ThreeCrumb");
+        }else{
+          Bread("报销详情","ThreeCrumb");
+        }
         return {
             ...this.props.Detail,
             approvaltext:null,

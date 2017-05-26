@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { Form, Icon, Button, Row, Col,message} from 'antd';
-
+import cs from 'classnames';
 import styles from './style.less';
 import Main from '../components/home/main';
 import WaitmeSearch from '../components/waitme-approve/search';
 import WaitmeList from '../components/waitme-approve/list';
+import Pagetitle from '../components/public/pagetitle';
 
 
 const Waitme = React.createClass({
@@ -24,6 +25,7 @@ const Waitme = React.createClass({
             start_time,
             end_time,
             currentPage,
+            perPage,
             modalVisible,
             modalType,
             sorging,
@@ -52,14 +54,15 @@ const Waitme = React.createClass({
             },
             onSorting(sorting,filterType){
                 filterType = filterType || [];
-                let payload = {
-                                            type:type,
-                                            keywords: keywords,
-                                            start_time: start_time,
-                                            end_time: end_time,
-                                            sort:sorting,
-                                            at:filterType
-                                        };
+                let payload =   {
+                                    type:type,
+                                    keywords: keywords,
+                                    start_time: start_time,
+                                    end_time: end_time,
+                                    sort:sorting,
+                                    at:filterType,
+                                    page_size:perPage
+                                };
 
                 this.dispatch({
                     type: 'waitme/filtersort',
@@ -105,7 +108,7 @@ const Waitme = React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>待我审批</h2>
+                        <Pagetitle title="待我审批" />
                         <WaitmeSearch {...WaitmeSearchProps}/>
                         <WaitmeList {...WaitmeListProps}/>
                     </div>

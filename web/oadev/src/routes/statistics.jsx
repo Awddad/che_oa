@@ -6,7 +6,8 @@ import styles from './style.less';
 import Main from '../components/home/main';
 import LoadDetailSearch from '../components/statistics/search';
 import LoadDetailList from '../components/statistics/list';
-
+import Pagetitle from '../components/public/pagetitle';
+import cs from 'classnames';
 
 const LoadDetail = React.createClass({
    render(){
@@ -84,7 +85,7 @@ const LoadDetail = React.createClass({
             <Main location={location}>
                 <Row>
                     <div className={styles.home_wrap}>
-                        <h2 className={styles.mb_md}>在借款员工明细表</h2>
+                        <Pagetitle title = '在借款员工明细表'/>
                         <LoadDetailSearch {...loadSearchProps} />
                         <LoadDetailList {...detailListProps}/>
                     </div>

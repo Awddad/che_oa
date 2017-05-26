@@ -12,7 +12,7 @@ import DetailImg from '../../components/details/detailimg';
 import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmPayment';
-import { chkPms } from '../../components/common';
+import { chkPms,Bread } from '../../components/common';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -20,6 +20,11 @@ const FormItem = Form.Item;
 
 const ReimburseDetail = React.createClass({
     getInitialState(){
+        if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "approval"){
+          Bread("借款审批","ThreeCrumb");
+        }else{
+          Bread("借款详情","ThreeCrumb");
+        }
         return {
             ...this.props.Detail,
         };
@@ -161,7 +166,7 @@ const ReimburseDetail = React.createClass({
                     <div className={styles.home_wrap}>
                         <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={Loan_Detail} />
-                        <h2 className={cs('mt-lg','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href={pdf}>下载审批</a></h2>
+                        <h2 className={cs('mt-lg','mb-md')}><strong>需审批内容</strong><a className={cs(styles.download,'ml-sm')} href={pdf}>下载审批单</a></h2>
                         <FormItem {...formItemLayout}  label="借款金额" className="mb-sm">
                             <p style={{marginTop:5}}>{ money }元</p>
                         </FormItem>

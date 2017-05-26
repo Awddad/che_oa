@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'dva'
+import { routerRedux,Link } from 'dva/router';
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import {chkPms,chkPmsForBlock,chkPmsForInlineBlock,host} from '../common';
 import styles from './search.less';
@@ -116,7 +117,7 @@ const MakeCollectionsList = React.createClass({
             dataIndex:'operation',
             render:(text,record)=> (
                 <p>
-                    <a className="mr-md" style={chkPmsForInlineBlock(['shou_kuan_que_ren_detail'])} href={"/repaymentdetail?apply_id="+record.apply_id+"&type=confirm"}>详情</a>
+                    <Link className="mr-md" style={chkPmsForInlineBlock(['shou_kuan_que_ren_detail'])} to={"/repaymentdetail?type=confirm&apply_id="+record.apply_id}>详情</Link>
                     <a data-applyid={record.apply_id} style={chkPmsForInlineBlock(['shou_kuan_que_ren'])} onClick={this.ConfirmClick}>收款确认</a>
                 </p>
             )

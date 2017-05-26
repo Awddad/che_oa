@@ -72,7 +72,7 @@ const StepDetails = React.createClass({
             <div>
                 <div className={styles.loan_box}>
                     <div className={styles.img}>
-                        <img src={require('../../assets/logo.png')} style={{marginTop:5}} />
+                        <img src={require('../../assets/avarter.png')} style={{marginTop:5}} />
                     </div>
                     <div className={styles.load_tit}>
                         <h2>{stepdata.title}</h2>

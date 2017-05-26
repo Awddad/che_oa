@@ -1,6 +1,7 @@
 import { connect } from 'dva';
 import React from 'react';
 import {Icon} from 'antd';
+import cs from 'classnames';
 
 
 const Pagetitle = React.createClass({
@@ -12,11 +13,8 @@ const Pagetitle = React.createClass({
     if(this.props.isback){
       icon = (<Icon type="left" />);
     }
-    return(
-      <h1 className='page-title'>
-        <a onClick={this.handlelocation} style={{fontSize:30}}>{icon}</a>
-        <strong>{this.props.title}</strong>
-      </h1>
+    return (
+      <h3 className={cs("mt-md","mb-md")} >{this.props.title}</h3>
     )
   }
 });

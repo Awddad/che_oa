@@ -53,6 +53,7 @@ export default {
       });
       const { data } = yield call(query, payload);
       const  response2 = yield call(GetUserInfo,{});
+      yield put({ type: 'hideLoading' });
       if (data && data.code == 200 && response2.data && response2.data.code == 200) {
         yield put({
           type: 'querySuccess',
@@ -67,7 +68,9 @@ export default {
       }
     },
     *search({ payload },{ call,put }){
+        yield put({ type: 'showLoading' });
         const { data } = yield call(query,payload);
+        yield put({ type: 'hideLoading' });
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
@@ -85,7 +88,9 @@ export default {
         }
     },
     *filtersort({ payload },{ call,put }){
+        yield put({ type: 'showLoading' });
         const { data } = yield call(query,payload);
+        yield put({ type: 'hideLoading' });
         if(data && data.code === 200){
             yield put({
                 type: 'querySuccess',
@@ -104,7 +109,9 @@ export default {
         }
     },
     *revoke({payload},{call,put}){
+        yield put({ type: 'showLoading' });
         const { data } = yield call(revoke,payload);
+        yield put({ type: 'hideLoading' });
         if(data && data.code === 200){
             message.success("撤销成功",3);
             const { data } = yield call(query, payload);
@@ -128,6 +135,9 @@ export default {
   reducers: {
     showLoading(state) {
       return { ...state, loading: true };
+    },
+    hideLoading(state) {
+      return { ...state, loading: false };
     },
     querySuccess(state, action) {
       return { ...state, ...action.payload, loading: false };
