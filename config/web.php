@@ -40,6 +40,9 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'session'=>array(
+            'timeout'=> 3600 * 12,
+        ),
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
