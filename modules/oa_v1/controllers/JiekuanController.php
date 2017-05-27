@@ -8,6 +8,7 @@ use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use app\models\JieKuan;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 /**
  * 借款相关接口信息
@@ -75,12 +76,25 @@ class JiekuanController extends BaseController
             'totalCount' => $query->count(),
         ]);
 
-        $data = $query->orderBy("get_money_time {$sort}")
+        $model = $query->orderBy("get_money_time {$sort}")
             ->offset($pagination->offset)
-            ->limit($pagination->limit)->asArray()
+            ->limit($pagination->limit)
             ->all();
-        foreach ($data as $k => $v) {
+        $data = [];
+        foreach ($model as $k => $v) {
+            if(!$v->apply)
+                continue;
+            $personInfo = $v->apply->personInfo;
+            $org = $personInfo->org;
+            $orgName = $org->orgName;
+            $org =  join(' - ', $orgName);
             $data[$k]['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
+            $data[$k]['apply_id'] = $v->apply_id;
+            $data[$k]['get_money_time'] = Yii::$app->formatter->asDatetime($v->get_money_time);;
+            $data[$k]['money'] = Yii::$app->formatter->asCurrency($v->money);
+            $data[$k]['des'] = $v->des;
+            $data[$k]['person'] = $v->apply->person;
+            $data[$k]['org'] = $org;
         }
 
         return $this->_return([
