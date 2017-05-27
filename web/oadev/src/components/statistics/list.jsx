@@ -3,7 +3,7 @@ import { connect } from 'dva'
 import { Table, Popconfirm, Pagination, Modal, Button,Form, Row, Col, Input, Icon, Menu, Dropdown, DatePicker, Select } from 'antd';
 import { routerRedux,Link } from 'dva/router';
 import styles from './search.less';
-import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms } from '../common';
+import { chkPmsForBlock,chkPmsForInline,chkPmsForInlineBlock,chkPms,host } from '../common';
 
 const LoadDetailsList= React.createClass({
     // 筛选事件
@@ -39,6 +39,11 @@ const LoadDetailsList= React.createClass({
             }
         })
     },
+    handleClick(){
+        const { key,time,xz_department }  = this.props.Statistics;
+        let endtime = time == null?'':time;
+        window.location.href = host + "/oa_v1/jiekuan/export?keyword="+key+"&time="+endtime+"&orgId="+xz_department ;
+    },
 
     render(){
 
@@ -63,6 +68,7 @@ const LoadDetailsList= React.createClass({
             key: 'get_money_time',
             sorter: (a, b) => a.get_money_time - b.get_money_time,
             sortOrder:sortingType,
+             width:120,
         },{
             title: '借款人',
             dataIndex: 'person',
@@ -70,7 +76,8 @@ const LoadDetailsList= React.createClass({
         },{
             title:'部门',
             dataIndex:'org',
-            key:'org'
+            key:'org',
+            width:250,
         },{
             title:'借款金额',
             dataIndex:'money',
@@ -79,7 +86,8 @@ const LoadDetailsList= React.createClass({
         },{
             title:'事由',
             dataIndex:'des',
-            key:'des'
+            key:'des',
+            width:300,
         },{
             title:'操作',
             dataIndex:'operation',
@@ -98,7 +106,7 @@ const LoadDetailsList= React.createClass({
 
         return (
             <div>
-                <Button type="primary" className={styles.mt_lg}>导出列表</Button>
+                <Button type="primary" className={styles.mt_lg} onClick={this.handleClick}>导出列表</Button>
                     <Table
                         columns={columns}
                         loading={loading}

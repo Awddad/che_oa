@@ -52,7 +52,7 @@ export const chkPmsForInlineBlock = (pids,style)=>{
  */
 export const setCookie = (name,value) =>{
     let exp = new Date();
-        exp.setTime(exp.getTime() + 30*60*1000);
+        exp.setTime(exp.getTime() + 24*60*60*1000);
         document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
@@ -132,5 +132,10 @@ export const DateTime =() =>{
 }
 
 export const Bread = (item,cc) =>{
+  let url = webStorage.getItem("OneUrl");
   webStorage.setItem(cc,item);
+}
+
+export const MenuKey = (item) =>{
+  webStorage.setItem("menuKey",item);
 }

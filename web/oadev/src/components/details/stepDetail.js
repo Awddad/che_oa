@@ -49,8 +49,16 @@ const StepDetails = React.createClass({
                             </div>)
                         :
                                     data.status != 1 ?
-                                        (<div><div>{data.name+ "  " + data.date}</div>
-                                            <div>{data.org}</div></div>)
+                                        (<div>
+                                            <div>{data.name+ "  " + data.date}</div>
+                                            <div>{data.org}</div>
+                                            <div>{
+                                                data.status == '1' ?
+                                                data.diff_time==0 ? '':"已等待："+ deff_time(data.diff_time)
+                                                :
+                                                data.diff_time==0 ? '':"耗费："+ deff_time(data.diff_time)
+                                            }</div>
+                                        </div>)
                                     :
                                         (<div><div>{data.name+ "  " + data.date}</div>
                                         <div>{data.org}</div>

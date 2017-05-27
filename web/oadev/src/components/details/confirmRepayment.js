@@ -141,7 +141,7 @@ const Confirm = React.createClass({
             bank_des = details.info.bank_des;
         }
         return(
-                <Modal title="还款确认"  {...modalOpts} >
+                <Modal title="收款确认"  {...modalOpts} >
                         <Form>
                             <FormItem {...formItemLayout}  label="打款人">
                                 <p style={{marginTop:5}}>{ name }&nbsp;&nbsp;&nbsp;{ bank_name }</p>

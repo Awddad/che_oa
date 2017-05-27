@@ -1,7 +1,7 @@
 import { query,revoke,GetUserInfo } from '../services/mysend';
 import { parse } from 'qs';
 import { message} from 'antd';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 export default {
   namespace: 'mysend',
@@ -32,6 +32,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/mysend') {
+          MenuKey('/mysend');
           dispatch({
             type: 'query',
             payload: {

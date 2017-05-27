@@ -138,31 +138,35 @@ export default {
     },
     *addconst({payload},{call,put,select}){//添加审批人
       const data = yield select(({ reimBurse }) => reimBurse.constdata );
-      if(payload.type == 1){
-        data.push(payload.row);
+      if(data.length<5){
+        if(payload.type == 1){
+          data.push(payload.row);
+        }
+        //payload.constPersonal.splice(payload.index,1);
+        yield put({
+            type: 'updateConst',
+            payload: {
+                constdata : data,
+                constPersonal:payload.constPersonal
+            }
+        });
       }
-      //payload.constPersonal.splice(payload.index,1);
-      yield put({
-          type: 'updateConst',
-          payload: {
-              constdata : data,
-              constPersonal:payload.constPersonal
-          }
-      });
     },
     *addcopy({payload},{call,put,select}){//添加抄送人
       const  data  = yield select(({ reimBurse }) => reimBurse.copydata );
-      if(payload.type == 1){
-        data.push(payload.row);
+      if(data.length<5){
+        if(payload.type == 1){
+          data.push(payload.row);
+        }
+        //payload.copyPersonal.splice(payload.index,1);
+        yield put({
+            type: 'updateCopy',
+            payload: {
+                copydata : data,
+                copyPersonal:payload.copyPersonal
+            }
+        });
       }
-      //payload.copyPersonal.splice(payload.index,1);
-      yield put({
-          type: 'updateCopy',
-          payload: {
-              copydata : data,
-              copyPersonal:payload.copyPersonal
-          }
-      });
     },
     *create({payload},{call,put}){//提交报销单
       const { data } = yield call(constCreate, payload);

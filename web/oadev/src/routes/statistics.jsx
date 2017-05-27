@@ -63,11 +63,11 @@ const LoadDetail = React.createClass({
       // 查询控件
         const loadSearchProps = {
             handleSearch:(fieldsValue)=>{
-              let time = null;
+              let start_time = null,end_time = null;
               let orgId = null;
                 if(fieldsValue.begin_end_time != null && fieldsValue.begin_end_time != undefined && fieldsValue.begin_end_time.length > 0){
-                  time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
-                  time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
+                  start_time = fieldsValue.begin_end_time[0].format('YYYY-MM-DD');
+                  end_time = fieldsValue.begin_end_time[1].format('YYYY-MM-DD');
                 }
 
                 this.props.dispatch({
@@ -75,7 +75,7 @@ const LoadDetail = React.createClass({
                     payload: {
                         key:fieldsValue.key,
                         orgId:fieldsValue.department,
-                        time:time,
+                        time:start_time+'--'+end_time,
                     },
                 });
             },

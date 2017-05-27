@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react';
 import { Breadcrumb, Row, Col, Layout,Icon } from 'antd';
 import { connect } from 'dva';
+import { Link } from 'react-router';
 import styles from './main.less';
 import Top from './Top';
 import Left from './Left';
 import Menu from './Menu';
 import Bottom from './Bottom';
+import Bread from './Bread';
 import { userLogin } from '../common';
 const { Header, Content, Footer, Sider } = Layout;
 import WebStorage from 'react-webstorage';
@@ -30,9 +32,20 @@ class Main extends React.Component {
           let oneCrumb = webStorage.getItem('OneCrumb');
           let twoCrumb = webStorage.getItem('TwoCrumb');
           let threeCrumb = webStorage.getItem('ThreeCrumb');
+          let oneUrl = webStorage.getItem('OneUrl');
+          let twoUrl = webStorage.getItem('TwoUrl');
           const crumbs = [];
-          if(oneCrumb) crumbs.push(<Breadcrumb.Item key="oneCrumb">{oneCrumb}</Breadcrumb.Item>);
-          if(twoCrumb) crumbs.push(<Breadcrumb.Item key="twoCrumb">{twoCrumb}</Breadcrumb.Item>);
+          if(oneCrumb && oneUrl != null){
+                crumbs.push(<Breadcrumb.Item key="oneCrumb" href={"#"+oneUrl}>{oneCrumb}</Breadcrumb.Item>)
+          }else{
+                crumbs.push(<Breadcrumb.Item key="oneCrumb" >{oneCrumb}</Breadcrumb.Item>)
+          }
+
+          if(twoCrumb && twoUrl != null){
+                crumbs.push(<Breadcrumb.Item key="twoCrumb" href={"#"+twoUrl}>{twoCrumb}</Breadcrumb.Item>)
+          }else{
+                crumbs.push(<Breadcrumb.Item key="twoCrumb" >{twoCrumb}</Breadcrumb.Item>)
+          };
           if(threeCrumb) crumbs.push(<Breadcrumb.Item key="threeCrumb">{threeCrumb}</Breadcrumb.Item>);
 
         const children = this.props.children;
@@ -47,10 +60,10 @@ class Main extends React.Component {
                             <Top location={location}  toggle={this.toggle} collapsed = {this.state.collapsed} />
                         </Header>
                         <Content style={{ margin: '24px 16px 0' }}>
-                            <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
+                            <div style={{ padding:  24, background: '#fff', minHeight: 360 }}>
                                 <Row >
                                     <Breadcrumb>
-                                      <Breadcrumb.Item key="index"><Icon type="home" /></Breadcrumb.Item>
+                                      <Breadcrumb.Item href=""><Icon type="home" /></Breadcrumb.Item>
                                       {crumbs}
                                     </Breadcrumb>
                                 </Row>

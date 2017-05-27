@@ -184,12 +184,12 @@ const ReimburseDetail = React.createClass({
                               key:'name',
                               dataIndex: 'name',
                               className:cs("t-r"),
-                              width:120
                             },{
                               title: '格式',
                               key:'ext',
                               dataIndex: 'ext',
                               className:cs("t-c"),
+                              width:60
                             },{
                               title: '操作',
                               key:'option',
@@ -217,7 +217,7 @@ const ReimburseDetail = React.createClass({
                     <div className={styles.home_wrap}>
                         <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={Baoxiao_Detail} />
-                        <BxDetail columns={bxmx_columns} dataSource={Baoxiao_Detail.info} label="报销明细" />
+                        <BxDetail columns={bxmx_columns} dataSource={Baoxiao_Detail.info} label="报销明细" pdf={pdf} />
                         <FormItem {...formItemLayout}  label="报销卡号">
                             <p style={{marginTop:5}}>{ name }&nbsp;&nbsp;&nbsp;{ bank_name }</p>
                             <p>{ bank_id }</p>

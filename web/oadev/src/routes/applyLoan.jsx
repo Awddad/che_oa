@@ -378,18 +378,29 @@ const ApplyLoan = React.createClass({
 
 const ApprovalPerson = React.createClass({
     render(){
+          let person = this.props.approvalPerson == null ? "": this.props.approvalPerson;
         return (
             <div className={styles.approval_wrap} >
                 <ul>
-                  {this.props.approvalPerson}
-                  <li className={styles.add_approval} onClick={this.props.handleClick} >
-                      <Icon type="plus" />
-                  </li>
+                  {person}
+                  {
+                    person == null ?
+                      (<li className={styles.add_approval} onClick={this.props.handleClick} >
+                          <Icon type="plus" />
+                      </li>)
+                    :
+                      person.length < 5 ?
+                        (<li className={styles.add_approval} onClick={this.props.handleClick} >
+                            <Icon type="plus" />
+                        </li>)
+                        :""
+                  }
                  </ul>
             </div>
         )
     }
 });
+
 
 ApplyLoan.propTypes = {
    location: PropTypes.object,

@@ -130,7 +130,6 @@ const MakeCollectionsList = React.createClass({
         };
 
         const {RepayMent_Detail,isShowRepaymentConfirm} = this.props.Detail;
-        const GenConfirm = () => <Confirm isShowRepaymentConfirm={ isShowRepaymentConfirm } details={RepayMent_Detail}/>;
         return (
             <div>
                 <Button type="primary" className={styles.mt_lg} onClick={this.handleClick}>导出列表</Button>
@@ -145,7 +144,7 @@ const MakeCollectionsList = React.createClass({
                     bordered />
                <Pagination showQuickJumper current = { current } defaultCurrent={ 1 } total={ total } onChange={ this.paginationChange } onShowSizeChange={this.onShowSizeChange} showSizeChanger showQuickJumper/>
 
-               <GenConfirm />
+               <Confirm isShowRepaymentConfirm={ isShowRepaymentConfirm } details={RepayMent_Detail}/>
 
             </div>
         );

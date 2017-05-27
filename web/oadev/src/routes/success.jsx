@@ -68,7 +68,7 @@ const Success = React.createClass({
                         <Row className="mb-lg">
                             <Col span='8'>发起时间：{ time }</Col>
                             <Col span='8'>审批单编号：{ applyid }</Col>
-                            <Col span='8'>抄送人：{ copy_person }</Col>
+                            <Col span='8'>抄送人：{ copy_person==''?'--':copy_person }</Col>
                         </Row>
                         { resultSteps }
                     </div>

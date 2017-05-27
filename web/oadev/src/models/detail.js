@@ -2,7 +2,7 @@ import { query,Detail,RepayMentConfirmquery,RepayMentConfirm,PayMentConfirmquery
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 
 export default {
@@ -36,16 +36,19 @@ export default {
         setup({ dispatch, history }) {
           history.listen(location => {
             if (location.pathname === '/reimbursedetail') {
+                MenuKey('/reimbursedetail');
                 dispatch({
                     type: 'BaoxiaoDetails',
                     payload: location.query,
                 });
             }else if(location.pathname === '/loanmentdetail'){
+                MenuKey('/loanmentdetail');
                 dispatch({
                     type: 'LoanDetails',
                     payload: location.query,
                 });
             }else if(location.pathname === '/repaymentdetail'){
+                MenuKey('/repaymentdetail');
                 dispatch({
                     type: 'RepayMentDetails',
                     payload: location.query,
