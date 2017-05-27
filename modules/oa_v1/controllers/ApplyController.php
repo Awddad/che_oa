@@ -40,8 +40,9 @@ class ApplyController extends BaseController
 			'page' => $res ['pages'],
 			'res' => []
 		];
-		foreach ($res ['data'] as $v) {
+		foreach ($res ['data'] as $k=>$v) {
 			$data ['res'] [] = [
+				'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
 				'apply_id' => $v ['apply_id'], // 审批单编号
 				'date' => date('Y-m-d H:i', $v ['create_time']), // 创建时间
 				'type' => $v ['type'], // 类型
