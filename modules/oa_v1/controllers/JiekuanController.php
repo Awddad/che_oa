@@ -142,7 +142,7 @@ class JiekuanController extends BaseController
                 'person' => $v->apply->person,
                 'org' => $org,
                 'money' => Yii::$app->formatter->asCurrency($v->money),
-                'des' => Yii::$app->formatter->asCurrency($v->des),
+                'des' => $v->des,
             ];
         }
 
