@@ -38,7 +38,9 @@ class JiekuanController extends BaseController
         $sort = (($sort == 'asc') ? 'ASC' : 'DESC');
 
         // 查询结构
-        $query = JieKuan::find()->where(['is_pay_back' => false]);
+        $query = JieKuan::find()->where(['is_pay_back' => 0])->andWhere([
+            '>', 'get_money_time' , 0
+        ]);
 
         // 关键字查询
         if (!empty($key)) {
@@ -68,7 +70,7 @@ class JiekuanController extends BaseController
         // 借款时间
         if (!empty($time)) {
             $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime(substr($time, -10));
+            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
             $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
         }
 
@@ -76,7 +78,6 @@ class JiekuanController extends BaseController
             'defaultPageSize' => $pageSize,
             'totalCount' => $query->count(),
         ]);
-
         $model = $query->orderBy("get_money_time {$sort}")
             ->offset($pagination->offset)
             ->limit($pagination->limit)
@@ -114,7 +115,9 @@ class JiekuanController extends BaseController
         $time = Yii::$app->request->get('time');
 
         // 查询结构
-        $query = JieKuan::find()->where(['is_pay_back' => false]);
+        $query = JieKuan::find()->where(['is_pay_back' => 0])->andWhere([
+            '>', 'get_money_time' , 0
+        ]);
 
         // 关键字查询
         if (!empty($key)) {
@@ -144,7 +147,7 @@ class JiekuanController extends BaseController
         // 借款时间
         if (!empty($time)) {
             $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime(substr($time, -10));
+            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
             $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
         }
 
@@ -152,10 +155,9 @@ class JiekuanController extends BaseController
         $model = $query->all();
         $data = [];
         foreach ($model as $v) {
-            $personInfo = $v->apply->personInfo;
-            $org = $personInfo->org;
-            $orgName = $org->orgName;
-            $org =  join(' - ', $orgName);
+            if(!$v->apply)
+                continue;
+            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
             $data[] = [
                 'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
                 'person' => $v->apply->person,
