@@ -142,21 +142,21 @@ class JiekuanController extends BaseController
                 'person' => $v->apply->person,
                 'org' => $org,
                 'money' => Yii::$app->formatter->asCurrency($v->money),
-                'desc' => Yii::$app->formatter->asCurrency($v->desc),
+                'des' => Yii::$app->formatter->asCurrency($v->des),
             ];
         }
 
         \moonland\phpexcel\Excel::export([
             'models' => $data,
             'columns' => [
-                'get_money_time', 'person', 'org', 'money', 'desc'
+                'get_money_time', 'person', 'org', 'money', 'des'
             ],
             'headers' => [
                 'get_money_time' => '借款时间',
                 'person' => '借款人',
                 'org' => '部门',
                 'money' => '借款金额',
-                'desc' => '是由',
+                'des' => '是由',
             ],
             'fileName' => '借款明细_'.date('YmdHi').'.xlsx'
         ]);
