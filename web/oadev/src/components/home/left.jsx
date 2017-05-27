@@ -48,11 +48,14 @@ const Left = React.createClass({
     webStorage.setItem("menuKey", item.key);
     if(typeof(item.item.props.children) == "object" && item.item.props.children.props.children == "首页"){
       webStorage.setItem("OneCrumb","首页");
+      webStorage.setItem("OneUrl","/adminhome");
       webStorage.setItem("TwoCrumb", "");
       webStorage.setItem("ThreeCrumb","");
     }else{
-      webStorage.setItem("OneCrumb", _keypath[item.keyPath[1]]);
-      webStorage.setItem("TwoCrumb", item.item.props.children);
+      //webStorage.setItem("OneCrumb", _keypath[item.keyPath[1]]);
+      webStorage.setItem("OneCrumb", item.item.props.children);
+      webStorage.setItem("OneUrl", item.key);
+      webStorage.setItem("TwoCrumb", "");
       webStorage.setItem("ThreeCrumb","");
     }
   },

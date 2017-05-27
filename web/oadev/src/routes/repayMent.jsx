@@ -188,6 +188,7 @@ const RepayMent = React.createClass({
           title: '事由',
           key:'des',
           dataIndex: 'des',
+          width:300
         }];
 
     const rowSelection = {
@@ -222,6 +223,10 @@ const RepayMent = React.createClass({
           }
     }
 
+    const GenconstPerson = () => <ApprovalPerson handleClick={this.showconstModal} approvalPerson={auditingLi} />;
+    const GencopyPerson = () => <ApprovalPerson handleClick={this.showcopyModal} approvalPerson={copyLi} />;
+
+
     return (
       <Main location={location}>
         <Row>
@@ -251,25 +256,11 @@ const RepayMent = React.createClass({
                 )}
             </FormItem>
             <h3 className={cs("mt-md","mb-md")}>审批人和抄送人</h3>
-            <FormItem {...formItemLayout} label="审批人"  className="labelt" >
-                <div className={styles.approval_wrap} >
-                      <ul>
-                        {auditingLi}
-                        <li className={styles.add_approval} onClick={this.showconstModal}>
-                            <Icon type="plus" />
-                        </li>
-                      </ul>
-                </div>
+            <FormItem {...formItemLayout} label="审批人" className="labelt">
+                <GenconstPerson />
             </FormItem>
-            <FormItem {...formItemLayout} label="抄送人">
-                <div className={styles.approval_wrap} >
-                      <ul>
-                        {copyLi}
-                        <li className={styles.add_approval} onClick={this.showcopyModal}>
-                            <Icon type="plus" />
-                        </li>
-                      </ul>
-                </div>
+            <FormItem {...formItemLayout} label="抄送人" >
+                <GencopyPerson />
             </FormItem>
             <FormItem>
                    <Button className={cs('mt-md','mb-md','ant-col-sm-offset-2')} type="primary" onClick={this.showsubmitModal}>确定</Button>
@@ -281,6 +272,33 @@ const RepayMent = React.createClass({
     )
   }
 });
+
+
+const ApprovalPerson = React.createClass({
+    render(){
+          let person = this.props.approvalPerson == null ? "": this.props.approvalPerson;
+        return (
+            <div className={styles.approval_wrap} >
+                <ul>
+                  {person}
+                  {
+                    person == null ?
+                      (<li className={styles.add_approval} onClick={this.props.handleClick} >
+                          <Icon type="plus" />
+                      </li>)
+                    :
+                      person.length < 5 ?
+                        (<li className={styles.add_approval} onClick={this.props.handleClick} >
+                            <Icon type="plus" />
+                        </li>)
+                        :""
+                  }
+                 </ul>
+            </div>
+        )
+    }
+});
+
 
 RepayMent.propTypes = {
    location: PropTypes.object,

@@ -41,10 +41,10 @@ const AdminHome = React.createClass({
                       (<div className={styles.home_wrap}>
                           <h3 className={cs("mt-md","mb-md")}>报销相关</h3>
                           <Row className="home-wraplist">
-                            <ul className="ant-col-md-12 ant-col-sm-24">
-                                <li style={chkPmsForBlock(['shen_qing_bao_xiao'])} className="ant-col-md-8"><Link to="/reimburse" onClick = {this.currentPage}>申请报销</Link></li>
-                                <li style={chkPmsForBlock(['shen_qing_jie_kuan'])} className="ant-col-md-8"><Link to="/applyloan" onClick = {this.currentPage}>申请借款</Link></li>
-                                <li style={chkPmsForBlock(['shen_qing_huang_kuan'])} className="ant-col-md-8"><Link to="/repayment" onClick = {this.currentPage}>申请还款</Link></li>
+                            <ul className="ant-col-sm-24">
+                                <li style={chkPmsForBlock(['shen_qing_bao_xiao'])}><Link className={styles.reimBurse} to="/reimburse" onClick = {this.currentPage}>申请报销</Link></li>
+                                <li style={chkPmsForBlock(['shen_qing_jie_kuan'])}><Link className={styles.applyloan} to="/applyloan" onClick = {this.currentPage}>申请借款</Link></li>
+                                <li className="repayment" style={chkPmsForBlock(['shen_qing_huang_kuan'])}><Link className={styles.repayment} to="/repayment" onClick = {this.currentPage}>申请还款</Link></li>
                             </ul>
                           </Row>
                       </div>)

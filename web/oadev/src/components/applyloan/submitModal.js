@@ -81,7 +81,7 @@ const SubmitModal = React.createClass({
                              <td className={styles.b_gray}>事由</td>
                          </tr>
                          <tr>
-                             <td className={cs('t-c',styles.b_gray)}>¥ {money}</td>
+                             <td className={cs('t-c')}>¥ {money}</td>
                              <td className="t-l">{des}</td>
                          </tr>
                          <tr>

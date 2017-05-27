@@ -141,7 +141,7 @@ const RepayMentDetail = React.createClass({
             const GenTable = () => <ApplyTable tabledata={tabledata}/>;
             confirm = (<ConfirmButton handleClick={this.handleConfirmClick} />);
         }
-        const GenConfirm = () => <Confirm handleClick={this.handleConfirmClick} isShowRepaymentConfirm = { isShowRepaymentConfirm } details={RepayMent_Detail}/>;
+        //const GenConfirm = () => ;
 
         let bxmx_columns = [{
                               title: '序号',
@@ -186,7 +186,7 @@ const RepayMentDetail = React.createClass({
                     <div className={styles.home_wrap}>
                         <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={RepayMent_Detail} />
-                        <BxDetail columns={bxmx_columns} pdf={pdf} dataSource={RepayMent_Detail.info} label="还款列表" />
+                        <BxDetail columns={bxmx_columns} pdf={pdf} dataSource={RepayMent_Detail.info} label="还款列表" pdf={pdf} />
                         <FormItem {...formItemLayout}  label="还款金额" className="mb-sm">
                             <p style={{marginTop:5}}>{ money }元</p>
                         </FormItem>
@@ -203,7 +203,7 @@ const RepayMentDetail = React.createClass({
                         }
                         { approval }
                         { confirm }
-                        <GenConfirm />
+                        <Confirm handleClick={this.handleConfirmClick} isShowRepaymentConfirm = { isShowRepaymentConfirm } details={RepayMent_Detail}/>
                     </div>
                 </Row>
             </Main>

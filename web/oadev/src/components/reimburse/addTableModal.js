@@ -28,7 +28,7 @@ const AddTableModal = React.createClass({
             }
             const tabledata = { ...getFieldsValue() };
             const { bxtypeID } = this.props.reimBurse;
-            const row = {money:(tabledata.money*1).toFixed(2),type_name:this.state.text,des:tabledata.des,type:tabledata.bxType[tabledata.bxType.length-1]}
+            const row = {money:(tabledata.money*1).toFixed(2),type_name:this.state.text,des:tabledata.des==null?'--':tabledata.des,type:tabledata.bxType[tabledata.bxType.length-1]}
             this.props.dispatch({
               type: 'reimBurse/addtable',
               payload: {

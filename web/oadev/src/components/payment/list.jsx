@@ -84,9 +84,11 @@ const PaymentdList= React.createClass({
         })
     },
     handleClick(){
-        const { keyword,begin_time,end_time }  = this.props.payment;
+        const { keyword,begin_time,end_time,type }  = this.props.payment;
+        let ttype="";
         let endtime = end_time == null?'':end_time;
-        window.location.href = host + "/oa_v1/pay-confirm/export?keyword="+keyword+"&begin_time="+begin_time+"&end_time="+endtime ;
+        ttype = type == undefined ? "" : type;
+        window.location.href = host + "/oa_v1/pay-confirm/export?keyword="+keyword+"&begin_time="+begin_time+"&end_time="+endtime+"&type="+ttype ;
     },
     render(){
 
@@ -169,9 +171,6 @@ const PaymentdList= React.createClass({
 
         const {Baoxiao_Detail,Loan_Detail,isShowPaymentConfirm} = this.props.Detail;
         let details = this.state.status == 1 ? Baoxiao_Detail : Loan_Detail;
-
-        //const GenConfirm = () => <Confirm isShowPaymentConfirm={ isShowPaymentConfirm } details={details}/>;
-
 
         return (
             <div>

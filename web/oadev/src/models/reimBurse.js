@@ -163,8 +163,7 @@ export default {
     },
     *addconst({payload},{call,put,select}){//添加审批人
       const data = yield select(({ reimBurse }) => reimBurse.constdata );
-      console.log(data.length);
-      if(data.length<7){
+      if(data.length<5){
           if(payload.type == 1){
             data.push(payload.row);
           }

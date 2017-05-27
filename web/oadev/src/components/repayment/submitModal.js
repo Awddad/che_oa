@@ -108,7 +108,7 @@ const SubmitModal = React.createClass({
                          <td>&nbsp;</td>
                      </tr>
                      <tr>
-                         <td className={cs(styles.b_gray,"t-c")}>备注</td>
+                         <td className={cs(styles.b_gray,"t-c")}>说明</td>
                          <td className="t-l" colSpan="2">{des==null?'--':des}</td>
                      </tr>
                     </tbody>
