@@ -196,7 +196,7 @@ class QuanXianServer extends Server
             self::$arrOrgList[] = [
                 'org_id' => $val['id'],
                 'org_name' => $val['name'],
-                'org_short_name' => $val['short_name'],
+                'org_short_name' => $val['short_name'] ? : '',
                 'pid' => $pid,
             ];
             if(isset($val['children']) && is_array($val['children']) && !empty($val['children']))
