@@ -93,8 +93,8 @@ class BackLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['like', 'apply_id' , $keyword],
-                ['like','title', $keyword]
+                ['like', 'apply_id', $keyword],
+                ['like', 'title', $keyword]
             ]);
         }
 
@@ -110,7 +110,7 @@ class BackLogic extends BaseLogic
 
         $order = 'create_time desc';
         if (\Yii::$app->request->post('sort')) {
-            $order = 'create_time ' .\Yii::$app->request->post('sort');
+            $order = 'create_time ' . \Yii::$app->request->post('sort');
         }
 
         $query->andWhere([
@@ -134,7 +134,7 @@ class BackLogic extends BaseLogic
         )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
-            foreach ($models as $model) {
+            foreach ($models as $k => $model) {
                 $typeName = '';
                 $money = 0;
                 if ($model->type == 3) {
@@ -143,6 +143,7 @@ class BackLogic extends BaseLogic
                 }
 
                 $data[] = [
+                    'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                     'create_time' => date('Y-m-d H:i', $model->create_time),
                     'type_name' => $typeName,
                     'apply_id' => $model->apply_id,
@@ -238,7 +239,7 @@ class BackLogic extends BaseLogic
                 'apply_id' => '审批单号',
                 'title' => '标题'
             ],
-            'fileName' => '收款确认_'.date('YmdHi').'.xlsx'
+            'fileName' => '收款确认_' . date('YmdHi') . '.xlsx'
         ]);
     }
 }
