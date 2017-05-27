@@ -274,7 +274,7 @@ class BaoxiaoForm extends BaseForm
 			'approval_person' => implode(',', array_column($this -> approval_persons,'person_name')),//多个人、分隔
 			'copy_person' => $this -> copy_person?implode(',', array_column($this -> copy_person,'person_name')):'',//多个人、分隔
 			'list' => [],
-			'tips' => ''
+			'tips' => '--'
 		];
 		foreach($this -> bao_xiao_list as $v){
 			$arrInfo['list'][] = [

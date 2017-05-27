@@ -77,8 +77,11 @@ class JiekuanController extends BaseController
 
         $data = $query->orderBy("get_money_time {$sort}")
             ->offset($pagination->offset)
-            ->limit($pagination->limit)
+            ->limit($pagination->limit)->asArray()
             ->all();
+        foreach ($data as $k => $v) {
+            $data[$k]['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
+        }
 
         return $this->_return([
             'info' => $data,
