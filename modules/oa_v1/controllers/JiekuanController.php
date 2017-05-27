@@ -130,7 +130,21 @@ class JiekuanController extends BaseController
         }
 
 
-        $data = $query->all();
+        $model = $query->all();
+        $data = [];
+        foreach ($model as $v) {
+            $personInfo = $v->apply->personInfo;
+            $org = $personInfo->org;
+            $orgName = $org->orgName;
+            $org =  join(' - ', $orgName);
+            $data[] = [
+                'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
+                'person' => $v->apply->person,
+                'org' => $org,
+                'money' => Yii::$app->formatter->asCurrency($v->money),
+                'desc' => Yii::$app->formatter->asCurrency($v->desc),
+            ];
+        }
 
         \moonland\phpexcel\Excel::export([
             'models' => $data,
