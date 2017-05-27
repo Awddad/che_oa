@@ -58,6 +58,7 @@ const StepDetails = React.createClass({
                                                 :
                                                 data.diff_time==0 ? '':"耗费："+ deff_time(data.diff_time)
                                             }</div>
+                                            <div>{ data.des==''?'':"说明："+ data.des}</div>
                                         </div>)
                                     :
                                         (<div><div>{data.name+ "  " + data.date}</div>

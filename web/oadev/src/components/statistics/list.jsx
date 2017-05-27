@@ -54,14 +54,15 @@ const LoadDetailsList= React.createClass({
             }else if(sort == "desc"){
                 sortingType = "descend";
             }
-
         const columns = [{
             title: '序号',
             dataIndex: 'id',
+            width:60,
             key: 'id',
-                    render:(text, row, index)=>(
-                                    index+1
-                                ),
+            render:(text, row, index)=>(
+               index+1
+            ),
+
         },{
             title: '借款时间',
             dataIndex: 'get_money_time',
