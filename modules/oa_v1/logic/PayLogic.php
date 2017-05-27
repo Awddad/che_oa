@@ -166,19 +166,26 @@ class PayLogic extends BaseLogic
      * 导出付款确认列表
      *
      * @param array $user
+     * @param array $orgIds
      */
-    public function export($user)
+    public function export($user, $orgIds)
     {
         $type = \Yii::$app->request->get('type');
 
         $query = Apply::find()->where([
-            'status' => 4
+            'status' => 4,
         ]);
         //筛选
         if ($type && in_array($type, [1, 2])) {
-            $query->andWhere([
-                'type' => $type
-            ]);
+            if(is_array($type)) {
+                $query->andWhere([
+                    'in', 'type', $type
+                ]);
+            } else {
+                $query->andWhere([
+                    'type' => $type
+                ]);
+            }
         } else {
             $query->andWhere([
                 'in', 'type', [1, 2]
@@ -212,7 +219,9 @@ class PayLogic extends BaseLogic
         if (\Yii::$app->request->get('asc')) {
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
-
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
         $models = $query->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
@@ -237,10 +246,10 @@ class PayLogic extends BaseLogic
                 $data[] = [
                     'name' => $user['person_name'],
                     'bank_name' => $bankName,
-                    'bank_card_id' => $bankCardId,
+                    'bank_card_id' => " $bankCardId",
                     'money' => $money,
                     'type' => $typeName,
-                    'apply_id' => $model->apply_id,
+                    'apply_id' => " $model->apply_id",
                     'title' => $model->title
                 ];
             }

@@ -63,9 +63,8 @@ class PersonLogic extends BaseLogic
         if($org->pid == 0) {
             return [$org->org_short_name] ?  : [$org->org_name];
         }
-        $arr = $org->org_short_name ? [$org->org_short_name] : [$org->org_name];
-        $orgArr =  $this->getParentOrg($org, $arr);
-        krsort($orgArr);
+        $orgArr =  $this->getParentOrg($org);
+        $orgArr[] = $org->org_short_name ? $org->org_short_name : $org->org_name;
         return $orgArr;
         
     }
@@ -75,7 +74,7 @@ class PersonLogic extends BaseLogic
      * @param $result
      * @return array
      */
-    public function getParentOrg($org, &$result)
+    public function getParentOrg($org, &$result = [])
     {
         $parent = Org::findOne($org->pid);
         if($parent->pid != 0 ){

@@ -57,7 +57,8 @@ class BaseController extends Controller
         '/oa_v1/approval-log/update',
         '/oa_v1/apply/get-baoxiao',
         '/oa_v1/apply/get-jiekuan',
-        '/oa_v1/apply/get-payback'
+        '/oa_v1/apply/get-payback',
+        '/oa_v1/jiekuan/export'
     ];
 
 

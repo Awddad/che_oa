@@ -68,7 +68,7 @@ class BackConfirmController extends BaseController
      */
     public function actionList()
     {
-        $back = BackLogic::instance()->canConfirmList();
+        $back = BackLogic::instance()->canConfirmList($this->arrPersonRoleInfo['permissionOrgIds']);
         return $this->_return($back);
     }
 
@@ -77,7 +77,7 @@ class BackConfirmController extends BaseController
      */
     public function actionExport()
     {
-        BackLogic::instance()->export($this->arrPersonInfo);
+        BackLogic::instance()->export($this->arrPersonInfo, $this->arrPersonRoleInfo['permissionOrgIds']);
     }
 
 }

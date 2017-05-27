@@ -85,4 +85,80 @@ class JiekuanController extends BaseController
             'pages' => BackLogic::instance()->pageFix($pagination)
         ]);
     }
+
+
+    public function actionExport()
+    {
+        // 获取相关参数
+        $key = Yii::$app->request->get('key');
+        $orgId = Yii::$app->request->get('orgId');
+        $time = Yii::$app->request->get('time');
+
+        // 查询结构
+        $query = JieKuan::find()->where(['is_pay_back' => false]);
+
+        // 关键字查询
+        if (!empty($key)) {
+            // 通过key获取用户id,再获取申请id
+            $personIds = PersonLogic::getPersonIdsByKey($key);
+            if ($personIds) {
+                $applyIds = JieKuanLogic::getApplyIdsByPersonId($personIds);
+            }
+
+            // 借款事由模糊查询
+            if (isset($applyIds) && $applyIds) {
+                $query->andWhere(['or', ['like', 'des', $key], ['apply_id' => $applyIds]]);
+            } else {
+                $query->andWhere(['like', 'des', $key]);
+            }
+        }
+
+        // 部门查询
+        if (!empty($orgId)) {
+            $personIds = PersonLogic::getPersonIdsByOrgId($orgId);
+            if ($personIds) {
+                $applyIds = JieKuanLogic::getApplyIdsByPersonId($personIds);
+                $query->andFilterWhere(['apply_id' => $applyIds]);
+            }
+        }
+
+        // 借款时间
+        if (!empty($time)) {
+            $beforeTime = strtotime(substr($time, 0, 10));
+            $afterTime = strtotime(substr($time, -1, 10));
+            $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
+        }
+
+
+        $model = $query->all();
+        $data = [];
+        foreach ($model as $v) {
+            $personInfo = $v->apply->personInfo;
+            $org = $personInfo->org;
+            $orgName = $org->orgName;
+            $org =  join(' - ', $orgName);
+            $data[] = [
+                'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
+                'person' => $v->apply->person,
+                'org' => $org,
+                'money' => Yii::$app->formatter->asCurrency($v->money),
+                'des' => $v->des,
+            ];
+        }
+
+        \moonland\phpexcel\Excel::export([
+            'models' => $data,
+            'columns' => [
+                'get_money_time', 'person', 'org', 'money', 'des'
+            ],
+            'headers' => [
+                'get_money_time' => '借款时间',
+                'person' => '借款人',
+                'org' => '部门',
+                'money' => '借款金额',
+                'des' => '是由',
+            ],
+            'fileName' => '借款明细_'.date('YmdHi').'.xlsx'
+        ]);
+    }
 }
