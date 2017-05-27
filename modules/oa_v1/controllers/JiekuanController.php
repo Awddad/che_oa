@@ -66,7 +66,7 @@ class JiekuanController extends BaseController
         // 借款时间
         if (!empty($time)) {
             $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime(substr($time, -1, 10));
+            $afterTime = strtotime(substr($time, -10));
             $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
         }
 
@@ -125,7 +125,7 @@ class JiekuanController extends BaseController
         // 借款时间
         if (!empty($time)) {
             $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime(substr($time, -1, 10));
+            $afterTime = strtotime(substr($time, -10));
             $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
         }
 
