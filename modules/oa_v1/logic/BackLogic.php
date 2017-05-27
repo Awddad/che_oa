@@ -165,7 +165,7 @@ class BackLogic extends BaseLogic
      * @param array $user
      * @param array $orgIds
      */
-    public function export($user, $orgIds)
+    public function export($orgIds)
     {
         $query = Apply::find()->where([
             'status' => 4,
@@ -214,7 +214,7 @@ class BackLogic extends BaseLogic
                 $bankName = $model->payBack->bank_name;
                 $bankCardId = $model->payBack->bank_card_id;
                 $data[] = [
-                    'name' => $user['person_name'],
+                    'name' => $model->person,
                     'bank_name' => $bankName,
                     'bank_card_id' => " $bankCardId",
                     'money' => $money,

@@ -168,7 +168,7 @@ class PayLogic extends BaseLogic
      * @param array $user
      * @param array $orgIds
      */
-    public function export($user, $orgIds)
+    public function export($orgIds)
     {
         $type = \Yii::$app->request->get('type');
 
@@ -244,7 +244,7 @@ class PayLogic extends BaseLogic
                 }
 
                 $data[] = [
-                    'name' => $user['person_name'],
+                    'name' => $model->person,
                     'bank_name' => $bankName,
                     'bank_card_id' => " $bankCardId",
                     'money' => $money,
