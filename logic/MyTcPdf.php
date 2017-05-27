@@ -221,17 +221,13 @@ TABLEHTML;
             return false;//文件类型不是pdf
         }
         // html 具体样式等前端提供，此处先写个demo
-        $strListHtml = '<tr>
-            <td colspan="4">借款时间</td>
-            <td colspan="4">金额</td>
-            <td colspan="4">明细</td>
-            </tr>';
+        $strListHtml = '';
         foreach($arrInfo['list'] as $val)
         {
             $strListHtml .= "<tr>
-            <td colspan='4'>{$val['create_time']}</td>
-            <td colspan='4'>{$val['money']}</td>
-            <td colspan='4'>{$val['detail']}</td>
+                <td colspan='2'>".$val['create_time']."</td>
+                <td colspan='2'>".$val['money']."</td>
+                <td colspan='2'>".$val['detail']."</td>
             </tr>";
         }
         $strHtml = <<<TABLEHTML
@@ -240,42 +236,45 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <div>
-         <h2 style="text-align: center;">还款单</h2>  
-        <table style="text-align: center;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
-            <tr>
-                <td colspan='2'>日期</td>
-                <td colspan='4'>{$arrInfo['apply_date']}</td>
-                <td colspan='2'>单号</td>
-                <td colspan='4'>{$arrInfo['apply_id']}</td>
-            </tr>
-            <tr>
-                <td colspan='2'>部门</td>
-                <td colspan='4'>{$arrInfo['org_full_name']}</td>
-                <td colspan='2'> 还款人</td>
-                <td colspan='4'>{$arrInfo['person']}</td>
-            </tr>
-            <tr>
-                <td colspan='2'>开户行名称</td>
-                <td colspan='4'>{$arrInfo['bank_name']}</td>
-                <td colspan='2'>银行卡号</td>
-                <td colspan='4'>{$arrInfo['bank_card_id']}</td>
-            </tr>
-            {$strListHtml}
-            <tr>
-                <td colspan="4">备注信息</td>
-                <td colspan="8">{$arrInfo['des']}</td>
-            </tr>
-            <tr>
-                <td colspan="2">审批人</td>
-                <td colspan="2">{$arrInfo['approval_person']}</td>
-                <td colspan="2">抄送人</td>
-                <td colspan="2">{$arrInfo['copy_person']}</td>
-                <td colspan="2">财务确认</td>
-                <td colspan="2">财务确认</td>
-            </tr>
-        </table>
-    </div>
+    <h2 style="text-align: center;">还款单</h2>  
+    <table style="text-align: center;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td>日期</td>
+            <td colspan='2'>{$arrInfo['apply_date']}</td>
+            <td>单号</td>
+            <td colspan='2'>{$arrInfo['apply_id']}</td>
+        </tr>
+        <tr>
+            <td>部门</td>
+            <td colspan='2'>{$arrInfo['org_full_name']}</td>
+            <td> 还款人</td>
+            <td colspan='2'>{$arrInfo['person']}</td>
+        </tr>
+        <tr>
+            <td>开户行名称</td>
+            <td colspan='2'>{$arrInfo['bank_name']}</td>
+            <td>银行卡号</td>
+            <td colspan='2'>{$arrInfo['bank_card_id']}</td>
+        </tr>
+        <tr>
+            <td colspan='2'>借款时间</td>
+            <td colspan='2'>金额</td>
+            <td colspan='2'>明细</td>
+        </tr>
+        {$strListHtml}
+        <tr>
+            <td colspan='2'>备注信息</td>
+            <td colspan='4'>{$arrInfo['des']}</td>
+        </tr>
+        <tr>
+            <td>审批人</td>
+            <td>{$arrInfo['approval_person']}</td>
+            <td>抄送人</td>
+            <td>{$arrInfo['copy_person']}</td>
+            <td>财务确认</td>
+            <td>财务确认</td>
+        </tr>
+    </table>
 </div>
 TABLEHTML;
         $pdf = new TCPDF();
