@@ -68,9 +68,6 @@ const CcsendList = React.createClass({
                 title: '序号',
                 dataIndex: 'id',
                 key: 'id',
-                render:(text, row, index)=>(
-                                index+1
-                            ),
             },{
                 title: '申请时间',
                 dataIndex: 'date',

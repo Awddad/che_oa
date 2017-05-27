@@ -57,12 +57,8 @@ const LoadDetailsList= React.createClass({
         const columns = [{
             title: '序号',
             dataIndex: 'id',
-            width:60,
             key: 'id',
-            render:(text, row, index)=>(
-               index+1
-            ),
-
+            width:60,
         },{
             title: '借款时间',
             dataIndex: 'get_money_time',
