@@ -2,6 +2,7 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\models\Org;
 use app\modules\oa_v1\logic\BackLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\modules\oa_v1\logic\PersonLogic;
@@ -84,17 +85,18 @@ class JiekuanController extends BaseController
         foreach ($model as $k => $v) {
             if(!$v->apply)
                 continue;
-            $personInfo = $v->apply->personInfo;
-            $org = $personInfo->org;
-            $orgName = $org->orgName;
-            $org =  join(' - ', $orgName);
-            $data[$k]['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
-            $data[$k]['apply_id'] = $v->apply_id;
-            $data[$k]['get_money_time'] = Yii::$app->formatter->asDatetime($v->get_money_time);;
-            $data[$k]['money'] = Yii::$app->formatter->asCurrency($v->money);
-            $data[$k]['des'] = $v->des;
-            $data[$k]['person'] = $v->apply->person;
-            $data[$k]['org'] = $org;
+            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
+
+
+            $data[] = [
+                'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                'apply_id' => $v->apply_id,
+                'get_money_time' => Yii::$app->formatter->asDatetime($v->get_money_time),
+                'money' => Yii::$app->formatter->asCurrency($v->money),
+                'des' => $v->des,
+                'person' => $v->apply->person,
+                'org' => $org,
+            ];
         }
 
         return $this->_return([

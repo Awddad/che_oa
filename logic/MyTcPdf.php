@@ -42,11 +42,11 @@ class MyTcPdf {
         $strListHtml = '';
         foreach($arrInfo['list'] as $val)
         {
-            $strListHtml .= "<tr>
-            <td colspan='2' >{$val['type_name']}</td>
-            <td colspan='2'>{$val['money']}</td>
-            <td colspan='2'>{$val['detail']}</td>
-            </tr>";
+            $strListHtml .= '<tr>
+            <td colspan="2" >'.$val["type_name"].'</td>
+            <td colspan="2">'.$val["money"].'</td>
+            <td colspan="2">'.$val["detail"].'</td>
+            </tr>';
         }
         $strHtml = <<<TABLEHTML
 <style>
@@ -56,7 +56,7 @@ table tr{height:40px;}
 <div>
     <div>
         <h2 style="text-align: center;">报销单</h2> 
-        <table style="text-align: center;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
+        <table style="text-align: center;height:40px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
             <tr>
                 <td>日期</td>
                 <td colspan="2">{$arrInfo['apply_date']}</td>
@@ -100,7 +100,7 @@ TABLEHTML;
         $pdf = new TCPDF();
         $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
         $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, false, true, false, '');
+        $pdf->writeHTML($strHtml, true, false, false, false, '');
         $pdf->lastPage();
         $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I
         return is_file($strSaveName);
@@ -139,7 +139,7 @@ table tr{height:40px;}
 </style>
 <div>
     <h2 style="text-align: center;">借款单</h2>    
-    <table style="text-align: center;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
+    <table style="text-align: center; height:40px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
         <tr>
             <td colspan="2" class="bg">日期</td>
             <td colspan="4">{$arrInfo['apply_date']}</td>
@@ -225,11 +225,11 @@ TABLEHTML;
         $strListHtml = '';
         foreach($arrInfo['list'] as $val)
         {
-            $strListHtml .= "<tr>
-                <td colspan='2'>{$val['create_time']}</td>
-                <td colspan='2'>{$val['money']}</td>
-                <td colspan='2'>{$val['detail']}</td>
-            </tr>";
+            $strListHtml .= '<tr>
+                <td colspan="2">'.$val['create_time'].'</td>
+                <td colspan="2">'.$val['money'].'</td>
+                <td colspan="2">'.$val['detail'].'</td>
+            </tr>';
         }
         $strHtml = <<<TABLEHTML
 <style>
@@ -238,7 +238,7 @@ table tr{height:40px;}
 </style>
 <div>
     <h2 style="text-align: center;">还款单</h2>  
-    <table style="text-align: center;" border="1" width='98%' cellspacing="0">
+    <table style="text-align: center;height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td>日期</td>
             <td colspan="2">{$arrInfo['apply_date']}</td>
