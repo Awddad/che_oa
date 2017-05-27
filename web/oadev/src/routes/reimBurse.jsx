@@ -309,9 +309,12 @@ const Reimburse = React.createClass({
       fileList: this.state.imgfileList,
       onChange: this.handleimgChange,
     };
-
-    const  cardOptions = constCard.map( data => <Option key={cardmodalProps} value={data.bank_name+" "+data.card_id +" "+data.bank_des}>{data.bank_name+'-'+data.card_id}</Option>);
-
+    let cardOptions=[],defaultvalue="";
+    if(constCard.length > 0){
+      for(let key in constCard){
+        cardOptions.push(<Option key={"key"+key} value={constCard[key].bank_name+" "+constCard[key].card_id +" "+constCard[key].bank_des}>{constCard[key].bank_name+'-'+constCard[key].card_id}</Option>);
+      }
+    }
 
     const { previewVisible, previewImage, imgfileList } = this.state;
     let auditingLi=null,copyLi=null;
@@ -351,6 +354,7 @@ const Reimburse = React.createClass({
         };
 
     const { getFieldDecorator } = this.props.form;
+
     const GenconstPerson = () => <ApprovalPerson handleClick={this.showconstModal} approvalPerson={auditingLi} />;
     const GencopyPerson = () => <ApprovalPerson handleClick={this.showcopyModal} approvalPerson={copyLi} />;
 
@@ -437,13 +441,23 @@ const Reimburse = React.createClass({
 
 const ApprovalPerson = React.createClass({
     render(){
+          let person = this.props.approvalPerson == null ? "": this.props.approvalPerson;
         return (
             <div className={styles.approval_wrap} >
                 <ul>
-                  {this.props.approvalPerson}
-                  <li className={styles.add_approval} onClick={this.props.handleClick} >
-                      <Icon type="plus" />
-                  </li>
+                  {person}
+                  {
+                    person == null ?
+                      (<li className={styles.add_approval} onClick={this.props.handleClick} >
+                          <Icon type="plus" />
+                      </li>)
+                    :
+                      person.length < 5 ?
+                        (<li className={styles.add_approval} onClick={this.props.handleClick} >
+                            <Icon type="plus" />
+                        </li>)
+                        :""
+                  }
                  </ul>
             </div>
         )

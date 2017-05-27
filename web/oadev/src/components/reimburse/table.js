@@ -44,7 +44,7 @@ class ApplyTable extends React.Component{
           dataIndex: 'option',
           render: (text, record, index) => {
             return (
-              this.props.tabledata.length > 1 ?
+              this.props.tabledata.length > 0 ?
               (
                 <Popconfirm title="你确定要删除吗?" onConfirm={() => this.onDelete(index)}>
                   <a href="javascript:;">删除</a>
