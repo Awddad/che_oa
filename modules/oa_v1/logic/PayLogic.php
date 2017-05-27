@@ -246,10 +246,10 @@ class PayLogic extends BaseLogic
                 $data[] = [
                     'name' => $user['person_name'],
                     'bank_name' => $bankName,
-                    'bank_card_id' => $bankCardId,
+                    'bank_card_id' => " $bankCardId",
                     'money' => $money,
                     'type' => $typeName,
-                    'apply_id' => $model->apply_id,
+                    'apply_id' => " $model->apply_id",
                     'title' => $model->title
                 ];
             }
