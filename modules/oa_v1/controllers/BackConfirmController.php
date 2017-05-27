@@ -77,7 +77,7 @@ class BackConfirmController extends BaseController
      */
     public function actionExport()
     {
-        BackLogic::instance()->export($this->arrPersonInfo, $this->arrPersonRoleInfo['permissionOrgIds']);
+        BackLogic::instance()->export($this->arrPersonRoleInfo['permissionOrgIds']);
     }
 
 }
