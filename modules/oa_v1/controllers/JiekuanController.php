@@ -28,7 +28,7 @@ class JiekuanController extends BaseController
     public function actionIndex()
     {
         // 获取相关参数
-        $key = Yii::$app->request->get('keyword');
+        $key = Yii::$app->request->get('key');
         $orgId = Yii::$app->request->get('orgId');
         $time = Yii::$app->request->get('time');
         $pageSize = Yii::$app->request->get('pageSize', 20);
