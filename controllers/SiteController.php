@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\logic\MyTcPdf;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -114,12 +115,42 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays about page.
+     * 还款单测试
      *
      * @return string
      */
     public function actionAbout()
     {
-        return $this->render('about');
+
+        $applyId = '2017052716514402399';
+        $pdf = new  MyTcPdf();
+        $basePath = \Yii::$app->basePath.'/web';
+        $filePath = '/upload/pdf/payback/'.date('Y-m-d').'/';
+        $rootPath = $basePath.$filePath;
+        if (!file_exists($rootPath)) {
+            @mkdir($rootPath, 0777, true);
+        }
+        $rst = $pdf->createHuanKuanDanPdf($rootPath.$applyId.'.pdf', [
+            'list' => [
+                [
+                    'create_time' => date('Y-m-d H:i'),
+                    'money' => 40000,
+                    'detail' => '33333'
+                ],[
+                    'create_time' => date('Y-m-d H:i'),
+                    'money' => '8888',
+                    'detail' => '99009'
+                ]
+            ],
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $applyId,
+            'org_full_name' => '张三',
+            'person' => '张三三',
+            'bank_name' => '农行',
+            'bank_card_id' => '63363663636663',
+            'des' => '肉肉肉肉肉肉',
+            'approval_person' => 'wwww',//多个人、分隔
+            'copy_person' => 'u 有人工湖 i 个 i',//多个人、分隔
+        ]);
     }
 }
