@@ -85,6 +85,6 @@ class PayConfirmController extends BaseController
      */
     public function actionExport()
     {
-        PayLogic::instance()->export($this->arrPersonInfo);
+        PayLogic::instance()->export($this->arrPersonInfo, $this->arrPersonRoleInfo['permissionOrgIds']);
     }
 }

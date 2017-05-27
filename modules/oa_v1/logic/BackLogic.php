@@ -74,8 +74,12 @@ class BackLogic extends BaseLogic
 
     /**
      * 待确认收款列表
+     *
+     * @param array $orgIds
+     * @return array
+     *
      */
-    public function canConfirmList()
+    public function canConfirmList($orgIds)
     {
         $query = Apply::find()->where([
             'status' => 4
@@ -108,6 +112,10 @@ class BackLogic extends BaseLogic
         if (\Yii::$app->request->post('sort')) {
             $order = 'create_time ' .\Yii::$app->request->post('sort');
         }
+
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
 
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
@@ -155,8 +163,9 @@ class BackLogic extends BaseLogic
      * 导出收款确认列表
      *
      * @param array $user
+     * @param array $orgIds
      */
-    public function export($user)
+    public function export($user, $orgIds)
     {
         $query = Apply::find()->where([
             'status' => 4,
@@ -191,6 +200,10 @@ class BackLogic extends BaseLogic
         if (\Yii::$app->request->get('asc')) {
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
+
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
 
         $models = $query->orderBy($order)->all();
         $data = [];
