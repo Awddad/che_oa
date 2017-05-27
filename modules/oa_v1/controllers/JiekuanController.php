@@ -68,7 +68,7 @@ class JiekuanController extends BaseController
         }
 
         // 借款时间
-        if (!empty($time)) {
+        if (!empty($time) && strlen($time > 20)) {
             $beforeTime = strtotime(substr($time, 0, 10));
             $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
             $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
@@ -145,7 +145,7 @@ class JiekuanController extends BaseController
         }
 
         // 借款时间
-        if (!empty($time)) {
+        if (!empty($time) && strlen($time > 20)) {
             $beforeTime = strtotime(substr($time, 0, 10));
             $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
             $query->andWhere(['between', 'get_money_time', $beforeTime, $afterTime]);
