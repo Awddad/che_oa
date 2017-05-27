@@ -39,17 +39,13 @@ class MyTcPdf {
             return false;//文件类型不是pdf
         }
         // html 具体样式等前端提供，此处先写个demo
-        $strListHtml = '<tr>
-            <th colspan="4">类别</th>
-            <th colspan="4">金额</th>
-            <th colspan="4">明细</th>
-            </tr>';
+        $strListHtml = '';
         foreach($arrInfo['list'] as $val)
         {
             $strListHtml .= "<tr>
-            <td colspan='4'>{$val['type_name']}</td>
-            <td colspan='4'>{$val['money']}</td>
-            <td colspan='4'>{$val['detail']}</td>
+            <td colspan='2' >{$val['type_name']}</td>
+            <td colspan='2'>{$val['money']}</td>
+            <td colspan='2'>{$val['detail']}</td>
             </tr>";
         }
         $strHtml = <<<TABLEHTML
@@ -78,6 +74,11 @@ table tr{height:40px;}
                 <td colspan="2">{$arrInfo['bank_name']}</td>
                 <td>银行卡号</td>
                 <td colspan="2">{$arrInfo['bank_card_id']}</td>
+            </tr>
+            <tr>
+                <td colspan="2">类别</td>
+                <td colspan="2">金额</td>
+                <td colspan="2">明细</td>
             </tr>
             {$strListHtml}
             <tr>
@@ -225,9 +226,9 @@ TABLEHTML;
         foreach($arrInfo['list'] as $val)
         {
             $strListHtml .= "<tr>
-                <td colspan='2'>".$val['create_time']."</td>
-                <td colspan='2'>".$val['money']."</td>
-                <td colspan='2'>".$val['detail']."</td>
+                <td colspan='2'>{$val['create_time']}</td>
+                <td colspan='2'>{$val['money']}</td>
+                <td colspan='2'>{$val['detail']}</td>
             </tr>";
         }
         $strHtml = <<<TABLEHTML

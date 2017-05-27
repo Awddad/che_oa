@@ -34,16 +34,16 @@ class PayLogic extends BaseLogic
         ]);
         //筛选
         if ($type) {
-            if(is_array($type)) {
+            if (is_array($type)) {
                 $query->andWhere([
-                   'in', 'type', $type
+                    'in', 'type', $type
                 ]);
             } else {
                 $query->andWhere([
                     'type' => $type
                 ]);
             }
-            
+
         } else {
             $query->andWhere([
                 'in', 'type', [1, 2]
@@ -54,8 +54,8 @@ class PayLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['like', 'apply_id' , $keyword],
-                ['like','title', $keyword]
+                ['like', 'apply_id', $keyword],
+                ['like', 'title', $keyword]
             ]);
         }
 
@@ -76,7 +76,7 @@ class PayLogic extends BaseLogic
         $pagination = new Pagination(['totalCount' => $totalCount]);
         $order = 'create_time desc';
         if (\Yii::$app->request->post('sort')) {
-            $order = 'create_time ' .\Yii::$app->request->post('sort');
+            $order = 'create_time ' . \Yii::$app->request->post('sort');
         }
 
         //当前页
@@ -93,7 +93,7 @@ class PayLogic extends BaseLogic
         )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
-            foreach ($models as $model) {
+            foreach ($models as $k => $model) {
                 if ($model->type == 1) {
                     $typeName = '申请报销';
                     $money = $model->expense->money;
@@ -103,6 +103,7 @@ class PayLogic extends BaseLogic
                 }
 
                 $data[] = [
+                    'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                     'create_time' => date('Y-m-d H:i', $model->create_time),
                     'type_name' => $typeName,
                     'apply_id' => $model->apply_id,
@@ -177,7 +178,7 @@ class PayLogic extends BaseLogic
         ]);
         //筛选
         if ($type && in_array($type, [1, 2])) {
-            if(is_array($type)) {
+            if (is_array($type)) {
                 $query->andWhere([
                     'in', 'type', $type
                 ]);
@@ -268,7 +269,7 @@ class PayLogic extends BaseLogic
                 'apply_id' => '审批单号',
                 'title' => '标题'
             ],
-            'fileName' => '付款确认_'.date('YmdHi').'.xlsx'
+            'fileName' => '付款确认_' . date('YmdHi') . '.xlsx'
         ]);
     }
 }
