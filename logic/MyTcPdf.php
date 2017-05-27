@@ -62,35 +62,35 @@ table tr{height:40px;}
         <h2 style="text-align: center;">报销单</h2> 
         <table style="text-align: center;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
             <tr>
-                <td colspan="2">日期</td>
-                <td colspan="4">{$arrInfo['apply_date']}</td>
-                <td colspan="2">单号</td>
-                <td colspan="4">{$arrInfo['apply_id']}</td>
+                <td>日期</td>
+                <td colspan="2">{$arrInfo['apply_date']}</td>
+                <td>单号</td>
+                <td colspan="2">{$arrInfo['apply_id']}</td>
             </tr>
             <tr>
-                <td colspan="2">部门</td>
-                <td colspan="4">{$arrInfo['org_full_name']}</td>
-                <td colspan="2">报销人</td>
-                <td colspan="4">{$arrInfo['person']}</td>
+                <td>部门</td>
+                <td colspan="2">{$arrInfo['org_full_name']}</td>
+                <td>报销人</td>
+                <td colspan="2">{$arrInfo['person']}</td>
             </tr>
             <tr>
-                <td colspan="2">开户行名称</td>
-                <td colspan="4">{$arrInfo['bank_name']}</td>
-                <td colspan="2">银行卡号</td>
-                <td colspan="4">{$arrInfo['bank_card_id']}</td>
+                <td>开户行名称</td>
+                <td colspan="2">{$arrInfo['bank_name']}</td>
+                <td>银行卡号</td>
+                <td colspan="2">{$arrInfo['bank_card_id']}</td>
             </tr>
             {$strListHtml}
             <tr>
-                <td colspan="4">备注信息</td>
-                <td colspan="8">{$arrInfo['tips']}</td>
+                <td colspan="2">备注信息</td>
+                <td colspan="4">{$arrInfo['tips']}</td>
             </tr>
             <tr>
-                <td colspan="2">审批人</td>
-                <td colspan="2">{$arrInfo['approval_person']}</td>
-                <td colspan="2">抄送人</td>
-                <td colspan="2">{$arrInfo['copy_person']}</td>
-                <td colspan="2">财务确认</td>
-                <td colspan="2">财务确认</td>
+                <td>审批人</td>
+                <td>{$arrInfo['approval_person']}</td>
+                <td>抄送人</td>
+                <td>{$arrInfo['copy_person']}</td>
+                <td>财务确认</td>
+                <td>财务确认</td>
             </tr>
         </table>
     </div>
@@ -240,31 +240,31 @@ table tr{height:40px;}
     <table style="text-align: center;" border="1" width='98%' cellspacing="0">
         <tr>
             <td>日期</td>
-            <td colspan='2'>{$arrInfo['apply_date']}</td>
+            <td colspan="2">{$arrInfo['apply_date']}</td>
             <td>单号</td>
-            <td colspan='2'>{$arrInfo['apply_id']}</td>
+            <td colspan="2">{$arrInfo['apply_id']}</td>
         </tr>
         <tr>
             <td>部门</td>
-            <td colspan='2'>{$arrInfo['org_full_name']}</td>
+            <td colspan="2">{$arrInfo['org_full_name']}</td>
             <td> 还款人</td>
-            <td colspan='2'>{$arrInfo['person']}</td>
+            <td colspan="2">{$arrInfo['person']}</td>
         </tr>
         <tr>
             <td>开户行名称</td>
-            <td colspan='2'>{$arrInfo['bank_name']}</td>
+            <td colspan="2">{$arrInfo['bank_name']}</td>
             <td>银行卡号</td>
-            <td colspan='2'>{$arrInfo['bank_card_id']}</td>
+            <td colspan="2">{$arrInfo['bank_card_id']}</td>
         </tr>
         <tr>
-            <td colspan='2'>借款时间</td>
-            <td colspan='2'>金额</td>
-            <td colspan='2'>明细</td>
+            <td colspan="2">借款时间</td>
+            <td colspan="2">金额</td>
+            <td colspan="2">明细</td>
         </tr>
         {$strListHtml}
         <tr>
-            <td colspan='2'>备注信息</td>
-            <td colspan='4'>{$arrInfo['des']}</td>
+            <td colspan="2">备注信息</td>
+            <td colspan="4">{$arrInfo['des']}</td>
         </tr>
         <tr>
             <td>审批人</td>

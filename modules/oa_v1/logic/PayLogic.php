@@ -259,7 +259,7 @@ class PayLogic extends BaseLogic
                 'apply_id' => '审批单号',
                 'title' => '标题'
             ],
-            'fileName' => 'pay_confirm_'.date('YmdHi').'.xlsx'
+            'fileName' => '付款确认_'.date('YmdHi').'.xlsx'
         ]);
     }
 }
