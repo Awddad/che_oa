@@ -45,7 +45,7 @@ class PayConfirmForm extends CaiWuFuKuan
             [['apply_id'], 'string', 'max' => 20],
             [['org_name', 'bank_name', 'bank_name_des', 'fu_kuan_id'], 'string', 'max' => 255],
             ['bank_name_des', 'default', 'value' => ''],
-            [['bank_card_id'], 'string', 'max' => 25],
+            [['bank_card_id'], 'string', 'max' => 50],
         ];
     }
 
