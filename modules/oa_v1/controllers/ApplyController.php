@@ -7,6 +7,7 @@ use Yii;
 use app\models as appmodel;
 use app\modules\oa_v1\logic\ApplyLogic;
 use app\modules\oa_v1\logic\PersonLogic;
+use yii\db\Exception;
 
 class ApplyController extends BaseController
 {
@@ -414,11 +415,32 @@ class ApplyController extends BaseController
 
 		$apply->status = Apply::STATUS_REVOKED;
 		$apply->next_des = '该申请已撤销';
-
-		if ($apply->save()) {
-			return $this->_return('', 200);
-		} else {
-			return $this->_returnError(404, $apply->errors);
-		}
+		// 还款单撤销特殊处理
+		if($apply->type == 3) {
+            $db = Yii::$app->db;
+            $transaction = $db->beginTransaction();
+            try {
+                if ($apply->save()) {
+                    throw new Exception('撤销失败');
+                }
+                $payBack = appmodel\PayBack::findOne($applyId);
+                $applyIds = explode(',', $payBack->jie_kuan_ids);
+                //改变借款单状态
+                foreach ($applyIds as $apply_id) {
+                    appmodel\JieKuan::updateAll(['status' => 1], ['apply_id' => $apply_id]);
+                }
+                $transaction->commit();
+                return $this->_return('', 200);
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                return $this->_returnError(404, $e);
+            }
+        } else {
+            if ($apply->save()) {
+                return $this->_return('', 200);
+            } else {
+                return $this->_returnError(404, $apply->errors);
+            }
+        }
 	}
 }
