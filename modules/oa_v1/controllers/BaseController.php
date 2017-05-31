@@ -163,7 +163,7 @@ class BaseController extends Controller
         $strCacheKey = 'role_info_' . $strOs . '_' . $intRoleId . '_' . $personId;
         if($blnForce == false)//不强制刷新的时候 从缓存中获取
         {
-            //$this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
+            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
         }
         
         if(empty($this->arrPersonRoleInfo))
