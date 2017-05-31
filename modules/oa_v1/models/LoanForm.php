@@ -156,7 +156,7 @@ class LoanForm extends BaseForm
             'person' => $user['person_name'],
             'bank_name' => $this->bank_name,
             'bank_card_id' => $this->bank_card_id,
-            'money' => $this->money,
+            'money' => \Yii::$app->formatter->asCurrency($this->money),
             'detail' => $this->des,
             'tips' => $this->tips,
             'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
