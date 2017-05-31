@@ -89,9 +89,11 @@ class BaseController extends Controller
                 if (!$user) {
                     //用户没有登录 需要跳转到登录页面去登录
                     $broker->clearToken();
-                    header("Content-type: application/json");
-                    echo json_encode($this->_return(['login_url' => $loginUrl], 401));
-                    die();
+//                    header("Content-type: application/json");
+//                    echo json_encode($this->_return(['login_url' => $loginUrl], 401));
+//                    die();
+                    header('Location: /oa_v1/default/setroleinfo');
+                    exit();
                 } else {
                     $strCacheKey = 'login_' . $strOsType . '_' . $broker->token;
                     $objPerson = \Yii::$app->cache->get($strCacheKey);
