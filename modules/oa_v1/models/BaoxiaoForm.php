@@ -279,7 +279,7 @@ class BaoxiaoForm extends BaseForm
 		foreach($this -> bao_xiao_list as $v){
 			$arrInfo['list'][] = [
 					'type_name' => $v['type_name'],
-					'money' => $v['money'],
+					'money' => \Yii::$app->formatter->asCurrency($v['money']),
 					'detail' => @$v['des']
 					];
 		}

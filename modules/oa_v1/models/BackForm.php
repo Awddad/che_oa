@@ -264,7 +264,7 @@ class BackForm extends BaseForm
             $back = JieKuan::findOne($apply_id);
             $data[] = [
                 'create_time' => date('Y-m-d H:i', $back->apply->create_time),
-                'money' => $back->money,
+                'money' => \Yii::$app->formatter->asCurrency($back->money),
                 'detail' => $back->des
             ];
         }
