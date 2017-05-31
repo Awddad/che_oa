@@ -420,7 +420,7 @@ class ApplyController extends BaseController
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
             try {
-                if ($apply->save()) {
+                if (!$apply->save()) {
                     throw new Exception('撤销失败');
                 }
                 $payBack = appmodel\PayBack::findOne($applyId);
