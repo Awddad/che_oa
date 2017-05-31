@@ -23,9 +23,9 @@ else //正式环境
 {
     return [
         'class' => 'yii\db\Connection',
-        'dsn' => 'mysql:host=192.168.1.21;dbname=che_oa',
+        'dsn' => 'mysql:host=checheng.mysql.rds.aliyuncs.com;dbname=oa',
         'username' => 'oa',
-        'password' => 'che@oa',
+        'password' => 'Oa@che!@3',
         'charset' => 'utf8',
     ];
 }

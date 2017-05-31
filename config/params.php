@@ -39,19 +39,19 @@ else if(YII_ENV_TEST) //测试环境
 }
 else
 {
-//    return [
-//        'adminEmail' => 'admin@example.com',
-//        'quan_xian' => [
-//            'auth_sso_url' => 'http://auth.admin.che.com',//单点登录地址
-//            'auth_broker_id' => '1564438672652512',//项目appID
-//            'auth_broker_secret' => '4a5fc71ce117d47c998a8179c14f3c17',//配置的项目 Secret
-//            'auth_sso_login_url' => 'http://admin.che.com/login.php',//跳转的单点登录页面
-//            'auth_api_url' => 'http://sso.checheng.net/api',//拉取组织和人员以及角色信息的接口地址
-//            'auth_token' => '61d08b77da5e0fef8e433c608b059820',//token
-//        ],
-//        'cai_wu' => [
-//            'token' => 'debf6cc22a8baf00904acc5f42535575',
-//            'baseUrl' => 'http://test.pocket.checheng.net/api/'
-//        ]
-//    ];
+    return [
+        'adminEmail' => 'admin@example.com',
+        'quan_xian' => [
+            'auth_sso_url' => 'http://auth.admin.che.com',//单点登录地址
+            'auth_broker_id' => '1568902738126210',//项目appID
+            'auth_broker_secret' => '8891c222969fe0f3b210ca3690d24a19',//配置的项目 Secret
+            'auth_sso_login_url' => 'http://admin.che.com/login.php',//跳转的单点登录页面
+            'auth_api_url' => 'http://sso.checheng.net/api',//拉取组织和人员以及角色信息的接口地址
+            'auth_token' => '52afd3834c3f88f83e84254d9b8a26cc',//token
+        ],
+        'cai_wu' => [
+            'token' => '1f320d157d95ca8f5cab2dd208ad8202',
+            'baseUrl' => 'http://cw.admin.che.com/api/'
+        ]
+    ];
 }
