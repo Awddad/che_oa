@@ -128,7 +128,8 @@ class LoanForm extends BaseForm
             [
                 ['money', 'bank_card_id', 'bank_name', 'bank_name_des','des', 'tips', 'apply_id'],
                 'string'
-            ]
+            ],
+            ['apply_id', 'checkOnly']
         ];
     }
 
