@@ -117,7 +117,8 @@ class BackForm extends BaseForm
             [
                 ['apply_ids'],
                 'checkApplyIds',
-            ]
+            ],
+            ['apply_id', 'checkOnly']
         ];
     }
 

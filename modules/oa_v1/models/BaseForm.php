@@ -77,6 +77,15 @@ class BaseForm extends Model
         }
     }
 
+    /**
+     * @param $attribute
+     */
+    public function checkOnly($attribute) {
+        if (Apply::findOne($this->$attribute)) {
+            $this->addError($attribute, '申请单已存在');
+        }
+    }
+
 
     /**
      * 审批人
