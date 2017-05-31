@@ -45,6 +45,7 @@ class TreeTagLogic extends Logic
      */
     public function saveTreeTag($data)
     {
+        \Yii::$app->db->createCommand()->truncateTable('oa_tag_tree')->execute();
         return \Yii::$app->db->createCommand()->batchInsert('oa_tag_tree',
             ['id', 'parent_id', 'name', 'type', 'level' ,'status'],
             $data
