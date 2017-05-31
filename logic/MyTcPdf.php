@@ -278,8 +278,6 @@ table tr{height:40px;}
     </table>
 </div>
 TABLEHTML;
-        echo $strHtml;
-        //die;
         $pdf = new TCPDF();
         $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
         $pdf->AddPage();
