@@ -167,20 +167,23 @@ export default {
     *create({payload},{call,put}){//提交借款单
       const { data } = yield call(constCreate, payload);
       if (data && data.code === 200) {
+        yield put({
+          type: 'hideModal1'
+        });
+        let const_data = payload.constdata;
+        let copy_data = payload.copydata;
+        const_data.length = 0
+        copy_data.length = 0;
+        console.log(const_data);
         yield put(routerRedux.push({
           pathname: '/success',
           query: {
             apply_id:data.data,
-            urltype:payload.urltype
+            urltype:payload.urltype,
+            constdata:const_data,
+            copydata:copy_data
           }
         }));
-        yield put({
-          type: 'hideModal1',
-          payload:{
-            constdata:[],
-            copydata:[]
-          }
-        });
       } else {
         message.error(data.content, 5);
       }

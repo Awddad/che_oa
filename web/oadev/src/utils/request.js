@@ -1,4 +1,5 @@
 import fetch from 'dva/fetch';
+import {getLocalStorage} from '../components/common';
 
 function parseJSON(response) {
   return response.json();
@@ -8,7 +9,7 @@ function checkStatus(response) {
   if (response.code==200){
     return response;
   }
-  //console.log(response);
+
   const error = new Error(response);
   error.response = response;
   throw error;

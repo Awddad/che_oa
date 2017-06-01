@@ -22,6 +22,8 @@ const ReimburseDetail = React.createClass({
     getInitialState(){
         if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "approval"){
           Bread("报销审批","ThreeCrumb");
+        }else if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "confirm"){
+          Bread("报销确认","ThreeCrumb");
         }else{
           Bread("报销详情","ThreeCrumb");
         }

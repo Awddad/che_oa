@@ -91,6 +91,9 @@ export default {
           if( typeof(payload.constPersonal) != Array && payload.constPersonal == null ){
               const response1 = yield call(constPersonal, payload);
               data = response1.data.data;
+          }else if(typeof(payload.constPersonal) == Array && payload.constPersonal.length == 0 ){
+              const response1 = yield call(constPersonal, payload);
+              data = response1.data.data;
           }else{
               data = payload.constPersonal;
           }
@@ -199,13 +202,11 @@ export default {
       }
     },
     *create({payload},{call,put}){//提交报销单
-      console.log(payload);
       const { data } = yield call(constCreate, payload);
       if (data && data.code === 200) {
         yield put({
             type: 'hideModal1',
             payload:{
-              constPersonal:[],
               tabledata:[],
               constdata:[],
               copydata:[],

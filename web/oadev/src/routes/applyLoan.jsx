@@ -105,37 +105,6 @@ const ApplyLoan = React.createClass({
             }
     });
   },
-  handleSubmit(){//借款申请提交
-      let { CardDetail,constdata,copydata,addApplyID } = this.props.applyLoan;
-      let pic = null, pics = "";
-      if(CardDetail.pics != null){
-          pic = CardDetail.pics.fileList.map(data => data.response.data);
-          for(let i=0;i<pic.length;i++){
-              if(i == pic.length-1){
-                pics += pic[i];
-              }else{
-                pics += pic[i]+','
-              }
-          }
-      }
-
-
-      this.props.dispatch({
-          type: 'applyLoan/create',
-          payload: {
-              apply_id:addApplyID,
-              money:CardDetail.money,
-              des:CardDetail.des,
-              approval_persons:constdata.map(data => data.id),
-              copy_person:copydata.map(data => data.id),
-              bank_card_id:(CardDetail.code).split(" ")[1],
-              bank_name:(CardDetail.code).split(" ")[0],
-              tips:CardDetail.tips,
-              pics:pics,
-              urltype:2
-          }
-      });
-  },
   beforeImgUpload(file,fileList) {
     const size = 20971520;
     const fileName = file.name;
@@ -223,8 +192,12 @@ const ApplyLoan = React.createClass({
       onChange: this.handleimgChange,
     };
 
-    const  cardOptions = constCard.map(data =><Option key={cardmodalProps} value={data.bank_name+" "+data.card_id+" "+data.bank_des}>{data.bank_name+"-"+data.card_id}</Option>);
-
+    let cardOptions=[],defaultvalue="";
+    if(constCard.length > 0){
+      for(let key in constCard){
+          cardOptions.push(<Option key={constCard[key].bank_name+" "+constCard[key].card_id +" "+constCard[key].bank_des +' '+key}>{constCard[key].bank_name+'-'+constCard[key].card_id}</Option>);
+      }
+    }
     const { previewVisible, previewImage, imgfileList } = this.state;
     const uploadButton = (
                             <div>
@@ -268,7 +241,7 @@ const ApplyLoan = React.createClass({
           <GenAddCardModal />
           <GenAddConstModal />
           <AddCopyModal key={copymodalProps} title="抄送人" isshowcopymodal = {isshowcopymodal} />
-          <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
+          <SubmitModal key={submitmodalProps} handleSubmit={this.handleSubmit} confirmLoad={this.state.confirmLoad}/>
 
           <Form>
             <Pagetitle isback='true' title = '借款申请表'/>

@@ -30,6 +30,7 @@ const Reimburse = React.createClass({
       imgfileList:[],
       previewVisible: false,
       previewImage: '',
+      confirmLoad:false
     };
   },
   componentWillMount() {
@@ -75,7 +76,8 @@ const Reimburse = React.createClass({
 
   //审批人选择弹窗
   showconstModal(){
-    const { constPersonal,copyPersonal } = this.props.reimBurse;
+    const { constPersonal } = this.props.reimBurse;
+    //console.log(constPersonal);
     this.props.dispatch({
         type: 'reimBurse/modelHandle',
         payload: {
@@ -132,52 +134,6 @@ const Reimburse = React.createClass({
                 }
             }
     });
-  },
-  handleSubmit(){
-      let { tabledata,CardDetail,constdata,copydata,addApplyID } = this.props.reimBurse;
-
-      const approval_persons = [],copy_person=[],approval_p={},copy_p={};
-
-      for(let i =0; i<constdata.length;i++){
-          approval_persons.push({"person_id": constdata[i].id,"person_name":constdata[i].name,"steep":(i+1)});
-      }
-
-      for(let i =0; i<copydata.length;i++){
-          copy_person.push({"person_id": copydata[i].id,"person_name":copydata[i].name});
-      }
-
-      let files=null,file=null,pics = '',pic=null;
-      if(CardDetail.file != null){
-          files = CardDetail.file.fileList.map(data => data.response.data[0]);
-      }
-      if(CardDetail.pics != null){
-
-          pic = CardDetail.pics.fileList.map(data => data.response.data);
-
-          for(let i=0;i<pic.length;i++){
-              if(i == pic.length-1){
-                pics += pic[i];
-              }else{
-                pics += pic[i]+','
-              }
-          }
-      }
-
-      this.props.dispatch({
-          type: 'reimBurse/create',
-          payload: {
-              bank_card_id:(CardDetail.code).split(" ")[1],
-              bank_name:(CardDetail.code).split(" ")[0],
-              bank_name_des:(CardDetail.code).split(" ")[2],
-              bao_xiao_list:tabledata,
-              approval_persons:approval_persons,
-              copy_person:copy_person,
-              fujian:files,
-              pics:pics,
-              apply_id:addApplyID,
-              urltype:1
-          }
-      });
   },
   beforeImgUpload(file,fileList) {
     const size = 20971520;//20M
@@ -312,7 +268,7 @@ const Reimburse = React.createClass({
     let cardOptions=[],defaultvalue="";
     if(constCard.length > 0){
       for(let key in constCard){
-        cardOptions.push(<Option key={"key"+key} value={constCard[key].bank_name+" "+constCard[key].card_id +" "+constCard[key].bank_des}>{constCard[key].bank_name+'-'+constCard[key].card_id}</Option>);
+        cardOptions.push(<Option key={constCard[key].bank_name+" "+constCard[key].card_id +" "+constCard[key].bank_des +' '+key}>{constCard[key].bank_name+'-'+constCard[key].card_id}</Option>);
       }
     }
 
@@ -365,7 +321,7 @@ const Reimburse = React.createClass({
           <AddCardModal key={cardmodalProps} isshowcardmodal = {isshowcardmodal} />
           <AddConstModal key={constmodalProps} title="审批人" isshowconstmodal = {isshowconstmodal}/>
           <AddCopyModal key={copymodalProps} title="抄送人" isshowcopymodal = {isshowcopymodal} />
-          <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} />
+          <SubmitModal key={submitmodalProps} issubmitmodal = {issubmitmodal} handleSubmit={this.handleSubmit} confirmLoad={this.state.confirmLoad}/>
 
           <Form>
             <Pagetitle title = '报销申请表'/>

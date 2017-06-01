@@ -24,6 +24,7 @@ const SubmitModal = React.createClass({
     getInitialState(){
         return {
           ...this.props.reimBurse,
+          confirmLoad:false
         };
     },
     componentDidMount(){
@@ -33,7 +34,57 @@ const SubmitModal = React.createClass({
             type: 'reimBurse/hideModal'
         });
     },
+    handleSubmit(){
+        let { tabledata,CardDetail,constdata,copydata,addApplyID,issubmitmodal } = this.props.reimBurse;
+
+        const approval_persons = [],copy_person=[],approval_p={},copy_p={};
+
+        for(let i =0; i<constdata.length;i++){
+              approval_persons.push({"person_id": constdata[i].id,"person_name":constdata[i].name,"steep":(i+1)});
+        }
+
+        for(let i =0; i<copydata.length;i++){
+              copy_person.push({"person_id": copydata[i].id,"person_name":copydata[i].name});
+        }
+
+        let files=null,file=null,pics = '',pic=null;
+        if(CardDetail.file != null){
+              files = CardDetail.file.fileList.map(data => data.response.data[0]);
+        }
+        if(CardDetail.pics != null){
+
+              pic = CardDetail.pics.fileList.map(data => data.response.data);
+
+              for(let i=0;i<pic.length;i++){
+                  if(i == pic.length-1){
+                    pics += pic[i];
+                  }else{
+                    pics += pic[i]+','
+                  }
+              }
+        }
+        this.setState({
+            confirmLoad:true
+        });
+
+        this.props.dispatch({
+              type: 'reimBurse/create',
+              payload: {
+                  bank_card_id:(CardDetail.code).split(" ")[1],
+                  bank_name:(CardDetail.code).split(" ")[0],
+                  bank_name_des:(CardDetail.code).split(" ")[2],
+                  bao_xiao_list:tabledata,
+                  approval_persons:approval_persons,
+                  copy_person:copy_person,
+                  fujian:files,
+                  pics:pics,
+                  apply_id:addApplyID,
+                  urltype:1
+              }
+        });
+    },
     render(){
+        let { issubmitmodal } = this.props.reimBurse;
         const formItemLayout = {
           labelCol: {
             xs: { span: 24 },
@@ -46,8 +97,8 @@ const SubmitModal = React.createClass({
         };
 
         const modalOpts = {
-          visible:this.props.issubmitmodal,
-          onOk: this.props.handleSubmit,
+          visible:issubmitmodal,
+          onOk: this.handleSubmit,
           onCancel: this.onCancel,
           width:840,
           maskClosable:false
@@ -69,7 +120,7 @@ const SubmitModal = React.createClass({
         }
 
         return(
-            <Modal title="报销确认"  {...modalOpts} >
+            <Modal title="报销确认"  {...modalOpts} confirmLoading={this.state.confirmLoad} >
                 <div className={cs(styles.const_wrap,'mb-md')}>
                   <h1 className="mb-md">报销单</h1>
                   <table>

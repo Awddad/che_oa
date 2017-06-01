@@ -48,6 +48,7 @@ const LoadDetailsList= React.createClass({
     render(){
 
         const { dataSource,keyword,time,type,current,totalCount,pageSize,pageCount,perPage,currentPage,loading,total,sort} = this.props.Statistics;
+            console.log(dataSource);
             let sortingType = null;
             if(sort == "asc"){
                 sortingType = "ascend";
@@ -59,6 +60,9 @@ const LoadDetailsList= React.createClass({
             dataIndex: 'id',
             key: 'id',
             width:60,
+             render:(text, row, index)=>(
+                index+1
+            ),
         },{
             title: '借款时间',
             dataIndex: 'get_money_time',
