@@ -100,22 +100,7 @@ const RepayMent = React.createClass({
             }
     });
   },
-  handleSubmit(){//还款申请提交
-      let { CardDetail,constdata,copydata,selectedRows,addApplyID }  = this.props.repayMent;
-      this.props.dispatch({
-          type: 'repayMent/create',
-          payload: {
-              apply_id:addApplyID,
-              approval_persons:constdata.map(data => data.id),
-              copy_person:copydata.map(data => data.id),
-              bank_card_id:(CardDetail.code).split(" ")[1],
-              bank_name:(CardDetail.code).split(" ")[0],
-              apply_ids:selectedRows.map(data => data.apply_id),
-              des:CardDetail.explain,
-              urltype:3,
-          }
-      });
-  },
+
   btnhandleCancel(){
       this.props.form.resetFields();
       const {constdata,copydata} = this.props.repayMent;

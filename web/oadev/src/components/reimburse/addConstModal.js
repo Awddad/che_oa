@@ -73,6 +73,16 @@ const AddConstModal = React.createClass({
 
         const { getFieldDecorator,getFieldsValue } = this.props.form;
         const {constPersonal,constdata} = this.props.reimBurse;
+       /* if(constPersonal == null || constPersonal.length == 0){
+            this.props.dispatch({
+                type: 'reimBurse/modelHandle',
+                payload:{
+                    constPersonal:constPersonal,
+                    modalIndex:2
+                }
+            });
+        }
+        debugger*/
         let personalOptions =[],constid = [];
         if(constdata.length>0){constid = constdata.map(data => parseInt(data.id));}
         if(constPersonal != null){

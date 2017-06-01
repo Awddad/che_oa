@@ -168,10 +168,22 @@ export default {
         });
       }
     },
-    *create({payload},{call,put}){//提交报销单
+    *create({payload},{call,put}){//提交还款单
       const { data } = yield call(constCreate, payload);
       if (data && data.code === 200) {
         message.success('还款申请提交成功',2);
+        let const_data = payload.constdata;
+        let copy_data = payload.copydata;
+        const_data.length = 0;
+        copy_data.length = 0;
+
+        yield put({
+          type: 'hideModal1',
+          payload:{
+            constdata:const_data,
+            copydata:copy_data
+          }
+        });
         yield put(routerRedux.push({
           pathname: '/success',
           query: {
@@ -179,13 +191,6 @@ export default {
             urltype:payload.urltype
           }
         }));
-        yield put({
-          type: 'hideModal1',
-          payload:{
-            constdata:[],
-            copydata:[]
-          }
-        });
       } else {
         message.error(data.message,5);
       }

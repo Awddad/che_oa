@@ -139,3 +139,13 @@ export const Bread = (item,cc) =>{
 export const MenuKey = (item) =>{
   webStorage.setItem("menuKey",item);
 }
+
+// Operation LocalStorage
+export function setLocalStorage(key, vaule) {
+  return localStorage.setItem(key, JSON.stringify(vaule));
+}
+
+export function getLocalStorage(key) {
+  const value = localStorage.getItem(key);
+  return value;
+}

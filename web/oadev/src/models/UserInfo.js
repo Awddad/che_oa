@@ -8,17 +8,6 @@ export default {
         userInfo:{},
         personID:null,
     },
-    subscriptions: {
-        setup({ dispatch, history }) {
-          history.listen(location => {
-            if (location.pathname === '/') {
-              dispatch({
-                type: 'query',
-              });
-            }
-          });
-        },
-    },
     effects: {
         *query({ payload }, { call, put }) {
             const { data } = yield call(UserInfo);
@@ -34,12 +23,12 @@ export default {
                 });
             }
         },
-        reducers: {
-            querySuccess(state, action) {
-              return { ...state, ...action.payload};
-            }
-        },
-    }
+    },
+    reducers: {
+        querySuccess(state, action) {
+            return { ...state, ...action.payload};
+        }
+    },
 }
 
 
