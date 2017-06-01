@@ -78,7 +78,8 @@ class BaseController extends Controller
         {
             $session = Yii::$app->session;
             $objPerson = $session->get('USER_INFO');
-            if(empty($objPerson)) {
+            $intRoleId = $session->get('ROLE_ID');
+            if(empty($objPerson) || !$intRoleId) {
                 $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
                 header("Content-type: application/json");
                 echo json_encode($this->_return(['login_url' => $loginUrl], 401));
@@ -86,7 +87,6 @@ class BaseController extends Controller
             }
             $this->arrPersonInfo = $objPerson;
     
-            $intRoleId = $session->get('ROLE_ID');
             $this->setUserRoleInfo($intRoleId);
 
             //权限
