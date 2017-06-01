@@ -68,7 +68,7 @@ class BaseController extends Controller
      * @功能：项目入口，判断用户登录信息
      * @作者：王雕
      * @创建时间：2017-05-04
-     * @param type $action
+     * @param $action
      * @return boolean
      */
     public function beforeAction($action)
@@ -79,47 +79,16 @@ class BaseController extends Controller
             $session = Yii::$app->session;
             $objPerson = $session->get('USER_INFO');
             if(empty($objPerson)) {
-                $serverUrl = Yii::$app->params['quan_xian']['auth_sso_url'];//单点登录地址
-                $brokerId = Yii::$app->params['quan_xian']['auth_broker_id'];//项目appID
-                $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
                 $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
-                $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
-                $broker->attach(true);
-                $user = $broker->getUserInfo();//获取用户信息，这里会curl单点登录获取用户信息,但是不全
-                if (!$user) {
-                    //用户没有登录 需要跳转到登录页面去登录
-                    $broker->clearToken();
-                    header("Content-type: application/json");
-                    echo json_encode($this->_return(['login_url' => $loginUrl], 401));
-                    die();
-                } else {
-                    $strCacheKey = 'login_' . $strOsType . '_' . $broker->token;
-                    $objPerson = \Yii::$app->cache->get($strCacheKey);
-                    if (empty($objPerson) || $objPerson->person_id != $user['id']) {
-                        $objPerson = Person::findOne(['person_id' => $user['id']]);
-                        if (!$objPerson) {
-                            //用户信息取不到的时候提示用户不存在
-                            header("Content-type: application/json");
-                            echo json_encode($this->_return(['login_url' => $loginUrl], 402));
-                            die();
-                        } else {
-                            Yii::$app->cache->set($strCacheKey, $objPerson);
-                        }
-                    }
-                }
-                $session->set('USER_INFO', $objPerson);
+                header("Content-type: application/json");
+                echo json_encode($this->_return(['login_url' => $loginUrl], 401));
+                die();
             }
             $this->arrPersonInfo = $objPerson;
     
-            //如果没选角色，默认一个角色
-            if (empty($this->arrPersonRoleInfo['roleInfo']) || $this->arrPersonRoleInfo['permissionOrgIds']) {
-                $arrRoleIds = explode(',', $this->arrPersonInfo->role_ids);
-                if (empty($intRoleId) && count($arrRoleIds) >= 1) {
-                    $intRoleId = $arrRoleIds[0];
-                    $this->roleId = $intRoleId;
-                }
-                $this->setUserRoleInfo($intRoleId);
-            }
+            $intRoleId = $session->get('ROLE_ID');
+            $this->setUserRoleInfo($intRoleId);
+
             //权限
             $roleInfo = Role::findOne($this->roleId);
             $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
@@ -132,12 +101,6 @@ class BaseController extends Controller
                     echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
                     die();
                 }
-            }
-    
-            //设置角色信息
-            $session = Yii::$app->getSession();
-            if (isset($session['role_id'])) {
-                $this->setUserRoleInfo($session['role_id']);
             }
         } else {
             //app 版本的登录   先预留
