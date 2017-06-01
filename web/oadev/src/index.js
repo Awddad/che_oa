@@ -10,10 +10,10 @@ import { message} from 'antd';
 const app = dva({
   onError(error,dispatch) {
     if(error.response && error.response.code==401){
-        message.error('登录超时，请重新登录');
+        //message.error('登录超时，请重新登录');
         setTimeout(function(){
           window.location.href=error.response.data.login_url;
-        },800);
+        },300);
     }else if(error.response && error.response.code==403){
       message.error('没有 '+error.response.url+' 权限，请联系管理员',4);
     }else{

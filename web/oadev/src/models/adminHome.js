@@ -41,7 +41,7 @@ export default {
                 delCookie("department");
                 delCookie("adminPms");
                 delCookie("userID");
-                webStorage.setItem('adminPms','');
+                localStorage.clear();
                 window.location.href = data.data.login_url;
             }
         }

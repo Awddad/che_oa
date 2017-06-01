@@ -24,11 +24,33 @@ const SubmitModal = React.createClass({
     getInitialState(){
         return {
           ...this.props.repayMent,
+          confirmLoad:false
         };
     },
     onCancel(){
         this.props.dispatch({
             type: 'repayMent/hideModal'
+        });
+    },
+    handleSubmit(){//还款申请提交
+        let { CardDetail,constdata,copydata,selectedRows,addApplyID }  = this.props.repayMent;
+        this.setState({
+            confirmLoad:true
+        });
+        this.props.dispatch({
+            type: 'repayMent/create',
+            payload: {
+              apply_id:addApplyID,
+              approval_persons:constdata.map(data => data.id),
+              copy_person:copydata.map(data => data.id),
+              bank_card_id:(CardDetail.code).split(" ")[1],
+              bank_name:(CardDetail.code).split(" ")[0],
+              apply_ids:selectedRows.map(data => data.apply_id),
+              des:CardDetail.explain,
+              urltype:3,
+              constdata:constdata,
+              copydata:copydata
+            }
         });
     },
     render(){
@@ -43,12 +65,14 @@ const SubmitModal = React.createClass({
           },
         };
 
+        const {issubmitmodal}  = this.props.repayMent;
         const modalOpts = {
-          visible:this.props.issubmitmodal,
-          onOk: this.props.handleSubmit,
+          visible:issubmitmodal,
+          onOk: this.handleSubmit,
           onCancel: this.onCancel,
           width:840,
-          maskClosable:false
+          maskClosable:false,
+          confirmLoading:this.state.confirmLoad
         };
 
         const {carddata,constdata,copydata,CardDetail,bank_id,bank_name,selectedRows,addApplyID} = this.props.repayMent;

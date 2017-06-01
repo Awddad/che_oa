@@ -11,12 +11,50 @@ const SubmitModal = React.createClass({
     getInitialState(){
         return {
           ...this.props.applyLoan,
+          confirmLoad:false
         };
     },
     onCancel(){
         this.props.dispatch({
             type: 'applyLoan/hideModal'
         });
+    },
+    handleSubmit(){//借款申请提交
+        let { CardDetail,constdata,copydata,addApplyID } = this.props.applyLoan;
+        let pic = null, pics = "";
+        if(CardDetail.pics != null){
+              pic = CardDetail.pics.fileList.map(data => data.response.data);
+              for(let i=0;i<pic.length;i++){
+                  if(i == pic.length-1){
+                    pics += pic[i];
+                  }else{
+                    pics += pic[i]+','
+                  }
+              }
+        }
+
+        this.setState({
+            confirmLoad:true
+        });
+
+        this.props.dispatch({
+            type: 'applyLoan/create',
+            payload: {
+                apply_id:addApplyID,
+                money:CardDetail.money,
+                des:CardDetail.des,
+                approval_persons:constdata.map(data => data.id),
+                copy_person:copydata.map(data => data.id),
+                bank_card_id:(CardDetail.code).split(" ")[1],
+                bank_name:(CardDetail.code).split(" ")[0],
+                tips:CardDetail.tips,
+                pics:pics,
+                urltype:2,
+                constdata:constdata,
+                copydata:copydata,
+            }
+        });
+
     },
     render(){
         const formItemLayout = {
@@ -30,15 +68,15 @@ const SubmitModal = React.createClass({
           },
         };
 
+        const {carddata,constdata,copydata,CardDetail,bank_id,bank_name,addApplyID,issubmitmodal} = this.props.applyLoan;
         const modalOpts = {
-          visible:this.props.issubmitmodal,
-          onOk: this.props.handleSubmit,
+          visible:issubmitmodal,
+          onOk: this.handleSubmit,
           onCancel: this.onCancel,
           width:840,
           maskClosable:false
         };
 
-        const {carddata,constdata,copydata,CardDetail,bank_id,bank_name,addApplyID} = this.props.applyLoan;
 
         let constpersonal = constdata.map(data=>data.name.split(" ")[0]).join("、");
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
@@ -49,7 +87,7 @@ const SubmitModal = React.createClass({
         let department = getCookie("department") || '';
 
         return(
-            <Modal title="申请借款确认"  {...modalOpts} >
+            <Modal title="申请借款确认"  {...modalOpts} confirmLoading={this.state.confirmLoad}>
                 <div className={cs(styles.const_wrap,'mb-md')}>
                   <h1 className="mb-md">借款单</h1>
                   <table>

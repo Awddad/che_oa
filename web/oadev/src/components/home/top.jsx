@@ -7,9 +7,8 @@ import { Row, Icon, Menu, Dropdown } from 'antd';
 import { Link } from 'dva/router';
 import styles from './top.less';
 import cs from 'classnames';
-import { getCookie } from '../common';
-import WebStorage from 'react-webstorage';
-const webStorage = new WebStorage(window.sessionStorage || window.localStorage);
+import { getLocalStorage } from '../common';
+
 
 const menu = (
   <Menu>
@@ -31,6 +30,12 @@ const Top = React.createClass({
         });
     },
     render(){
+        let username = localStorage.getItem("username");
+        if(username == null){
+            this.props.dispatch({
+                type:"Loading/userinfo"
+            });
+        }
         return (
           	<Row>
                 <div className={styles.menu}>
@@ -38,7 +43,7 @@ const Top = React.createClass({
                     <div className={styles.sec_right}>{/*<a className={styles.reset}>修改密码</a>*/}
                         <Dropdown overlay={menu}>
                       	    <a className="ant-dropdown-link" href="javascript:void(0);" style={{color:'#fff'}}>
-                      	        <Icon type="user" style={{fontSize:16,color:'#eeeeee'}}/> { getCookie('username') } <Icon type="down" style={{paddingLeft:5}}/>
+                      	        <Icon type="user" style={{fontSize:16,color:'#eeeeee'}}/> { getLocalStorage('username') } <Icon type="down" style={{paddingLeft:5}}/>
                       	    </a>
                       	 </Dropdown>
                     </div>
@@ -51,11 +56,12 @@ const Top = React.createClass({
 Top.PropTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
-   adminHome:PropTypes.object,
+  adminHome:PropTypes.object,
+  Loading:PropTypes.object,
 };
 
-function mapStateToProps({ adminHome}) {
-  return { adminHome };
+function mapStateToProps({ adminHome,Loading}) {
+  return { adminHome,Loading };
 }
 
 export default connect(mapStateToProps)(Top);
