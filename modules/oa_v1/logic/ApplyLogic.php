@@ -31,8 +31,8 @@ class ApplyLogic extends BaseLogic
             $apply_type = null;
         }
 		
-		$query ;
-		
+		$query;
+
 		if(1 == $type){//待我审批
 			$approval_model = new appmodel\ApprovalLog();
 			$query = $approval_model::find()
