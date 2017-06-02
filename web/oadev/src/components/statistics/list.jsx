@@ -48,7 +48,7 @@ const LoadDetailsList= React.createClass({
     render(){
 
         const { dataSource,keyword,time,type,current,totalCount,pageSize,pageCount,perPage,currentPage,loading,total,sort} = this.props.Statistics;
-            console.log(dataSource);
+            //console.log(dataSource);
             let sortingType = null;
             if(sort == "asc"){
                 sortingType = "ascend";
