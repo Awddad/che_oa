@@ -65,7 +65,7 @@ const StepDetails = React.createClass({
                                         <div>{data.org}</div>
                                         <div className="cred">申请人撤销申请</div></div>)
                 } />);
-//debugger
+
             resultSteps =   (<Steps current={stepdata.step}>
                                 {step}
                             </Steps>);

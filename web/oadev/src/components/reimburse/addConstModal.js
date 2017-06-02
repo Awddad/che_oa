@@ -82,7 +82,7 @@ const AddConstModal = React.createClass({
                 }
             });
         }
-        debugger*/
+        */
         let personalOptions =[],constid = [];
         if(constdata.length>0){constid = constdata.map(data => parseInt(data.id));}
         if(constPersonal != null){
