@@ -8,6 +8,7 @@ import Main from '../components/home/main';
 import CcsendSearch from '../components/ccsend/search';
 import CcsendList from '../components/ccsend/list';
 import Pagetitle from '../components/public/pagetitle';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
 
 const Ccsend = React.createClass({
@@ -98,6 +99,7 @@ const Ccsend = React.createClass({
 
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="抄送给我" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title = '抄送给我'/>

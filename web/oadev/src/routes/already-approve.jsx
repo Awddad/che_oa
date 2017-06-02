@@ -8,15 +8,10 @@ import Main from '../components/home/main';
 import Pagetitle from '../components/public/pagetitle';
 import AlreadyApproveSearch from '../components/already-approve/search';
 import AlreadyApproveList from '../components/already-approve/list';
-import { Bread } from '../components/common';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
 const AlreadyApprove =React.createClass({
    render(){
-        if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "approval"){
-            Bread("借款审批","ThreeCrumb");
-          }else{
-            Bread("借款详情","ThreeCrumb");
-          }
         const {
             loading,
             res,
@@ -106,6 +101,7 @@ const AlreadyApprove =React.createClass({
 
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="我已审批" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title="我已审批" />

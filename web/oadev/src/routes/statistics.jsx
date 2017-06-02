@@ -7,6 +7,7 @@ import Main from '../components/home/main';
 import LoadDetailSearch from '../components/statistics/search';
 import LoadDetailList from '../components/statistics/list';
 import Pagetitle from '../components/public/pagetitle';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import cs from 'classnames';
 
 const LoadDetail = React.createClass({
@@ -83,6 +84,7 @@ const LoadDetail = React.createClass({
         }
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="在借款员工明细表" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title = '在借款员工明细表'/>

@@ -1,7 +1,7 @@
 import { query } from '../services/waitme-approve';
 import { parse } from 'qs';
 import { message} from 'antd';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 export default {
   namespace: 'waitme',
@@ -27,6 +27,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/waitmeapprove') {
+          MenuKey('/waitmeapprove');
           dispatch({
             type: 'query',
             payload: {
