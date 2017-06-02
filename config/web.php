@@ -24,8 +24,8 @@ $config = [
         'response' => [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
-                if (\Yii::$app->controller->id != 'site')//预留登录后门用
-                {
+//                if (\Yii::$app->controller->id != 'site')//预留登录后门用
+//                {
                     $response = $event->sender;
                     $response->data = [
                         'code' => isset($response->data['code']) ? $response->data['code'] : 0,
@@ -33,7 +33,7 @@ $config = [
                         'data' => isset($response->data['data']) ? $response->data['data'] : NULL,
                     ];
                     $response->statusCode = 200;
-                }
+                //}
             },
 
         ],
