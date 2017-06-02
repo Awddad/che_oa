@@ -9,6 +9,7 @@ import AddConstModal from '../components/repayment/addConstModal';
 import AddCopyModal from '../components/repayment/addCopyModal';
 import SubmitModal from '../components/repayment/submitModal';
 import {Bread} from '../components/common';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import { routerRedux } from 'dva/router';
 import styles from './reimburse.less';
 import cs from 'classnames';
@@ -169,11 +170,12 @@ const RepayMent = React.createClass({
           title: '借款时间',
           key:'get_money_time',
           dataIndex: 'get_money_time',
+          width:150,
         },{
           title: '事由',
           key:'des',
           dataIndex: 'des',
-          width:300
+          width:250
         }];
 
     const rowSelection = {
@@ -214,6 +216,7 @@ const RepayMent = React.createClass({
 
     return (
       <Main location={location}>
+        <BreadcrumbCustom first="申请还款" second="" furl="" />
         <Row>
           <AddCardModal key={cardmodalProps} isshowcardmodal = {isshowcardmodal} />
           <AddConstModal key={constmodalProps} title="审批人" isshowconstmodal = {isshowconstmodal}/>

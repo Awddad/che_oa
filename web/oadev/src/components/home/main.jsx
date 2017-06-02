@@ -60,13 +60,13 @@ class Main extends React.Component {
                             <Top location={location}  toggle={this.toggle} collapsed = {this.state.collapsed} />
                         </Header>
                         <Content style={{ margin: '24px 16px 0' }}>
-                            <div style={{ padding:  24, background: '#fff', minHeight: 360 }}>
-                                <Row >
+                            <div className="main_content">
+                                {/*<Row >
                                     <Breadcrumb>
                                       <Breadcrumb.Item href=""><Icon type="home" /></Breadcrumb.Item>
                                       {crumbs}
                                     </Breadcrumb>
-                                </Row>
+                                </Row>*/}
                                 {children}
                             </div>
                         </Content>

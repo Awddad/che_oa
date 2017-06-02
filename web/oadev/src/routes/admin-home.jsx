@@ -6,6 +6,7 @@ import cs from 'classnames'
 import Main from '../components/home/main';
 import styles from './admin-home.less';
 import {chkPms,chkPmsForBlock,currentPage,Bread} from '../components/common';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
@@ -36,6 +37,7 @@ const AdminHome = React.createClass({
 
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="" second="" furl="" />
                 <Row>
                     {chkPms(['shen_qing_bao_xiao','shen_qing_jie_kuan','shen_qing_huang_kuan']) ?
                       (<div className={styles.home_wrap}>

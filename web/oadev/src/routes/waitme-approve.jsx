@@ -8,6 +8,7 @@ import Main from '../components/home/main';
 import WaitmeSearch from '../components/waitme-approve/search';
 import WaitmeList from '../components/waitme-approve/list';
 import Pagetitle from '../components/public/pagetitle';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
 
 const Waitme = React.createClass({
@@ -106,6 +107,7 @@ const Waitme = React.createClass({
 
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="待我审批" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title="待我审批" />

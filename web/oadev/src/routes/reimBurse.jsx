@@ -11,6 +11,7 @@ import AddCopyModal from '../components/reimburse/addCopyModal';
 import SubmitModal from '../components/reimburse/submitModal';
 import {Bread} from '../components/common';
 import Main from '../components/home/main';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import { routerRedux } from 'dva/router';
 import styles from './reimburse.less';
 import cs from 'classnames';
@@ -316,6 +317,7 @@ const Reimburse = React.createClass({
 
     return (
       <Main location={location}>
+        <BreadcrumbCustom first="申请报销" second="" furl="" />
         <Row>
           <AddTableModal key={tablemodalProps} isshowtablemodal = {isshowtablemodal} />
           <AddCardModal key={cardmodalProps} isshowcardmodal = {isshowcardmodal} />

@@ -13,6 +13,7 @@ import Approval from '../../components/details/approval';
 import ConfirmButton from '../../components/details/confirmbutton';
 import Confirm from '../../components/details/confirmPayment';
 import { chkPms,Bread } from '../../components/common';
+import BreadcrumbCustom from '../../components/BreadcrumbCustom';
 import cs from 'classnames';
 import styles from '../style.less';
 const Option = Select.Option;
@@ -20,11 +21,6 @@ const FormItem = Form.Item;
 
 const ReimburseDetail = React.createClass({
     getInitialState(){
-        if(location.hash.split("?")[1].split("&")[0].split("=")[1] == "approval"){
-          Bread("借款审批","ThreeCrumb");
-        }else{
-          Bread("借款详情","ThreeCrumb");
-        }
         return {
             ...this.props.Detail,
         };
@@ -159,10 +155,20 @@ const ReimburseDetail = React.createClass({
                 pics = Loan_Detail.info.pics;
                 pdf = Loan_Detail.pdf;
             }
-
+            let  ttype = location.hash.split("?")[1].split("&")[0].split("=")[1];
+            let  bread = '';
+            if( ttype == "approval"){
+                bread = (<BreadcrumbCustom first="待我审批" second="借款审批" furl="/waitmeapprove" />);
+            }else if(ttype == "confirm"){
+                bread = (<BreadcrumbCustom first="付款确认" second="借款确认" furl="/payment" />);
+            }else{
+                bread = (<BreadcrumbCustom first="借款详情" second="" furl="" />);
+            }
         return(
             <Main location={location}>
+                {bread}
                 <Row>
+
                     <div className={styles.home_wrap}>
                         <Pagetitle isback='true' title={title} />
                         <StepDetail stepdata={Loan_Detail} />

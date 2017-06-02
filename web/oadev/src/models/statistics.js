@@ -1,7 +1,7 @@
 import { query, department } from '../services/statistics';
 import { parse } from 'qs';
 import { message} from 'antd';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 export default {
   namespace: 'Statistics',
@@ -28,13 +28,14 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/statistics') {
-          dispatch({
-            type: 'query',
-            payload: {
-                pageCount:location.query.pageCount == null? "" : location.query.pageCount,
-                pageSize:10,
-            },
-          });
+            MenuKey('/statistics');
+            dispatch({
+                type: 'query',
+                payload: {
+                    pageCount:location.query.pageCount == null? "" : location.query.pageCount,
+                    pageSize:10,
+                },
+            });
         }
       });
     },
