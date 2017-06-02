@@ -9,7 +9,6 @@ import AddCardModal from '../components/reimburse/addCardModal';
 import AddConstModal from '../components/reimburse/addConstModal';
 import AddCopyModal from '../components/reimburse/addCopyModal';
 import SubmitModal from '../components/reimburse/submitModal';
-import {Bread} from '../components/common';
 import Main from '../components/home/main';
 import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import { routerRedux } from 'dva/router';
@@ -23,8 +22,6 @@ const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
 const Reimburse = React.createClass({
   getInitialState(){
-    //Bread("报销管理","OneCrumb");
-    Bread("申请报销","OneCrumb");
     return {
       ...this.props.reimBurse,
       fileList: [],

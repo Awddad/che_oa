@@ -8,7 +8,6 @@ import Main from '../components/home/main';
 import Pagetitle from '../components/public/pagetitle';
 import AlreadyApproveSearch from '../components/already-approve/search';
 import AlreadyApproveList from '../components/already-approve/list';
-import { Bread } from '../components/common';
 import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
 const AlreadyApprove =React.createClass({

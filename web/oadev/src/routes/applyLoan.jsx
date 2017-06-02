@@ -8,7 +8,6 @@ import AddConstModal from '../components/applyloan/addConstModal';
 import AddCopyModal from '../components/applyloan/addCopyModal';
 import AuditingLi from '../components/applyloan/auditingLi';
 import SubmitModal from '../components/applyloan/submitModal';
-import {Bread} from '../components/common';
 import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import { routerRedux } from 'dva/router';
 import styles from './reimburse.less';
@@ -24,8 +23,6 @@ const acceptImgFormat = 'jpg,jpeg,png,gif'; //上传图片格式
 
 const ApplyLoan = React.createClass({
   getInitialState(){
-    //Bread("报销管理","OneCrumb");
-    Bread("申请借款","OneCrumb");
     return {
       ...this.props.applyLoan,
       imgfileList:[],

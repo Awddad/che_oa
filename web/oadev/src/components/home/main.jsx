@@ -7,7 +7,6 @@ import Top from './Top';
 import Left from './Left';
 import Menu from './Menu';
 import Bottom from './Bottom';
-import Bread from './Bread';
 import { userLogin } from '../common';
 const { Header, Content, Footer, Sider } = Layout;
 import WebStorage from 'react-webstorage';
@@ -29,25 +28,6 @@ class Main extends React.Component {
         });
     }
     render(){
-          let oneCrumb = webStorage.getItem('OneCrumb');
-          let twoCrumb = webStorage.getItem('TwoCrumb');
-          let threeCrumb = webStorage.getItem('ThreeCrumb');
-          let oneUrl = webStorage.getItem('OneUrl');
-          let twoUrl = webStorage.getItem('TwoUrl');
-          const crumbs = [];
-          if(oneCrumb && oneUrl != null){
-                crumbs.push(<Breadcrumb.Item key="oneCrumb" href={"#"+oneUrl}>{oneCrumb}</Breadcrumb.Item>)
-          }else{
-                crumbs.push(<Breadcrumb.Item key="oneCrumb" >{oneCrumb}</Breadcrumb.Item>)
-          }
-
-          if(twoCrumb && twoUrl != null){
-                crumbs.push(<Breadcrumb.Item key="twoCrumb" href={"#"+twoUrl}>{twoCrumb}</Breadcrumb.Item>)
-          }else{
-                crumbs.push(<Breadcrumb.Item key="twoCrumb" >{twoCrumb}</Breadcrumb.Item>)
-          };
-          if(threeCrumb) crumbs.push(<Breadcrumb.Item key="threeCrumb">{threeCrumb}</Breadcrumb.Item>);
-
         const children = this.props.children;
         return (
                 <Layout className="warpper">
@@ -61,12 +41,6 @@ class Main extends React.Component {
                         </Header>
                         <Content style={{ margin: '24px 16px 0' }}>
                             <div className="main_content">
-                                {/*<Row >
-                                    <Breadcrumb>
-                                      <Breadcrumb.Item href=""><Icon type="home" /></Breadcrumb.Item>
-                                      {crumbs}
-                                    </Breadcrumb>
-                                </Row>*/}
                                 {children}
                             </div>
                         </Content>
