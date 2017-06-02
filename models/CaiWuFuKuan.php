@@ -45,7 +45,6 @@ class CaiWuFuKuan extends \yii\db\ActiveRecord
             [['apply_id'], 'string', 'max' => 20],
             [['org_name', 'bank_name', 'bank_name_des', 'fu_kuan_id'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 50],
-            ['pics', 'default', 'value' => '']
         ];
     }
 
