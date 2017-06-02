@@ -2,7 +2,7 @@ import { constType,constCard,constPersonal,constCreate,addCard,GetApplyID,GetUse
 import { parse } from 'qs';
 import { message} from 'antd';
 import { routerRedux } from 'dva/router';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
@@ -39,6 +39,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/reimburse') {
+          MenuKey('/reimburse');
           dispatch({
             type: 'query',
             payload: location.query,

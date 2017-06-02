@@ -1,7 +1,7 @@
 import { query } from '../services/make_collections';
 import { parse } from 'qs';
 import { message} from 'antd';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 export default {
   namespace: 'make_collections',
@@ -29,6 +29,7 @@ export default {
         setup({ dispatch, history }) {
           history.listen(location => {
             if (location.pathname === '/make_collections') {
+              MenuKey('/make_collections');
               dispatch({
                 type: 'query',
                 payload: {

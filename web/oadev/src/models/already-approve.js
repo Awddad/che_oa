@@ -1,7 +1,7 @@
 import { query } from '../services/already-approve';
 import { parse } from 'qs';
 import { message} from 'antd';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 export default {
   namespace: 'alreadyApprove',
@@ -28,6 +28,7 @@ export default {
     setup({ dispatch, history }) {
       history.listen(location => {
         if (location.pathname === '/already-approve') {
+          MenuKey('/already-approve');
           dispatch({
             type: 'query',
             payload: {

@@ -1,7 +1,7 @@
 import { GetApplyID } from '../services/applyIDuserInfo';
 import { parse } from 'qs';
 import { message} from 'antd';
-import { userLogin } from '../components/common';
+import { userLogin,MenuKey } from '../components/common';
 
 export default {
   namespace: 'ApplyIDuserInfo',

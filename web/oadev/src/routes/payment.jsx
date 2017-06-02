@@ -8,6 +8,7 @@ import Main from '../components/home/main';
 import PaymentSearch from '../components/payment/search';
 import PaymentList from '../components/payment/list';
 import Pagetitle from '../components/public/pagetitle';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
 const Payment =React.createClass({
    render(){
@@ -99,6 +100,7 @@ const Payment =React.createClass({
       }
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="付款确认" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title = '付款确认'/>

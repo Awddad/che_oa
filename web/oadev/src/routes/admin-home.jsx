@@ -5,7 +5,8 @@ import { Form, Icon, Button, Row, Col,message} from 'antd';
 import cs from 'classnames'
 import Main from '../components/home/main';
 import styles from './admin-home.less';
-import {chkPms,chkPmsForBlock,currentPage,Bread} from '../components/common';
+import {chkPms,chkPmsForBlock,currentPage} from '../components/common';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 import WebStorage from 'react-webstorage';
 const webStorage = new WebStorage(window.localStorage || window.sessionStorage);
 
@@ -13,10 +14,7 @@ const FormItem = Form.Item;
 
 const AdminHome = React.createClass({
     getInitialState(){
-          Bread("首页","OneCrumb");
-          Bread("","TwoCrumb");
-          Bread("","ThreeCrumb");
-          return{}
+        return{}
     },
     contextTypes: {
       router: React.PropTypes.object
@@ -36,6 +34,7 @@ const AdminHome = React.createClass({
 
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="" second="" furl="" />
                 <Row>
                     {chkPms(['shen_qing_bao_xiao','shen_qing_jie_kuan','shen_qing_huang_kuan']) ?
                       (<div className={styles.home_wrap}>

@@ -9,6 +9,7 @@ import MakeCollectionSearch from '../components/make_collections/search';
 import MakeCollectionsList from '../components/make_collections/list';
 import ConfirmPayment from '../components/details/confirmPayment';
 import Pagetitle from '../components/public/pagetitle';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
  const MakeCollection= React.createClass({
 
@@ -97,6 +98,7 @@ import Pagetitle from '../components/public/pagetitle';
     }
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="收款确认" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title = '收款确认'/>

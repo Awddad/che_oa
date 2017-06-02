@@ -17,7 +17,8 @@ const Confirm = React.createClass({
             previewVisible: false,
             previewImage: '',
             flowvalue:1,
-            paymentTime:null
+            paymentTime:null,
+            confirmLoad:false
         };
     },
     handleflowChange(e){
@@ -56,6 +57,9 @@ const Confirm = React.createClass({
                         pics += pic[i]+','
                       }
                 }
+                this.setState({
+                    confirmLoad:true
+                });
                 this.props.dispatch({
                     type: 'Detail/PayMentConfirm',
                     payload: {
@@ -178,8 +182,8 @@ const Confirm = React.createClass({
         }
 
         return(
-                <Modal title="付款确认"  {...modalOpts} >
-                        <Form>
+                <Modal title="付款确认"  {...modalOpts} confirmLoading={this.state.confirmLoad} >
+                        <Form  layout='horizontal'>
                             <FormItem {...formItemLayout} label="付款部门" hasFeedback>
                                 {getFieldDecorator('department', {
                                     rules: [{required: true, message: '请选择付款部门',}]

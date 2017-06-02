@@ -142,7 +142,7 @@ const Confirm = React.createClass({
         }
         return(
                 <Modal title="收款确认"  {...modalOpts} >
-                        <Form>
+                        <Form layout='horizontal'>
                             <FormItem {...formItemLayout}  label="打款人">
                                 <p style={{marginTop:5}}>{ name }&nbsp;&nbsp;&nbsp;{ bank_name }</p>
                                 <p>{ bank_id }</p>
@@ -196,9 +196,10 @@ const Confirm = React.createClass({
                                     <Input type="textarea" placeholder="请输入备注" />
                                 )}
                             </FormItem>
-                            <FormItem {...formItemLayout} label="财务流水" hasFeedback>
+                            <FormItem {...formItemLayout} label="财务流水">
                                 {getFieldDecorator('flow', {
-                                    rules: [{required: true, message: '请选择财务流水',}]
+                                    rules: [{required: true, message: '请选择财务流水',}],
+                                    initialValue:1
                                     })(
                                     <RadioGroup onChange={this.handleflowChange} value={this.state.flowvalue}>
                                         <Radio value={1}>自动生成</Radio>

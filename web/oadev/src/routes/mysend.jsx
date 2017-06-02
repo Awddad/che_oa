@@ -8,6 +8,7 @@ import Main from '../components/home/main';
 import MysendSearch from '../components/mysend/search';
 import MysendList from '../components/mysend/list';
 import Pagetitle from '../components/public/pagetitle';
+import BreadcrumbCustom from '../components/BreadcrumbCustom';
 
 const confirm = Modal.confirm;
 const Mysend=React.createClass({
@@ -130,6 +131,7 @@ const Mysend=React.createClass({
 
         return (
             <Main location={location}>
+                <BreadcrumbCustom first="我发起的" second="" furl="" />
                 <Row>
                     <div className={styles.home_wrap}>
                         <Pagetitle title = '我发起的'/>
