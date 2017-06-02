@@ -43,6 +43,7 @@ class CaiWuShouKuan extends \yii\db\ActiveRecord
             [['tips', 'pics'], 'string'],
             [['apply_id', 'org_name', 'bank_name', 'bank_name_des', 'shou_kuan_id', 'pics'], 'string', 'max' => 255],
             [['bank_card_id'], 'string', 'max' => 50],
+            ['pics', 'default', 'value' => '']
         ];
     }
 
