@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\Exception;
 
 /**
  * This is the model class for table "oa_apply".
@@ -151,9 +152,30 @@ class Apply extends \yii\db\ActiveRecord
      */
     public function approvalFail()
     {
-        $this->status = self::STATUS_FAIL;
-        $this->next_des = '审批不通过，已终止';
-        return $this->save();
+        if($this->type == 3) {
+            $db = Yii::$app->db;
+            $transaction = $db->beginTransaction();
+            try {
+                if (!$this->save()) {
+                    throw new Exception('审批不通过，操作失败');
+                }
+                $payBack = PayBack::findOne($this->apply_id);
+                $applyIds = explode(',', $payBack->jie_kuan_ids);
+                //改变借款单状态
+                foreach ($applyIds as $apply_id) {
+                    JieKuan::updateAll(['status' => 1], ['apply_id' => $apply_id]);
+                }
+                $transaction->commit();
+                return true;
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                return true;
+            }
+        } else {
+            $this->status = self::STATUS_FAIL;
+            $this->next_des = '审批不通过，已终止';
+            return $this->save();
+        }
     }
 
     /**
