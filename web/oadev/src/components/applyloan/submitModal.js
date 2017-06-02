@@ -83,7 +83,7 @@ const SubmitModal = React.createClass({
         let des = CardDetail.des;
         let money = CardDetail.money;
         let tips = CardDetail.tips;
-        let name = getCookie("username") || '';
+        let name = localStorage.getItem("username") || '';
         let department = getCookie("department") || '';
 
         return(

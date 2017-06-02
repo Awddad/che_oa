@@ -104,10 +104,10 @@ const SubmitModal = React.createClass({
           maskClosable:false
         };
 
-        const {tabledata,carddata,constdata,copydata,CardDetail,bank_id,bank_name,addApplyID,bxname,department } = this.props.reimBurse;
+        const {tabledata,carddata,constdata,copydata,CardDetail,bank_id,bank_name,addApplyID,department } = this.props.reimBurse;
         let constpersonal = constdata.map(data=>data.name.split(" ")[0]).join("、");
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
-
+        let bxname = localStorage.getItem("username");
 
         let html =[],count = 0;
         if(tabledata != undefined ){

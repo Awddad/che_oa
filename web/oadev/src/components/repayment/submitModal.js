@@ -80,7 +80,7 @@ const SubmitModal = React.createClass({
         let copypersonal = copydata.map(data=>data.name.split(" ")[0]).join("、");
         let des = CardDetail.explain;
 
-        let name = getCookie("username");
+        let name = localStorage.getItem("username");
         let department = getCookie("department");
         let html =[],count = 0;
         if(selectedRows != undefined ){
