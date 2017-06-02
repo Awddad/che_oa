@@ -165,7 +165,8 @@ class PayConfirmForm extends CaiWuFuKuan
     }
 
     /**
-     * @param Apply $apply
+     * @param $apply
+     * @return mixed
      */
     public function getMoney($apply)
     {
