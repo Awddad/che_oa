@@ -139,11 +139,18 @@ class PersonLogic extends BaseLogic
             return [];
         }
         foreach ($org as $value) {
-            $data[] = [
-                'label' => $value->org_name,
-                'value' => $value->org_id,
-                'children' => $this->getOrgs($value->org_id, [])
-            ];
+            if ($children = $this->getOrgs($value->org_id, [])) {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                    'children' => $this->getOrgs($value->org_id, [])
+                ];
+            } else {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                ];
+            }
         }
         return $data;
     }

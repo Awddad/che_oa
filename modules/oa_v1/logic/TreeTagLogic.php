@@ -90,11 +90,18 @@ class TreeTagLogic extends Logic
             return [];
         }
         foreach ($tagTree as $tree) {
-            $data[] = [
-                'label' => $tree->name,
-                'value' => $tree->id,
-                'children' => $this->getTreeTagsByParentId($tree->id, [])
-            ];
+            if($child = $this->getTreeTagsByParentId($tree->id, [])) {
+                $data[] = [
+                    'label' => $tree->name,
+                    'value' => $tree->id,
+                    'children' => $child
+                ];
+            } else {
+                $data[] = [
+                    'label' => $tree->name,
+                    'value' => $tree->id,
+                ];
+            }
         }
         return $data;
     }
