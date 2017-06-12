@@ -161,12 +161,11 @@ class JiekuanController extends BaseController
             $data[] = [
                 'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
                 'person' => $v->apply->person,
-                'org' => $org,
+                'org' => implode('-', $org),
                 'money' => Yii::$app->formatter->asCurrency($v->money),
                 'des' => $v->des,
             ];
         }
-
         \moonland\phpexcel\Excel::export([
             'models' => $data,
             'columns' => [
