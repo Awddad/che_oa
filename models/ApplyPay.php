@@ -12,7 +12,7 @@ use Yii;
  * @property string $money
  * @property string $des
  * @property string $to_name
- * @property string $card_number
+ * @property string $bank_card_id
  * @property string $bank_name
  * @property string $files
  * @property integer $created_at
@@ -39,7 +39,7 @@ class ApplyPay extends \yii\db\ActiveRecord
             [['des', 'files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
             [['to_name'], 'string', 'max' => 128],
-            [['card_number'], 'string', 'max' => 50],
+            [['bank_card_id'], 'string', 'max' => 50],
             [['bank_name'], 'string', 'max' => 64],
         ];
     }
@@ -55,7 +55,7 @@ class ApplyPay extends \yii\db\ActiveRecord
             'money' => '付款金额',
             'des' => '付款事由',
             'to_name' => '对方名称',
-            'card_number' => '对方卡号',
+            'bank_card_id' => '对方卡号',
             'bank_name' => '开户行',
             'files' => '附件',
             'created_at' => '申请时间',

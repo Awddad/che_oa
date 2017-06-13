@@ -70,6 +70,24 @@ class DefaultController extends BaseController
                 case 3:
                     $id = date('YmdHis') . '03' . rand(100, 999);
                     break;
+                case 4:
+                    $id = date('YmdHis') . '04' . rand(100, 999);
+                    break;
+                case 5:
+                    $id = date('YmdHis') . '05' . rand(100, 999);
+                    break;
+                case 6:
+                    $id = date('YmdHis') . '06' . rand(100, 999);
+                    break;
+                case 7:
+                    $id = date('YmdHis') . '07' . rand(100, 999);
+                    break;
+                case 8:
+                    $id = date('YmdHis') . '08' . rand(100, 999);
+                    break;
+                case 9:
+                    $id = date('YmdHis') . '09' . rand(100, 999);
+                    break;
             }
             return $this->_return(['apply_id' => $id]);
         }

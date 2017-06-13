@@ -220,4 +220,22 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasMany(BaoXiaoList::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * 获取请购
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApplyBuy()
+    {
+        return $this->hasOne(ApplyBuy::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
+     * 获取付款申请
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApplyPay()
+    {
+        return $this->hasOne(ApplyPay::className(), ['apply_id' => 'apply_id']);
+    }
 }
