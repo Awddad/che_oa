@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\models\User;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
@@ -16,9 +17,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
 use yii\web\Response;
-use Jasny\SSO\Broker;
 use Yii;
-use app\models\Person;
 use app\models\Role;
 use app\models\RoleOrgPermission;
 
@@ -30,6 +29,9 @@ use app\models\RoleOrgPermission;
  */
 class BaseController extends Controller
 {
+    /**
+     * @var User object
+     */
     public $arrPersonInfo = [];//用户登录信息保存
     
     public $arrPersonRoleInfo = [];//用户的角色和权限信息 - 菜单权限 - 数据权限
@@ -90,18 +92,18 @@ class BaseController extends Controller
             $this->setUserRoleInfo($intRoleId);
 
             //权限
-            $roleInfo = Role::findOne($this->roleId);
-            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
-            if (!in_array($requestUrlArr['0'], static::$arrWhiteList)
-                && !in_array(Yii::$app->controller->id, ['default', 'upload'])
-            ) {
-                if (!in_array($requestUrlArr['0'], $roleArr)) {
-                    header("Content-type: application/json");
-                    echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
-                    die();
-                }
-            }
+//            $roleInfo = Role::findOne($this->roleId);
+//            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
+//            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
+//            if (!in_array($requestUrlArr['0'], static::$arrWhiteList)
+//                && !in_array(Yii::$app->controller->id, ['default', 'upload'])
+//            ) {
+//                if (!in_array($requestUrlArr['0'], $roleArr)) {
+//                    header("Content-type: application/json");
+//                    echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
+//                    die();
+//                }
+//            }
         } else {
             //app 版本的登录   先预留
         }

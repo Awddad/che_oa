@@ -1,4 +1,5 @@
 <?php
+use yii\helpers\ArrayHelper;
 
 $params = require(__DIR__ . '/params.php');
 
@@ -27,12 +28,23 @@ $config = [
                 if (\Yii::$app->controller->module->id == 'oa_v1')//预留登录后门用
                 {
                     $response = $event->sender;
-                    $response->data = [
-                        'code' => isset($response->data['code']) ? $response->data['code'] : 0,
-                        'message' => isset($response->data['message']) ? $response->data['message'] : '',
-                        'data' => isset($response->data['data']) ? $response->data['data'] : NULL,
-                    ];
-                    $response->statusCode = 200;
+                    if ($response->data !== null) {
+                        if ($response->isSuccessful) {
+                            $response->data = [
+                                'message' => ArrayHelper::getValue($response->data, 'message', ''),
+                                'code' => intval(ArrayHelper::getValue($response->data, 'code', 0)),
+                                'data' => ArrayHelper::getValue($response->data, 'data'),
+                            ];
+                        } else {
+                            $code = intval(Yii::$app->errorHandler->exception->getCode());
+                            $response->data = [
+                                'message' => Yii::$app->errorHandler->exception->getMessage(),
+                                'code' => $code ? :  $response->statusCode,
+                                'data' => [],
+                            ];
+                        }
+                        $response->statusCode = 200;
+                    }
                 }
             },
 
