@@ -33,3 +33,6 @@ Vagrantfile
 .vagrant
 composer.lock
 .gitignore
+/docker-compose.yml
+/docker/
+/web/dev.txt
