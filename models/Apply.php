@@ -238,4 +238,20 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ApplyPay::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApplyDemand()
+    {
+        return $this->hasOne(ApplyDemand::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getApplyUseChapter()
+    {
+        return $this->hasOne(ApplyUseChapter::className(), ['apply_id' => 'apply_id']);
+    }
 }
