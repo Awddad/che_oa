@@ -60,22 +60,16 @@ class ApplyBuyController extends BaseController
         if (empty($apply)) {
             return $this->_returnError(400, [], '未找到改报销');
         }
-        $data = [
-            "apply_id" => $apply->apply_id,
-            "create_time" => date('Y-m-d H:i', $apply->create_time),
-            "next_des" => $apply->next_des,
-            "title" => $apply->title,
-            "type" => $apply->type,
-            "type_value" => "请购",
-            "person" => $apply->person,
-            'date' => date('Y年m月d日', $apply->create_time),
+        $applyLogic = BaseApplyLogic::instance();
+        $data['base'] = $applyLogic->getBaseApply($apply);
+        $data['info'] = [
             'to_name' => $apply->applyBuy->to_name,
             'bank_card_id' => $apply->applyBuy->bank_card_id,
             'bank_name' => $apply->applyBuy->bank_name,
-            'des' => $apply->applyBuy->des
+            'des' => $apply->applyBuy->des,
+            'files' => json_decode($apply->applyBuy->files)
         ];
         
-        $data['copy_person'] = $apply->copy_person;
         $data['flow'] = BaseApplyLogic::instance()->getFlowData($apply);
         $data['buy_list'] = BaseApplyLogic::instance()->getApplyBuyList($apply->apply_id);
         return $this->_return($data);

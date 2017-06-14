@@ -58,24 +58,17 @@ class ApplyPayController extends BaseController
         if (empty($apply)) {
             return $this->_returnError(400, [], '未找到改报销');
         }
-        $data = [
-            "apply_id" => $apply->apply_id,
-            "create_time" => date('Y-m-d H:i', $apply->create_time),
-            "next_des" => $apply->next_des,
-            "title" => $apply->title,
-            "type" => $apply->type,
-            "type_value" => "请购",
-            "person" => $apply->person,
-            'date' => date('Y年m月d日', $apply->create_time),
+        $applyLogic = BaseApplyLogic::instance();
+        $data['base'] = $applyLogic->getBaseApply($apply);
+        $data['info'] = [
             'to_name' => $apply->applyPay->to_name,
             'bank_card_id' => $apply->applyPay->bank_card_id,
             'bank_name' => $apply->applyPay->bank_name,
             'pay_type' => $apply->applyPay->pay_type,
-            'des' => $apply->applyPay->des
+            'des' => $apply->applyPay->des,
+            'files' => json_decode($apply->applyBuy->files)
         ];
-        
-        $data['copy_person'] = $apply->copy_person;
-        $data['flow'] = BaseApplyLogic::instance()->getFlowData($apply);
+        $data['flow'] = $applyLogic->getFlowData($apply);
         return $this->_return($data);
     }
 }
