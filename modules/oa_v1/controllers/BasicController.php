@@ -42,7 +42,7 @@ class BasicController extends BaseController
 			$data = ['id'=>$model->id,'name'=>$model->name,'child'=>$child];
 			return $this->_return($data);
 		}else{
-			return $this->_returnError(111,null,'原数据不存在');
+			return $this->_returnError(403,'原数据不存在');
 		}
 	}
 	
@@ -57,13 +57,13 @@ class BasicController extends BaseController
 		$model->load(['BasicAssetForm'=>$post]);
 		
 		if(!$model->validate()){
-			return $this->_returnError(123,current($model->getFirstErrors()),'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->addType();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError(111,$res['msg'],'添加失败');	
+			return $this->_returnError(400,$res['msg']);	
 		}
 	}
 	
@@ -75,13 +75,13 @@ class BasicController extends BaseController
 		$model->load(['BasicAssetForm'=>$post]);
 		
 		if(!$model->validate()){
-			return $this->_returnError(123,current($model->getFirstErrors()),'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->updateType();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError(111,$res['msg'],'修改失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
@@ -95,13 +95,13 @@ class BasicController extends BaseController
 		$model->load(['BasicAssetForm'=>$post]);
 		
 		if(!$model->validate()){
-			return $this->_returnError(123,current($model->getFirstErrors()),'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->addBrand();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError(111,$res['msg'],'添加失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
@@ -115,13 +115,13 @@ class BasicController extends BaseController
 		$model->load(['BasicAssetForm'=>$post]);
 		
 		if(!$model->validate()){
-			return $this->_returnError(123,current($model->getFirstErrors()),'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->updateBrand();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError(111,$res['msg'],'修改失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
@@ -156,7 +156,7 @@ class BasicController extends BaseController
 			$data = ['brand_id'=>$brand->id,'brand_name'=>$brand->name];
 			return $this->_return($data);
 		}else{
-			return $this->_returnError(111,null,'原数据不存在');
+			return $this->_returnError(403,'原数据不存在');
 		}
 	}
 	/**
@@ -190,13 +190,13 @@ class BasicController extends BaseController
 		$model -> setScenario($model::SCENARIO_ADD);
 		$model->load(['BasicPersonForm'=>$post]);
 		if(!$model->validate()){
-			return $this->_returnError(current($model->getFirstErrors()),123,'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->editType();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError('111',$res['msg'],'添加失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
@@ -209,13 +209,13 @@ class BasicController extends BaseController
 		$model -> setScenario($model::SCENARIO_EDIT);
 		$model->load(['BasicPersonForm'=>$post]);
 		if(!$model->validate()){
-			return $this->_returnError(current($model->getFirstErrors()),123,'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->editType();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError('111',$res['msg'],'修改失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
@@ -229,7 +229,7 @@ class BasicController extends BaseController
 			$data = ['id'=>$model->id,'name'=>$model->name];
 			return $this->_return($data);
 		}else{
-			return $this->_returnError(111,null,'原数据不存在');
+			return $this->_returnError(403,'原数据不存在');
 		}
 	}
 	/**
@@ -265,7 +265,7 @@ class BasicController extends BaseController
 			$data = ['id'=>$model->id,'name'=>$model->name];
 			return $this->_return($data);
 		}else{
-			return $this->_returnError(111,null,'原数据不存在');
+			return $this->_returnError(403,'原数据不存在');
 		}
 	}
 	/**
@@ -278,13 +278,13 @@ class BasicController extends BaseController
 		$model -> setScenario($model::SCENARIO_ADD);
 		$model->load(['BasicEmployeeForm'=>$post]);
 		if(!$model->validate()){
-			return $this->_returnError(current($model->getFirstErrors()),123,'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->editType();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError('111',$res['msg'],'添加失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
@@ -297,13 +297,13 @@ class BasicController extends BaseController
 		$model -> setScenario($model::SCENARIO_EDIT);
 		$model->load(['BasicEmployeeForm'=>$post]);
 		if(!$model->validate()){
-			return $this->_returnError(current($model->getFirstErrors()),123,'参数不正确');
+			return $this->_returnError(403,current($model->getFirstErrors()));
 		}
 		$res = $model->editType();
 		if($res['status']){
 			return $this->_return('成功');
 		}else{
-			return $this->_returnError('111',$res['msg'],'修改失败');
+			return $this->_returnError(400,$res['msg']);
 		}
 	}
 }
