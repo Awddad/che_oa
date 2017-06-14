@@ -7,7 +7,7 @@ use app\models\Apply;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 
-class PositiveForm extends BaseForm
+class ApplyPositiveForm extends BaseForm
 {
 	public $type = 10;
 	public $cai_wu_need = 1;
@@ -82,7 +82,9 @@ class PositiveForm extends BaseForm
 	}
 	
 	
-	
+	/**
+	 * 保存转正表
+	 */
 	public function savePositive()
 	{
 		$model = new ApplyPositive();
@@ -92,7 +94,8 @@ class PositiveForm extends BaseForm
 		$model->suggest = $this->suggest;
 		$model->entry_time = $this->entry_time;
 		$model->job = $this->job;
-		$model->files = $this->files?:'';
+		$model->files = $this->files?json_encode($this->files):'';
+		$model->created_at = time();
 		if(!$model->save()){
 			throw new Exception(current($model->getFirstErrors()));
 		}
