@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\logic;
 use app\logic\Logic;
 use app\models\Apply;
 use app\models\ApplyBuyList;
+use app\models\ApplyDemandList;
 use app\models\ApprovalLog;
 
 
@@ -161,6 +162,24 @@ class BaseApplyLogic extends Logic
     }
     
     /**
+     * 需求单 需求明细
+     * @param $applyId
+     * @return array
+     */
+    public function getApplyDemandList($applyId)
+    {
+        $data = [];
+        $list = ApplyDemandList::find()->where(['apply_id' => $applyId])->all();
+        foreach ($list as $v) {
+            $data[] = [
+                'name' => $v->name,
+                'amount' => $v->amount,
+            ];
+        }
+        return $data;
+    }
+    
+    /**
      * 获取请购基础信息
      * @param $apply
      * @return array
@@ -179,5 +198,4 @@ class BaseApplyLogic extends Logic
             'approval_persons' => $apply->approval_persons
         ];
     }
-    
 }

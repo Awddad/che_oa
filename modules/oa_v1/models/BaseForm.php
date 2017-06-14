@@ -24,6 +24,12 @@ use yii\web\UploadedFile;
 class BaseForm extends Model
 {
     /**
+     * 是否需要财务确认
+     * @var
+     */
+    public $cai_wu_need = 1;
+    
+    /**
      * 文件路径
      * @var string
      */
