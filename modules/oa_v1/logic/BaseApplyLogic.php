@@ -160,4 +160,24 @@ class BaseApplyLogic extends Logic
         return $data;
     }
     
+    /**
+     * 获取请购基础信息
+     * @param $apply
+     * @return array
+     */
+    public function getBaseApply($apply)
+    {
+        return [
+            "apply_id" => $apply->apply_id,
+            "create_time" => date('Y-m-d H:i', $apply->create_time),
+            "next_des" => $apply->next_des,
+            "title" => $apply->title,
+            "type" => $apply->type,
+            "person" => $apply->person,
+            'date' => date('Y年m月d日', $apply->create_time),
+            'copy_person' => $apply->copy_person,
+            'approval_persons' => $apply->approval_persons
+        ];
+    }
+    
 }
