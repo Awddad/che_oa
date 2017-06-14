@@ -8,6 +8,7 @@ use app\models as appmodel;
 use app\modules\oa_v1\logic\ApplyLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
+use app\modules\oa_v1\logic\AssetLogic;
 
 class ApplyController extends BaseController
 {
@@ -442,5 +443,22 @@ class ApplyController extends BaseController
                 return $this->_returnError(404, $apply->errors);
             }
         }
+	}
+	/**
+	 * 获取资产类别
+	 */
+	public function actionGetAssetType()
+	{
+		$parent_id = \yii::$app->request->get('pid',0);
+		$res = AssetLogic::instance()->getAssetTypeByParentId($parent_id);
+		return $this->_return($res);
+	}
+	/**
+	 * 获得品牌
+	 */
+	public function actionGetBrand()
+	{
+		$res = AssetLogic::instance()->getAssetBrandList();
+		return $this->_return($res);
 	}
 }
