@@ -73,7 +73,10 @@ class BaseForm extends Model
         6 => '需求单',
         7 => '用章',
         8 => '固定资产零用',
-        9 => '固定资产归还'
+        9 => '固定资产归还',
+    	10 => '转正',
+    	11 => '离职',
+    	12 => '调职'
     ];
     
     
@@ -136,8 +139,10 @@ class BaseForm extends Model
     public function getPerson($type)
     {
         $person = [];
-        foreach ($this->$type as $v) {
-            $person[] = PersonLogic::instance()->getPersonName($v);
+        if(is_array($this->$type)){
+	        foreach ($this->$type as $v) {
+	            $person[] = PersonLogic::instance()->getPersonName($v);
+	        }
         }
         return implode(',',$person);
     }
@@ -150,17 +155,19 @@ class BaseForm extends Model
     public function copyPerson($apply)
     {
         $data = [];
-        foreach ($this->copy_person as $v) {
-            $personName = PersonLogic::instance()->getPersonName($v);
-            $data[] = [
-                $apply->apply_id,
-                $v,
-                $personName,
-            ];
+        if(is_array($this->copy_person)){
+	        foreach ($this->copy_person as $v) {
+	            $personName = PersonLogic::instance()->getPersonName($v);
+	            $data[] = [
+	                $apply->apply_id,
+	                $v,
+	                $personName,
+	            ];
+	        }
+	        \Yii::$app->db->createCommand()->batchInsert('oa_apply_copy_person',[
+	            'apply_id', 'copy_person_id', 'copy_person',
+	        ],$data)->execute();
         }
-        \Yii::$app->db->createCommand()->batchInsert('oa_apply_copy_person',[
-            'apply_id', 'copy_person_id', 'copy_person',
-        ],$data)->execute();
     }
 
     /**
