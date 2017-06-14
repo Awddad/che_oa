@@ -8,9 +8,9 @@ use Yii;
  * This is the model class for table "oa_apply_positive".
  *
  * @property integer $id
- * @property integer $apply_id
- * @property string $ prosecution
- * @property string $ summary
+ * @property string $apply_id
+ * @property string $prosecution
+ * @property string $summary
  * @property string $suggest
  * @property string $entry_time
  * @property string $job
@@ -33,11 +33,11 @@ class ApplyPositive extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'create_at'], 'integer'],
             [['files'], 'string'],
+            [['create_at'], 'integer'],
+            [['apply_id', 'job'], 'string', 'max' => 20],
             [['prosecution', 'summary', 'suggest'], 'string', 'max' => 255],
             [['entry_time'], 'string', 'max' => 25],
-            [['job'], 'string', 'max' => 20],
         ];
     }
 
