@@ -154,4 +154,19 @@ class PersonLogic extends BaseLogic
         }
         return $data;
     }
+    
+    /**
+     * 根据部门id 获得部门名称
+     * @param unknown $org_id
+     */
+    public function getOrgById($org_id)
+    {
+    	$org = Org::findOne($org_id);
+    	if($org->pid == 0) {
+    		return [$org->org_short_name] ?  : [$org->org_name];
+    	}
+    	$orgArr =  $this->getParentOrg($org);
+    	$orgArr[] = $org->org_short_name ? $org->org_short_name : $org->org_name;
+    	return implode('-', $orgArr);
+    }
 }

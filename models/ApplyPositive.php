@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "oa_apply_positive".
@@ -14,6 +13,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $summary
  * @property string $suggest
  * @property string $entry_time
+ * @property string $org
  * @property string $job
  * @property string $files
  * @property integer $created_at
@@ -39,6 +39,7 @@ class ApplyPositive extends \yii\db\ActiveRecord
             [['apply_id', 'job'], 'string', 'max' => 20],
             [['prosecution', 'summary', 'suggest'], 'string', 'max' => 255],
             [['entry_time'], 'string', 'max' => 25],
+            [['org'], 'string', 'max' => 50],
         ];
     }
 
@@ -54,6 +55,7 @@ class ApplyPositive extends \yii\db\ActiveRecord
             'summary' => 'Summary',
             'suggest' => 'Suggest',
             'entry_time' => 'Entry Time',
+            'org' => 'Org',
             'job' => 'Job',
             'files' => 'Files',
             'created_at' => 'Created At',
