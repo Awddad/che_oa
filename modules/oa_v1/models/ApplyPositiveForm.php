@@ -70,7 +70,7 @@ class ApplyPositiveForm extends BaseForm
 			if(!$apply->save()){
 				throw new Exception(current($apply->getFirstErrors()));
 			}
-			$this->savePositive();
+			$this->savePositive($apply);
 			$this->approvalPerson($apply);
 			$this->copyPerson($apply);
 			$transaction->commit();
@@ -85,7 +85,7 @@ class ApplyPositiveForm extends BaseForm
 	/**
 	 * 保存转正表
 	 */
-	public function savePositive()
+	public function savePositive($apply)
 	{
 		$model = new ApplyPositive();
 		$model->apply_id = $this->apply_id;
@@ -93,6 +93,7 @@ class ApplyPositiveForm extends BaseForm
 		$model->summary = $this->summary;
 		$model->suggest = $this->suggest;
 		$model->entry_time = $this->entry_time;
+		$model->org = PersonLogic::instance()->getOrgNameByPersonId($apply->person_id);
 		$model->job = $this->job;
 		$model->files = $this->files?json_encode($this->files):'';
 		$model->created_at = time();

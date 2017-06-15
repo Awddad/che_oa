@@ -9,7 +9,7 @@ use app\models\ApplyTransfer;
 
 class ApplyTransferForm extends BaseForm
 {
-	public $type = 10;
+	public $type = 12;
 	public $cai_wu_need = 1;
 	
 	public $apply_id;
@@ -22,13 +22,14 @@ class ApplyTransferForm extends BaseForm
 	public $entry_time;
 	public $transfer_time;
 	public $files;
+	public $des;
 	
 	
 	public function rules()
 	{
 		return [
 				[
-					['apply_id','old_org_id','old_profession','target_org_id','target_profession','entry_time','transfer_time'],
+					['apply_id','old_org_id','old_profession','target_org_id','target_profession','entry_time','transfer_time','des'],
 					'required',
 					'message' => '{attribute}不能为空'
 				],
@@ -40,6 +41,7 @@ class ApplyTransferForm extends BaseForm
 				[
 					['approval_persons', 'copy_person'], 'checkTotal'
 				],
+				['des','string','max' => 255,'message' => '调职原因不正确！'],
 				['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
 				['transfer_time','date','format' => 'yyyy-mm-dd','message' => '调职时间不正确'],
 				['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
@@ -95,11 +97,14 @@ class ApplyTransferForm extends BaseForm
 		$model = new ApplyTransfer();
 		$model->apply_id = $this->apply_id;
 		$model->old_org_id = $this->old_org_id;
+		$model->old_org_name = PersonLogic::instance()->getOrgById($this->old_org_id);
 		$model->old_profession = $this->old_profession;
 		$model->target_org_id = $this->target_org_id;
+		$model->target_org_name = PersonLogic::instance()->getOrgById($this->target_org_id);
 		$model->target_profession = $this->target_profession;
 		$model->entry_time = $this->entry_time;
 		$model->transfer_time = $this->transfer_time;
+		$model->des = $this->des;
 		$model->files = $this->files?json_encode($this->files):'';
 		$model->created_at = time();
 		

@@ -46,29 +46,5 @@ class ApplyPayController extends BaseController
         }
     }
     
-    /**
-     * 请购详情
-     *
-     * @param $apply_id
-     * @return array
-     */
-    public function actionView($apply_id)
-    {
-        $apply = Apply::findOne($apply_id);
-        if (empty($apply)) {
-            return $this->_returnError(400, [], '未找到改报销');
-        }
-        $applyLogic = BaseApplyLogic::instance();
-        $data['base'] = $applyLogic->getBaseApply($apply);
-        $data['info'] = [
-            'to_name' => $apply->applyPay->to_name,
-            'bank_card_id' => $apply->applyPay->bank_card_id,
-            'bank_name' => $apply->applyPay->bank_name,
-            'pay_type' => $apply->applyPay->pay_type,
-            'des' => $apply->applyPay->des,
-            'files' => json_decode($apply->applyBuy->files)
-        ];
-        $data['flow'] = $applyLogic->getFlowData($apply);
-        return $this->_return($data);
-    }
+    
 }

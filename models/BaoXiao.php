@@ -65,4 +65,14 @@ class BaoXiao extends \yii\db\ActiveRecord
             'pics' => '图片url，多个用逗号分隔',
         ];
     }
+    
+    /**
+     * 报销单列表
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getList()
+    {
+    	return $this->hasMany(BaoXiaoList::className(), ['apply_id' => 'apply_id']);
+    }
 }

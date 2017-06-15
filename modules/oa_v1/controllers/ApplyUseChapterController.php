@@ -43,27 +43,5 @@ class ApplyUseChapterController extends BaseController
         }
     }
     
-    /**
-     * 请购详情
-     *
-     * @param $apply_id
-     * @return array
-     */
-    public function actionView($apply_id)
-    {
-        /* @var Apply $apply */
-        $apply = Apply::findOne($apply_id);
-        if (empty($apply)) {
-            return $this->_returnError(400, [], '未找到改报销');
-        }
-        $applyLogic = BaseApplyLogic::instance();
-        $data['base'] = $applyLogic->getBaseApply($apply);
-        $data['info'] = [
-            'des' => $apply->applyUseChapter->des,
-            'files' => json_decode($apply->applyUseChapter->files)
-        ];
-        
-        $data['flow'] = BaseApplyLogic::instance()->getFlowData($apply);
-        return $this->_return($data);
-    }
+   
 }

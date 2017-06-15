@@ -49,28 +49,5 @@ class ApplyDemandController extends BaseController
         }
     }
     
-    /**
-     * 请购详情
-     *
-     * @param $apply_id
-     * @return array
-     */
-    public function actionView($apply_id)
-    {
-        /* @var Apply $apply */
-        $apply = Apply::findOne($apply_id);
-        if (empty($apply)) {
-            return $this->_returnError(400, [], '未找到改报销');
-        }
-        $applyLogic = BaseApplyLogic::instance();
-        $data['base'] = $applyLogic->getBaseApply($apply);
-        $data['info'] = [
-            'des' => $apply->applyDemand->des,
-            'files' => json_decode($apply->applyDemand->files)
-        ];
-        
-        $data['flow'] = BaseApplyLogic::instance()->getFlowData($apply);
-        $data['demand_list'] = BaseApplyLogic::instance()->getApplyDemandList($apply->apply_id);
-        return $this->_return($data);
-    }
+    
 }
