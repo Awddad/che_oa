@@ -36,3 +36,5 @@ composer.lock
 /docker-compose.yml
 /docker/
 /web/dev.txt
+
+/wiki

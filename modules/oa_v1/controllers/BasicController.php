@@ -14,7 +14,7 @@ use app\models\AssetType;
 
 class BasicController extends BaseController
 {
-	public function actionTypeList()
+	public function actionGetTypeList()
 	{
 		$params = yii::$app->request->get();
 		$model = new BasicAssetForm();
@@ -38,7 +38,7 @@ class BasicController extends BaseController
 		$id = yii::$app->request->get('id');
 		$model = AssetType::findOne($id);
 		if($model){
-			$child = AssetType::find()->select('id','name')->where(['parent_id'=>$model->id])->asArray()->all();
+			$child = AssetType::find()->select('id,name')->where(['parent_id'=>$model->id])->asArray()->all();
 			$data = ['id'=>$model->id,'name'=>$model->name,'child'=>$child];
 			return $this->_return($data);
 		}else{
@@ -249,6 +249,7 @@ class BasicController extends BaseController
 					'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
 					'name' => $v['name'],
 					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
+					'default' => $v['default'],
 			];
 		}
 		return $this->_return($data);
