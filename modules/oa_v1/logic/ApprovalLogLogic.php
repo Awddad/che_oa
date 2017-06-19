@@ -102,7 +102,7 @@ class ApprovalLogLogic extends BaseLogic
             $this->object->is_end = 1;
 
             $apply = $this->object->apply;
-            if ($apply->cai_wu_need) {
+            if ($apply->cai_wu_need == 2) {
                 // 需要财务确认
                 $this->object->scenario = ApprovalLog::SCENARIO_CONFIRM;
                 return $this->object->save();
