@@ -10,6 +10,7 @@ use app\models\AssetBrand;
 class BasicAssetForm extends BaseForm
 {
 	const SCENARIO_ADD_TYPE = 'add_type';
+	const SCENARIO_ADD_CHILD = 'add_child';
 	const SCENARIO_EDIT_TYPE = 'edit_type';
 	const SCENARIO_ADD_BRAND = 'add_brand';
 	const SCENARIO_EDIT_BRAND = 'edit_brand';
@@ -35,6 +36,12 @@ class BasicAssetForm extends BaseForm
 					'on'=>[self::SCENARIO_EDIT_TYPE],
 					'message'=>'{attribute}不能为空',
 				],
+    		    [
+        		    ['type_id','child'],
+        		    'required',
+        		    'on'=>[self::SCENARIO_ADD_CHILD],
+        		    'message'=>'{attribute}不能为空',
+        		    ],
 				[
 					['brand_name'],
 					'required',
@@ -53,10 +60,10 @@ class BasicAssetForm extends BaseForm
 				['brand_id','exist','targetClass'=>'\app\models\AssetBrand','targetAttribute'=>'id','message'=>'原数据不存在！'],
 				['type_name','string','length' => [2, 20],'message'=>'名称不正确'],
 				['brand_name','string','length' => [2, 20],'message'=>'名称不正确'],
-				['child','safe'],
+				//['child','safe'],
 				//['child','each','rule'=>['string','length'=>[2, 20]],'message'=>'名称错误'],
-				['child','each','rule'=>['validatorChild']],
-				//['child','validatorChild'],
+				//['child','each','rule'=>['validatorChild']],
+				//['child','string','message'=>'child不正确！'],
 				
 		];
 	}
@@ -74,8 +81,9 @@ class BasicAssetForm extends BaseForm
 	public function scenarios()
 	{
 		return [
-				self::SCENARIO_ADD_TYPE => ['type_name','child'],
-				self::SCENARIO_EDIT_TYPE => ['type_id','type_name','child'],
+				self::SCENARIO_ADD_TYPE => ['type_name'],
+		        self::SCENARIO_ADD_CHILD => ['type_id','child'],
+				self::SCENARIO_EDIT_TYPE => ['type_id','type_name'],
 				self::SCENARIO_ADD_BRAND => ['brand_name'],
 				self::SCENARIO_EDIT_BRAND => ['brand_id','brand_name'],
 		];
@@ -85,10 +93,16 @@ class BasicAssetForm extends BaseForm
 	 */
 	public function addType()
 	{
-		$transaction = \yii::$app->db->beginTransaction();
+		//$transaction = \yii::$app->db->beginTransaction();
 		$model = new AssetType();
 		$model->name = $this->type_name;
 		$model->parent_id = 0;
+		if($model->save()){
+		    return ['status'=>true];
+		}else{
+		    return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+		}
+		/*
 		try{
 			if(!$model->save()){
 				throw new \Exception(current($model->getFirstErrors()));
@@ -109,16 +123,22 @@ class BasicAssetForm extends BaseForm
 			$transaction->rollBack();
 			return ['status'=>false,'msg'=>$e->getMessage()];
 		}
-		
+		*/
 	}
 	/**
 	 * 修改资产类别
 	 */
 	public function updateType()
 	{
-		$transaction = \yii::$app->db->beginTransaction();
+		//$transaction = \yii::$app->db->beginTransaction();
 		$model = AssetType::findOne($this->type_id);
 		$model->name = $this->type_name;
+		if($model->save()){
+		    return ['status'=>true];
+		}else{
+		    return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+		}
+		/*
 		try{
 			$model->save();
 			if($model->hasErrors()){
@@ -141,6 +161,29 @@ class BasicAssetForm extends BaseForm
 			$transaction->commit();
 			return ['status'=>true];
 		}catch(\Exception $e){
+			$transaction->rollBack();
+			return ['status'=>false,'msg'=>$e->getMessage()];
+		}
+		*/
+	}
+	
+	/**
+	 * 添加子类
+	 */
+	public function addChild()
+	{
+	    $arr = explode("\n",$this->child);
+	    foreach ($arr as $v) {
+	        $time = time();
+	        $data[] = [$v,$time,$time,$this->type_id,];
+	    }
+	    try{
+    	    \Yii::$app->db->createCommand()->batchInsert('oa_asset_type',['name', 'add_time', 'update_time', 'parent_id'],$data)->execute();
+    	    $assetType = AssetType::findOne($this->type_id);
+    	    $assetType->has_child = 1;
+    	    $assetType->save();
+    	    return ['status'=>true];
+	    }catch(\Exception $e){
 			$transaction->rollBack();
 			return ['status'=>false,'msg'=>$e->getMessage()];
 		}
@@ -182,8 +225,9 @@ class BasicAssetForm extends BaseForm
 		$end_time = ArrayHelper::getValue($params,'end_time',null);
 		$page = ArrayHelper::getValue($params,'page',1);
 		$page_size = ArrayHelper::getValue($params,'page_size',10);
+		$parent_id = ArrayHelper::getValue($params,'pid',0);
 		
-		$query = AssetType::find()->where(['parent_id' => 0]);
+		$query = AssetType::find()->where(['parent_id' => $parent_id]);
 		//关键词
 		if($keywords){
 			$keywords = mb_convert_encoding($keywords,'UTF-8','auto');

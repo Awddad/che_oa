@@ -27,6 +27,7 @@ class BasicController extends BaseController
 			$data['res'][] = [
 					'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
 					'name' => $v['name'],
+			        'has_child' => $v['has_child'] ? 1 : 0, 
 					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
 			];
 		}
@@ -38,8 +39,8 @@ class BasicController extends BaseController
 		$id = yii::$app->request->get('id');
 		$model = AssetType::findOne($id);
 		if($model){
-			$child = AssetType::find()->select('id,name')->where(['parent_id'=>$model->id])->asArray()->all();
-			$data = ['id'=>$model->id,'name'=>$model->name,'child'=>$child];
+			//$child = AssetType::find()->select('id,name')->where(['parent_id'=>$model->id])->asArray()->all();
+			$data = ['id'=>$model->id,'name'=>$model->name];
 			return $this->_return($data);
 		}else{
 			return $this->_returnError(403,'原数据不存在');
@@ -82,6 +83,24 @@ class BasicController extends BaseController
 			return $this->_return('成功');
 		}else{
 			return $this->_returnError(400,$res['msg']);
+		}
+	}
+	
+	public function actionAddChild()
+	{
+	    $post = yii::$app->request->post();
+        $model = new BasicAssetForm();
+		$model->setScenario($model::SCENARIO_ADD_CHILD);
+		$model->load(['BasicAssetForm'=>$post]);
+		
+		if(!$model->validate()){
+		    return $this->_returnError(403,current($model->getFirstErrors()));
+		}
+		$res = $model->addChild();
+		if($res['status']){
+		    return $this->_return('成功');
+		}else{
+		    return $this->_returnError(400,$res['msg']);
 		}
 	}
 	/**
