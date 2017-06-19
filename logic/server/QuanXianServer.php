@@ -12,6 +12,9 @@ use app\models\PersonBankInfo;
 use app\models\Role;
 use app\models\RoleOrgPermission;
 use app\models\Menu;
+use app\models\Job;
+use app\models\EmployeeType;
+use app\models\Employee;
 class QuanXianServer extends Server
 {
     /*
@@ -49,6 +52,7 @@ class QuanXianServer extends Server
             'role_user' => $this->preUrl . '/projects/role_user',//
             'user_add_bankcards' => $this->preUrl . '/users/bankcards',//用户添加银行卡
             'menu_list' => $this->preUrl . '/projects/permissions',//项目目录菜单
+            'positions' => $this->preUrl . '/organizations/positions',//职位列表
         ];
     }
     
@@ -231,6 +235,7 @@ class QuanXianServer extends Server
             }
             //构造入库数据
             $arrPerson = [];//oa_person表的入库数据
+            $arrEmployee = [];//oa_employee表的入库数据
             $arrBankList = [];//oa_person_bank_info表的入库数据
             foreach($arrRtn['data']['data'] as $val)
             {
@@ -246,6 +251,14 @@ class QuanXianServer extends Server
                     'phone' => $val['phone'],
                     'bqq_open_id' => $val['bqq_open_id'],
                     'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] ))
+                ];
+                $arrEmployee[] = [
+                		'person_id' => $val['id'],
+                		'name' => $val['name'],
+                		'org_id' => $val['organization_id'],
+                		'job' => $val['position_id'],
+                		'phone' => $val['phone'],
+                		'email' => $val['email'],
                 ];
                 //银行卡信息
                 if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
@@ -268,6 +281,13 @@ class QuanXianServer extends Server
             $arrKeys = array_keys($arrPerson[0]);
             $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrPerson, 'person_id');
             $result = Yii::$app->db->createCommand($strSql)->execute();
+            
+            //更新入库 - oa_employee
+            $strTable = Employee::tableName();
+            $arrKeys = array_keys($arrEmployee[0]);
+            $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id');
+            Yii::$app->db->createCommand($strSql)->execute();
+            
             
             //更新入库 - oa_person_bank_info表
             if(!empty($arrBankList))
@@ -501,6 +521,35 @@ class QuanXianServer extends Server
         }
         return $arrSendResult;
     }
+    
+    public function curlUpdatePositions()
+    {
+    	$arrPost = [
+    			'_token' => $this->_token,
+    			'show_deleted' => true
+    	];
+    	$arrRtn = $this->thisHttpPost($this->arrApiUrl['positions'], $arrPost);
+    	if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']))//接口处理数据成功
+    	{
+    		//构造数据
+    		$arrJob = [];//职位数据
+    		foreach($arrRtn['data'] as $v){
+    			$arrJob[] = [
+    				'id' => $v['id'],
+    				'name' => $v['name'],
+    				'is_delete' => $v['deleted_at']==null ? 0 : 1,
+    			];
+    		}
+    		//更新入库 - oa_person 表
+    		$strTable = Job::tableName();
+    		$arrKeys = array_keys($arrJob[0]);
+    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrJob, 'id');
+    		$result = Yii::$app->db->createCommand($strSql)->execute();
+    		return $result;
+    	}
+    }
+    
+    
     
     /**
      * @功能：将curl请求包一层，以便记录与权限系统的交互log
