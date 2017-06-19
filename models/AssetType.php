@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $id
  * @property string $name
  * @property integer $parent_id
+ * @property integer $has_child
  * @property integer $add_time
  * @property integer $update_time
  */
@@ -30,7 +31,7 @@ class AssetType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'add_time', 'update_time'], 'integer'],
+            [['parent_id', 'has_child', 'add_time', 'update_time'], 'integer'],
             [['name'], 'string', 'max' => 20],
         ];
     }
@@ -44,18 +45,20 @@ class AssetType extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'parent_id' => 'Parent ID',
+            'has_child' => 'Has Child',
             'add_time' => 'Add Time',
             'update_time' => 'Update Time',
         ];
     }
+    
     public function behaviors()
     {
-    	return [
-    			'timestamp'=>[
-    					'class' => TimestampBehavior::className(),
-    					'createdAtAttribute' => 'add_time',
-    					'updatedAtAttribute' => 'update_time',
-    			]
-    	];
+        return [
+            'timestamp'=>[
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'add_time',
+                'updatedAtAttribute' => 'update_time',
+            ]
+        ];
     }
 }
