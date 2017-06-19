@@ -6,6 +6,7 @@ use app\models\Apply;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use app\models\ApplyTransfer;
+use app\models\Job;
 
 class ApplyTransferForm extends BaseForm
 {
@@ -16,9 +17,9 @@ class ApplyTransferForm extends BaseForm
 	public $approval_persons;
 	public $copy_person;
 	public $old_org_id;
-	public $old_profession;
+	public $old_profession_id;
 	public $target_org_id;
-	public $target_profession;
+	public $target_profession_id;
 	public $entry_time;
 	public $transfer_time;
 	public $files;
@@ -29,7 +30,7 @@ class ApplyTransferForm extends BaseForm
 	{
 		return [
 				[
-					['apply_id','old_org_id','old_profession','target_org_id','target_profession','entry_time','transfer_time','des'],
+					['apply_id','old_org_id','old_profession_id','target_org_id','target_profession_id','entry_time','transfer_time','des'],
 					'required',
 					'message' => '{attribute}不能为空'
 				],
@@ -47,6 +48,8 @@ class ApplyTransferForm extends BaseForm
 				['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
 				['old_org_id','exist','targetClass'=>'\app\models\Org', 'targetAttribute'=>'org_id','message'=>'所属部门不存在'],
 				['target_org_id','exist','targetClass'=>'\app\models\Org', 'targetAttribute'=>'org_id','message'=>'调职后部门不存在'],
+		        ['old_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'原职位不存在'],
+		        ['target_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'调职后职位不存在'],
 				['files','safe'],
 		];
 	}
@@ -98,10 +101,12 @@ class ApplyTransferForm extends BaseForm
 		$model->apply_id = $this->apply_id;
 		$model->old_org_id = $this->old_org_id;
 		$model->old_org_name = PersonLogic::instance()->getOrgById($this->old_org_id);
-		$model->old_profession = $this->old_profession;
+		$model->old_profession_id = $this->old_profession_id;
+		$model->old_profession = Job::findOne($this->old_profession_id)->name;
 		$model->target_org_id = $this->target_org_id;
 		$model->target_org_name = PersonLogic::instance()->getOrgById($this->target_org_id);
-		$model->target_profession = $this->target_profession;
+		$model->target_profession_id = $this->target_profession_id;
+		$model->target_profession = Job::findOne($this->target_profession_id)->name;
 		$model->entry_time = $this->entry_time;
 		$model->transfer_time = $this->transfer_time;
 		$model->des = $this->des;

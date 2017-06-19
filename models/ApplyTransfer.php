@@ -11,9 +11,11 @@ use Yii;
  * @property string $apply_id
  * @property integer $old_org_id
  * @property string $old_org_name
+ * @property integer $old_profession_id
  * @property string $old_profession
  * @property integer $target_org_id
  * @property string $target_org_name
+ * @property integer $target_profession_id
  * @property string $target_profession
  * @property string $entry_time
  * @property string $transfer_time
@@ -37,8 +39,8 @@ class ApplyTransfer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'old_org_id'], 'required'],
-            [['old_org_id', 'target_org_id', 'created_at'], 'integer'],
+            [['apply_id'], 'required'],
+            [['old_org_id', 'old_profession_id', 'target_org_id', 'target_profession_id', 'created_at'], 'integer'],
             [['files'], 'string'],
             [['apply_id', 'old_profession', 'target_profession'], 'string', 'max' => 20],
             [['old_org_name', 'target_org_name'], 'string', 'max' => 50],
@@ -57,9 +59,11 @@ class ApplyTransfer extends \yii\db\ActiveRecord
             'apply_id' => 'Apply ID',
             'old_org_id' => 'Old Org ID',
             'old_org_name' => 'Old Org Name',
+            'old_profession_id' => 'Old Profession ID',
             'old_profession' => 'Old Profession',
             'target_org_id' => 'Target Org ID',
             'target_org_name' => 'Target Org Name',
+            'target_profession_id' => 'Target Profession ID',
             'target_profession' => 'Target Profession',
             'entry_time' => 'Entry Time',
             'transfer_time' => 'Transfer Time',
