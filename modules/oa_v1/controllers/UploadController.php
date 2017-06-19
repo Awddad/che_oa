@@ -20,6 +20,13 @@ use app\modules\oa_v1\models\FileForm;
  */
 class UploadController extends BaseController
 {
+    public function verbs()
+    {
+        return [
+            'file' => ['post']
+        ];
+    }
+    
     public function actionImage()
     {
         $model = new FileForm();
