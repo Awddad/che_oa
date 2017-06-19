@@ -20,6 +20,7 @@ use yii\web\Response;
 use Yii;
 use app\models\Role;
 use app\models\RoleOrgPermission;
+use app\models\Person;
 
 /**
  * 接口基础
@@ -78,9 +79,16 @@ class BaseController extends Controller
         $strOsType = \Yii::$app->session->get('os_type', 'web');//默认是web版的
         if($strOsType == 'web')//web版的使用单点登录
         {
-            $session = Yii::$app->session;
-            $objPerson = $session->get('USER_INFO');
-            $intRoleId = $session->get('ROLE_ID');
+            if(true){//建华test
+            	$objPerson = Person::findOne(['person_id' => 272]);
+            	$arrRoleIds = explode(',', $objPerson->role_ids);
+            	
+            	$intRoleId = $arrRoleIds[0];
+            }else{
+            	$session = Yii::$app->session;
+            	$objPerson = $session->get('USER_INFO');
+            	$intRoleId = $session->get('ROLE_ID');
+            }
             if(empty($objPerson) || !$intRoleId) {
                 $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
                 header("Content-type: application/json");
