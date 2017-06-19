@@ -67,7 +67,7 @@ class FileForm extends Model
         $data = [];
         foreach ($files as  $file) {
             $ext = $file->getExtension();
-            if (!in_array($ext, ['doc','xlsx','pdf', 'xls', 'docx'])) {
+            if (!in_array($ext, ['doc','xlsx','pdf', 'xls', 'docx', 'jpg', 'gif', 'png'])) {
                 $this->addError($name, '格式错误');
                 return false;
             }
@@ -80,10 +80,11 @@ class FileForm extends Model
             $file->saveAs($fileName);
             //$baseUrl = 'http://'.$_SERVER['HTTP_HOST'];
             $data[] = [
-                'name' => $str = str_replace('.'.$ext, '', $file->name),
+                'name' => $str = str_replace('.' . $ext, '', $file->name),
                 'ext' => $ext,
                 'url' => $filePath . $randName
             ];
+         
         }
         return $data;
     }

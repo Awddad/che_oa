@@ -3,6 +3,7 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\models\Apply;
+use app\modules\oa_v1\logic\TreeTagLogic;
 use Yii;
 use app\models as appmodel;
 use app\modules\oa_v1\logic\ApplyLogic;
@@ -218,6 +219,20 @@ class ApplyController extends BaseController
 		$res = AssetLogic::instance()->getAssetBrandList();
 		return $this->_return($res);
 	}
+    
+    /**
+     * 获取收入支出类别
+     * @param $id
+     * @return array
+     */
+    public function actionTreeTag($id)
+    {
+        $data = TreeTagLogic::instance()->getTreeTagsByParentId($id);
+        if (!$data) {
+            return $this->_return($data, 400, '获取失败');
+        }
+        return $this->_return($data);
+    }
 	/**
 	 * 获得职位列表
 	 */
