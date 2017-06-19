@@ -13,8 +13,10 @@ use Yii;
  * @property string $summary
  * @property string $suggest
  * @property string $entry_time
+ * @property integer $org_id
  * @property string $org
- * @property string $job
+ * @property integer $profession_id
+ * @property string $profession
  * @property string $files
  * @property integer $created_at
  */
@@ -34,9 +36,9 @@ class ApplyPositive extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['org_id', 'profession_id', 'created_at'], 'integer'],
             [['files'], 'string'],
-            [['created_at'], 'integer'],
-            [['apply_id', 'job'], 'string', 'max' => 20],
+            [['apply_id', 'profession'], 'string', 'max' => 20],
             [['prosecution', 'summary', 'suggest'], 'string', 'max' => 255],
             [['entry_time'], 'string', 'max' => 25],
             [['org'], 'string', 'max' => 50],
@@ -55,8 +57,10 @@ class ApplyPositive extends \yii\db\ActiveRecord
             'summary' => 'Summary',
             'suggest' => 'Suggest',
             'entry_time' => 'Entry Time',
+            'org_id' => 'Org ID',
             'org' => 'Org',
-            'job' => 'Job',
+            'profession_id' => 'Profession ID',
+            'profession' => 'Profession',
             'files' => 'Files',
             'created_at' => 'Created At',
         ];

@@ -10,6 +10,7 @@ use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\ApplyView;
+use app\modules\oa_v1\logic\Profession;
 
 class ApplyController extends BaseController
 {
@@ -216,5 +217,13 @@ class ApplyController extends BaseController
 	{
 		$res = AssetLogic::instance()->getAssetBrandList();
 		return $this->_return($res);
+	}
+	/**
+	 * 获得职位列表
+	 */
+	public function actionGetProfession()
+	{
+	    $res = Profession::instance()->getList();
+	    return $this->_return($res);
 	}
 }

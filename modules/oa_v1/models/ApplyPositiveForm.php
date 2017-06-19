@@ -6,6 +6,7 @@ use app\models\ApplyPositive;
 use app\models\Apply;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
+use app\models\Job;
 
 class ApplyPositiveForm extends BaseForm
 {
@@ -25,22 +26,23 @@ class ApplyPositiveForm extends BaseForm
 	public function rules()
 	{
 		return [
-				[
-					['apply_id', 'prosecution', 'summary', 'suggest', 'entry_time', 'job','approval_persons'],
-					'required',
-					'message' => '{attribute}不能为空'
-				],
-				[
-					['approval_persons', 'copy_person'],
-					'each',
-					'rule' => ['integer']
-					],
-				[
-					['approval_persons', 'copy_person'], 'checkTotal'
-				],
-				['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
-				['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
-				['files','safe'],
+		          [
+		              ['apply_id', 'prosecution', 'summary', 'suggest', 'entry_time', 'job','approval_persons'],
+					  'required',
+					  'message' => '{attribute}不能为空'
+				  ],
+				  [
+					  ['approval_persons', 'copy_person'],
+					  'each',
+					  'rule' => ['integer']
+					  ],
+				  [
+					  ['approval_persons', 'copy_person'], 'checkTotal'
+				  ],
+				  ['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
+		          ['job','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在'],
+				  ['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
+				  ['files','safe'],
 		];
 	}
 	
@@ -93,8 +95,10 @@ class ApplyPositiveForm extends BaseForm
 		$model->summary = $this->summary;
 		$model->suggest = $this->suggest;
 		$model->entry_time = $this->entry_time;
+		$model->org_id = $apply->org_id;
 		$model->org = PersonLogic::instance()->getOrgNameByPersonId($apply->person_id);
-		$model->job = $this->job;
+		$model->profession_id = $this->job;
+		$model->profession = Job::findOne($this->job)->name;
 		$model->files = $this->files?json_encode($this->files):'';
 		$model->created_at = time();
 		if(!$model->save()){
