@@ -5,6 +5,7 @@ namespace app\modules\oa_v1\controllers;
 use app\models\Apply;
 use app\modules\oa_v1\logic\ApprovalLogLogic;
 use Yii;
+use app\modules\oa_v1\logic\AfterApproval;
 
 class ApprovalLogController extends BaseController
 {
@@ -49,6 +50,7 @@ class ApprovalLogController extends BaseController
          * 2.2、需要财务确认
          * 2.3、申请全部完成
          */
+        $approval->on($approval::EVENT_AFTER_UPDATE, [AfterApproval::instance(),'handler'],$apply->type);
         $approvalLogic = new ApprovalLogLogic($approval);
         $code = $approvalLogic->operate($status, $des);
 
