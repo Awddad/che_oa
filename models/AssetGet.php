@@ -28,7 +28,7 @@ class AssetGet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'get_person', 'files'], 'required'],
+            [['apply_id', 'get_person'], 'required'],
             [['get_person'], 'integer'],
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],

@@ -32,19 +32,16 @@ class AssetGetForm extends BaseForm
     
     public $apply_id;
     
-    public $asset_ids;
+    public $asset_ids = [];
     
     /**
      * 表单验证
      */
     public function rules()
     {
-        [
+        return [
             [
-                [
-                    'apply_id', 'get_person', 'approval_persons', 'asset_ids'
-                ],
-                'required'
+                ['apply_id', 'get_person', 'approval_persons', 'asset_ids'], 'required'
             ],
             [['des', 'files'], 'string'],
             [
@@ -88,7 +85,7 @@ class AssetGetForm extends BaseForm
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             if (!$apply->save()) {
-                throw new Exception('付款申请单创建失败');
+                throw new Exception('付款申请单创建失败', $apply->errors);
             }
             $this->saveAssetGet();
             $this->approvalPerson($apply);
@@ -135,7 +132,7 @@ class AssetGetForm extends BaseForm
             'apply_id', 'asset_id', 'status'
         ], $data)->execute();
         if(!$n) {
-            throw new Exception('固定资产领用单创建失败');
+            throw new Exception('固定资产领用单创建失败!');
         }
     }
 }
