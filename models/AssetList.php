@@ -5,10 +5,10 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "oa_stock_list".
+ * This is the model class for table "oa_asset_list".
  *
  * @property integer $id
- * @property integer $stock_id
+ * @property integer $asset_id
  * @property string $asset_number
  * @property string $stock_number
  * @property string $sn_number
@@ -16,14 +16,14 @@ use Yii;
  * @property integer $status
  * @property integer $created_at
  */
-class StockList extends \yii\db\ActiveRecord
+class AssetList extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'oa_stock_list';
+        return 'oa_asset_list';
     }
 
     /**
@@ -32,8 +32,8 @@ class StockList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['stock_id'], 'required'],
-            [['stock_id', 'status', 'created_at'], 'integer'],
+            [['asset_id'], 'required'],
+            [['asset_id', 'status', 'created_at'], 'integer'],
             [['price'], 'number'],
             [['asset_number', 'stock_number'], 'string', 'max' => 15],
             [['sn_number'], 'string', 'max' => 64],
@@ -47,7 +47,7 @@ class StockList extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'stock_id' => '库存ID',
+            'asset_id' => '资产ID',
             'asset_number' => '资产编号',
             'stock_number' => '库存编号',
             'sn_number' => 'sn编号',

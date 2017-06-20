@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "oa_stock".
+ * This is the model class for table "oa_asset".
  *
  * @property integer $id
  * @property integer $asset_type_id
@@ -15,14 +15,14 @@ use Yii;
  * @property string $price
  * @property integer $free_amount
  */
-class Stock extends \yii\db\ActiveRecord
+class Asset extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'oa_stock';
+        return 'oa_asset';
     }
 
     /**

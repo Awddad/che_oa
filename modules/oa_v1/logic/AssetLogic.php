@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
+use app\models\Asset;
 use app\models\AssetType;
 use app\models\AssetBrand;
 
@@ -92,5 +93,32 @@ class AssetLogic extends Logic
     		];
     	}
     	return $data;
+    }
+    
+    /**
+     * 可领用资产列表
+     * @return array
+     */
+    public function getCanGetAssetList()
+    {
+        $socket = Asset::find()->where([
+            '!=', 'free_amount', 0
+        ])->all();
+        $data = [];
+        if(empty($socket)) {
+            return $data;
+        }
+        /**
+         * @var Asset $v
+         */
+        foreach ($socket as $v){
+            $data[] = [
+                'asset_type' => AssetLogic::instance()->getAssetType($v->asset_type_id),
+                'asset_brand' => AssetLogic::instance()->getAssetBrand($v->asset_brand_id),
+                'name' => $v->name,
+                'price' => $v->price
+            ];
+        }
+        return $data;
     }
 }
