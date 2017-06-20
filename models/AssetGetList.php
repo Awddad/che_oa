@@ -79,4 +79,9 @@ class AssetGetList extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AssetList::className(), ['id', 'asset_list_id']);
     }
+    
+    public function getAsset()
+    {
+        return $this->hasOne(Asset::className(), ['id' => 'asset_id']);
+    }
 }

@@ -7,10 +7,11 @@ use Yii;
 /**
  * This is the model class for table "oa_asset_back".
  *
- * @property integer $apply_id
+ * @property string $apply_id
  * @property integer $get_person
  * @property string $des
  * @property string $files
+ * @property string $asset_list_ids
  */
 class AssetBack extends \yii\db\ActiveRecord
 {
@@ -29,9 +30,10 @@ class AssetBack extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'get_person'], 'required'],
-            [['apply_id', 'get_person'], 'integer'],
+            [['get_person'], 'integer'],
             [['files'], 'string'],
-            [['des'], 'string', 'max' => 255],
+            [['apply_id'], 'string', 'max' => 20],
+            [['des','asset_list_ids'], 'string', 'max' => 255],
         ];
     }
 

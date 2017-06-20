@@ -55,7 +55,7 @@ class BackLogic extends BaseLogic
     {
         $jieKuan = JieKuan::find()->innerJoin('oa_apply', 'oa_apply.apply_id = oa_jie_kuan.apply_id')->where([
             'oa_apply.status' => 99,
-            'oa_jie_kuan.status' => 1,
+            'oa_jie_kuan.status' => 99,
             'oa_apply.person_id' => $user['person_id']
         ])->asArray()->all();
         $data = [];

@@ -119,6 +119,8 @@ class PayConfirmForm extends CaiWuFuKuan
             if($apply->type == 2) {
                 //借款单操作
                 $jieKuan = JieKuan::findOne($this->apply_id);
+                //借款成功
+                $jieKuan->status = 99;
                 $jieKuan->get_money_time = time();
                 $jieKuan->save();
                 $param['other_name'] = $person->person_name;

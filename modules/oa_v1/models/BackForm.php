@@ -205,7 +205,7 @@ class BackForm extends BaseForm
             $this->saveBack($apply);
             //改变借款单状态
             foreach ($this->apply_ids as $apply_id) {
-                JieKuan::updateAll(['status' => 99], ['apply_id' => $apply_id]);
+                JieKuan::updateAll(['status' => 100], ['apply_id' => $apply_id]);
             }
             $transaction->commit();
 

@@ -112,6 +112,9 @@ class AssetBackForm extends BaseForm
     
     /**
      * 资产领用
+     *
+     * @return AssetBack
+     * @throws Exception
      */
     public function saveAssetGet()
     {
@@ -120,6 +123,7 @@ class AssetBackForm extends BaseForm
         $model->des = $this->des;
         $model->get_person = $this->get_person;
         $model->files = $this->files;
+        $model->asset_list_ids = implode(',', $this->asset_back_ids);
         if (!$model->save()) {
             throw new Exception('固定资产归还单创建失败', $model->errors);
         }
@@ -127,13 +131,17 @@ class AssetBackForm extends BaseForm
     }
     
     /**
-     * 资产领用列表
+     * 更新资产领用列表，状态变为归还中
+     *
+     * @return bool
+     * @throws Exception
      */
     public function saveAssetGetList()
     {
-        $result = AssetGetList::updateAll(['status' => 3], ['in', 'id', $this->asset_back_ids]);
+        $result = AssetGetList::updateAll(['status' => 4], ['in', 'id', $this->asset_back_ids]);
         if(!$result) {
             throw new Exception('固定资产归还单创建失败');
         }
+        return true;
     }
 }
