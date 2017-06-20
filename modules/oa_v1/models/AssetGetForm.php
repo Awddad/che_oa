@@ -34,6 +34,9 @@ class AssetGetForm extends BaseForm
     
     public $asset_ids;
     
+    /**
+     * 表单验证
+     */
     public function rules()
     {
         [
