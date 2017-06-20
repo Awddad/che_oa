@@ -2,35 +2,34 @@
 namespace app\modules\oa_v1\models;
 
 use yii;
+use app\models\ApplyLeave;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
-use app\models\ApplyOpen;
 use Exception;
 
-class ApplyOpenForm extends BaseForm
+class ApplyLeaveForm extends BaseForm
 {
-    public $type = 13;
+    public $type = 12;
     public $cai_wu_need = 1;
     
-    
     public $apply_id;
-    public $district;
-    public $address;
-    public $rental;
-    public $summary;
-    public $approval_persons;
-    public $copy_person;
+    public $leave_time;
+    public $des;
+    public $stock_status;
+    public $finance_status;
+    public $account_status;
+    public $work_status;
     public $files;
-    
-    public $district_type = 3;//district对应region的type值
+	public $approval_persons;
+	public $copy_person;
     
     public function rules()
     {
         return [
             [
-                ['apply_id','district','address','rental','summary','approval_persons'],
+                ['apply_id','leave_time','des','stock_status','finance_status','account_status','work_status','approval_persons'],
                 'required',
-                'message' => '{attribute}不能为空'
+                'message'=>'{attribute}不能为空'
             ],
             [
                 ['approval_persons', 'copy_person'],
@@ -40,10 +39,9 @@ class ApplyOpenForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['rental','number','numberPattern'=>'/(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/','message' => '租金不正确！'],
-            ['summary','string','max'=>250, 'message'=>'说明不正确！'],
-            ['address','string','max'=>20, 'message'=>'地址不正确！'],
-            ['district','exist','targetClass'=>'\app\models\Region','targetAttribute'=>['district'=>'id','district_type'=>'type'],'message'=>'区号不正确！'],
+            [['stock_status','finance_status','account_status','work_status'],'in', 'range' => [1, 0],'message'=>'{attribute}不正确！'],
+            ['des','string','max' => 250,'message' => '离职说明不正确！'],
+            ['leave_time','date','format' => 'yyyy-mm-dd','message' => '离职时间不正确'],
             ['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
             ['files','safe'],
         ];
@@ -75,7 +73,7 @@ class ApplyOpenForm extends BaseForm
             if(!$apply->save()){
                 throw new Exception(current($apply->getFirstErrors()));
             }
-            $this->saveOpen($apply);
+            $this->saveLeave($apply);
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
@@ -86,18 +84,24 @@ class ApplyOpenForm extends BaseForm
         }
     }
     
-    public function saveOpen($apply)
+    /**
+     * 添加离职单
+     */
+    public function saveLeave($apply)
     {
-        $model = new ApplyOpen();
-        $model->apply_id = $this->apply_id;
-        $model->district = $this->district;
-        $model->address = $this->address;
-        $model->rental = $this->rental;
-        $model->summary = $this->summary;
+        $model = new ApplyLeave();
+        $model->apply_id = $apply->apply_id;
+        $model->leave_time = $this->leave_time;
+        $model->des = $this->des;
+        $model->stock_status = $this->stock_status;
+        $model->account_status = $this->account_status;
+        $model->work_status = $this->work_status;
+        $model->finance_status = $this->finance_status;
+        $model->files = $this->files?json_encode($this->files):'';
         $model->created_at = time();
+        
         if(!$model->save()){
             throw new Exception(current($model->getFirstErrors()));
         }
-        
     }
 }
