@@ -267,8 +267,8 @@ class BasicAssetForm extends BaseForm
 	    $data = [];
 	    foreach($res as $v){
 	        $tmp = [
-	            'label' => $v->id,
-                'value' => $v->name,
+	            'label' => $v->name,
+                'value' => $v->id,
 	        ];
 	        $v->has_child && $tmp['children'] = $this->getAssetType($v->id);
 	        $data[] = $tmp;
