@@ -14,7 +14,9 @@ use app\models\Apply;
 use app\models\ApplyBuyList;
 use app\models\ApplyDemandList;
 use app\models\ApprovalLog;
-
+use app\models\Asset;
+use app\models\AssetGetList;
+use app\models\AssetList;
 
 
 /**
@@ -198,5 +200,56 @@ class BaseApplyLogic extends Logic
             'approval_persons' => $apply->approval_persons ? : '--',
         	'pdf' => $apply->apply_list_pdf
         ];
+    }
+    
+    /**
+     * 固定资产申请列表
+     * 
+     * @param $applyId
+     * @return array
+     */
+    public function getAssetGetList($applyId)
+    {
+        $data = [];
+        $list = AssetGetList::find()->where(['apply_id' => $applyId])->all();
+        $assetLogic = AssetLogic::instance();
+        /**
+         * @var AssetGetList $v
+         */
+        foreach ($list as $v) {
+            $data[] = [
+                'asset_type' => $assetLogic->getAssetType($v->assetList->asset_type_id),
+                'asset_brand' => $assetLogic->getAssetBrand($v->assetList->asset_brand_id),
+                'name' => $v->assetList->name,
+                'price' => $v->assetList->price,
+            ];
+        }
+        return $data;
+    }
+    
+    /**
+     * 固定资产归还列表
+     * @param $assetListIds
+     * @return array
+     */
+    public function getAssetBackList($assetListIds)
+    {
+        $data = [];
+        
+        $list = AssetGetList::find()->where(['in', 'apply_id', explode(',', $assetListIds)])->all();
+        $assetLogic = AssetLogic::instance();
+        /**
+         * @var AssetGetList $v
+         */
+        foreach ($list as $v) {
+            $data[] = [
+                'asset_type' => $assetLogic->getAssetType($v->assetList->asset_type_id),
+                'asset_brand' => $assetLogic->getAssetBrand($v->assetList->asset_brand_id),
+                'name' => $v->asset->name,
+                'price' => $v->assetList->price,
+                'stock_number' => $v->assetList->stock_number
+            ];
+        }
+        return $data;
     }
 }

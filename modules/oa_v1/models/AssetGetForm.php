@@ -41,7 +41,7 @@ class AssetGetForm extends BaseForm
     {
         return [
             [
-                ['apply_id', 'get_person', 'approval_persons', 'asset_ids'], 'required'
+                ['apply_id', 'approval_persons', 'asset_ids'], 'required'
             ],
             [['des', 'files'], 'string'],
             [
@@ -87,7 +87,7 @@ class AssetGetForm extends BaseForm
             if (!$apply->save()) {
                 throw new Exception('付款申请单创建失败', $apply->errors);
             }
-            $this->saveAssetGet();
+            $this->saveAssetGet($user);
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $this->saveAssetGetList();
@@ -101,13 +101,17 @@ class AssetGetForm extends BaseForm
     
     /**
      * 资产领用
+     *
+     * @param $user
+     * @return AssetGet
+     * @throws Exception
      */
-    public function saveAssetGet()
+    public function saveAssetGet($user)
     {
         $model = new AssetGet();
         $model->apply_id = $this->apply_id;
         $model->des = $this->des;
-        $model->get_person = $this->get_person;
+        $model->get_person = $user['person_id'];
         $model->files = $this->files;
         if (!$model->save()) {
             throw new Exception('固定资产领用单创建失败', $model->errors);
@@ -125,7 +129,8 @@ class AssetGetForm extends BaseForm
             $data[] = [
                 'apply_id' => $this->apply_id,
                 'asset_id' => $v,
-                'status' => 1
+                'status' => 1,
+                'created_at' => time()
             ];
         }
         $n = \Yii::$app->db->createCommand()->batchInsert('oa_asset_get_list', [

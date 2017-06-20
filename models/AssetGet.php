@@ -48,9 +48,4 @@ class AssetGet extends \yii\db\ActiveRecord
             'files' => '附件',
         ];
     }
-    
-    public function getAssetGetList()
-    {
-        
-    }
 }

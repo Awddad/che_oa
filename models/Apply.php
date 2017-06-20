@@ -163,7 +163,7 @@ class Apply extends \yii\db\ActiveRecord
                 $applyIds = explode(',', $payBack->jie_kuan_ids);
                 //改变借款单状态
                 foreach ($applyIds as $apply_id) {
-                    JieKuan::updateAll(['status' => 1], ['apply_id' => $apply_id]);
+                    JieKuan::updateAll(['status' => 99], ['apply_id' => $apply_id]);
                 }
                 $transaction->commit();
                 return true;
@@ -276,7 +276,7 @@ class Apply extends \yii\db\ActiveRecord
     
     /**
      * 离职申请
-     * @return ActiveQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getApplyLeave()
     {
@@ -285,10 +285,29 @@ class Apply extends \yii\db\ActiveRecord
     
     /**
      * 开店申请
-     * @return ActiveQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getApplyOpen()
     {
         return $this->hasOne(ApplyOpen::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * 固定资产领取
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAssetGet()
+    {
+        return $this->hasOne(AssetGet::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
+     * 固定资产归还
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAssetBack()
+    {
+        return $this->hasOne(AssetBack::className(), ['apply_id' => 'apply_id']);
+    }
+    
 }

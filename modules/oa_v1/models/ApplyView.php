@@ -3,6 +3,8 @@ namespace app\modules\oa_v1\models;
 
 
 
+use app\models\AssetBack;
+use app\models\AssetGet;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
 use app\models\JieKuan;
@@ -18,8 +20,8 @@ class ApplyView extends BaseForm
         5 => 'Buy',
         6 => 'Demand',
         7 => 'UseChapter',
-        8 => '固定资产零用',
-        9 => '固定资产归还',
+        8 => 'AssetGet',
+        9 => 'AssetBack',
         10 => 'Positive',
         11 => 'Leave',
         12 => 'Transfer',
@@ -118,7 +120,7 @@ class ApplyView extends BaseForm
 				'des' => $v->des
 			];
 		}
-		return data;
+		return $data;
 	}
 	
 	/**
@@ -257,4 +259,40 @@ class ApplyView extends BaseForm
 	    ];
 	    return $data;
 	}
+    
+    /**
+     * @param Apply $apply
+     * @return array
+     */
+	public function getAssetGet($apply)
+    {
+        /**
+         * @var AssetGet $applyBuy
+         */
+        $applyBuy= $apply->assetGet;
+        $data = [
+            'des' => $applyBuy->des,
+            'files' => json_decode($applyBuy->files),
+            'list' => BaseApplyLogic::instance()->getAssetGetList($apply->apply_id)
+        ];
+        return $data;
+    }
+    
+    /**
+     * @param Apply $apply
+     * @return array
+     */
+    public function getAssetBack($apply)
+    {
+        /**
+         * @var AssetBack $assetBack\
+         */
+        $assetBack = $apply->assetBack;
+        $data = [
+            'des' => $assetBack->des,
+            'files' => json_decode($assetBack->files),
+            'list' => BaseApplyLogic::instance()->getAssetBackList($apply->asset_list_ids)
+        ];
+        return $data;
+    }
 }

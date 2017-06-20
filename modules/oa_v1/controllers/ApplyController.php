@@ -67,7 +67,12 @@ class ApplyController extends BaseController
 		}
 		return $this->_return($data, 200);
 	}
-
+    
+    /**
+     * 申请详情
+     *
+     * @return array
+     */
 	public function actionGetInfo() {
 		
 		$get = Yii::$app->request->get();
@@ -81,6 +86,9 @@ class ApplyController extends BaseController
 		} else {
 			$type = (int)$get['type'];
 		}
+        /**
+         * @var Apply $apply
+         */
 		$apply = Apply::find()->where(['apply_id'=>$apply_id,'type'=>$type])->one();
 		if(empty($apply)){
 			return $this->_return('申请单不存在！', 403);
@@ -187,7 +195,7 @@ class ApplyController extends BaseController
                 $applyIds = explode(',', $payBack->jie_kuan_ids);
                 //改变借款单状态
                 foreach ($applyIds as $apply_id) {
-                    appmodel\JieKuan::updateAll(['status' => 1], ['apply_id' => $apply_id]);
+                    appmodel\JieKuan::updateAll(['status' => 99], ['apply_id' => $apply_id]);
                 }
                 $transaction->commit();
                 return $this->_return('', 200);
