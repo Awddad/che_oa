@@ -12,6 +12,7 @@ use yii\db\Exception;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\ApplyView;
 use app\modules\oa_v1\logic\Profession;
+use app\modules\oa_v1\logic\RegionLogic;
 
 class ApplyController extends BaseController
 {
@@ -239,6 +240,12 @@ class ApplyController extends BaseController
 	public function actionGetProfession()
 	{
 	    $res = Profession::instance()->getList();
+	    return $this->_return($res);
+	}
+	
+	public function actionGetRegion()
+	{
+	    $res = RegionLogic::instance()->getRegion();
 	    return $this->_return($res);
 	}
 }
