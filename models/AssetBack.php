@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "oa_asset_back".
  *
- * @property integer $id
+ * @property integer $apply_id
  * @property integer $get_person
  * @property string $des
  * @property string $files
@@ -28,8 +28,8 @@ class AssetBack extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['get_person', 'files'], 'required'],
-            [['get_person'], 'integer'],
+            [['apply_id', 'get_person', 'files'], 'required'],
+            [['apply_id', 'get_person'], 'integer'],
             [['files'], 'string'],
             [['des'], 'string', 'max' => 255],
         ];
@@ -41,7 +41,7 @@ class AssetBack extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'apply_id' => '申请ID',
             'get_person' => '接收人',
             'des' => '说明',
             'files' => '附件',

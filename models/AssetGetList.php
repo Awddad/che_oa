@@ -30,7 +30,7 @@ class AssetGetList extends \yii\db\ActiveRecord
      * 状态
      * @var array
      */
-    public $status = [
+    const STATUS = [
         1 => '申请中',
         2 => '已发放',
         3 => '已归还'
@@ -69,5 +69,14 @@ class AssetGetList extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className()
         ];
+    }
+    
+    /**
+     * 获取资产信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAssetList()
+    {
+        return $this->hasOne(AssetList::className(), ['id', 'asset_list_id']);
     }
 }

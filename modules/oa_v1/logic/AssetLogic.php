@@ -10,6 +10,8 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
 use app\models\Asset;
+use app\models\AssetGetList;
+use app\models\AssetList;
 use app\models\AssetType;
 use app\models\AssetBrand;
 
@@ -41,6 +43,7 @@ class AssetLogic extends Logic
      * 
      * @param int $parent_id
      * @param array $data
+     * @return array
      */
     public function getAssetTypeByParentId($parent_id = 0, $data=[])
     {
@@ -118,6 +121,33 @@ class AssetLogic extends Logic
                 'name' => $v->name,
                 'price' => $v->price
             ];
+        }
+        return $data;
+    }
+    
+    public function getCanBackList($personId)
+    {
+        $list = AssetGetList::find()->where([
+            'status' => 2,
+            'person_id' => $personId
+        ])->all();
+        $data = [];
+        if(!empty($list)) {
+            /**
+             * @var AssetGetList $v
+             */
+            $assetLogic = AssetLogic::instance();
+            foreach ($list as $k => $v) {
+                $asset = Asset::findOne($v->asset_id);
+                $data[] = [
+                    'index' => $k + 1,
+                    'asset_type' => $assetLogic->getAssetType($asset->asset_type_id),
+                    'asset_brand' => $assetLogic->getAssetBrand($asset->asset_brand_id),
+                    'name' => $asset->name,
+                    'price' => $asset->price,
+                    'socket_number' => AssetList::findOne($v->asset_list_id)->stock_number
+                ];
+            }
         }
         return $data;
     }
