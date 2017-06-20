@@ -37,7 +37,7 @@ class AfterApproval extends BaseLogic
          */
         $obj = $event->sender;
         
-        if ($obj->getScenario() == $obj::SCENARIO_COMPLETE && method_exists($this, $fuc)) {
+        if (!$obj->hasErrors() && $obj->getScenario() == $obj::SCENARIO_COMPLETE && method_exists($this, $fuc)) {
             return $this->$fuc($obj);
         }
         return true;
