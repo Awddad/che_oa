@@ -35,7 +35,7 @@ class ApplyPositiveForm extends BaseForm
 					  ['approval_persons', 'copy_person'],
 					  'each',
 					  'rule' => ['integer']
-					  ],
+				  ],
 				  [
 					  ['approval_persons', 'copy_person'], 'checkTotal'
 				  ],

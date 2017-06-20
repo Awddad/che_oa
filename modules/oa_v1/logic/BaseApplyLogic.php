@@ -195,7 +195,7 @@ class BaseApplyLogic extends Logic
             "person" => $apply->person,
             'date' => date('Y年m月d日', $apply->create_time),
             'copy_person' => $apply->copy_person,
-            'approval_persons' => $apply->approval_persons,
+            'approval_persons' => $apply->approval_persons ? : '--',
         	'pdf' => $apply->apply_list_pdf
         ];
     }

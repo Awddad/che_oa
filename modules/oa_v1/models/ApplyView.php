@@ -9,19 +9,21 @@ use app\models\JieKuan;
 
 class ApplyView extends BaseForm
 {
-	protected  $typeMethod = [
-			1 => 'Baoxiao',
-			2 => 'Loan',
-			3 => 'PayBack',
-			4 => 'Pay',
-			5 => 'Buy',
-			6 => 'Demand',
-			7 => 'UseChapter',
-			8 => '固定资产零用',
-			9 => '固定资产归还',
-			10 => 'Positive',
-			11 => '离职',
-			12 => 'Transfer'
+
+    protected $typeMethod = [
+        1 => 'Baoxiao',
+        2 => 'Loan',
+        3 => 'PayBack',
+        4 => 'Pay',
+        5 => 'Buy',
+        6 => 'Demand',
+        7 => 'UseChapter',
+        8 => '固定资产零用',
+        9 => '固定资产归还',
+        10 => 'Positive',
+        11 => 'Leave',
+        12 => 'Transfer',
+        13 => 'Open',
 	];
 	
 	
@@ -223,5 +225,36 @@ class ApplyView extends BaseForm
 				'files' => json_decode($transfer->files),
 		];
 		return $data;
+	}
+	
+	/**
+	 * 离职详情
+	 * @param \app\models\Apply $apply
+	 * @return array
+	 */
+	protected function getLeave($apply)
+	{
+	   $leave = $apply->applyLeave;
+	   $data = [
+	       
+	   ];
+	   return $data;
+	}
+	
+	/**
+	 * 开店申请
+	 * @param \app\models\Apply $apply
+	 * @return array
+	 */
+	protected function getOpen($apply)
+	{
+	    $open = $apply->applyOpen;
+	    $data = [
+	        'address' => $open->address,
+	        'rental' => $open->rental,
+	        'summary' => $open->summary,
+	        'city' => $open->district,
+	    ];
+	    return $data;
 	}
 }

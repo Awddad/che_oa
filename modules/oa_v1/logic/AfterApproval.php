@@ -19,9 +19,9 @@ class AfterApproval extends BaseLogic
         8 => '固定资产零用',
         9 => '固定资产归还',
         10 => 'Positive',
-        11 => '离职',
+        11 => 'Leave',
         12 => 'Transfer',
-        13 => ''
+        13 => 'Open'
     ];
 
     /**
@@ -37,7 +37,6 @@ class AfterApproval extends BaseLogic
          */
         $obj = $event->sender;
         
-        //var_dump($obj->getScenario(), $obj::SCENARIO_COMPLETE);die();
         if ($obj->getScenario() == $obj::SCENARIO_COMPLETE && method_exists($this, $fuc)) {
             return $this->$fuc($obj);
         }
@@ -75,10 +74,33 @@ class AfterApproval extends BaseLogic
         $employee->org_id = $transfer->target_org_id;
         $employee->profession = $transfer->target_profession_id;
         if ($employee->save()) {
-            // 权限系统接口
+            // 权限系统接口（待开发）
             $objQx = new QuanXianServer();
         }
         return true;
+    }
+    
+    /**
+     * 离职
+     *
+     * @param app\models\ApprovalLog $approvalLog
+     */
+    protected function Leave($approvalLog)
+    {
+        $apply = Apply::findOne($approvalLog->apply_id);
+        $leave = $apply->applyLeave;
+        
+        $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
+        
+        $employee->status = 3;
+        if ($employee->save()) {
+            
+            //权限系统接口（待开发）
+            $objQx = new QuanXianServer();
+            
+            return true;
+        }
+        return false;
     }
 }
 
