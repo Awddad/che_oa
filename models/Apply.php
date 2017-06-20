@@ -239,6 +239,7 @@ class Apply extends \yii\db\ActiveRecord
         return $this->hasOne(ApplyPay::className(), ['apply_id' => 'apply_id']);
     }
     
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -257,7 +258,7 @@ class Apply extends \yii\db\ActiveRecord
     
     /**
      * 转正申请
-     * @return ActiveQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getApplyPositive()
     {
@@ -266,7 +267,7 @@ class Apply extends \yii\db\ActiveRecord
     
     /**
      * 调职申请
-     * @return ActiveQuery
+     * @return \yii\db\ActiveQuery
      */
     public function getApplyTransfer()
     {

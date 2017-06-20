@@ -17,6 +17,11 @@ use Yii;
  */
 class ApplyDemand extends \yii\db\ActiveRecord
 {
+    const STATUS = [
+        1 => '未采购',
+        2 => '部分采购',
+        3 => '已采购'
+    ];
     /**
      * @inheritdoc
      */
