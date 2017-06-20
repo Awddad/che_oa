@@ -14,6 +14,13 @@ use app\models\AssetType;
 
 class BasicController extends BaseController
 {
+    public function actionGetTypeAll()
+    {
+        $model = new BasicAssetForm();
+        $res = $model->getAssetType();
+        return $this->_return($res);
+    }
+    
 	public function actionGetTypeList()
 	{
 		$params = yii::$app->request->get();
