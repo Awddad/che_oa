@@ -273,4 +273,22 @@ class Apply extends \yii\db\ActiveRecord
     {
     	return $this->hasOne(ApplyTransfer::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * 离职申请
+     * @return ActiveQuery
+     */
+    public function getApplyLeave()
+    {
+        return $this->hasOne(ApplyLeave::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
+     * 开店申请
+     * @return ActiveQuery
+     */
+    public function getApplyOpen()
+    {
+        return $this->hasOne(ApplyOpen::className(), ['apply_id' => 'apply_id']);
+    }
 }
