@@ -260,6 +260,22 @@ class BasicAssetForm extends BaseForm
 				'pages' => BackLogic::instance()->pageFix($pagination)
 		];
 	}
+	
+	public function getAssetType($pid=0)
+	{
+	    $res = AssetType::find()->where(['parent_id'=>$pid])->all();
+	    $data = [];
+	    foreach($res as $v){
+	        $tmp = [
+	            'label' => $v->id,
+                'value' => $v->name,
+	        ];
+	        $v->has_child && $tmp['children'] = $this->getAssetType($v->id);
+	        $data[] = $tmp;
+	    }
+	    return $data;
+	}
+	
 	/**
 	 * 获得品牌列表
 	 * @param array $params
