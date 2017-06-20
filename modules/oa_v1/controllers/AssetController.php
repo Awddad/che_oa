@@ -67,16 +67,20 @@ class AssetController extends BaseController
     /**
      * 可领用资产明细
      */
-    public function actionCanGetList()
+    public function actionCanGetAsset()
     {
-        $data = AssetLogic::instance()->getCanGetAssetList();
+        $data = AssetLogic::instance()->getCanGetAsset();
         return $this->_return($data);
     }
     
-    public function actionCanBackList()
+    /**
+     * 待归还资产
+     * @return array
+     */
+    public function actionCanBackAsset()
     {
         $personId = $this->arrPersonInfo->person_id;
-        $data = AssetLogic::instance()->getCanBackList($personId);
+        $data = AssetLogic::instance()->getCanBackAsset($personId);
         return $this->_return($data);
     }
 }

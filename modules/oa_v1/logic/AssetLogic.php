@@ -102,7 +102,7 @@ class AssetLogic extends Logic
      * 可领用资产列表
      * @return array
      */
-    public function getCanGetAssetList()
+    public function getCanGetAsset()
     {
         $socket = Asset::find()->where([
             '!=', 'free_amount', 0
@@ -125,7 +125,13 @@ class AssetLogic extends Logic
         return $data;
     }
     
-    public function getCanBackList($personId)
+    /**
+     * 可归还资产列表
+     *
+     * @param $personId
+     * @return array
+     */
+    public function getCanBackAsset($personId)
     {
         $list = AssetGetList::find()->where([
             'status' => 2,

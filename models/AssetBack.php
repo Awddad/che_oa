@@ -28,7 +28,7 @@ class AssetBack extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_id', 'get_person', 'files'], 'required'],
+            [['apply_id', 'get_person'], 'required'],
             [['apply_id', 'get_person'], 'integer'],
             [['files'], 'string'],
             [['des'], 'string', 'max' => 255],
