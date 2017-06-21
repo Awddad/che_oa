@@ -22,7 +22,7 @@ class BasicEmployeeForm extends BaseForm
 				[['name'],'required','message'=>'{attribute}不能为空','on'=>[self::SCENARIO_ADD]],
 				[['id','name'],'required','message'=>'{attribute}不能为空','on'=>[self::SCENARIO_EDIT]],
 	
-				['id','exist','targetClass'=>'\app\models\PersonType','message'=>'原数据不存在！'],
+				['id','exist','targetClass'=>'\app\models\EmployeeType','message'=>'原数据不存在！'],
 				['name','string','length' => [1, 20],'message'=>'名称不正确'],
 		];
 	}
