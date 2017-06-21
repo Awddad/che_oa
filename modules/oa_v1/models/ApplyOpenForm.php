@@ -6,6 +6,10 @@ use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use app\models\ApplyOpen;
 use Exception;
+use yii\data\Pagination;
+use app\modules\oa_v1\logic\BackLogic;
+use app\modules\oa_v1\logic\RegionLogic;
+use yii\helpers\ArrayHelper;
 
 class ApplyOpenForm extends BaseForm
 {
@@ -91,6 +95,7 @@ class ApplyOpenForm extends BaseForm
         $model = new ApplyOpen();
         $model->apply_id = $this->apply_id;
         $model->district = $this->district;
+        $model->district_name = RegionLogic::instance()->getRegionByChild($this->district);
         $model->address = $this->address;
         $model->rental = $this->rental;
         $model->files = $this->files?json_encode($this->files):'';
@@ -101,4 +106,84 @@ class ApplyOpenForm extends BaseForm
         }
         
     }
+    /**
+     * 开店列表
+     * @param array $params
+     */
+    public function getOpenList($params)
+    {
+        $keywords = ArrayHelper::getValue($params,'keywords',null);
+        $start_time = ArrayHelper::getValue($params,'start_time',null);
+        $end_time = ArrayHelper::getValue($params,'end_time',null);
+        $page = ArrayHelper::getValue($params,'page',1);
+        $page_size = ArrayHelper::getValue($params,'page_size',10);
+        $status = ArrayHelper::getValue($params, 'status',null);
+        $sort = ArrayHelper::getValue($params, 'sort','desc');
+        
+        $query = ApplyOpen::find()->joinWith('apply a',true,'RIGHT JOIN');
+        //关键词
+        if($keywords){
+            $keywords = mb_convert_encoding($keywords,'UTF-8','auto');
+            $query -> andWhere("instr(CONCAT(district_name,address,person),'{$keywords}') > 0 ");
+        }
+        //开始时间
+        if($start_time){
+            $start_time = strtotime($start_time);
+            $query->addWhere(['>=', 'create_time', $start_time]);
+        }
+        //结束时间
+        if($end_time){
+            $end_time = strtotime($end_time);
+            $query->addWhere(['<=', 'create_time', $end_time]);
+        }
+        //状态
+        if($status){
+            $arr_status = [];
+            foreach($status as $v){
+                switch($v){
+                    case 1://待确认
+                        array_push($arr_status ,1,11);
+                        break;
+                    case 2://已通过
+                        array_push($arr_status ,99);
+                        break;
+                    case 3://不通过
+                        array_push($arr_status ,2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if(count($arr_status) == 1){
+                $query -> andWhere(['status'=>$arr_status[0]]);
+            }elseif(count($arr_status) > 1){
+                $query -> andWhere(['in','status',$arr_status]);
+            }
+        }
+        //分页
+        $pagination = new Pagination([
+            'defaultPageSize' => $page_size,
+            'totalCount' => $query->count(),
+        ]);
+        //排序
+        switch($sort){
+            case 'asc'://时间顺序
+                $orderBy = ['create_time'=>SORT_ASC];
+                break;
+            default://时间倒序
+                $orderBy = ['create_time'=>SORT_DESC];
+                break;
+        }
+        $data = $query->orderBy($orderBy)->select('*')
+        ->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->asArray()
+        ->all();
+        
+        return [
+            'data' => $data,
+            'pages' => BackLogic::instance()->pageFix($pagination)
+        ];
+    }
+     
 }
