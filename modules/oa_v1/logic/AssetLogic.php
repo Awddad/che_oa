@@ -139,6 +139,7 @@ class AssetLogic extends Logic
          */
         foreach ($model as $v){
             $data[] = [
+                'id' => $v->id,
                 'asset_type' => $v->asset_type_name,
                 'asset_brand' => $v->asset_brand_name,
                 'name' => $v->name,
@@ -174,6 +175,7 @@ class AssetLogic extends Logic
                 $asset = Asset::findOne($v->asset_id);
                 $data[] = [
                     'index' => $k + 1,
+                    'id' => $v->id,
                     'asset_type' => $assetLogic->getAssetType($asset->asset_type_id),
                     'asset_brand' => $assetLogic->getAssetBrand($asset->asset_brand_id),
                     'name' => $asset->name,
