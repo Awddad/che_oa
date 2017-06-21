@@ -12,6 +12,7 @@ use app\models\Apply;
 use app\models\JieKuan;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
+use app\models\Employee;
 
 /**
  * 申请单详情
@@ -253,6 +254,7 @@ class ApplyView extends BaseForm
 	protected function getLeave($apply)
 	{
 	   $leave = $apply->applyLeave;
+	   $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
 	   $data = [
 	       'leave_time'=>$leave->leave_time,
 	       'dex' => $leave->des,
@@ -263,9 +265,9 @@ class ApplyView extends BaseForm
 	       'files' => json_decode($leave->files),
 	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
 	       'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
-	       'qq' => '',
-	       'email' => '',
-	       'tel' => '',
+	       'qq' => isset($employee->account)?$employee->account->qq:'--',
+	       'email' => isset($employee->account)?$employee->account->email:'--',
+	       'tel' => isset($employee->account)?$employee->account->tel:'--',
 	   ];
 	   return $data;
 	}

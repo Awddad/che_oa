@@ -168,7 +168,8 @@ class AssetLogic extends Logic
             //1 => '申请中'
         ];
         $res = AssetGetList::find()
-            ->where(['person_id'=>$person_id,['and',['in', 'status', [5, 4, 2]]]])
+            ->where(['person_id'=>$person_id])
+            ->andWhere(['in', 'status', [5, 4, 2]])
             ->orderBy(['created_at'=>SORT_ASC])
             ->all();
         
