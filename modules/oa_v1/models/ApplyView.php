@@ -8,6 +8,8 @@ use app\models\AssetGet;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
 use app\models\JieKuan;
+use app\modules\oa_v1\logic\AssetLogic;
+use app\modules\oa_v1\logic\JieKuanLogic;
 
 class ApplyView extends BaseForm
 {
@@ -238,7 +240,18 @@ class ApplyView extends BaseForm
 	{
 	   $leave = $apply->applyLeave;
 	   $data = [
-	       
+	       'leave_time'=>$leave->leave_time,
+	       'dex' => $leave->des,
+	       'stock_status' => $leave->stock_status ? '是' : '否',
+	       'finance_status' => $leave->finance_status ? '是' : '否',
+	       'account_status' => $leave->account_status ? '是' : '否',
+	       'work_status' => $leave->work_status ? '是' : '否',
+	       'files' => json_decode($transfer->files),
+	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
+	       'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
+	       'qq' => '',
+	       'email' => '',
+	       'tel' => '',
 	   ];
 	   return $data;
 	}
@@ -256,6 +269,7 @@ class ApplyView extends BaseForm
 	        'rental' => $open->rental,
 	        'summary' => $open->summary,
 	        'city' => $open->district,
+	        'files' => json_decode($transfer->files),
 	    ];
 	    return $data;
 	}

@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
 use app\models\Apply;
+use app\models\JieKuan;
 
 class JieKuanLogic extends Logic
 {
@@ -19,5 +20,31 @@ class JieKuanLogic extends Logic
             ->select('apply_id')
             ->where(['person_id' => $personId, 'type' => Apply::TYPE_JIE_KUAN])
             ->all();
+    }
+    
+    public function getHistory($personId)
+    {
+        $status_arr = [
+            //1 => '',
+            99 => '未归还',
+            100 => '未归还',
+            101 => '已归还',
+            102 => '未归还',
+        ];
+        $res = Apply::find()->where(['person_id'=>$personId,'type'=>2])->all();
+        $data = [];
+        foreach($res as $k => $v){
+            if($v->loan->status == 1){
+                continue;
+            }
+            $data[] = [
+                'id' => $k,
+                'time' => date('Y-m-d H:i',$v->create_time),
+                'des' => $v->loan->des,
+                'price' => $v->loan->money,
+                'status' => $status_arr[$v->loan->status],
+            ];
+        }
+        return $data;
     }
 }
