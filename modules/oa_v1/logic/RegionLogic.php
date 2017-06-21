@@ -6,17 +6,27 @@ use app\models\Region;
 
 class RegionLogic extends BaseLogic
 {
+	protected $key = 'oa_region';
+	
+	/**
+	 * 地区列表
+	 * @return array
+	 */
     public function getRegion()
     {
         $cache = yii::$app->cache;
-        $key = 'oa_region';
-        if(!$region = $cache->get($key)){
+        if(!$region = $cache->get($this->key)){
             $region = $this->getRegionByParent();
-            $cache->set($key, $region);
+            $cache->set($this->key, $region,86400);
         }
         return $region;
     }
     
+    /**
+     * 通过parent_id递归获得地区
+     * @param number $parent_id
+     * @return array
+     */
     public function getRegionByParent($parent_id=100000)
     {
         $res = Region::find()->where(['parent_id'=>$parent_id])->all();
@@ -31,5 +41,22 @@ class RegionLogic extends BaseLogic
             $data[] = $tmp;
         }
         return $data;
+    }
+    
+    /**
+     * 通过child获得地区字符串
+     * @param int $id
+     * @return string
+     */
+    public function getRegionByChild($id)
+    {
+    	$str = '';
+    	$res = Region::findOne($id);
+    	if($res->parent_id > 100000){
+    		$str = $this->getRegionStr($res->parent_id).'-'.$res->fullName;
+    	}else{
+    		$str = $res->fullName;
+    	}
+    	return $str;
     }
 }

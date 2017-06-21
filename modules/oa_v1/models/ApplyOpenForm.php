@@ -93,6 +93,7 @@ class ApplyOpenForm extends BaseForm
         $model->district = $this->district;
         $model->address = $this->address;
         $model->rental = $this->rental;
+        $model->files = $this->files?json_encode($this->files):'';
         $model->summary = $this->summary;
         $model->created_at = time();
         if(!$model->save()){

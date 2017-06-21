@@ -13,6 +13,7 @@ use app\models\JieKuan;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
+use app\modules\oa_v1\logic\RegionLogic;
 
 /**
  * 申请单详情
@@ -256,7 +257,7 @@ class ApplyView extends BaseForm
 	   $leave = $apply->applyLeave;
 	   $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
 	   $data = [
-	       'leave_time'=>$leave->leave_time,
+	       'leave_time'=>date('Y年m月d日',strtotime($leave->leave_time)),
 	       'dex' => $leave->des,
 	       'stock_status' => $leave->stock_status ? '是' : '否',
 	       'finance_status' => $leave->finance_status ? '是' : '否',
@@ -284,7 +285,7 @@ class ApplyView extends BaseForm
 	        'address' => $open->address,
 	        'rental' => $open->rental,
 	        'summary' => $open->summary,
-	        'city' => $open->district,
+	        'city' => RegionLogic::instance()->getRegionByChild($open->district),
 	        'files' => json_decode($open->files),
 	    ];
 	    return $data;
