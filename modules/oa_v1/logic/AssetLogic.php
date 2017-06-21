@@ -16,7 +16,9 @@ use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetType;
 use app\models\AssetBrand;
+use yii\data\Pagination;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * 基础数据
@@ -103,29 +105,51 @@ class AssetLogic extends Logic
     
     /**
      * 可领用资产列表
+     *
+     * @param array $param
      * @return array
      */
-    public function getCanGetAsset()
+    public function getCanGetAsset($param)
     {
-        $socket = Asset::find()->where([
-            '!=', 'free_amount', 0
-        ])->all();
+        $query = Asset::find()->where([
+            '>', 'free_amount', 0
+        ]);
+        if(isset($param['keyword'])) {
+            $query->andWhere([
+                'or',
+                ['like', 'asset_type_name', $param['keyword']],
+                ['like', 'name', $param['keyword']],
+            ]);
+        }
+        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pagination = new Pagination([
+            'defaultPageSize' => $pageSize,
+            'totalCount' => $query->count(),
+        ]);
+        $model = $query->orderBy(["id" => SORT_DESC])
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
         $data = [];
-        if(empty($socket)) {
+        if(empty($model)) {
             return $data;
         }
         /**
          * @var Asset $v
          */
-        foreach ($socket as $v){
+        foreach ($model as $v){
             $data[] = [
-                'asset_type' => AssetLogic::instance()->getAssetType($v->asset_type_id),
-                'asset_brand' => AssetLogic::instance()->getAssetBrand($v->asset_brand_id),
+                'asset_type' => $v->asset_type_name,
+                'asset_brand' => $v->asset_brand_name,
                 'name' => $v->name,
                 'price' => $v->price
             ];
         }
-        return $data;
+        
+        return [
+            'list' => $data,
+            'page' => BaseLogic::instance()->pageFix($pagination)
+        ];
     }
     
     /**

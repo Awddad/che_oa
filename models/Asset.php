@@ -9,7 +9,9 @@ use Yii;
  *
  * @property integer $id
  * @property integer $asset_type_id
+ * @property string $asset_type_name
  * @property integer $asset_brand_id
+ * @property string $asset_brand_name
  * @property string $name
  * @property integer $amount
  * @property string $price
@@ -33,7 +35,7 @@ class Asset extends \yii\db\ActiveRecord
         return [
             [['asset_type_id', 'asset_brand_id', 'amount', 'free_amount'], 'integer'],
             [['price'], 'number'],
-            [['name'], 'string', 'max' => 128],
+            [['asset_type_name', 'asset_brand_name', 'name'], 'string', 'max' => 128],
         ];
     }
 
@@ -44,8 +46,10 @@ class Asset extends \yii\db\ActiveRecord
     {
         return [
             'id' => '自增ID',
-            'asset_type_id' => '类别',
-            'asset_brand_id' => '品牌',
+            'asset_type_id' => '类别ID',
+            'asset_type_name' => '类别',
+            'asset_brand_id' => '品牌ID',
+            'asset_brand_name' => '品牌',
             'name' => '名称',
             'amount' => '数量',
             'price' => '单价',
