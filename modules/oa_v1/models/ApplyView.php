@@ -5,12 +5,20 @@ namespace app\modules\oa_v1\models;
 
 use app\models\AssetBack;
 use app\models\AssetGet;
+use app\models\BaoXiao;
+use app\models\BaoXiaoList;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
 use app\models\JieKuan;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 
+/**
+ * 申请单详情
+ *
+ * Class ApplyView
+ * @package app\modules\oa_v1\models
+ */
 class ApplyView extends BaseForm
 {
 
@@ -56,6 +64,9 @@ class ApplyView extends BaseForm
 	 */
 	protected function getBaoxiao($apply)
 	{
+        /**
+         * @var BaoXiao $baoxiao
+         */
 		$baoxiao = $apply->expense;
 		$data  = [
 				'money' => $baoxiao->money,
@@ -66,6 +77,9 @@ class ApplyView extends BaseForm
 				'pics' => explode(',', $baoxiao->pics),
 				'list' => []
 		];
+        /**
+         * @var BaoXiaoList $v
+         */
 		foreach ($baoxiao->list as $v) {
 			$data['list'][] = [
 					'money' => $v->money,
@@ -246,7 +260,7 @@ class ApplyView extends BaseForm
 	       'finance_status' => $leave->finance_status ? '是' : '否',
 	       'account_status' => $leave->account_status ? '是' : '否',
 	       'work_status' => $leave->work_status ? '是' : '否',
-	       'files' => json_decode($transfer->files),
+	       'files' => json_decode($leave->files),
 	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
 	       'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
 	       'qq' => '',
@@ -269,7 +283,7 @@ class ApplyView extends BaseForm
 	        'rental' => $open->rental,
 	        'summary' => $open->summary,
 	        'city' => $open->district,
-	        'files' => json_decode($transfer->files),
+	        'files' => json_decode($open->files),
 	    ];
 	    return $data;
 	}
