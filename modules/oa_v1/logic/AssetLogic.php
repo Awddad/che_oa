@@ -157,4 +157,33 @@ class AssetLogic extends Logic
         }
         return $data;
     }
+    
+    public function getAssetHistory($person_id)
+    {
+        $status_arr = [
+            5 => '已归还',
+            4 => '未归还',//归还中
+            //3 => '申请失败',
+            2 => '未归还',//'申请通过',
+            //1 => '申请中'
+        ];
+        $res = AssetGetList::find()
+            ->where(['person_id'=>$person_id,['and',['in', 'status', [5, 4, 2]]]])
+            ->orderBy(['created_at'=>SORT_ASC])
+            ->all();
+        
+        $data = [];
+        foreach($res as $v){
+            $asset = Asset::findOne($v->asset_id);
+            $data[] = [
+                'type' => $this->getAssetType($asset->asset_type_id),//类别
+                'sn' => AssetList::findOne($v->asset_list_id)->sn_number,//库存编号
+                'brand' => $this->getAssetBrand($asset->asset_brand_id),//品牌
+                'name' => $asset->name,//名称
+                'price' => $asset->price,//价格
+                'status' => $status_arr[$v->status],//状态
+            ];
+        }
+        return $data;
+    }
 }
