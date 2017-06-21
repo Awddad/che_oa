@@ -9,11 +9,14 @@
 namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
+use app\models\Apply;
 use app\models\Asset;
+use app\models\AssetBack;
 use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetType;
 use app\models\AssetBrand;
+use yii\db\Exception;
 
 /**
  * 基础数据
@@ -187,4 +190,70 @@ class AssetLogic extends Logic
         }
         return $data;
     }
+    
+    /**
+     * 固定资产领取审批通过操作
+     *
+     * @param Apply $apply
+     *
+     * @return boolean
+     * @throws Exception
+     */
+    public function assetGetComplete($apply)
+    {
+        $assetGetList = AssetGetList::find()->where([$apply->apply_id])->all();
+        /**
+         * @var AssetGetList $v
+         */
+        foreach ($assetGetList as $v) {
+            /**
+             * @var AssetList $assetList
+             */
+            $assetList = AssetList::find()->where([
+                'asset_id' => $v->asset_id,
+                'status' => 1
+            ])->orderBy(['id' => SORT_ASC])->one();
+            $v->asset_list_id = $assetList->id;
+            $v->status = 2;
+            if (!$v->save()) {
+                throw new Exception('资产分配失败');
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * 固定资产领取审批不通过或者用户撤销操作,状态变为失败
+     *
+     * @param Apply $apply
+     *
+     * @return boolean
+     */
+    public function assetGetCancel($apply)
+    {
+        return AssetGetList::updateAll(['status' => 3],['in', 'id', $apply->apply_id]);
+    }
+    
+    /**
+     * 资产归还
+     *
+     * @param Apply $apply
+     * @return boolean
+     */
+    public function assetBackComplete($apply)
+    {
+        $assetBack = AssetBack::findOne($apply->apply_id);
+        return  AssetGetList::updateAll(['status' => 5],['in', 'id', explode(',', $assetBack->asset_list_ids)]);
+    }
+    
+    /**
+     * 资产归还，取消或者撤销
+     * @param $apply
+     * @return int
+     */
+    public function assetBackCancel($apply)
+    {
+        return AssetGetList::updateAll(['status' => 2],['in', 'id', $apply->apply_id]);
+    }
+    
 }

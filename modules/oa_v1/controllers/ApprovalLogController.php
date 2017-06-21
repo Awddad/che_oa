@@ -7,6 +7,12 @@ use app\modules\oa_v1\logic\ApprovalLogLogic;
 use Yii;
 use app\modules\oa_v1\logic\AfterApproval;
 
+/**
+ * 审批单
+ *
+ * Class ApprovalLogController
+ * @package app\modules\oa_v1\controllers
+ */
 class ApprovalLogController extends BaseController
 {
     /**
