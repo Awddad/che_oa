@@ -305,7 +305,7 @@ class ApplyView extends BaseForm
         $data = [
             'des' => $assetBack->des,
             'files' => json_decode($assetBack->files),
-            'list' => BaseApplyLogic::instance()->getAssetBackList($apply->asset_list_ids)
+            'list' => BaseApplyLogic::instance()->getAssetBackList($assetBack->asset_list_ids)
         ];
         return $data;
     }
