@@ -83,4 +83,10 @@ class Employee extends \yii\db\ActiveRecord
             'person_id' => 'Person ID',
         ];
     }
+    
+    public function getAccount()
+    {
+    	return $this->hasOne(EmployeeAccount::className(), ['employee_id' => 'id']);
+    }
+    
 }
