@@ -9,7 +9,7 @@ use Exception;
 
 class ApplyLeaveForm extends BaseForm
 {
-    public $type = 12;
+    public $type = 11;
     public $cai_wu_need = 1;
     
     public $apply_id;
