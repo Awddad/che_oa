@@ -115,6 +115,7 @@ class BackConfirmForm extends CaiWuShouKuan
                 $loanIds = explode(',', $payBack->jie_kuan_ids);
                 foreach ($loanIds as $id) {
                     $jieKuan = JieKuan::findOne($id);
+                    //还款成功
                     $jieKuan->status = 101;
                     $jieKuan->pay_back_time = time();
                     $jieKuan->is_pay_back = 1;

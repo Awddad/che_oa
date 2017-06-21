@@ -204,7 +204,7 @@ class BaseApplyLogic extends Logic
     
     /**
      * 固定资产申请列表
-     * 
+     *
      * @param $applyId
      * @return array
      */
@@ -218,10 +218,10 @@ class BaseApplyLogic extends Logic
          */
         foreach ($list as $v) {
             $data[] = [
-                'asset_type' => $assetLogic->getAssetType($v->assetList->asset_type_id),
-                'asset_brand' => $assetLogic->getAssetBrand($v->assetList->asset_brand_id),
-                'name' => $v->assetList->name,
-                'price' => $v->assetList->price,
+                'asset_type' => $assetLogic->getAssetType($v->asset->asset_type_id),
+                'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
+                'name' => $v->asset->name,
+                'price' => $v->asset->price,
             ];
         }
         return $data;
@@ -235,18 +235,17 @@ class BaseApplyLogic extends Logic
     public function getAssetBackList($assetListIds)
     {
         $data = [];
-        
-        $list = AssetGetList::find()->where(['in', 'apply_id', explode(',', $assetListIds)])->all();
+        $list = AssetGetList::find()->where(['in', 'asset_list_id', explode(',', $assetListIds)])->all();
         $assetLogic = AssetLogic::instance();
         /**
          * @var AssetGetList $v
          */
         foreach ($list as $v) {
             $data[] = [
-                'asset_type' => $assetLogic->getAssetType($v->assetList->asset_type_id),
-                'asset_brand' => $assetLogic->getAssetBrand($v->assetList->asset_brand_id),
+                'asset_type' => $assetLogic->getAssetType($v->asset->asset_type_id),
+                'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
                 'name' => $v->asset->name,
-                'price' => $v->assetList->price,
+                'price' => $v->asset->price,
                 'stock_number' => $v->assetList->stock_number
             ];
         }
