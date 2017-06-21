@@ -9,11 +9,9 @@
 namespace app\modules\oa_v1\controllers;
 
 
-use app\models\AssetBack;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\AssetBackForm;
 use app\modules\oa_v1\models\AssetGetForm;
-use Yii;
 
 /**
  * 资产领取，归还
@@ -29,6 +27,7 @@ class AssetController extends BaseController
             'get' => ['post'],
             'back' => ['post'],
             'can-get-list' => ['get'],
+            'can-back-list' => ['get'],
         ];
     }
     
@@ -69,7 +68,9 @@ class AssetController extends BaseController
      */
     public function actionCanGetAsset()
     {
-        $data = AssetLogic::instance()->getCanGetAsset();
+        $param = \Yii::$app->request->get();
+        
+        $data = AssetLogic::instance()->getCanGetAsset($param);
         return $this->_return($data);
     }
     
@@ -79,7 +80,7 @@ class AssetController extends BaseController
      */
     public function actionCanBackAsset()
     {
-        $personId = $this->arrPersonInfo->person_id;
+        $personId = $this->arrPersonInfo['person_id'];
         $data = AssetLogic::instance()->getCanBackAsset($personId);
         return $this->_return($data);
     }

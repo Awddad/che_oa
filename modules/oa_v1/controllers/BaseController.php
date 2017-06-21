@@ -31,7 +31,7 @@ use app\models\Person;
 class BaseController extends Controller
 {
     /**
-     * @var User object
+     * @var User $arrPersonInfo
      */
     public $arrPersonInfo = [];//用户登录信息保存
     
