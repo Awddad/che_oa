@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\BaoXiao;
 use yii\data\Pagination;
 
 /**
@@ -30,7 +31,8 @@ class PayLogic extends BaseLogic
         $type = \Yii::$app->request->post('type');
 
         $query = Apply::find()->where([
-            'status' => 4
+            'status' => 4,
+            'cai_wu_need' => 2
         ]);
         //筛选
         if ($type) {
@@ -46,7 +48,7 @@ class PayLogic extends BaseLogic
 
         } else {
             $query->andWhere([
-                'in', 'type', [1, 2]
+                'in', 'type', [1, 2, 4, 5]
             ]);
         }
         $keyword = trim(\Yii::$app->request->post('keyword'));
@@ -134,33 +136,31 @@ class PayLogic extends BaseLogic
             $this->error = '申请ID不能确认，请求不合法';
             return false;
         }
-        if ($apply->type == 1) {
-            return [
-                'pay_org' => PersonLogic::instance()->getOrg(),
-                'pay_bank' => ThirdServer::instance([
-                    'token' => \Yii::$app->params['cai_wu']['token'],
-                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-                ])->getAccount($person['org_id']),
-                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
-                'bank_card_id' => $apply->expense->bank_card_id,
-                'bank_name' => $apply->expense->bank_name,
-                'bank_name_des' => $apply->expense->bank_name_des,
-            ];
+        switch ($apply->type) {
+            case 1:
+                $applyDetail = $apply->expense;
+                break;
+            case 2:
+                $applyDetail = $apply->loan;
+                break;
+            case 4:
+                $applyDetail = $apply->applyPay;
+                break;
+            default:
+                $applyDetail = $apply->applyBuy;
         }
-        if ($apply->type == 2) {
-            return [
-                'pay_org' => PersonLogic::instance()->getOrg(),
-                'pay_bank' => ThirdServer::instance([
-                    'token' => \Yii::$app->params['cai_wu']['token'],
-                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-                ])->getAccount($person['org_id']),
-                'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
-                'bank_card_id' => $apply->loan->bank_card_id,
-                'bank_name' => $apply->loan->bank_name,
-                'bank_name_des' => $apply->loan->bank_name_des,
-            ];
-        }
-
+        $data = [
+            'pay_org' => PersonLogic::instance()->getOrg(),
+            'pay_bank' => ThirdServer::instance([
+                'token' => \Yii::$app->params['cai_wu']['token'],
+                'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+            ])->getAccount($person['org_id']),
+            'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
+            'bank_card_id' => $applyDetail->bank_card_id,
+            'bank_name' => $applyDetail->bank_name,
+            'bank_name_des' => $applyDetail->bank_name_des,
+        ];
+        return $data;
     }
 
     /**

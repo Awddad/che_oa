@@ -2,9 +2,17 @@
 namespace app\modules\oa_v1\logic;
 
 use app\models\Apply;
+use app\models\ApprovalLog;
 use app\models\Employee;
 use app\logic\server\QuanXianServer;
+use yii\base\Event;
 
+/**
+ * 审批后处理
+ *
+ * Class AfterApproval
+ * @package app\modules\oa_v1\logic
+ */
 class AfterApproval extends BaseLogic
 {
 
@@ -16,8 +24,8 @@ class AfterApproval extends BaseLogic
         5 => 'Buy',
         6 => 'Demand',
         7 => 'UseChapter',
-        8 => '固定资产零用',
-        9 => '固定资产归还',
+        8 => 'AssetGet',
+        9 => 'AssetBack',
         10 => 'Positive',
         11 => 'Leave',
         12 => 'Transfer',
@@ -27,7 +35,8 @@ class AfterApproval extends BaseLogic
     /**
      * 审批完成后
      * 
-     * @param obj $event            
+     * @param Event $event
+     * @return boolean
      */
     public function handler($event)
     {
@@ -46,7 +55,8 @@ class AfterApproval extends BaseLogic
     /**
      * 转正
      * 
-     * @param app\models\ApprovalLog $approvalLog            
+     * @param ApprovalLog $approvalLog
+     * @return boolean
      */
     protected function Positive($approvalLog)
     {
@@ -62,7 +72,8 @@ class AfterApproval extends BaseLogic
     /**
      * 调职
      * 
-     * @param app\models\ApprovalLog $approvalLog            
+     * @param ApprovalLog $approvalLog
+     * @return boolean
      */
     protected function Transfer($approvalLog)
     {
@@ -83,7 +94,8 @@ class AfterApproval extends BaseLogic
     /**
      * 离职
      *
-     * @param app\models\ApprovalLog $approvalLog
+     * @param ApprovalLog $approvalLog
+     * @return boolean
      */
     protected function Leave($approvalLog)
     {
