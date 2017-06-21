@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $apply_id
  * @property integer $district
+ * @property string $district_name
  * @property string $address
  * @property string $rental
  * @property string $files
@@ -35,7 +36,7 @@ class ApplyOpen extends \yii\db\ActiveRecord
             [['apply_id', 'district', 'created_at'], 'integer'],
             [['rental'], 'number'],
             [['files'], 'string'],
-            [['address'], 'string', 'max' => 50],
+            [['district_name', 'address'], 'string', 'max' => 50],
             [['summary'], 'string', 'max' => 255],
         ];
     }
@@ -48,11 +49,21 @@ class ApplyOpen extends \yii\db\ActiveRecord
         return [
             'apply_id' => 'Apply ID',
             'district' => 'District',
+            'district_name' => 'District Name',
             'address' => 'Address',
             'rental' => 'Rental',
             'files' => 'Files',
             'summary' => 'Summary',
             'created_at' => 'Created At',
         ];
+    }
+    
+    /**
+     * 获取该审批的申请信息
+     * @return \yii\db\ActiveQuery|Apply
+     */
+    public function getApply()
+    {
+        return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
     }
 }

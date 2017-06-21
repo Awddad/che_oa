@@ -285,7 +285,7 @@ class ApplyView extends BaseForm
 	        'address' => $open->address,
 	        'rental' => $open->rental,
 	        'summary' => $open->summary,
-	        'city' => RegionLogic::instance()->getRegionByChild($open->district),
+	        'city' => $open->district_name,
 	        'files' => json_decode($open->files),
 	    ];
 	    return $data;
