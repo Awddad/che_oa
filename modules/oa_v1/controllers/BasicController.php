@@ -32,7 +32,8 @@ class BasicController extends BaseController
 		];
 		foreach($res['data'] as $k => $v){
 			$data['res'][] = [
-					'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+					'number' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+			        'id' => $v['id'],
 					'name' => $v['name'],
 			        'has_child' => $v['has_child'] ? 1 : 0, 
 					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
@@ -164,7 +165,8 @@ class BasicController extends BaseController
 		];
 		foreach($res['data'] as $k => $v){
 			$data['res'][] = [
-					'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+			        'number' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+					'id' => $v['id'],
 					'name' => $v['name'],
 					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
 			];
@@ -199,7 +201,8 @@ class BasicController extends BaseController
 		];
 		foreach($res['data'] as $k => $v){
 			$data['res'][] = [
-					'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+					'number' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+			        'id' => $v['id'],
 					'name' => $v['name'],
 					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
 			];
@@ -272,7 +275,8 @@ class BasicController extends BaseController
 		];
 		foreach($res['data'] as $k => $v){
 			$data['res'][] = [
-					'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+					'number' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
+			        'id' => $v['id'],
 					'name' => $v['name'],
 					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
 					'default' => $v['default'],
