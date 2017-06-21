@@ -48,4 +48,9 @@ class ApplyBuyController extends BaseController
         }
     }
     
+    public function actionList()
+    {
+        
+    }
+    
 }
