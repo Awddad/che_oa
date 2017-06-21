@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\oa_v1\logic\AssetLogic;
 use Yii;
 use yii\db\Exception;
 
@@ -153,9 +154,10 @@ class Apply extends \yii\db\ActiveRecord
     public function approvalFail()
     {
         if($this->type == 3) {
-            $db = Yii::$app->db;
-            $transaction = $db->beginTransaction();
+            $transaction = Yii::$app->db->beginTransaction();
             try {
+                $this->status = self::STATUS_FAIL;
+                $this->next_des = '审批不通过，已终止';
                 if (!$this->save()) {
                     throw new Exception('审批不通过，操作失败');
                 }
@@ -171,11 +173,16 @@ class Apply extends \yii\db\ActiveRecord
                 $transaction->rollBack();
                 return true;
             }
-        } else {
-            $this->status = self::STATUS_FAIL;
-            $this->next_des = '审批不通过，已终止';
-            return $this->save();
+        } elseif($this->type == 8) {
+            AssetLogic::instance()->assetGetCancel($this);
+        } elseif($this->type == 9) {
+            AssetLogic::instance()->assetBackCancel($this);
         }
+          
+        $this->status = self::STATUS_FAIL;
+        $this->next_des = '审批不通过，已终止';
+        return $this->save();
+        
     }
 
     /**
@@ -206,6 +213,15 @@ class Apply extends \yii\db\ActiveRecord
      */
     public function approvalComplete()
     {
+        $assetLogic = AssetLogic::instance();
+        if($this->cai_wu_need == 1) {
+            if ($this->type == 8) {
+                $assetLogic->assetGetComplete($this);
+            }
+            if ($this->type == 9) {
+                $assetLogic->assetBackComplete($this);
+            }
+        }
         $this->next_des = '审批完成';
         $this->status = self::STATUS_OK;
         return $this->save();

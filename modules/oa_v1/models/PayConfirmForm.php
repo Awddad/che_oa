@@ -114,9 +114,7 @@ class PayConfirmForm extends CaiWuFuKuan
                 $param['other_name'] = $person->person_name;
                 $param['other_card'] = $apply->expense->bank_card_id;
                 $param['other_bank'] = $apply->expense->bank_name;
-            }
-
-            if($apply->type == 2) {
+            } elseif($apply->type == 2) {
                 //借款单操作
                 $jieKuan = JieKuan::findOne($this->apply_id);
                 //借款成功
@@ -126,6 +124,14 @@ class PayConfirmForm extends CaiWuFuKuan
                 $param['other_name'] = $person->person_name;
                 $param['other_card'] = $apply->loan->bank_card_id;
                 $param['other_bank'] = $apply->loan->bank_name;
+            } elseif($apply->type == 4){
+                $param['other_name'] = $person->person_name;
+                $param['other_card'] = $apply->applyPay->bank_card_id;
+                $param['other_bank'] = $apply->applyPay->bank_name;
+            } else {
+                $param['other_name'] = $person->person_name;
+                $param['other_card'] = $apply->applyBuy->bank_card_id;
+                $param['other_bank'] = $apply->applyBuy->bank_name;
             }
 
             $param['trade_number'] = $this->fu_kuan_id;
@@ -172,14 +178,19 @@ class PayConfirmForm extends CaiWuFuKuan
      */
     public function getMoney($apply)
     {
-        if($apply->type == 1) {
-            $money = $apply->expense->money;
-        }
-        if($apply->type == 2){
-            $money = $apply->loan->money;
-        }
-        if($apply->type == 3) {
-            $money = $apply->payBack->money;
+        switch ($apply->type) {
+            case 2:
+                $money = $apply->loan->money;
+                break;
+            case 4:
+                $money = $apply->applyPay->money;
+                break;
+            case 5:
+                $money = $apply->applyBuy->money;
+                break;
+            default:
+                $money = $apply->expense->money;
+                break;
         }
         return $money;
     }

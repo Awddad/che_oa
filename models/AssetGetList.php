@@ -33,7 +33,9 @@ class AssetGetList extends \yii\db\ActiveRecord
     const STATUS = [
         1 => '申请中',
         2 => '已发放',
-        3 => '已归还'
+        3 => '审核失败',
+        4 => '申请归还中',
+        5 => '已归还'
     ];
 
     /**
