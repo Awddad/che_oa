@@ -15,6 +15,7 @@ use Yii;
  * @property string $bank_name_des
  * @property string $des
  * @property string $files
+ * @property integer $status
  */
 class ApplyBuy extends \yii\db\ActiveRecord
 {
@@ -25,6 +26,12 @@ class ApplyBuy extends \yii\db\ActiveRecord
     {
         return 'oa_apply_buy';
     }
+    
+    const STATUS = [
+        0 => '未入库',
+        1 => '部分入库',
+        2 => '已入库',
+    ];
 
     /**
      * @inheritdoc
@@ -35,6 +42,7 @@ class ApplyBuy extends \yii\db\ActiveRecord
             [['apply_id'], 'required'],
             [['money'], 'number'],
             [['files'], 'string'],
+            [['status'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
             [['to_name', 'bank_name_des'], 'string', 'max' => 128],
             [['bank_card_id'], 'string', 'max' => 50],
@@ -54,9 +62,10 @@ class ApplyBuy extends \yii\db\ActiveRecord
             'to_name' => '对方名称',
             'bank_card_id' => '对方卡号',
             'bank_name' => '开户行',
-            'bank_name_des' => '支行信息',
+            'bank_name_des' => '支行',
             'des' => '说明',
             'files' => '文件',
+            'status' => '请购单入库状态',
         ];
     }
 }

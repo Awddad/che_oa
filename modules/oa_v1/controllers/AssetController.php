@@ -8,10 +8,19 @@
 
 namespace app\modules\oa_v1\controllers;
 
-
+use app\models\Apply;
+use app\models\Asset;
+use app\models\AssetGetList;
+use app\models\AssetList;
+use app\models\Person;
+use app\modules\oa_v1\logic\BaseLogic;
+use app\modules\oa_v1\logic\PersonLogic;
+use Yii;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\AssetBackForm;
 use app\modules\oa_v1\models\AssetGetForm;
+use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 
 /**
  * 资产领取，归还
@@ -82,6 +91,144 @@ class AssetController extends BaseController
     {
         $personId = $this->arrPersonInfo['person_id'];
         $data = AssetLogic::instance()->getCanBackAsset($personId);
+        return $this->_return($data);
+    }
+    
+    /**
+     * 固定资产库存列表
+     *
+     * @return array
+     */
+    public function actionList()
+    {
+        $param = Yii::$app->request->get();
+        $query = Asset::find()->where([]);
+    
+        $keyword = ArrayHelper::getValue($param, 'keyword');
+        if($keyword) {
+            $query->andWhere([
+                'like','name', $keyword
+            ]);
+        }
+        $time = ArrayHelper::getValue($param, 'time');;
+        if (!empty($time) && strlen($time > 20)) {
+            $beforeTime = strtotime(substr($time, 0, 10));
+            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
+            $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
+        }
+    
+        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+    
+        $pagination = new Pagination([
+            'defaultPageSize' => $pageSize,
+            'totalCount' => $query->count(),
+        ]);
+        $model = $query->orderBy(["id" => SORT_DESC])
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        $data = [];
+        /**
+         * @var Asset $v
+         */
+        foreach ($model as $k => $v) {
+            $data[] = [
+                'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                'id' => $v->id,
+                'asset_type_name' => $v->asset_type_name,
+                'asset_brand_name' => $v->asset_brand_name,
+                'name' => $v->name,
+                'amount' => $v->amount,
+                'price' => Yii::$app->formatter->asCurrency($v->price)
+            ];
+        }
+  
+        return $this->_return([
+            'list' => $data,
+            'pages' => BaseLogic::instance()->pageFix($pagination)
+        ]);
+    }
+    
+    /**
+     * 资产列表详情
+     *
+     * @param $asset_id
+     * @return array
+     */
+    public function actionAssetList($asset_id)
+    {
+        $param = Yii::$app->request->get();
+        $query = AssetList::find()->where(['asset_id' => $asset_id]);
+    
+        $keyword = ArrayHelper::getValue($param, 'keyword');
+        if($keyword) {
+            $query->andWhere([
+                'like','name', $keyword
+            ]);
+        }
+        $time = ArrayHelper::getValue($param, 'time');;
+        if (!empty($time) && strlen($time > 20)) {
+            $beforeTime = strtotime(substr($time, 0, 10));
+            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
+            $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
+        }
+    
+        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+    
+        $pagination = new Pagination([
+            'defaultPageSize' => $pageSize,
+            'totalCount' => $query->count(),
+        ]);
+        $model = $query->orderBy(["id" => SORT_DESC])
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        $data = [];
+        /**
+         * @var AssetList $v
+         */
+        foreach ($model as $k => $v) {
+            $data[$k] = [
+                'id' => $v->id,
+                'created_at' => date("Y-m-d H:i", $v->created_at),
+                'stock_number' => $v->stock_number,
+                'asset_number' => $v->asset_number,
+                'status' => $v::STATUS[$v->status],
+                'price' => Yii::$app->formatter->asCurrency($v->price)
+            ];
+            if($v->status == 2) {
+                $assetGetList = AssetGetList::findOne(['asset_list_id' => $v->id]);
+                $person = Person::findOne($assetGetList->person_id);
+                $org = PersonLogic::instance()->getOrgName($person);
+                $data[$k]['use_person'] = $person->person_name;
+                $data[$k]['org'] = implode('-', $org);
+                $data[$k]['use_day'] = ceil((time() - $assetGetList->created_at)/ 86400);
+            }
+        }
+        return $this->_return([
+            'list' => $data,
+            'pages' => BaseLogic::instance()->pageFix($pagination)
+        ]);
+    }
+    
+    /**
+     * 资产使用详情
+     *
+     * @param $asset_list_id
+     *
+     * @return array
+     */
+    public function actionAssetDetail($asset_list_id)
+    {
+        $assetList = AssetList::findOne($asset_list_id);
+        
+        $assetGetList = AssetGetList::find()->where([])->all();
+        $data['detail'] = [
+            'asset_type_name' => $assetList->asset->asset_type_name,
+            'asset_brand_name' => $assetList->asset->asset_brand_name,
+            'name' => $assetList->asset->name,
+        ];
+        
         return $this->_return($data);
     }
 }
