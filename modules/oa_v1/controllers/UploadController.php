@@ -23,7 +23,7 @@ class UploadController extends BaseController
     public function verbs()
     {
         return [
-            'file' => ['post']
+            'file' => ['POST', 'OPTIONS']
         ];
     }
     

@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "oa_asset_list_log".
  *
  * @property integer $id
+ * @property integer $asset_list_id
  * @property integer $person_id
  * @property integer $type
  * @property string $des
@@ -29,8 +30,8 @@ class AssetListLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['asset_list_id', 'person_id', 'type', 'created_at'], 'integer'],
             [['person_id', 'type', 'created_at'], 'required'],
-            [['person_id', 'type', 'created_at'], 'integer'],
             [['des'], 'string'],
         ];
     }
@@ -42,6 +43,7 @@ class AssetListLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'asset_list_id' => 'Asset List ID',
             'person_id' => '操作人',
             'type' => '类别',
             'des' => '说明',
