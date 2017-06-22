@@ -7,6 +7,7 @@ use app\models\AssetBack;
 use app\models\AssetGet;
 use app\models\BaoXiao;
 use app\models\BaoXiaoList;
+use app\models\TagTree;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
 use app\models\JieKuan;
@@ -148,6 +149,7 @@ class ApplyView extends BaseForm
 	 */
 	protected function getPay($apply)
 	{
+	    $tagTree = TagTree::findOne($apply->applyPay->pay_type);
 		$data = [
 			'to_name' => $apply->applyPay->to_name,
 			'bank_card_id' => $apply->applyPay->bank_card_id,
@@ -155,6 +157,7 @@ class ApplyView extends BaseForm
 			'pay_type' => $apply->applyPay->pay_type,
 			'des' => $apply->applyPay->des,
             'money' => $apply->applyPay->money,
+            'pay_type_name' => $tagTree->name,
 			'files' => json_decode($apply->applyPay->files)
 		];
 		return $data;
