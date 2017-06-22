@@ -25,6 +25,13 @@ class AssetList extends \yii\db\ActiveRecord
     {
         return 'oa_asset_list';
     }
+    
+    const STATUS = [
+        1 => '未使用',
+        2 => '使用中',
+        3 => '已报废',
+        4 => '已丢失',
+    ];
 
     /**
      * @inheritdoc
@@ -55,5 +62,15 @@ class AssetList extends \yii\db\ActiveRecord
             'status' => '状态',
             'created_at' => '入库时间',
         ];
+    }
+    
+    /**
+     * 获取资产信息
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAsset()
+    {
+        return $this->hasOne(Asset::className(), ['id' => 'asset_id']);
     }
 }
