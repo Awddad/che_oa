@@ -154,6 +154,7 @@ class ApplyView extends BaseForm
 			'bank_name' => $apply->applyPay->bank_name,
 			'pay_type' => $apply->applyPay->pay_type,
 			'des' => $apply->applyPay->des,
+            'money' => $apply->applyPay->money,
 			'files' => json_decode($apply->applyPay->files)
 		];
 		return $data;

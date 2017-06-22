@@ -37,8 +37,17 @@ class BaoxiaoForm extends BaseForm
 			],
 			['apply_id','unique','targetClass' => '\app\models\Apply', 'message' => '申请单已存在.'],
 			//['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
-			['approval_persons','validatePersons','params'=>'审批人'],
-			['copy_person','validatePersons','params'=>'抄送人'],
+			//['approval_persons','validatePersons','params'=>'审批人'],
+			//['copy_person','validatePersons','params'=>'抄送人'],
+			[
+				['approval_persons', 'copy_person'],
+				'each',
+				'rule' => ['integer']
+			],
+			[
+				['approval_persons', 'copy_person'], 'checkTotal'
+			],
+				
 			['bao_xiao_list','validateList'],
 			[['files','pics'],'safe'],
 		];
@@ -99,10 +108,10 @@ class BaoxiaoForm extends BaseForm
 			if($model_apply -> insert()){
 				$this -> saveBaoxiaoList();
 				$this -> baoxiao();
-				$this -> approvalLog();
-				$this -> copyLog();
-				//$this -> approvalPerson($model_apply);
-				//$this -> copyPerson($model_apply);
+				//$this -> approvalLog();
+				//$this -> copyLog();
+				$this -> approvalPerson($model_apply);
+				$this -> copyPerson($model_apply);
 				
 				$transaction -> commit();
 				return $this -> apply_id;

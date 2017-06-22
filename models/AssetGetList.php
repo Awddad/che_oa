@@ -10,6 +10,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property string $apply_id
+ * @property integer $person_id
  * @property integer $asset_id
  * @property integer $asset_list_id
  * @property integer $status
@@ -45,7 +46,7 @@ class AssetGetList extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id', 'apply_id'], 'required'],
-            [['asset_id', 'asset_list_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['asset_id', 'asset_list_id', 'status', 'created_at', 'updated_at', 'person_id'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
         ];
     }

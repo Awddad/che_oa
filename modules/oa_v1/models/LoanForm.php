@@ -76,7 +76,7 @@ class LoanForm extends BaseForm
      * 上传图片
      * @var
      */
-    public $pics;
+    public $files;
 
     /**
      * 审批人
@@ -123,7 +123,7 @@ class LoanForm extends BaseForm
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
             [
-                ['pics'], 'string'
+                ['files'], 'safe'
             ],
             [
                 ['money', 'bank_card_id', 'bank_name', 'bank_name_des','des', 'tips', 'apply_id'],
@@ -214,7 +214,7 @@ class LoanForm extends BaseForm
         $model->bank_name = $this->bank_name;
         $model->bank_card_id = $this->bank_card_id;
         $model->bank_name_des = $this->bank_name_des ? : '';
-        $model->pics = $this->pics ? : '';
+        $model->pics = $this->files ? json_encode($this->files): '';
         $model->money = $this->money;
         $model->des = $this->des;
         $model->tips = $this->tips;

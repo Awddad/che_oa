@@ -36,13 +36,18 @@ class UploadController extends BaseController
         }
         return $this->_return($img);
     }
-
+    
+    /**
+     * 上传接口
+     *
+     * @return array
+     */
     public function actionFile()
     {
         $model = new FileForm();
         $file = $model->saveUploadFile();
         if(!$file) {
-            return $this->_return($file, 1012);
+            return $this->_returnError(1012);
         }
         return $this->_return($file);
     }
