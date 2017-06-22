@@ -85,7 +85,7 @@ class ApplyBuyForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['files', 'string'],
+            ['files', 'each'],
             ['apply_id', 'checkOnly'],
             ['buy_list', 'checkBuyList']
         ];
@@ -169,7 +169,7 @@ class ApplyBuyForm extends BaseForm
         $applyPay->bank_card_id = $this->bank_card_id;
         $applyPay->bank_name = $this->bank_name;
         $applyPay->money = $this->money;
-        $applyPay->files = $this->files;
+        $applyPay->files = $this->files ? json_encode($this->files): '';
         $applyPay->des = $this->des;
         $applyPay->to_name = $this->to_name;
         if (!$applyPay->save()) {

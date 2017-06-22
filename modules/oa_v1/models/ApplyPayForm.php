@@ -86,7 +86,7 @@ class ApplyPayForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['files', 'string'],
+            ['files', 'each'],
             ['apply_id', 'checkOnly']
         ];
     }
@@ -144,7 +144,7 @@ class ApplyPayForm extends BaseForm
         $applyPay->bank_name = $this->bank_name;
         $applyPay->money = $this->money;
         $applyPay->created_at = time();
-        $applyPay->files = $this->files;
+        $applyPay->files = $this->files ? json_encode($this->files): '';
         $applyPay->des = $this->des;
         $applyPay->pay_type = $this->pay_type;
         $applyPay->to_name = $this->to_name;

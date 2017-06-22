@@ -197,7 +197,10 @@ class AssetController extends BaseController
                 'price' => Yii::$app->formatter->asCurrency($v->price)
             ];
             if($v->status == 2) {
-                $assetGetList = AssetGetList::findOne(['asset_list_id' => $v->id]);
+                $assetGetList = AssetGetList::findOne([
+                    'asset_list_id' => $v->id,
+                    'status' => 1
+                ]);
                 $person = Person::findOne($assetGetList->person_id);
                 $org = PersonLogic::instance()->getOrgName($person);
                 $data[$k]['use_person'] = $person->person_name;
@@ -223,10 +226,16 @@ class AssetController extends BaseController
         $assetList = AssetList::findOne($asset_list_id);
         
         $assetGetList = AssetGetList::find()->where([])->all();
+        
         $data['detail'] = [
             'asset_type_name' => $assetList->asset->asset_type_name,
             'asset_brand_name' => $assetList->asset->asset_brand_name,
             'name' => $assetList->asset->name,
+            'asset_number' => $assetList->asset_number,
+            'stock_number' => $assetList->stock_number,
+            'sn_number' => $assetList->sn_number,
+            'price' => $assetList->price,
+            'status' => $assetList->status,
         ];
         
         return $this->_return($data);
