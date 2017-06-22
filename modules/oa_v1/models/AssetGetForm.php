@@ -134,7 +134,7 @@ class AssetGetForm extends BaseForm
             ];
         }
         $n = \Yii::$app->db->createCommand()->batchInsert('oa_asset_get_list', [
-            'apply_id', 'asset_id', 'status'
+            'apply_id', 'asset_id', 'status', 'created_at'
         ], $data)->execute();
         if(!$n) {
             throw new Exception('固定资产领用单创建失败!');
