@@ -23,10 +23,10 @@ class UploadController extends BaseController
     public function verbs()
     {
         return [
-            'file' => ['post']
+            'file' => ['post','OPTIONS']
         ];
     }
-    
+
     public function actionImage()
     {
         $model = new FileForm();
