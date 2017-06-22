@@ -72,6 +72,7 @@ class ApplyUseChapterForm extends BaseForm
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
             ['files', 'safe'],
+            ['des', 'string'],
             ['apply_id', 'checkOnly'],
             ['chapter_type', 'in', 'range' => [1,2,3,4,5]]
         ];

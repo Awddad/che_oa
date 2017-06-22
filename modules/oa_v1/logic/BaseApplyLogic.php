@@ -183,7 +183,7 @@ class BaseApplyLogic extends Logic
     
     /**
      * 获取请购基础信息
-     * @param $apply
+     * @param Apply $apply
      * @return array
      */
     public function getBaseApply($apply)
@@ -198,7 +198,8 @@ class BaseApplyLogic extends Logic
             'date' => date('Y年m月d日', $apply->create_time),
             'copy_person' => $apply->copy_person,
             'approval_persons' => $apply->approval_persons ? : '--',
-        	'pdf' => $apply->apply_list_pdf
+        	'pdf' => $apply->apply_list_pdf,
+            'org' => implode('-', PersonLogic::instance()->getOrgName($apply->personInfo))
         ];
     }
     

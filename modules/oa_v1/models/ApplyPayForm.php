@@ -87,6 +87,7 @@ class ApplyPayForm extends BaseForm
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
             ['files', 'safe'],
+            ['des', 'string'],
             ['apply_id', 'checkOnly']
         ];
     }
