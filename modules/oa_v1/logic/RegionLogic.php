@@ -53,7 +53,7 @@ class RegionLogic extends BaseLogic
     	$str = '';
     	$res = Region::findOne($id);
     	if($res->parent_id > 100000){
-    		$str = $this->getRegionStr($res->parent_id).'-'.$res->fullName;
+    		$str = $this->getRegionByChild($res->parent_id).'-'.$res->fullName;
     	}else{
     		$str = $res->fullName;
     	}
