@@ -52,7 +52,8 @@ class AssetGetForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            [['files', 'des'], 'string'],
+            [['des'], 'string'],
+            ['files', 'each'],
             ['apply_id', 'checkOnly'],
         ];
     }
@@ -112,7 +113,7 @@ class AssetGetForm extends BaseForm
         $model->apply_id = $this->apply_id;
         $model->des = $this->des;
         $model->get_person = $user['person_id'];
-        $model->files = $this->files;
+        $model->files = $this->files ? json_encode($this->files): '';
         if (!$model->save()) {
             throw new Exception('固定资产领用单创建失败', $model->errors);
         }
