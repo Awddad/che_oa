@@ -71,7 +71,7 @@ class ApplyDemandForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['files', 'string'],
+            ['files', 'each'],
             ['apply_id', 'checkOnly'],
             ['demand_list', 'checkDemandList']
         ];
@@ -146,7 +146,7 @@ class ApplyDemandForm extends BaseForm
     {
         $model = new ApplyDemand();
         $model->apply_id = $this->apply_id;
-        $model->files = $this->files;
+        $model->files = $this->files ? json_encode($this->files): '';
         $model->des = $this->des;
         $model->status = 0;
         if (!$model->save()) {
