@@ -53,7 +53,7 @@ class AssetGetForm extends BaseForm
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
             [['des'], 'string'],
-            ['files', 'each'],
+            ['files', 'safe'],
             ['apply_id', 'checkOnly'],
         ];
     }

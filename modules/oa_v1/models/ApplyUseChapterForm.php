@@ -71,7 +71,7 @@ class ApplyUseChapterForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['files', 'string'],
+            ['files', 'safe'],
             ['apply_id', 'checkOnly'],
             ['chapter_type', 'in', 'range' => [1,2,3,4,5]]
         ];
@@ -128,7 +128,7 @@ class ApplyUseChapterForm extends BaseForm
     {
         $model = new ApplyUseChapter();
         $model->apply_id = $this->apply_id;
-        $model->files = $this->files;
+        $model->files = $this->files ? json_encode($this->files): '';;
         $model->chapter_type = $this->chapter_type;
         $model->name = $this->name;
         $model->des = $this->des;
