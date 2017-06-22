@@ -147,16 +147,17 @@ class BaoxiaoForm extends BaseForm
 	protected function loadModel($type,&$model,$data=[])
 	{
 		if('apply' == $type){
+			
 			$model -> load(['Apply'=>(array)$this]);
 			$model -> apply_id = $this -> apply_id;
 			$model -> create_time = $this -> create_time;
 			$model -> title = $this -> title;
 			$model -> person = $this->user['name'];
 			$model -> person_id = $this->user['id'];
-			$model -> approval_persons = implode(',', array_column($model -> approval_persons,'person_name'));
-			$model -> copy_person = $model -> copy_person?implode(',', array_column($model -> copy_person,'person_name')):'';
-			$approval_person = array_column($this -> approval_persons,'person_name')[0];
-			$model -> next_des = "等待{$approval_person}审批";
+			$model -> approval_persons = $this->getPerson('approval_persons');
+			$model -> copy_person = $this->getPerson('copy_person');
+			$nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
+			$model -> next_des = "'等待{$nextName}审批'";
 			$model -> org_id = $this -> user['org_id'];
 		}elseif('baoxiao' == $type){
 			$model -> apply_id = $this -> apply_id;
@@ -280,8 +281,8 @@ class BaoxiaoForm extends BaseForm
 			'person' => $this -> user['name'],
 			'bank_name' => $this -> bank_name.$this -> bank_name_des,
 			'bank_card_id' => $this -> bank_card_id,
-			'approval_person' => implode(',', array_column($this -> approval_persons,'person_name')),//多个人、分隔
-			'copy_person' => $this -> copy_person?implode(',', array_column($this -> copy_person,'person_name')):'',//多个人、分隔
+			'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
+			'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
 			'list' => [],
 			'tips' => '--'
 		];
