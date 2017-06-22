@@ -12,6 +12,7 @@ use app\models\Apply;
 use app\models\Asset;
 use app\models\AssetGetList;
 use app\models\AssetList;
+use app\models\AssetListLog;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PersonLogic;
@@ -189,6 +190,7 @@ class AssetController extends BaseController
          */
         foreach ($model as $k => $v) {
             $data[$k] = [
+                'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'stock_number' => $v->stock_number,
@@ -225,9 +227,7 @@ class AssetController extends BaseController
     {
         $assetList = AssetList::findOne($asset_list_id);
         
-        $assetGetList = AssetGetList::find()->where([])->all();
-        
-        $data['detail'] = [
+        $data = [
             'asset_type_name' => $assetList->asset->asset_type_name,
             'asset_brand_name' => $assetList->asset->asset_brand_name,
             'name' => $assetList->asset->name,
@@ -240,4 +240,43 @@ class AssetController extends BaseController
         
         return $this->_return($data);
     }
+    
+    public function actionAssetListLog($asset_list_log_id)
+    {
+        $param = Yii::$app->request->get();
+        $query = AssetListLog::find()->where(['asset_id' => $asset_list_log_id]);
+    
+        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+    
+        $pagination = new Pagination([
+            'defaultPageSize' => $pageSize,
+            'totalCount' => $query->count(),
+        ]);
+        $model = $query->orderBy(["id" => SORT_DESC])
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        $data = [];
+        /**
+         * @var AssetListLog $v
+         */
+        foreach ($model as $k => $v) {
+            $person = Person::findOne($v->person_id);
+            $org = PersonLogic::instance()->getOrgName($person);
+            $data[$k] = [
+                'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                'id' => $v->id,
+                'created_at' => date("Y-m-d H:i", $v->created_at),
+                'person_name' => $person->person_name,
+                'org' => implode('-', $org),
+                'type' => $v->type,
+                'des' => $v->des
+            ];
+        }
+        return $this->_return([
+            'list' => $data,
+            'pages' => BaseLogic::instance()->pageFix($pagination)
+        ]);
+    }
+    
 }

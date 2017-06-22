@@ -153,8 +153,8 @@ class BaseApplyLogic extends Logic
         $list = ApplyBuyList::find()->where(['apply_id' => $applyId])->all();
         foreach ($list as $v) {
             $data[] = [
-                'asset_type_id' => $assetLogic->getAssetType($v->asset_type_id),
-                'asset_brand_id' => $assetLogic->getAssetBrand($v->asset_brand_id),
+                'asset_type_name' => $assetLogic->getAssetType($v->asset_type_id),
+                'asset_brand_name' => $assetLogic->getAssetBrand($v->asset_brand_id),
                 'name' => $v->name,
                 'price' => $v->price,
                 'amount' => $v->amount,

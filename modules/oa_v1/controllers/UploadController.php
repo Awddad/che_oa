@@ -36,7 +36,7 @@ class UploadController extends BaseController
         }
         return $this->_return($img);
     }
-    
+
     /**
      * 上传接口
      *

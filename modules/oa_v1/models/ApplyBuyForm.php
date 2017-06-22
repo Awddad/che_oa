@@ -196,11 +196,15 @@ class ApplyBuyForm extends BaseForm
                 'amount' => $v['amount'],
             ];
         }
-        $n = Yii::$app->db->createCommand()->batchInsert('oa_apply_buy_list', [
-            'apply_id', 'asset_type_id', 'asset_brand_id', 'name', 'price', 'amount',
-        ], $data)->execute();
-        if(!$n) {
-            throw new Exception('请购明细保存失败');
+        if($data) {
+            $n = Yii::$app->db->createCommand()->batchInsert('oa_apply_buy_list', [
+                'apply_id', 'asset_type_id', 'asset_brand_id', 'name', 'price', 'amount',
+            ], $data)->execute();
+            if (!$n) {
+                throw new Exception('请购明细保存失败');
+            }
+        } else {
+            throw new Exception('请购明细不能为空');
         }
     }
 }
