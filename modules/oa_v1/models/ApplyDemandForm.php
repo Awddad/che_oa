@@ -71,7 +71,7 @@ class ApplyDemandForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['files', 'each'],
+            ['files', 'safe'],
             ['apply_id', 'checkOnly'],
             ['demand_list', 'checkDemandList']
         ];
