@@ -43,6 +43,9 @@ class PersonLogic extends BaseLogic
         $persons = Person::find()->where(['!=', 'person_id', $personId])->orderBy('person_id desc')->all();
         $data = [];
         foreach ($persons as $person) {
+        	if($person->org_id <= 0){
+        		continue;
+        	}
             $orgArr = $this->getOrgName($person);
             $personName = $person->person_name. ' '. implode('-', $orgArr);
             $data[] = [
