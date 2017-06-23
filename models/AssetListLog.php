@@ -23,6 +23,13 @@ class AssetListLog extends \yii\db\ActiveRecord
     {
         return 'oa_asset_list_log';
     }
+    const TYPE = [
+        1 => '入库',
+        2 => '领用',
+        3 => '归还',
+        4 => '报废',
+        5 => '丢失',
+    ];
 
     /**
      * @inheritdoc
