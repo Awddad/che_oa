@@ -63,12 +63,12 @@ class BasicPersonForm extends BaseForm
 		//开始时间
 		if($start_time){
 			$start_time = strtotime($start_time);
-			$query->addWhere(['>=', 'update_time', $start_time]);
+			$query->andWhere(['>=', 'update_time', $start_time]);
 		}
 		//结束时间
 		if($end_time){
 			$end_time = strtotime($end_time);
-			$query->addWhere(['<=', 'update_time', $end_time]);
+			$query->andWhere(['<=', 'update_time', $end_time]);
 		}
 		//分页
 		$pagination = new Pagination([

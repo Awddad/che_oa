@@ -203,11 +203,13 @@ class AssetController extends BaseController
                     'asset_list_id' => $v->id,
                     'status' => 1
                 ]);
-                $person = Person::findOne($assetGetList->person_id);
-                $org = PersonLogic::instance()->getOrgName($person);
-                $data[$k]['use_person'] = $person->person_name;
-                $data[$k]['org'] = implode('-', $org);
-                $data[$k]['use_day'] = ceil((time() - $assetGetList->created_at)/ 86400);
+                if($assetGetList) {
+                    $person = Person::findOne($assetGetList->person_id);
+                    $org = PersonLogic::instance()->getOrgName($person);
+                    $data[$k]['use_person'] = $person->person_name;
+                    $data[$k]['org'] = implode('-', $org);
+                    $data[$k]['use_day'] = ceil((time() - $assetGetList->created_at)/ 86400);
+                }
             }
         }
         return $this->_return([
@@ -241,6 +243,13 @@ class AssetController extends BaseController
         return $this->_return($data);
     }
     
+    /**
+     * 资产使用轨迹
+     *
+     * @param $asset_list_id
+     *
+     * @return array
+     */
     public function actionAssetListLog($asset_list_id)
     {
         $param = Yii::$app->request->get();
@@ -269,7 +278,7 @@ class AssetController extends BaseController
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'person_name' => $person->person_name,
                 'org' => implode('-', $org),
-                'type' => $v->type,
+                'type' => $v::TYPE[$v->type],
                 'des' => $v->des
             ];
         }
