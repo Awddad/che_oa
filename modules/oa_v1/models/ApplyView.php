@@ -204,8 +204,10 @@ class ApplyView extends BaseForm
 	protected function getUseChapter($apply)
 	{
 		$data = [
-				'des' => $apply->applyUseChapter->des,
-				'files' => json_decode($apply->applyUseChapter->files),
+		    'chapter_type' => $apply->applyUseChapter->chapter_type,
+		    'name' => $apply->applyUseChapter->des,
+            'des' => $apply->applyUseChapter->des,
+            'files' => json_decode($apply->applyUseChapter->files),
 		];
 		return $data;
 	}
