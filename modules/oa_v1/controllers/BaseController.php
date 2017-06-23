@@ -79,11 +79,11 @@ class BaseController extends Controller
         $strOsType = \Yii::$app->session->get('os_type', 'web');//默认是web版的
         if($strOsType == 'web')//web版的使用单点登录
         {
-            if(true){//建华test
+            if(YII_ENV_DEV){//建华test
             	$objPerson = Person::findOne(['person_id' => 272]);
             	$arrRoleIds = explode(',', $objPerson->role_ids);
-            	
             	$intRoleId = $arrRoleIds[0];
+                Yii::$app->session->set('ROLE_ID', $intRoleId);
             }else{
             	$session = Yii::$app->session;
             	$objPerson = $session->get('USER_INFO');
