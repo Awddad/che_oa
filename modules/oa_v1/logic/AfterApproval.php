@@ -85,8 +85,18 @@ class AfterApproval extends BaseLogic
         $employee->org_id = $transfer->target_org_id;
         $employee->profession = $transfer->target_profession_id;
         if ($employee->save()) {
-            // 权限系统接口（待开发）
+            // 权限系统接口
             $objQx = new QuanXianServer();
+            $params = [
+            		'name' => $employee->name,
+            		'email' => $employee->email,
+            		'org_id' => $employee->org_id,
+            		'position_id' => $employee->profession,
+            ];
+            $id = $objQx->curlEditUser($params);
+            if($id){
+            	$employee->person_id = $id;
+            }
         }
         return true;
     }
@@ -106,10 +116,9 @@ class AfterApproval extends BaseLogic
         
         $employee->status = 3;
         if ($employee->save()) {
-            
-            //权限系统接口（待开发）
+            //权限系统接口
             $objQx = new QuanXianServer();
-            
+            $objQx->curlDeleteUser($employee->person_id);
             return true;
         }
         return false;
