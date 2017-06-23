@@ -45,6 +45,7 @@ class DefaultController extends BaseController
     {
         $arrData = [
             'userinfo' => $this->arrPersonInfo,
+            'roleId' => Yii::$app->session->get("ROLE_ID"),
             'roleInfo' => (isset($this->arrPersonRoleInfo['roleInfo']) ? $this->arrPersonRoleInfo['roleInfo'] : []),
         ];
         return $this->_return($arrData);
