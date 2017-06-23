@@ -54,7 +54,6 @@ class AssetBackForm extends BaseForm
                 ],
                 'required'
             ],
-            [['des', 'files'], 'string'],
             [
                 ['approval_persons', 'copy_person', 'asset_back_ids'],
                 'each',
