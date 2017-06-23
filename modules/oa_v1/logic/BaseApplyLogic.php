@@ -71,7 +71,8 @@ class BaseApplyLogic extends Logic
                     "date"=> $v->approval_time ? date('Y-m-d H:i', $v->approval_time) : '',
                     "org" => PersonLogic::instance()->getOrgNameByPersonId($v->approval_person_id),
                     "status" => $status,
-                    'diff_time' => $diff_time
+                    'diff_time' => $diff_time,
+                     'des' => $v->des,
                 ];
                 if ($count == $k + 1 && $apply->status == 99 && $apply->cai_wu_need == 1) {
                     $data[] = [
@@ -183,7 +184,7 @@ class BaseApplyLogic extends Logic
     
     /**
      * 获取请购基础信息
-     * @param $apply
+     * @param Apply $apply
      * @return array
      */
     public function getBaseApply($apply)
@@ -198,7 +199,8 @@ class BaseApplyLogic extends Logic
             'date' => date('Y年m月d日', $apply->create_time),
             'copy_person' => $apply->copy_person,
             'approval_persons' => $apply->approval_persons ? : '--',
-        	'pdf' => $apply->apply_list_pdf
+        	'pdf' => $apply->apply_list_pdf,
+            'org' => implode('-', PersonLogic::instance()->getOrgName($apply->personInfo))
         ];
     }
     

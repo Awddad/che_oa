@@ -43,7 +43,6 @@ class AssetGetForm extends BaseForm
             [
                 ['apply_id', 'approval_persons', 'asset_ids'], 'required'
             ],
-            [['des', 'files'], 'string'],
             [
                 ['approval_persons', 'copy_person', 'asset_ids'],
                 'each',
