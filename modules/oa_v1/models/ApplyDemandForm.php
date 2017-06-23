@@ -165,9 +165,9 @@ class ApplyDemandForm extends BaseForm
         $data = [];
         foreach ($this->demand_list as $v) {
             $data[] = [
-                'apply_id' => $this->apply_id,
-                'name' => $v['name'],
-                'amount' => $v['amount'],
+                $this->apply_id,
+                $v['name'],
+                $v['amount'],
             ];
         }
         $n = Yii::$app->db->createCommand()->batchInsert('oa_apply_demand_list', [

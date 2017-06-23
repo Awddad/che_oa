@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\models\ApplyBuy;
+use app\models\ApplyBuyList;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
@@ -111,6 +112,19 @@ class ApplyBuyController extends BaseController
             'list' => $data,
             'pages' => BaseLogic::instance()->pageFix($pagination)
         ]);
+    }
+    
+    /**
+     * 入库列表
+     * @param $apply_id
+     *
+     * @return array
+     */
+    public function actionBuyList($apply_id)
+    {
+        $query = ApplyBuyList::find()->where(['apply_id' => $apply_id]);
+        
+        return $this->_return($query->all());
     }
     
 }
