@@ -71,7 +71,8 @@ class BaseApplyLogic extends Logic
                     "date"=> $v->approval_time ? date('Y-m-d H:i', $v->approval_time) : '',
                     "org" => PersonLogic::instance()->getOrgNameByPersonId($v->approval_person_id),
                     "status" => $status,
-                    'diff_time' => $diff_time
+                    'diff_time' => $diff_time,
+                     'des' => $v->des,
                 ];
                 if ($count == $k + 1 && $apply->status == 99 && $apply->cai_wu_need == 1) {
                     $data[] = [

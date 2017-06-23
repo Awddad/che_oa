@@ -241,10 +241,10 @@ class AssetController extends BaseController
         return $this->_return($data);
     }
     
-    public function actionAssetListLog($asset_list_log_id)
+    public function actionAssetListLog($asset_list_id)
     {
         $param = Yii::$app->request->get();
-        $query = AssetListLog::find()->where(['asset_id' => $asset_list_log_id]);
+        $query = AssetListLog::find()->where(['asset_list_id' => $asset_list_id]);
     
         $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
     
