@@ -129,12 +129,12 @@ class ApplyOpenForm extends BaseForm
         //开始时间
         if($start_time){
             $start_time = strtotime($start_time);
-            $query->addWhere(['>=', 'create_time', $start_time]);
+            $query->andWhere(['>=', 'create_time', $start_time]);
         }
         //结束时间
         if($end_time){
             $end_time = strtotime($end_time);
-            $query->addWhere(['<=', 'create_time', $end_time]);
+            $query->andWhere(['<=', 'create_time', $end_time]);
         }
         //状态
         if($status){
