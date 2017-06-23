@@ -15,6 +15,7 @@ use app\models\Menu;
 use app\models\Job;
 use app\models\EmployeeType;
 use app\models\Employee;
+use Overtrue\Pinyin\Pinyin;
 class QuanXianServer extends Server
 {
     /*
@@ -53,6 +54,10 @@ class QuanXianServer extends Server
             'user_add_bankcards' => $this->preUrl . '/users/bankcards',//用户添加银行卡
             'menu_list' => $this->preUrl . '/projects/permissions',//项目目录菜单
             'positions' => $this->preUrl . '/organizations/positions',//职位列表
+            'all_user' => $this->preUrl . '/users',//组织架构下所有人
+            'add_user' => $this->preUrl . '/users/create',//添加用户
+            'update_user' => $this->preUrl . '/users/%b/update',//修改用户
+            'delete_user' => $this->preUrl . '/users/%b/delete',//删除用户
         ];
     }
     
@@ -235,7 +240,6 @@ class QuanXianServer extends Server
             }
             //构造入库数据
             $arrPerson = [];//oa_person表的入库数据
-            $arrEmployee = [];//oa_employee表的入库数据
             $arrBankList = [];//oa_person_bank_info表的入库数据
             foreach($arrRtn['data']['data'] as $val)
             {
@@ -251,14 +255,6 @@ class QuanXianServer extends Server
                     'phone' => $val['phone'],
                     'bqq_open_id' => $val['bqq_open_id'],
                     'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] ))
-                ];
-                $arrEmployee[] = [
-                		'person_id' => $val['id'],
-                		'name' => $val['name'],
-                		'org_id' => $val['organization_id'],
-                		'job' => $val['position_id'],
-                		'phone' => $val['phone'],
-                		'email' => $val['email'],
                 ];
                 //银行卡信息
                 if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
@@ -282,14 +278,12 @@ class QuanXianServer extends Server
             $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrPerson, 'person_id');
             $result = Yii::$app->db->createCommand($strSql)->execute();
             
-            //更新入库 - oa_employee
-            $strTable = Employee::tableName();
-            $arrKeys = array_keys($arrEmployee[0]);
-            $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id');
-            Yii::$app->db->createCommand($strSql)->execute();
-            
-            
             //更新入库 - oa_person_bank_info表
+            $strTable = PersonBankInfo::tableName();
+            $arrKeys = array_keys($arrBankList[0]);
+            $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrBankList, 'id');
+            $result = Yii::$app->db->createCommand($strSql)->execute();
+            /*
             if(!empty($arrBankList))
             {
                 $db = Yii::$app->db;
@@ -307,6 +301,7 @@ class QuanXianServer extends Server
                     $transaction->rollBack();
                 }
             }
+            */
             return $result;
         }
         return false;
@@ -521,7 +516,10 @@ class QuanXianServer extends Server
         }
         return $arrSendResult;
     }
-    
+    /**
+     * @功能：从权限系统中获取职位列表
+     * @作者：yjr
+     */
     public function curlUpdatePositions()
     {
     	$arrPost = [
@@ -549,6 +547,146 @@ class QuanXianServer extends Server
     	}
     }
     
+    /**
+     * @功能：与权限系统交互，获取所有员工信息列表
+     * @作者：yjr
+     * @创建时间：2017-06-22
+     */
+    public function curlUpdateAllUser()
+    {
+    	$arrPost = [
+    			'_token' => $this->_token,
+    			'page' => 1,
+    			'per_page' => 1000000,//一次拉取所有员工
+    			'show_deleted' => 1,
+    			'show_bank_cards' => 1,
+    	];
+    	$arrRtn = $this->thisHttpPost($this->arrApiUrl['all_user'], $arrPost);
+    	if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) &&!empty($arrRtn['data']['data']))//接口处理数据成功
+    	{
+    		//获取组织架构信息
+    		$arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+    		foreach($arrOrgListTmp as $val)
+    		{
+    			$arrOrgList[$val['org_id']] = $val['org_name'];
+    		}
+    		//构造入库数据
+    		//$arrPerson = [];//oa_person表的入库数据
+    		$arrEmployee = [];//oa_employee表的入库数据
+    		$arrBankList = [];//oa_person_bank_info表的入库数据
+    		foreach($arrRtn['data']['data'] as $val)
+    		{
+    			$arrEmployee[] = [
+    					'person_id' => $val['id'],
+    					'name' => $val['name'],
+    					'org_id' => $val['organization_id'],
+    					'profession' => $val['position_id'],
+    					'phone' => $val['phone'],
+    					'email' => $val['email'],
+    			];
+    			//银行卡信息
+    			if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
+    			{
+    				foreach($val['bank_cards'] as $bankInfo)
+    				{
+    					$arrBankList[] = [
+    							'id' => $bankInfo['id'],
+    							'bank_name' => $bankInfo['bank'],
+    							'bank_name_des' => '',
+    							'bank_card_id' => $bankInfo['number'],
+    							'is_salary' => $bankInfo['is_salary'],
+    							'person_id' => $bankInfo['user_id'],
+    					];
+    				}
+    			}
+    		}
+    		//更新入库 - oa_employee
+    		$strTable = Employee::tableName();
+    		$arrKeys = array_keys($arrEmployee[0]);
+    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id');
+    		$result= Yii::$app->db->createCommand($strSql)->execute();
+    	
+    		//更新入库 - oa_person_bank_info表
+    		$strTable = PersonBankInfo::tableName();
+    		$arrKeys = array_keys($arrBankList[0]);
+    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrBankList, 'id');
+    		$result = Yii::$app->db->createCommand($strSql)->execute();
+    		
+    		return $result;
+    	}
+    	return false;
+    }
+    
+    /**
+     * 与权限系统交互 添加用户
+     * @param array $params  [name,email,roles_id,org_id,phone,position_id]
+     */
+    public function curlAddUser($params)
+    {
+    	$pinyin = new Pinyin();
+    	$password = implode('', $pinyin->name($params['name']));
+    	
+    	$arrPost = [
+    			'_token' => $this->_token,
+    			'name' => $params['name'],
+    			'email' => $params['email'],
+    			'password' => $password,
+    			'password_confirmation' => $password,
+    			'role_ids' => [$params['roles_id']],
+    			'organization_id' => $params['org_id'],
+    			'phone' => $params['phone'],
+    			'position_id' => $params['position_id'],
+    	];
+    	$arrRtn = $this->thisHttpPost($this->arrApiUrl['add_user'], $arrPost);
+    	if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && $arrRtn['data']['id'] > 0)//接口处理数据成功
+    	{
+    		return $arrRtn['data']['id'];
+    	}
+    	return false;
+    }
+    
+    /**
+     * 与权限系统交互 删除用户
+     * @param int $person_id (oa_person表的id)
+     * @return boolean
+     */
+    public function curlDeleteUser($person_id)
+    {
+    	$arrPost = [
+    			'_token' => $this->_token
+    	];
+    	$url = sprintf($this->arrApiUrl['delete_user'],$person_id);
+    	$arrRtn = $this->thisHttpPost($url, $arrPost);
+    	if( $arrRtn['success'] == 1)//接口处理数据成功
+    	{
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * 与权限系统交互 修改用户
+     * @param array $params [name,email,org_id,position_id]
+     * @return boolean
+     */
+    public function curlEditUser($params)
+    {
+    	$arrPost = [
+    			'_token' => $this->_token,
+    			'name' => $params['name'],
+    			'email' => $params['email'],
+    	];
+    	$params['org_id'] && $arrPost['organization_id'] = $params['org_id'];
+    	$params['position_id'] && $arrPost['position_id'] = $params['position_id'];
+    	
+    	$url = sprintf($this->arrApiUrl['update_user'],$person_id);
+    	$arrRtn = $this->thisHttpPost($url, $arrPost);
+    	if( $arrRtn['success'] == 1)//接口处理数据成功
+    	{
+    		return true;
+    	}
+    	return false;
+    }
     
     
     /**
@@ -577,9 +715,10 @@ class QuanXianServer extends Server
      * @param array     $arrKeys        数据表的列名
      * @param array     $arrData        数据
      * @param string    $strPrimaryKey  表主键
+     * @param array		$arrNotUpdate	不更新字段
      * @return string   $strRtn         sql语句
      */
-    private function createReplaceSql($strTable, $arrKeys, $arrData, $strPrimaryKey)
+    private function createReplaceSql($strTable, $arrKeys, $arrData, $strPrimaryKey,$arrNotUpdate=[])
     {
         $arrKeysNew = array_map(function(&$v){ return '`' . $v . '`';}, $arrKeys);//列名称处理一下
         $strKeys = implode(', ', $arrKeysNew);
@@ -593,7 +732,7 @@ class QuanXianServer extends Server
         $strSQL = "INSERT INTO {$strTable} ({$strKeys}) values {$strValues} ON DUPLICATE KEY UPDATE ";
         foreach($arrKeys as $key)
         {
-            if($key != $strPrimaryKey)
+            if($key != $strPrimaryKey || !in_array($key, $arrNotUpdate));
             {
                 $strSQL .= "$key=VALUES({$key}),";
             }

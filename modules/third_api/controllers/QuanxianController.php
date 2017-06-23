@@ -39,6 +39,8 @@ class QuanxianController extends Controller
             
             //项目人员信息变动
             case 'users'://用户列表
+            	$intResult = $objQx->curlUpdateAllUser();
+            	break;
             case 'organizations/positions'://职位
             	$intResult = $objQx->curlUpdatePositions();
             	break;
