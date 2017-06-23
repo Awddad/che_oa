@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 
 use app\models\ApplyBuy;
+use app\modules\oa_v1\logic\AssetLogic;
 use Yii;
 use app\models\Apply;
 use app\models\User;
@@ -189,17 +190,19 @@ class ApplyBuyForm extends BaseForm
         $data = [];
         foreach ($this->buy_list as $v) {
             $data[] = [
-                'apply_id' => $this->apply_id,
-                'asset_type_id' => $v['asset_type_id'],
-                'asset_brand_id' => $v['asset_brand_id'],
-                'name' => $v['name'],
-                'price' => $v['price'],
-                'amount' => $v['amount'],
+                $this->apply_id,
+                $v['asset_type_id'],
+                AssetLogic::instance()->getAssetType($v['asset_type_id']),
+                $v['asset_brand_id'],
+                AssetLogic::instance()->getAssetType($v['asset_brand_id']),
+                $v['name'],
+                $v['price'],
+                $v['amount'],
             ];
         }
         if($data) {
             $n = Yii::$app->db->createCommand()->batchInsert('oa_apply_buy_list', [
-                'apply_id', 'asset_type_id', 'asset_brand_id', 'name', 'price', 'amount',
+                'apply_id', 'asset_type_id', 'asset_type_name','asset_brand_id', 'asset_brand_name','name', 'price', 'amount',
             ], $data)->execute();
             if (!$n) {
                 throw new Exception('请购明细保存失败');

@@ -14,8 +14,10 @@ use app\models\Asset;
 use app\models\AssetBack;
 use app\models\AssetGetList;
 use app\models\AssetList;
+use app\models\AssetListLog;
 use app\models\AssetType;
 use app\models\AssetBrand;
+use app\models\Person;
 use yii\data\Pagination;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
@@ -244,6 +246,7 @@ class AssetLogic extends Logic
             if (!$v->save()) {
                 throw new Exception('资产分配失败');
             }
+            $this->addAssetListLog($v->person_id, $assetList->id, $apply->apply_id);
         }
         return false;
     }
@@ -265,11 +268,24 @@ class AssetLogic extends Logic
      *
      * @param Apply $apply
      * @return boolean
+     * @throws Exception
      */
     public function assetBackComplete($apply)
     {
         $assetBack = AssetBack::findOne($apply->apply_id);
-        return  AssetGetList::updateAll(['status' => 5],['in', 'id', explode(',', $assetBack->asset_list_ids)]);
+        $assetGetList = AssetGetList::find()->where(['in', 'id', explode(',', $assetBack->asset_list_ids)])->all();
+        /**
+         * @var AssetGetList $v
+         */
+        foreach ($assetGetList as $k => $v) {
+            $v->status = 5;
+            if ($v->save()) {
+                $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id);
+            } else {
+                throw new Exception('资产归还失败！');
+            }
+        }
+        return true;
     }
     
     /**
@@ -280,6 +296,31 @@ class AssetLogic extends Logic
     public function assetBackCancel($apply)
     {
         return AssetGetList::updateAll(['status' => 2],['in', 'id', $apply->apply_id]);
+    }
+    
+    
+    /**
+     * 资产使用日志
+     *
+     * @param int $personId
+     * @param int $assetListId
+     * @param int $applyId
+     *
+     * @return boolean
+     * @throws \yii\base\Exception
+     */
+    public function addAssetListLog($personId, $assetListId, $applyId)
+    {
+        $log = new AssetListLog();
+        $log->person_id = $personId;
+        $log->asset_list_id = $assetListId;
+        $log->type = 2;
+        $log->des = '领用,审批单号：'.$applyId;
+        $log->created_at = time();
+        if ($log->save()) {
+            return true;
+        }
+        throw new \yii\base\Exception('日志保存时报');
     }
     
 }
