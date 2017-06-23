@@ -37,6 +37,14 @@ class ApplyUseChapter extends \yii\db\ActiveRecord
             [['des'], 'string', 'max' => 512],
         ];
     }
+    
+    const STATUS = [
+        1 => '公章',
+        2 => '财务章',
+        3 => '法人章',
+        4 => '合同专用章',
+        5 => '发票专用章',
+    ];
 
     /**
      * @inheritdoc
