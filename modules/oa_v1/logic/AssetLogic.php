@@ -241,6 +241,11 @@ class AssetLogic extends Logic
                 'asset_id' => $v->asset_id,
                 'status' => 1
             ])->orderBy(['id' => SORT_ASC])->one();
+            //改变库存状态
+            $assetList->status = 2;
+            if (!$assetList->save()) {
+                throw new Exception('资产分配失败');
+            }
             $v->asset_list_id = $assetList->id;
             $v->status = 2;
             if (!$v->save()) {
