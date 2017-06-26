@@ -57,6 +57,8 @@ class BasicController extends BaseController
 	
 	/**
 	 * 添加资产类型
+     *
+     * @return array
 	 */
 	public function actionAddType()
 	{
@@ -75,7 +77,12 @@ class BasicController extends BaseController
 			return $this->_returnError(400,$res['msg']);	
 		}
 	}
-	
+    
+    /**
+     * 更新资产类型
+     *
+     * @return array
+     */
 	public function actionUpdateType()
 	{
 		$post = yii::$app->request->post();
@@ -93,7 +100,12 @@ class BasicController extends BaseController
 			return $this->_returnError(400,$res['msg']);
 		}
 	}
-	
+    
+    /**
+     * 增加子资产类型
+     *
+     * @return array
+     */
 	public function actionAddChild()
 	{
 	    $post = yii::$app->request->post();
