@@ -7,7 +7,8 @@ use Yii;
 /**
  * This is the model class for table "oa_menu".
  *
- * @property string $id
+ * @property integer $id
+ * @property string $url
  * @property string $slug
  * @property string $name
  */
@@ -29,7 +30,7 @@ class Menu extends \yii\db\ActiveRecord
         return [
             [['id'], 'required'],
             [['id'], 'integer'],
-            [['slug', 'name'], 'string', 'max' => 255],
+            [['url', 'slug', 'name'], 'string', 'max' => 255],
         ];
     }
 
@@ -40,6 +41,7 @@ class Menu extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'id',
+            'url' => '链接',
             'slug' => '目录别名',
             'name' => '目录名称',
         ];

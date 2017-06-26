@@ -71,10 +71,8 @@ class QuanXianServer extends Server
         // 数据存表
         $arrPost = [
             '_token' => $this->_token,
-            'per_page' => 100000,
-            'page' => 1,
         ];
-        $arrRtn = $this->thisHttpPost($this->arrApiUrl['menu_list'], $arrPost);
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['menu_list'].'?per_page= 100000&page=1', $arrPost);
         if($arrRtn['success'] && !empty($arrRtn['data']) && isset($arrRtn['data']['data']))
         {
             $arrInsert = [];
@@ -82,15 +80,16 @@ class QuanXianServer extends Server
             foreach($arrRtn['data']['data'] as $val)
             {
                 //判断权限以slug别名为主，别名相同及为同一个功能，所以别名出现多次的时候只存一次
-                if(!in_array($val['slug'], $arrExistSlug)) 
-                {
+                //if(!in_array($val['slug'], $arrExistSlug))
+                //{
                     $arrInsert[] = [
                         'id' => $val['id'],
                         'slug' => $val['slug'],
                         'name' => $val['name'],
+                        'url' => $val['url'],
                     ];
-                    $arrExistSlug[] = $val['slug'];
-                }
+                    //$arrExistSlug[] = $val['slug'];
+                //}
             }
             if($arrInsert)
             {
