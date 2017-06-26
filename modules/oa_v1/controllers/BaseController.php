@@ -134,11 +134,11 @@ class BaseController extends Controller
         $this->roleId = $intRoleId;
         $personId = $this->arrPersonInfo->person_id;
         $strCacheKey = 'role_info_' . $strOs . '_' . $intRoleId . '_' . $personId;
-        if($blnForce == false)//不强制刷新的时候 从缓存中获取
-        {
-            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
-        }
-        
+//        if($blnForce == false)//不强制刷新的时候 从缓存中获取
+//        {
+//            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
+//        }
+//
         if(empty($this->arrPersonRoleInfo))
         {
             $objRoleMod = Role::findOne(['id' => $intRoleId]);

@@ -229,7 +229,7 @@ class AssetLogic extends Logic
      */
     public function assetGetComplete($apply)
     {
-        $assetGetList = AssetGetList::find()->where([$apply->apply_id])->all();
+        $assetGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
         /**
          * @var AssetGetList $v
          */
