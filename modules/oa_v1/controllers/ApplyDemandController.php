@@ -98,7 +98,7 @@ class ApplyDemandController extends BaseController
          * @var Apply $v
          */
         foreach ($model as $k => $v) {
-            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
+            $org = PersonLogic::instance()->getOrgName($v->personInfo);
             
             $detail = implode(',', ArrayHelper::getColumn($v->applyDemand, 'name'));
             
@@ -107,9 +107,9 @@ class ApplyDemandController extends BaseController
                 'apply_id' => $v->apply_id,
                 'create_time' => date('Y-m-d H:i', $v->create_time),
                 'person' => $v->person,
-                'org' => $org,
+                'org' => implode('-', $org),
                 'detail' => $detail,
-                'status' => ApplyDemand::STATUS[$v->status]
+                'status' => ApplyDemand::STATUS[$v->applyDemand->status]
             ];
         }
         return $this->_return([
