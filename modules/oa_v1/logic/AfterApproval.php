@@ -92,6 +92,7 @@ class AfterApproval extends BaseLogic
             		'email' => $employee->email,
             		'org_id' => $employee->org_id,
             		'position_id' => $employee->profession,
+            		'person_id' => $employee->person_id,
             ];
             $id = $objQx->curlEditUser($params);
             if($id){
