@@ -285,6 +285,7 @@ class AssetLogic extends Logic
         foreach ($assetGetList as $k => $v) {
             $v->status = 5;
             if ($v->save()) {
+                AssetList::updateAll(['status' => 1], ['id' => $v->asset_list_id]);
                 $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id);
             } else {
                 throw new Exception('资产归还失败！');
