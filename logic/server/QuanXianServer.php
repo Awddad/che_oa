@@ -679,7 +679,7 @@ class QuanXianServer extends Server
     	$params['org_id'] && $arrPost['organization_id'] = $params['org_id'];
     	$params['position_id'] && $arrPost['position_id'] = $params['position_id'];
     	
-    	$url = sprintf($this->arrApiUrl['update_user'],$person_id);
+    	$url = sprintf($this->arrApiUrl['update_user'],$params['person_id']);
     	$arrRtn = $this->thisHttpPost($url, $arrPost);
     	if( $arrRtn['success'] == 1)//接口处理数据成功
     	{
