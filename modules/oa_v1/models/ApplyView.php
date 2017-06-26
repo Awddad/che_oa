@@ -299,6 +299,8 @@ class ApplyView extends BaseForm
 	}
     
     /**
+     * 固定资产申请
+     *
      * @param Apply $apply
      * @return array
      */
@@ -317,6 +319,8 @@ class ApplyView extends BaseForm
     }
     
     /**
+     * 固定资产归还
+     *
      * @param Apply $apply
      * @return array
      */
