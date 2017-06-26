@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\models\Menu;
 use app\models\User;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
@@ -16,6 +17,7 @@ use yii\filters\RateLimiter;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
+use yii\web\HttpException;
 use yii\web\Response;
 use Yii;
 use app\models\Role;
@@ -99,19 +101,22 @@ class BaseController extends Controller
     
             $this->setUserRoleInfo($intRoleId);
 
-            //权限
-//            $roleInfo = Role::findOne($this->roleId);
-//            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-//            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
-//            if (!in_array($requestUrlArr['0'], static::$arrWhiteList)
-//                && !in_array(Yii::$app->controller->id, ['default', 'upload'])
-//            ) {
-//                if (!in_array($requestUrlArr['0'], $roleArr)) {
-//                    header("Content-type: application/json");
-//                    echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
-//                    die();
-//                }
-//            }
+            //权限管理
+            $roleInfo = Role::findOne($this->roleId);
+            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
+            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
+            $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
+    
+            if ($action->id == 'index') {
+                $url_one = '/' . $action->controller->id;
+                if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                    throw new HttpException(403);
+                }
+            } else {
+                if (!in_array($requestUrlArr, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                    throw new HttpException(403);
+                }
+            }
         } else {
             //app 版本的登录   先预留
         }
