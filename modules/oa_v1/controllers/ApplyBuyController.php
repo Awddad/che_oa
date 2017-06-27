@@ -97,8 +97,7 @@ class ApplyBuyController extends BaseController
          * @var Apply $v
          */
         foreach ($model as $k => $v) {
-            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
-            
+            $org = PersonLogic::instance()->getOrgName($v->personInfo);
             $data[] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'apply_id' => $v->apply_id,
@@ -106,7 +105,7 @@ class ApplyBuyController extends BaseController
                 'person' => $v->person,
                 'org' => $org,
                 'money' => $v->applyBuy->money,
-                'status' => ApplyBuy::STATUS[$v->status]
+                'status' => ApplyBuy::STATUS[$v->applyBuy->status]
             ];
         }
         return $this->_return([
