@@ -10,6 +10,8 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
 use app\models\Apply;
+use app\models\ApplyBuy;
+use app\models\ApplyBuyList;
 use app\models\Asset;
 use app\models\AssetBack;
 use app\models\AssetGetList;
@@ -36,43 +38,44 @@ class AssetLogic extends Logic
      * @param int $assetTypeId
      * @return string
      */
-    public function getAssetType($assetTypeId=1)
+    public function getAssetType($assetTypeId = 1)
     {
-    	$data = AssetType::find()->where(['id'=>$assetTypeId])->one();
-    	if(isset($data->parent_id) && $data->parent_id > 0){
-    		$parent = AssetType::find()->where(['id'=>$data->parent_id])->one();
-    	}
-    	
-        return (isset($parent->name)?$parent->name.'-':'').$data->name;//'固定资产-电子产品-手机';
+        $data = AssetType::find()->where(['id' => $assetTypeId])->one();
+        if (isset($data->parent_id) && $data->parent_id > 0) {
+            $parent = AssetType::find()->where(['id' => $data->parent_id])->one();
+        }
+        
+        return (isset($parent->name) ? $parent->name . '-' : '') . $data->name;//'固定资产-电子产品-手机';
     }
+    
     /**
      * 获得类别树
-     * 
+     *
      * @param int $parent_id
      * @param array $data
      * @return array
      */
-    public function getAssetTypeByParentId($parent_id = 0, $data=[])
+    public function getAssetTypeByParentId($parent_id = 0, $data = [])
     {
-    	$res = AssetType::find()->where(['parent_id' => $parent_id])->orderBy(['id' => SORT_ASC])->all();
-    	if(empty($res)){
-    		return [];
-    	}
-    	foreach($res as $v){
-    		if($child = $this->getAssetTypeByParentId($v->id)){
-    			$data[] = [
-    					'label' => $v->name,
-    					'value' => $v->id,
-    					'children' => $child
-    			];
-    		}else{
-    			$data[] = [
-    					'label' => $v->name,
-    					'value' => $v->id,
-    			];
-    		}
-    	}
-    	return $data;
+        $res = AssetType::find()->where(['parent_id' => $parent_id])->orderBy(['id' => SORT_ASC])->all();
+        if (empty($res)) {
+            return [];
+        }
+        foreach ($res as $v) {
+            if ($child = $this->getAssetTypeByParentId($v->id)) {
+                $data[] = [
+                    'label' => $v->name,
+                    'value' => $v->id,
+                    'children' => $child
+                ];
+            } else {
+                $data[] = [
+                    'label' => $v->name,
+                    'value' => $v->id,
+                ];
+            }
+        }
+        return $data;
     }
     
     /**
@@ -83,26 +86,27 @@ class AssetLogic extends Logic
      */
     public function getAssetBrand($assetBrand)
     {
-    	$res = AssetBrand::find()->where(['id'=>$assetBrand])->one();
+        $res = AssetBrand::find()->where(['id' => $assetBrand])->one();
         return $res->name;
     }
+    
     /**
      * 获得品牌列表
      */
     public function getAssetBrandList()
     {
-    	$res = AssetBrand::find()->all();
-    	if(empty($res)){
-    		return [];
-    	}
-    	$data = [];
-    	foreach($res as $v){
-    		$data[] = [
-    				'label' => $v->name,
-    				'value' => $v->id,
-    		];
-    	}
-    	return $data;
+        $res = AssetBrand::find()->all();
+        if (empty($res)) {
+            return [];
+        }
+        $data = [];
+        foreach ($res as $v) {
+            $data[] = [
+                'label' => $v->name,
+                'value' => $v->id,
+            ];
+        }
+        return $data;
     }
     
     /**
@@ -116,7 +120,7 @@ class AssetLogic extends Logic
         $query = Asset::find()->where([
             '>', 'free_amount', 0
         ]);
-        if(isset($param['keyword'])) {
+        if (isset($param['keyword'])) {
             $query->andWhere([
                 'or',
                 ['like', 'asset_type_name', $param['keyword']],
@@ -133,13 +137,13 @@ class AssetLogic extends Logic
             ->limit($pagination->limit)
             ->all();
         $data = [];
-        if(empty($model)) {
+        if (empty($model)) {
             return $data;
         }
         /**
          * @var Asset $v
          */
-        foreach ($model as $v){
+        foreach ($model as $v) {
             $data[] = [
                 'id' => $v->id,
                 'asset_type' => $v->asset_type_name,
@@ -168,7 +172,7 @@ class AssetLogic extends Logic
             'person_id' => $personId
         ])->all();
         $data = [];
-        if(!empty($list)) {
+        if (!empty($list)) {
             /**
              * @var AssetGetList $v
              */
@@ -199,13 +203,13 @@ class AssetLogic extends Logic
             //1 => '申请中'
         ];
         $res = AssetGetList::find()
-            ->where(['person_id'=>$person_id])
+            ->where(['person_id' => $person_id])
             ->andWhere(['in', 'status', [5, 4, 2]])
-            ->orderBy(['created_at'=>SORT_ASC])
+            ->orderBy(['created_at' => SORT_ASC])
             ->all();
         
         $data = [];
-        foreach($res as $v){
+        foreach ($res as $v) {
             $asset = Asset::findOne($v->asset_id);
             $data[] = [
                 'type' => $this->getAssetType($asset->asset_type_id),//类别
@@ -265,7 +269,7 @@ class AssetLogic extends Logic
      */
     public function assetGetCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => 3],['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => 3], ['in', 'id', $apply->apply_id]);
     }
     
     /**
@@ -301,7 +305,7 @@ class AssetLogic extends Logic
      */
     public function assetBackCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => 2],['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => 2], ['in', 'id', $apply->apply_id]);
     }
     
     
@@ -321,7 +325,7 @@ class AssetLogic extends Logic
         $log->person_id = $personId;
         $log->asset_list_id = $assetListId;
         $log->type = 2;
-        $log->des = '领用,审批单号：'.$applyId;
+        $log->des = '领用,审批单号：' . $applyId;
         $log->created_at = time();
         if ($log->save()) {
             return true;
@@ -329,4 +333,106 @@ class AssetLogic extends Logic
         throw new \yii\base\Exception('日志保存时报');
     }
     
+    /**
+     * 新增入库
+     *
+     * @param $data
+     * @return bool
+     * @throws Exception
+     */
+    public function addAsset($data)
+    {
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            $status = 2;
+            foreach ($data['list'] as $v) {
+                $buyList = ApplyBuyList::findOne($v['id']);
+                if(empty($buyList)){
+                    throw new Exception('入库失败');
+                }
+                if($v['amount'] != $buyList->amount) {
+                    $status = 1;
+                }
+                $asset = Asset::find()->where([
+                    'asset_type_id' => $buyList->asset_type_id,
+                    'asset_brand_id' => $buyList->asset_brand_id,
+                    'name' => $buyList->name,
+                ])->one();
+                if(empty($asset)) {
+                    $asset = new Asset();
+                    $asset->asset_type_id = $buyList->asset_type_id;
+                    $asset->asset_type_name = $buyList->asset_type_name;
+                    $asset->asset_brand_id = $buyList->asset_brand_id;
+                    $asset->asset_brand_name = $buyList->asset_brand_name;
+                    $asset->name = $buyList->name;
+                    $asset->amount = $v['amount'];
+                    $asset->price = $buyList->price;
+                    $asset->free_amount = $v['amount'];
+                    if (!$asset->save()) {
+                        throw new Exception('入库失败');
+                    }
+                }
+                $this->addAssetList($asset);
+            }
+            ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
+            $transaction->commit();
+            return true;
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+    
+    /**
+     * @param Asset $asset
+     */
+    public function addAssetList($asset)
+    {
+        $data = [];
+        $last = $this->getLastAssetNum();
+        for ($i = 0; $i < $asset->amount; $i++) {
+            $end = $this->formatEnd($last['endNum'] + 1, $last['length']);
+            $data[] = [
+                $asset->id,
+                $asset->price,
+                1,
+                time(),
+                $last['begin'] . $end,
+                $last['begin'] . $end
+            ];
+        }
+        \Yii::$app->db->createCommand()->batchInsert('oa_asset_list',[
+            'asset_id', 'price', 'status', 'created_at', 'asset_number', 'stock_number'
+        ], $data) ->execute();
+    }
+    
+    /**
+     * 得到最后一个资产编号
+     *
+     * @return array
+     */
+    public function getLastAssetNum()
+    {
+        $lastAssetList = AssetList::find()->orderBy(['id' => SORT_DESC])->one();
+        $assetNumber = $lastAssetList->asset_number;
+        $begin = substr($assetNumber, 0, -5);
+        $end = substr($assetNumber, -5);
+        $length = strlen($end);
+        $endNum = preg_replace('/^0+/', '', $end);
+        
+        return compact('begin', 'length', 'endNum');
+    }
+    
+    /**
+     * 格式化
+     *
+     * @param $num
+     * @param $length
+     * @return string
+     */
+    public function formatEnd($num, $length)
+    {
+        $len = $length - strlen($num);
+        return str_pad($num, $len, '0', STR_PAD_LEFT);
+    }
 }

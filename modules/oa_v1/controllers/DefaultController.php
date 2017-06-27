@@ -3,6 +3,7 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\logic\server\ThirdServer;
+use app\models\Role;
 use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Menu;
@@ -43,9 +44,10 @@ class DefaultController extends BaseController
      */
     public function actionGetUserInfo()
     {
+        $roleId = Yii::$app->session->get("ROLE_ID");
         $arrData = [
             'userinfo' => $this->arrPersonInfo,
-            'roleId' => Yii::$app->session->get("ROLE_ID"),
+            'roleName' => Role::findOne($roleId)->slug,
             'roleInfo' => (isset($this->arrPersonRoleInfo['roleInfo']) ? $this->arrPersonRoleInfo['roleInfo'] : []),
         ];
         return $this->_return($arrData);

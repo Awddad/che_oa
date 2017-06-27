@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\controllers;
 
 use app\models\ApplyBuy;
 use app\models\ApplyBuyList;
+use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
@@ -133,9 +134,11 @@ class ApplyBuyController extends BaseController
     public function addStock()
     {
         $param = Yii::$app->request->post();
-        foreach ($param as $v) {
-            
+        if(empty($param) || !isset($param['list']) || !isset($param['apply_id'])) {
+            return $this->_returnError(400);
         }
+        $data = AssetLogic::instance()->addAsset($param);
+        return $this->_return($data);
     }
     
 }
