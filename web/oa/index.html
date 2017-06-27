@@ -8,7 +8,7 @@
     /*{color: #333333;}*/
     html{
       min-height: 100%;
-      background-color: #F5F5F5 !important;
+      height: 100%;
     }
     body{ font-family: 'PingFangSC-Medium','PingFangSC-Semibold','Microsoft YaHei';
       font-size: 14px;
@@ -16,7 +16,9 @@
       letter-spacing: 0;
       margin: 0;
       min-height:100%;
+      height: 100%;
     }
+    #app,.app-main,.app-wrapper,.main-container{ min-height: 100%;height: 100%;}
     h3{font-size: 16px;}
     a{ color:#108EE9; text-decoration: none;}
     li{ list-style: none;}
@@ -52,7 +54,11 @@
     .line{ height: 1px; background-color: #E6E6E6; border:0; }
 
 
-
+    .el-menu--dark{
+      background-color: #333 !important;
+    }
+    .el-submenu{ background-color: #333;}
+    .el-menu--dark .el-submenu .el-menu{ background-color: #404040 !important;}
     .submit-dialog{ width:900px !important; min-width:320px !important; overflow: auto !important;}
     .el-pagination{ padding: 2px 0 !important;}
     .el-table{ border-radius: 4px; border-top:1px solid #E9E9E9 !important;}
@@ -160,6 +166,6 @@
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?045bc2e4b56823fec3a4"></script><script type="text/javascript" src="vendor.js?48a903aafddbd2f0c21b"></script><script type="text/javascript" src="index.js?7fa402d72d763750f2f8"></script></body>
+<script type="text/javascript" src="manifest.js?fda0854491149fcad4d9"></script><script type="text/javascript" src="vendor.js?a27e08aa05f889f72efd"></script><script type="text/javascript" src="index.js?fdf0a36b3bab9af37a6b"></script></body>
 
 </html>
