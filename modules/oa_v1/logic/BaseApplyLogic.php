@@ -14,9 +14,7 @@ use app\models\Apply;
 use app\models\ApplyBuyList;
 use app\models\ApplyDemandList;
 use app\models\ApprovalLog;
-use app\models\Asset;
 use app\models\AssetGetList;
-use app\models\AssetList;
 
 
 /**
@@ -200,7 +198,8 @@ class BaseApplyLogic extends Logic
             'copy_person' => $apply->copy_person,
             'approval_persons' => $apply->approval_persons ? : '--',
         	'pdf' => $apply->apply_list_pdf,
-            'org' => implode('-', PersonLogic::instance()->getOrgName($apply->personInfo))
+            'org' => implode('-', PersonLogic::instance()->getOrgName($apply->personInfo)),
+            'status' => $apply->status
         ];
     }
     
