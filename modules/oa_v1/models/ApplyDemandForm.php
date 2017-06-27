@@ -81,7 +81,7 @@ class ApplyDemandForm extends BaseForm
             ],
             [['des', 'tips'], 'string'],
             ['files', 'safe'],
-            ['apply_id', 'checkOnly'],
+            ['apply_id', 'checkOnly', 'on' => ['default']],
             ['demand_list', 'checkDemandList'],
             [['apply_id', 'buy_type', 'apply_buy_id',],  'required', 'on' => [self::CONFIRM_BUY] ],
             ['apply_buy_id', 'checkApplyBuyId']

@@ -243,7 +243,17 @@ class PayLogic extends BaseLogic
                     $money = $model->loan->money;
                     $bankName = $model->loan->bank_name;
                     $bankCardId = $model->loan->bank_card_id;
-                } else {
+                }else if ($model->type == 4) {
+                    $typeName = '申请付款';
+                    $money = $model->applyPay->money;
+                    $bankName = $model->applyPay->bank_name;
+                    $bankCardId = $model->applyPay->bank_card_id;
+                } else if ($model->type == 5) {
+                    $typeName = '申请请购';
+                    $money = $model->applyBuy->money;
+                    $bankName = $model->applyBuy->bank_name;
+                    $bankCardId = $model->applyBuy->bank_card_id;
+                }  else {
                     $typeName = '申请还款';
                     $money = $model->payBack->money;
                     $bankName = $model->payBack->bank_name;
