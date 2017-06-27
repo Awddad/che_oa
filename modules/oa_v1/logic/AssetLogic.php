@@ -364,7 +364,10 @@ class AssetLogic extends Logic
                 if(empty($buyList)){
                     throw new Exception('入库失败');
                 }
-                if($v['amount'] != $buyList->amount) {
+                $buyList->in_amount += $v['amount'];
+                $buyList->save();
+                //采购数 不等于入库数
+                if($buyList->in_amount != $buyList->amount) {
                     $status = 1;
                 }
                 $asset = Asset::find()->where([
@@ -382,11 +385,14 @@ class AssetLogic extends Logic
                     $asset->amount = $v['amount'];
                     $asset->price = $buyList->price;
                     $asset->free_amount = $v['amount'];
-                    if (!$asset->save()) {
-                        throw new Exception('入库失败');
-                    }
+                } else {
+                    $asset->amount += $v['amount'];
+                    $asset->free_amount += $v['amount'];
                 }
-                $this->addAssetList($asset);
+                if (!$asset->save()) {
+                    throw new Exception('入库失败');
+                }
+                $this->addAssetList($asset, $data['apply_id']);
             }
             ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
             $transaction->commit();
@@ -398,9 +404,12 @@ class AssetLogic extends Logic
     }
     
     /**
+     * 添加库存
+     *
      * @param Asset $asset
+     * @param string $applyBuyId
      */
-    public function addAssetList($asset)
+    public function addAssetList($asset, $applyBuyId)
     {
         $data = [];
         $last = $this->getLastAssetNum();
@@ -412,11 +421,12 @@ class AssetLogic extends Logic
                 1,
                 time(),
                 $last['begin'] . $end,
-                $last['begin'] . $end
+                $last['begin'] . $end,
+                $applyBuyId
             ];
         }
         \Yii::$app->db->createCommand()->batchInsert('oa_asset_list',[
-            'asset_id', 'price', 'status', 'created_at', 'asset_number', 'stock_number'
+            'asset_id', 'price', 'status', 'created_at', 'asset_number', 'stock_number', 'apply_buy_id'
         ], $data) ->execute();
     }
     

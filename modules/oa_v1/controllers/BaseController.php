@@ -196,7 +196,7 @@ class BaseController extends Controller
                 'class' => \yii\filters\Cors::className(),
                 'cors' => [
                     'Origin' => ['*'],
-                    'Access-Control-Request-Method' => ['POST', 'GET', 'OPTIONS'],
+                    'Access-Control-Request-Method' => ['POST', 'GET'],
                     'Access-Control-Request-Headers' => ['X-Wsse', 'Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
                     'Access-Control-Allow-Credentials' => true,
                     'Access-Control-Max-Age' => 3600,
