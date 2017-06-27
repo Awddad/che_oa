@@ -449,4 +449,30 @@ class AssetLogic extends Logic
         $len = $length - strlen($num);
         return str_pad($num, $len, '0', STR_PAD_LEFT);
     }
+    
+    /**
+     * 报废，丢失操作
+     *
+     * @param $param
+     * @return bool
+     * @throws Exception
+     */
+    public function updateAssetList($param)
+    {
+        $assetList = AssetList::findOne($param['asset_list_id']);
+        $assetList->status = $param['status'];
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if ($assetList->save()) {
+                $type = $param['status'] == 3 ? 4 : 5;
+                AssetLogic::instance()->addAssetListLog('', $param['asset_list_id'], null, $type, $param['des']);
+            }
+            $transaction->commit();
+            return true;
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+        
+    }
 }
