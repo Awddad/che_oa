@@ -2133,7 +2133,7 @@ module.exports = {
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://www.cheoa.com', // api的base_urlhttp://192.168.1.128:8010
+    baseURL: 'http://192.168.1.128:8010', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
 
@@ -44013,4 +44013,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[222]);
-//# sourceMappingURL=index.js.map?263e8d82b77ca932f07d
+//# sourceMappingURL=index.js.map?d4785a1a83797041134f
