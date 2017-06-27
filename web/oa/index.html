@@ -1,214 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>OA管理系统</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <link rel="stylesheet" href="index.css" />
-  <style type="text/css">
-    h3{ font-size: 16px; color: #333;}
-    .main_content{ padding:  24px; background: #fff; min-height: 360px;}
-    .ant-steps .ant-steps-head{ background: none;}
-    .ant-steps .ant-steps-main{
-        display: block;
+  <meta charset="utf-8">
+  <title>OA系统</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <style>
+    /*{color: #333333;}*/
+    html{
+      min-height: 100%;
+      background-color: #F5F5F5 !important;
     }
-    .ant-breadcrumb{ padding-bottom: 5px ;box-shadow: 0 1px 0 0 rgba(0,0,0,0.10);}
-    .warpper{
-      height: 100vh;
-    }
-    .ant-advanced-search-form {
-      padding: 24px !important;
-      background: #fbfbfb !important;
-      border: 1px solid #d9d9d9 !important;
-      border-radius: 6px !important;
-    }
-    .ant-menu-submenu-title{
-        background-color: #333 !important;
-    }
-    .ant-menu-submenu-title span,.ant-menu-submenu-title:after{
-      color: #fff;
-    }
-    .ant-menu-item{
-        background-color: #404040;
-        color: #a6a6a6;
-    }
-    .ant-menu-item:hover,.ant-menu-item.ant-menu-item-selected{
-      color: #fff;
-      background-color:#4BA9E8 !important;
-    }
-    .column-money{
-        text-align: right;
-    }
-    .ant-calendar-picker{
-      width: 100%;
-    }
-    .ant-menu-inline{
-      border: 0;
-    }
-    .ant-menu-inline .ant-menu-item{
-      left: 0;
-    }
-    .ant-row.home-wraplist{
-      margin:0 -8px;
-    }
-    .ant-steps .ant-steps-title{ background: none; }
-    .ant-layout-header{ height: 50px; line-height: 50px;}
-    .ant-layout-content{
-      overflow: initial;
-    }
-    .ant-table{ overflow: inherit;}
-    .zstable .ant-table-middle .ant-table-thead > tr > th:not(.ant-table-selection-column),
-    .zstable .ant-table-middle .ant-table-thead > tr > th,
-    .zstable .ant-table-middle .ant-table-tbody > tr > td,
-    .zstable .ant-table-middle .ant-table-title, .ant-table-middle .ant-table-footer{ padding:3px 8px !important;}
-    .zstable .ant-table-placeholder{padding: 8px ;}
-
-    .anticon-caret-right:before{
-                font-size:14px;
-                color: #ccc;
-            }
-
-    @media(min-width: 768px){
-      .ant-col-sm-2{ min-width: 97px; width: 97px;}
-      .ant-col-sm-offset-2{ margin-left: 97px;}
-    }
-    .page-title{font-size: 0;}
-    .page-title strong{
-      display: inline-block;
-      line-height: 23px;
-      border-left: 2px solid rgb(35, 192, 250);
-      padding-left: 8px;
-      font-size: 18px;
-    }
-    .page-title i{
-      color: rgb(35, 192, 250);
-      font-size: 16px;
-      padding-right: 8px;
-    }
-    h2{
-      font-size: 16px;
-    }
-    h2 a{ font-size: 14px; }
-    .ant-form-explain{
-      clear: both;
-    }
-    .mt-sm{ margin-top: 8px; }
-    .mt-md{ margin-top: 16px;}
-    .mt-lg{ margin-top: 24px;}
-
-    .mb-sm{margin-bottom: 8px;}
-    .mb-md{margin-bottom: 16px;}
-    .mb-lg{margin-bottom: 24px;}
-
-    .ml-sm{margin-left: 8px;}
-    .ml-md{margin-left: 16px;}
-    .ml-lg{margin-left: 24px;}
-
-    .mr-sm{margin-right: 8px;}
-    .mr-md{margin-right: 16px;}
-    .mr-lg{margin-right: 24px;}
-
-    .red{ color: #f04134; }
-    .labelt .ant-form-item-label:before,label.labelt:before {
-        display: inline-block;
-        margin-right: 4px;
-        content: "*";
-        font-family: SimSun;
-        line-height: 1;
-        font-size: 12px;
-        color: #f04134;
-    }
-    .f-l{float: left}
-    .t-l{text-align: left !important;}
-    .t-c{text-align: center !important;}
-    .t-r{text-align: right !important;}
-    .cred{ color: #f00 !important;}
-    .ant-pagination {
-      margin-top: 20px;
-      float: right;
-    }
-    p{line-height: 24px;}
-    .clearfix{ clear: both; }
-
-    @media(max-width:640px){
-        body{overflow-x:hidden; }
-        .main_content{padding: 10px;}
-        .ant-table-content{ overflow-x: auto; }
-        .ant-table-footer{}
-        .ant-table table{
-          min-width: 800px;
-        }
-    }
-
-    .ant-steps-dot .ant-steps-item .ant-steps-step{
-      width: 80%;
-      text-align: left;
-    }
-    .ant-steps-dot .ant-steps-item:last-child .ant-steps-head{
-      margin-left: 35px;
-    }
-    .success_step.ant-steps-dot .ant-steps-item:last-child .ant-steps-head{
-      margin-left: 13px;
-    }
-    .ant-steps-dot .ant-steps-item:last-child .ant-steps-main{
-      padding-left: 10px;
-    }
-    .ant-steps-dot .ant-steps-item:last-child .ant-steps-step{
-
-    }
-    .ant-steps-dot .ant-steps-item:last-child .ant-steps-step .ant-steps-icon-dot{
-      margin-left: 0
-    }
-    .ant-steps-dot .ant-steps-item:last-child.ant-steps-status-process .ant-steps-description{
-      width: 150px;
-    }
-    .ant-steps-dot .ant-steps-tail{
+    body{ font-family: 'PingFangSC-Medium','PingFangSC-Semibold','Microsoft YaHei';
+      font-size: 14px;
+      color: #333333;
+      letter-spacing: 0;
       margin: 0;
+      min-height:100%;
+    }
+    h3{font-size: 16px;}
+    a{ color:#108EE9; text-decoration: none;}
+    li{ list-style: none;}
+    .container{padding:20px;}
+    .f-l{float: left}
+    .f-r{float: right}
+    .t-l{text-align: left;}
+    .t-c{text-align: center;}
+    .t-r{text-align: right;}
+    .c-red{color: #ff4949}
+    .b_gray{background: #F7F7F7;}
+    .none{display: none !important;}
+    .clear{ clear: both}
+
+    .mt-lg{ margin-top: 24px;}
+    .mt-md{ margin-top: 16px;}
+    .mt-sm{ margin-top: 8px;}
+    .mt-0{margin-top: 0 !important;}
+
+    .mb-lg{ margin-bottom: 24px;}
+    .mb-md{ margin-bottom: 16px;}
+    .mb-sm{ margin-bottom: 8px;}
+    .mb-0{margin-bottom: 0 !important;}
+
+    .ml-lg{ margin-left: 24px;}
+    .ml-md{ margin-left: 16px;}
+    .ml-sm{ margin-left: 8px;}
+
+    .mr-lg{ margin-right: 24px;}
+    .mr-md{ margin-right: 16px;}
+    .mr-sm{ margin-right: 8px;}
+    .mr4{ margin-right: 4px;}
+    .line{ height: 1px; background-color: #E6E6E6; border:0; }
+
+
+
+    .submit-dialog{ width:900px !important; min-width:320px !important; overflow: auto !important;}
+    .el-pagination{ padding: 2px 0 !important;}
+    .el-table{ border-radius: 4px; border-top:1px solid #E9E9E9 !important;}
+    .el-table th{
+        background-color: #F7F7F7 !important;
+    }
+    .el-table th>.cell{
+        background-color: #F7F7F7 !important;
+    }
+    .el-table .cell{
+        color: rgba(0,0,0,0.65);
+        font-size: 12px;
+    }
+
+    .el-table--border td,.el-table--border th,.el-table td,.el-table th.is-leaf{
+        border-right: 1px solid #E9E9E9 !important;
+        border-bottom: 1px solid #E9E9E9 !important;
+    }
+    .el-step__description{
+      width: 85% !important;
+    }
+    .search-wrap{
+      padding: 15px;
+      background: #fbfbfb;
+      border: 1px solid #E9E9E9;
+      border-radius: 6px;
+    }
+    .el-dropdown-menu{
       padding: 0 !important;
     }
-    .ant-steps-horizontal .ant-steps-description{
-      max-width: 80%;
-    }
-    .ant-layout-header .trigger {
-      font-size: 28px;
-      line-height: 50px;
-      padding: 0 16px;
-      cursor: pointer;
-      color: #fff;
-      transition: color .3s;
-    }
+    .f14{ font-size: 14px;}
+    .f12{ font-size: 12px;}
 
-    .ant-layout-header .trigger:hover {
-      color: #fff;
+    .card-wrap{position: relative;}
+    .card-wrap .addcard{
+      position: absolute;
+      top: 0;
+      right: -70px;
     }
-
-    .ant-layout-header .logo {
-      height: 32px;
-      background: #333;
-      border-radius: 6px;
-      margin: 16px;
+    @media (min-width: 768px) {
+      .w92,.w97,.w120{line-height: 34px;}
+      .w92{ width: 92px !important;}
+      .w97{ width: 97px !important;}
+      .w120{ width: 120px !important;}
+      .mt-10{ margin-top: 10px !important;}
+      .ml-92{margin-left: 92px !important;}
+      .ml-97{margin-left: 97px !important;}
+      .ml-120{margin-left: 120px !important;}
+      .upload-wrap{ position: relative;}
+      .upload-wrap .el-button{ margin-top: 2px;}
+      .upload-wrap .modal-download{position: absolute; top:1px; left: 98px;}
     }
+    @media (max-width: 768px) {
+      .t-xs-l {
+        text-align: left !important;
+      }
 
-    .ant-layout-header .ant-layout-sider-collapsed .anticon {
-      font-size: 16px;
+      .t-xs-c {
+        text-align: center !important;
+      }
+
+      .t-xs-r {
+        text-align: left !important;
+      }
+      .el-dialog{
+          width: auto !important;
+          min-width: 320px !important;
+          left: 0 !important;
+          -webkit-transform: translateX(0) !important;
+          transform: translateX(0) !important;
+      }
+      .submit-dialog .el-dialog__body{
+          padding: 10px;
+      }
+      .card-wrap .addcard {
+        position: relative;
+        right: 0;
+
+      }
+      .attachment-wrap{overflow: auto;}
+      .const_wrap{ min-width:900px !important;}
+      .el-message-box{
+        width: 90% !important;
+      }
     }
-
-    .ant-layout-header .ant-layout-sider-collapsed .nav-text {
-      display: none;
-    }
-
   </style>
+  <script>
+      Date.prototype.Format = function (fmt) { //author: meizz
+          var o = {
+              "M+": this.getMonth() + 1, //月份
+              "d+": this.getDate(), //日
+              "h+": this.getHours(), //小时
+              "m+": this.getMinutes(), //分
+              "s+": this.getSeconds(), //秒
+              "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+              "S": this.getMilliseconds() //毫秒
+          };
+          if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+          for (var k in o)
+              if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+          return fmt;
+      }
+  </script>
 </head>
-<body>
 
-<div id="root" style="height:100%;"></div>
-<!-- <script src="../dist/ueditor/ueditor.config.js"></script>
-<script src="../dist/ueditor/ueditor.all.js"></script>
-<script src="../dist/ueditor/lang/zh-cn/zh-cn.js"></script>
-<script src="../dist/jquery.min.js"></script>
-<script src="../dist/common.js"></script> -->
-<script src="index.js"></script>
-</body>
+<body>
+  <div id="app"></div>
+<script type="text/javascript" src="manifest.js?b1c286a459c4e401ae0b"></script><script type="text/javascript" src="vendor.js?48a903aafddbd2f0c21b"></script><script type="text/javascript" src="index.js?263e8d82b77ca932f07d"></script></body>
+
 </html>
