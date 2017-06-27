@@ -40,7 +40,9 @@ class PersonLogic extends BaseLogic
      */
     public function getSelectPerson($personId)
     {
-        $persons = Person::find()->where(['!=', 'person_id', $personId])->orderBy('person_id desc')->all();
+        $persons = Person::find()->where([
+            '!=', 'person_id', $personId
+        ])->orderBy('person_id desc')->all();
         $data = [];
         foreach ($persons as $person) {
         	if($person->org_id <= 0){
@@ -63,6 +65,9 @@ class PersonLogic extends BaseLogic
     public function getOrgName($person)
     {
         $org = Org::findOne($person->org_id);
+        if (empty($org)) {
+            return ['未找到组织架构'];
+        }
         if($org->pid == 0) {
             return [$org->org_short_name] ?  : [$org->org_name];
         }
