@@ -146,6 +146,7 @@ class BackLogic extends BaseLogic
                     'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                     'create_time' => date('Y-m-d H:i', $model->create_time),
                     'type_name' => $typeName,
+                    'type'  => $model->type,
                     'apply_id' => $model->apply_id,
                     'title' => $model->title,
                     'money' => $money

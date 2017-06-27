@@ -113,6 +113,7 @@ class PayLogic extends BaseLogic
                 $data[] = [
                     'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                     'create_time' => date('Y-m-d H:i', $model->create_time),
+                    'type'  => $model->type,
                     'type_name' => $typeName,
                     'apply_id' => $model->apply_id,
                     'title' => $model->title,
