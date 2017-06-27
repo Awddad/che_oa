@@ -125,22 +125,16 @@ class ApplyDemandController extends BaseController
      */
     public function actionConfirmBuy()
     {
+        $model = new ApplyDemandForm();
+        $model->scenario = $model::CONFIRM_BUY;
+        
         $param = Yii::$app->request->post();
-        $applyId = ArrayHelper::getValue($param, 'apply_id');
-        $buyType = ArrayHelper::getValue($param, 'buy_type');
-        $applyBuyId = ArrayHelper::getValue($param, 'apply_buy_id');
-        $tips = ArrayHelper::getValue($param, 'tips', '');
-        if(!$buyType || !$applyBuyId) {
-            return $this->_returnError(400, [], '缺少必填参数');
+        $data['ApplyDemandForm'] = $param;
+        if ($model->load($data) && $model->validate() && $model->confirmSave()) {
+            return $this->_return($model->apply_id);
+        } else {
+            return $this->_returnError(400, $model->errors);
         }
-        $apply = ApplyDemand::findOne($applyId);
-        $apply->buy_type = $buyType;
-        $apply->apply_buy_id = $applyBuyId;
-        $apply->tips = $tips;
-        if (!$apply->save()) {
-            return $this->_returnError(500, [], '确认失败');
-        }
-        return $this->_return([]);
     }
     
 }

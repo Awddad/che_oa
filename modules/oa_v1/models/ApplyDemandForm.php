@@ -8,6 +8,7 @@
 
 namespace app\modules\oa_v1\models;
 
+use app\models\ApplyBuy;
 use app\models\ApplyDemand;
 use Yii;
 use app\models\Apply;
@@ -24,6 +25,7 @@ use yii\helpers\ArrayHelper;
  */
 class ApplyDemandForm extends BaseForm
 {
+    const CONFIRM_BUY = 'confirm_buy';
     /**
      * 申请ID
      * @var
@@ -54,6 +56,12 @@ class ApplyDemandForm extends BaseForm
      */
     public $copy_person = [];
     
+    public $buy_type;
+    
+    public $apply_buy_id;
+    
+    public $tips = '';
+    
     
     public function rules()
     {
@@ -71,14 +79,48 @@ class ApplyDemandForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['des', 'string'],
+            [['des', 'tips'], 'string'],
             ['files', 'safe'],
             ['apply_id', 'checkOnly'],
-            ['demand_list', 'checkDemandList']
+            ['demand_list', 'checkDemandList'],
+            [['apply_id', 'buy_type', 'apply_buy_id',],  'required', 'on' => [self::CONFIRM_BUY] ],
+            ['apply_buy_id', 'checkApplyBuyId']
         ];
     }
     
+    /**
+     * 设置场景
+     *
+     * @return array
+     */
+    public function scenarios()
+    {
+        return [
+            self::CONFIRM_BUY => ['apply_id', 'buy_type', 'apply_buy_id', 'tips'],
+            'default' => ['approval_persons', 'apply_id', 'demand_list', 'copy_person', 'des', 'files']
+        ];
+    }
     
+    /**
+     * 检查请购单是否存在
+     *
+     * @param $attribute
+     */
+    public function checkApplyBuyId($attribute)
+    {
+        if ($this->scenario == self::CONFIRM_BUY) {
+            $applyBuy = ApplyBuy::findOne($this->$attribute);
+            if (!$applyBuy  || $applyBuy->status != 99 ) {
+                $this->addError($attribute, '请购单不存在或者未审核通过');
+            }
+        }
+    }
+    
+    /**
+     * 检查$demand_list
+     *
+     * @param $attribute
+     */
     public function checkDemandList($attribute)
     {
         if (!is_array($this->$attribute)) {
@@ -177,5 +219,18 @@ class ApplyDemandForm extends BaseForm
             throw new Exception('请购明细保存失败');
         }
         return true;
+    }
+    
+    
+    public function confirmSave()
+    {
+        $apply = ApplyDemand::findOne($this->apply_id);
+        $apply->buy_type = $this->buy_type;
+        $apply->apply_buy_id = $this->apply_buy_id;
+        $apply->tips = $this->tips;
+        if (!$apply->save()) {
+            return $apply;
+        }
+        return $apply;
     }
 }
