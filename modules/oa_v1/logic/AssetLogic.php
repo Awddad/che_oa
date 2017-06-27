@@ -360,7 +360,7 @@ class AssetLogic extends Logic
         try {
             $status = 2;
             foreach ($data['list'] as $v) {
-                $buyList = ApplyBuyList::findOne($v['id']);
+                $buyList = ApplyBuyList::findOne($v['apply_buy_id']);
                 if(empty($buyList)){
                     throw new Exception('入库失败');
                 }
