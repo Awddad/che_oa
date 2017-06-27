@@ -24,27 +24,6 @@ use yii\web\HttpException;
 class PayConfirmController extends BaseController
 {
     /**
-     * 权限控制
-     *
-     * @param $action
-     * @return bool
-     * @throws HttpException
-     */
-    public function beforeAction($action)
-    {
-        parent::beforeAction($action);
-        $roleIds = explode(',', $this->arrPersonInfo['role_ids']);
-        if(in_array($this->roleId, $roleIds)){
-            $role = Role::findOne($this->roleId);
-            if ($role->slug != 'caiwu') {
-                throw new HttpException(403, '无权访问', 403);
-            }
-        }
-        return true;
-    }
-    
-    
-    /**
      * 付款确认表单
      */
     public function actionForm()
