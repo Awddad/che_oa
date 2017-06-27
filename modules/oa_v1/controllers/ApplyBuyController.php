@@ -127,4 +127,15 @@ class ApplyBuyController extends BaseController
         return $this->_return($query->all());
     }
     
+    /**
+     * 入库
+     */
+    public function addStock()
+    {
+        $param = Yii::$app->request->post();
+        foreach ($param as $v) {
+            
+        }
+    }
+    
 }

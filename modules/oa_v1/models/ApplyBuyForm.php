@@ -93,6 +93,11 @@ class ApplyBuyForm extends BaseForm
         ];
     }
     
+    /**
+     * 检查请购明细
+     *
+     * @param $attribute
+     */
     public function checkBuyList($attribute)
     {
         if (!is_array($this->$attribute)) {
