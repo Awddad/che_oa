@@ -315,22 +315,36 @@ class AssetLogic extends Logic
      * @param int $personId
      * @param int $assetListId
      * @param int $applyId
+     * @param int $type
+     * @param string $des
      *
      * @return boolean
      * @throws \yii\base\Exception
      */
-    public function addAssetListLog($personId, $assetListId, $applyId)
+    public function addAssetListLog($personId, $assetListId, $applyId = null, $type = 2, $des = null)
     {
+        switch ($type) {
+            case 2:
+                $des = '领用,审批单号：' . $applyId;
+                break;
+            case 3:
+                $des = '归还, 审批单号：201708091231313' . $applyId;
+                break;
+            default:
+                $des = '首次领用';
+                break;
+        }
         $log = new AssetListLog();
         $log->person_id = $personId;
         $log->asset_list_id = $assetListId;
-        $log->type = 2;
-        $log->des = '领用,审批单号：' . $applyId;
+        $log->type = $type;
+        $log->des = $des;
+        
         $log->created_at = time();
         if ($log->save()) {
             return true;
         }
-        throw new \yii\base\Exception('日志保存时报');
+        throw new \yii\base\Exception('日志保存失败');
     }
     
     /**
