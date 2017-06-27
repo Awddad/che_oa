@@ -16,6 +16,7 @@ use Yii;
  * @property string $name
  * @property string $price
  * @property integer $amount
+ * @property integer $in_amount
  */
 class ApplyBuyList extends \yii\db\ActiveRecord
 {
@@ -33,7 +34,7 @@ class ApplyBuyList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['asset_type_id', 'asset_brand_id', 'amount'], 'integer'],
+            [['asset_type_id', 'asset_brand_id', 'amount', 'in_amount'], 'integer'],
             [['price'], 'number'],
             [['apply_id'], 'string', 'max' => 20],
             [['name', 'asset_type_name', 'asset_brand_name'], 'string', 'max' => 128],

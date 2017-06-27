@@ -14,6 +14,7 @@ use Yii;
  * @property string $sn_number
  * @property string $price
  * @property integer $status
+ * @property integer $apply_buy_id
  * @property integer $created_at
  */
 class AssetList extends \yii\db\ActiveRecord
@@ -42,6 +43,7 @@ class AssetList extends \yii\db\ActiveRecord
             [['asset_id'], 'required'],
             [['asset_id', 'status', 'created_at'], 'integer'],
             [['price'], 'number'],
+            ['apply_buy_id', 'string', 'max' => 20],
             [['asset_number', 'stock_number'], 'string', 'max' => 15],
             [['sn_number'], 'string', 'max' => 64],
         ];

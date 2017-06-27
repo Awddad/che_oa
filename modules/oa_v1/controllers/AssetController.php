@@ -288,7 +288,11 @@ class AssetController extends BaseController
         ]);
     }
     
-    
+    /**
+     * 丢失／报废
+     *
+     * @return array
+     */
     public function actionUpdateAssetStock()
     {
         $param = Yii::$app->request->post();
@@ -297,11 +301,29 @@ class AssetController extends BaseController
              $this->_returnError(400);
         }
         
-        $assetList = AssetList::findOne($param['asset_list_id']);
-        $assetList->status = $param['status'];
-        if ($assetList->save()) {
-            $type = $param['status'] == 3 ?  4 : 5;
-            AssetLogic::instance()->addAssetListLog('',$param['asset_list_id'], null, $type, $param['des']);
+        $rst= AssetLogic::instance()->updateAssetList($param);
+        if($rst) {
+            return $this->_return([]);
         }
+        return $this->_returnError(500);
+    }
+    
+    /**
+     * 添加 sn_number
+     *
+     * @return array
+     */
+    public function addSnNumber()
+    {
+        $param = Yii::$app->request->post();
+    
+        if(empty($param) || !isset($param['asset_list_id'])  || !isset($param['sn_number'])) {
+            $this->_returnError(400);
+        }
+        $rst = AssetList::updateAll(['sn_number' => $param['sn_number'], ['id' => $param['asset_list_id']]]);
+        if($rst) {
+            return $this->_return([], 200, '添加成功');
+        }
+        return $this->_returnError(500);
     }
 }
