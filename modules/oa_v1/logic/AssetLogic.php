@@ -328,7 +328,7 @@ class AssetLogic extends Logic
                 $des = '领用,审批单号：' . $applyId;
                 break;
             case 3:
-                $des = '归还, 审批单号：201708091231313' . $applyId;
+                $des = '归还, 审批单号：' . $applyId;
                 break;
             default:
                 $des = '首次领用';

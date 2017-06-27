@@ -292,8 +292,16 @@ class AssetController extends BaseController
     public function actionUpdateAssetStock()
     {
         $param = Yii::$app->request->post();
-        if(empty($param) || !isset($param['apply_id']) || !isset($param['status'])) {
-            
+         
+        if(empty($param) || !isset($param['asset_list_id']) || !isset($param['status']) || !isset($param['des'])) {
+             $this->_returnError(400);
+        }
+        
+        $assetList = AssetList::findOne($param['asset_list_id']);
+        $assetList->status = $param['status'];
+        if ($assetList->save()) {
+            $type = $param['status'] == 3 ?  4 : 5;
+            AssetLogic::instance()->addAssetListLog('',$param['asset_list_id'], null, $type, $param['des']);
         }
     }
 }
