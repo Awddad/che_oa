@@ -70,9 +70,9 @@ class PayLogic extends BaseLogic
                 ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
-        $query->andWhere([
-            'in', 'org_id', $orgIds
-        ]);
+//        $query->andWhere([
+//            'in', 'org_id', $orgIds
+//        ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
@@ -226,9 +226,9 @@ class PayLogic extends BaseLogic
         if (\Yii::$app->request->get('asc')) {
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
-        $query->andWhere([
-            'in', 'org_id', $orgIds
-        ]);
+//        $query->andWhere([
+//            'in', 'org_id', $orgIds
+//        ]);
         $models = $query->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {

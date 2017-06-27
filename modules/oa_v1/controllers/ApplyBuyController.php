@@ -130,7 +130,7 @@ class ApplyBuyController extends BaseController
     /**
      * 入库
      */
-    public function addStock()
+    public function actionAddStock()
     {
         $param = Yii::$app->request->post();
         if(empty($param) || !isset($param['list']) || !isset($param['apply_id'])) {
