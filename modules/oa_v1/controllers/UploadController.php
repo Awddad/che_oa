@@ -23,10 +23,10 @@ class UploadController extends BaseController
     public function verbs()
     {
         return [
-            'file' => ['POST', 'OPTIONS']
+            'file' => ['post','OPTIONS']
         ];
     }
-    
+
     public function actionImage()
     {
         $model = new FileForm();
@@ -36,7 +36,7 @@ class UploadController extends BaseController
         }
         return $this->_return($img);
     }
-    
+
     /**
      * 上传接口
      *
