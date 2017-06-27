@@ -288,4 +288,12 @@ class AssetController extends BaseController
         ]);
     }
     
+    
+    public function actionUpdateAssetStock()
+    {
+        $param = Yii::$app->request->post();
+        if(empty($param) || !isset($param['apply_id']) || !isset($param['status'])) {
+            
+        }
+    }
 }
