@@ -2133,7 +2133,7 @@ module.exports = {
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://192.168.1.128:8010', // api的base_urlhttp://192.168.1.128:8010
+    baseURL: '', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
 
@@ -20714,8 +20714,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: 'http://192.168.1.128:8010/oa_v1/upload/file',
-        serverUrl: 'http://192.168.1.128:8010',
+        BaseUrl: '/oa_v1/upload/file',
+        serverUrl: '',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -44019,4 +44019,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[222]);
-//# sourceMappingURL=index.js.map?5e7e0463b138b7828d59
+//# sourceMappingURL=index.js.map?7fa402d72d763750f2f8
