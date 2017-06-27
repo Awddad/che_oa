@@ -24,7 +24,7 @@ use Yii;
  * @property string $entry_time
  * @property string $leave_time
  * @property integer $educational
- * @property string $current_location
+ * @property integer $current_location
  * @property string $birthday
  * @property integer $person_id
  */
@@ -44,12 +44,12 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['org_id', 'profession', 'political', 'marriage', 'status', 'type', 'educational', 'person_id'], 'integer'],
+            [['org_id', 'profession', 'political', 'marriage', 'status', 'type', 'educational', 'current_location', 'person_id'], 'integer'],
             [['name', 'entry_time', 'leave_time'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
             [['email'], 'string', 'max' => 50],
             [['id_card', 'birthday'], 'string', 'max' => 25],
-            [['nation', 'native', 'current_location'], 'string', 'max' => 15],
+            [['nation', 'native'], 'string', 'max' => 15],
             [['work_time'], 'string', 'max' => 10],
             [['person_id'], 'unique'],
         ];
@@ -83,10 +83,4 @@ class Employee extends \yii\db\ActiveRecord
             'person_id' => 'Person ID',
         ];
     }
-    
-    public function getAccount()
-    {
-    	return $this->hasOne(EmployeeAccount::className(), ['employee_id' => 'id']);
-    }
-    
 }
