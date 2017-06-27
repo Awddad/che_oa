@@ -98,7 +98,7 @@ class ApplyDemandController extends BaseController
          * @var Apply $v
          */
         foreach ($model as $k => $v) {
-            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
+            $org = PersonLogic::instance()->getOrgName($v->personInfo);
             
             $detail = implode(',', ArrayHelper::getColumn($v->applyDemand, 'name'));
             
@@ -107,15 +107,34 @@ class ApplyDemandController extends BaseController
                 'apply_id' => $v->apply_id,
                 'create_time' => date('Y-m-d H:i', $v->create_time),
                 'person' => $v->person,
-                'org' => $org,
+                'org' => implode('-', $org),
                 'detail' => $detail,
-                'status' => ApplyDemand::STATUS[$v->status]
+                'status' => ApplyDemand::STATUS[$v->applyDemand->status]
             ];
         }
         return $this->_return([
             'list' => $data,
             'pages' => BaseLogic::instance()->pageFix($pagination)
         ]);
+    }
+    
+    /**
+     * 需求单审核通过后，确认请购
+     *
+     * @return array
+     */
+    public function actionConfirmBuy()
+    {
+        $model = new ApplyDemandForm();
+        $model->scenario = $model::CONFIRM_BUY;
+        
+        $param = Yii::$app->request->post();
+        $data['ApplyDemandForm'] = $param;
+        if ($model->load($data) && $model->validate() && $model->confirmSave()) {
+            return $this->_return($model->apply_id);
+        } else {
+            return $this->_returnError(400, $model->errors);
+        }
     }
     
 }

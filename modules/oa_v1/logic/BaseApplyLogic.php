@@ -237,7 +237,7 @@ class BaseApplyLogic extends Logic
     public function getAssetBackList($assetListIds)
     {
         $data = [];
-        $list = AssetGetList::find()->where(['in', 'asset_list_id', explode(',', $assetListIds)])->all();
+        $list = AssetGetList::find()->where(['in', 'id', explode(',', $assetListIds)])->all();
         $assetLogic = AssetLogic::instance();
         /**
          * @var AssetGetList $v

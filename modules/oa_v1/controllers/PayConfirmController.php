@@ -52,7 +52,7 @@ class PayConfirmController extends BaseController
         $applyId = \Yii::$app->request->get('apply_id');
         $data = PayLogic::instance()->getForm($applyId, $this->arrPersonInfo);
         if(!$data) {
-            return $this->_return($data, PayLogic::instance()->errorCode);
+            return $this->_returnError(PayLogic::instance()->errorCode, $data);
         }
         return $this->_return($data);
     }

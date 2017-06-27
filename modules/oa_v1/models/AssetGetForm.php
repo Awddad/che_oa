@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 use app\models\Apply;
 use app\models\AssetGet;
+use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
@@ -90,7 +91,7 @@ class AssetGetForm extends BaseForm
             $this->saveAssetGet($user);
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
-            $this->saveAssetGetList();
+            $this->saveAssetGetList($user);
             $transaction->commit();
             return $apply;
         } catch (Exception $e) {
@@ -121,20 +122,24 @@ class AssetGetForm extends BaseForm
     
     /**
      * 资产领用列表
+     * @param Person $user
+     *
+     * @throws Exception
      */
-    public function saveAssetGetList()
+    public function saveAssetGetList($user)
     {
         $data = [];
         foreach ($this->asset_ids as $v) {
             $data[] = [
-                'apply_id' => $this->apply_id,
-                'asset_id' => $v,
-                'status' => 1,
-                'created_at' => time()
+                $this->apply_id,
+                $user->person_id,
+                $v,
+                1,
+                time()
             ];
         }
         $n = \Yii::$app->db->createCommand()->batchInsert('oa_asset_get_list', [
-            'apply_id', 'asset_id', 'status', 'created_at'
+            'apply_id', 'person_id', 'asset_id', 'status', 'created_at'
         ], $data)->execute();
         if(!$n) {
             throw new Exception('固定资产领用单创建失败!');

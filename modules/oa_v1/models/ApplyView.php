@@ -3,6 +3,7 @@ namespace app\modules\oa_v1\models;
 
 
 
+use app\models\ApplyUseChapter;
 use app\models\AssetBack;
 use app\models\AssetGet;
 use app\models\BaoXiao;
@@ -204,7 +205,7 @@ class ApplyView extends BaseForm
 	protected function getUseChapter($apply)
 	{
 		$data = [
-		    'chapter_type' => $apply->applyUseChapter->chapter_type,
+		    'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
 		    'name' => $apply->applyUseChapter->des,
             'des' => $apply->applyUseChapter->des,
             'files' => json_decode($apply->applyUseChapter->files),
@@ -298,6 +299,8 @@ class ApplyView extends BaseForm
 	}
     
     /**
+     * 固定资产申请
+     *
      * @param Apply $apply
      * @return array
      */
@@ -316,6 +319,8 @@ class ApplyView extends BaseForm
     }
     
     /**
+     * 固定资产归还
+     *
      * @param Apply $apply
      * @return array
      */

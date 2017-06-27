@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\models\Menu;
 use app\models\User;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
@@ -16,6 +17,7 @@ use yii\filters\RateLimiter;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\rest\Controller;
+use yii\web\HttpException;
 use yii\web\Response;
 use Yii;
 use app\models\Role;
@@ -99,19 +101,22 @@ class BaseController extends Controller
     
             $this->setUserRoleInfo($intRoleId);
 
-            //权限
-//            $roleInfo = Role::findOne($this->roleId);
-//            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-//            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
-//            if (!in_array($requestUrlArr['0'], static::$arrWhiteList)
-//                && !in_array(Yii::$app->controller->id, ['default', 'upload'])
-//            ) {
-//                if (!in_array($requestUrlArr['0'], $roleArr)) {
-//                    header("Content-type: application/json");
-//                    echo json_encode($this->_return([], 403, '您无操作权限，请联系管理员'));
-//                    die();
-//                }
-//            }
+            //权限管理
+            $roleInfo = Role::findOne($this->roleId);
+            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
+            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
+            $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
+    
+            if ($action->id == 'index') {
+                $url_one = '/' . $action->controller->id;
+                if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                    throw new HttpException(403);
+                }
+            } else {
+                if (!in_array($requestUrlArr, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                    throw new HttpException(403);
+                }
+            }
         } else {
             //app 版本的登录   先预留
         }
@@ -134,11 +139,11 @@ class BaseController extends Controller
         $this->roleId = $intRoleId;
         $personId = $this->arrPersonInfo->person_id;
         $strCacheKey = 'role_info_' . $strOs . '_' . $intRoleId . '_' . $personId;
-        if($blnForce == false)//不强制刷新的时候 从缓存中获取
-        {
-            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
-        }
-        
+//        if($blnForce == false)//不强制刷新的时候 从缓存中获取
+//        {
+//            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
+//        }
+//
         if(empty($this->arrPersonRoleInfo))
         {
             $objRoleMod = Role::findOne(['id' => $intRoleId]);
@@ -207,9 +212,9 @@ class BaseController extends Controller
     					4 => '付款',
     					5 => '请购',
     					6 => '需求',
-    					7 => '固定资产领用',
-    					8 => '固定资产归还',
-    					9 => '用章',
+                        7 => '用章',
+    					8 => '固定资产领用',
+    					9 => '固定资产归还',
     					10 => '转正',
     					11 => '离职',
     					12 => '调职',

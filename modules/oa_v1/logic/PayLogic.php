@@ -99,9 +99,15 @@ class PayLogic extends BaseLogic
                 if ($model->type == 1) {
                     $typeName = '申请报销';
                     $money = $model->expense->money;
-                } else {
-                    $typeName = '申请借款';
+                } elseif ($model->type == 2) {
+                    $typeName = '申请报销';
                     $money = $model->loan->money;
+                }elseif ($model->type == 4) {
+                    $typeName = '申请报销';
+                    $money = $model->applyPay->money;
+                }else {
+                    $typeName = '申请借款';
+                    $money = $model->applyBuy->money;
                 }
 
                 $data[] = [
@@ -131,7 +137,7 @@ class PayLogic extends BaseLogic
     public function getForm($applyId, $person)
     {
         $apply = Apply::findOne($applyId);
-        if ($apply->status != 4 || !in_array($apply->type, [1, 2])) {
+        if ($apply->status != 4 || !in_array($apply->type, [1, 2, 4, 5])) {
             $this->errorCode = 1010;
             $this->error = '申请ID不能确认，请求不合法';
             return false;
@@ -237,7 +243,17 @@ class PayLogic extends BaseLogic
                     $money = $model->loan->money;
                     $bankName = $model->loan->bank_name;
                     $bankCardId = $model->loan->bank_card_id;
-                } else {
+                }else if ($model->type == 4) {
+                    $typeName = '申请付款';
+                    $money = $model->applyPay->money;
+                    $bankName = $model->applyPay->bank_name;
+                    $bankCardId = $model->applyPay->bank_card_id;
+                } else if ($model->type == 5) {
+                    $typeName = '申请请购';
+                    $money = $model->applyBuy->money;
+                    $bankName = $model->applyBuy->bank_name;
+                    $bankCardId = $model->applyBuy->bank_card_id;
+                }  else {
                     $typeName = '申请还款';
                     $money = $model->payBack->money;
                     $bankName = $model->payBack->bank_name;
