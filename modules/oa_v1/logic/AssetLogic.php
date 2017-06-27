@@ -409,7 +409,7 @@ class AssetLogic extends Logic
      * @param Asset $asset
      * @param string $applyBuyId
      */
-    public function addAssetList($asset, $applyBuyId)
+    public function addAssetList($asset, $applyBuyId = '')
     {
         $data = [];
         $last = $this->getLastAssetNum();

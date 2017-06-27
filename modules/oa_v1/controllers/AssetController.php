@@ -16,6 +16,7 @@ use app\models\AssetListLog;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PersonLogic;
+use app\modules\oa_v1\models\AssetListForm;
 use Yii;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\AssetBackForm;
@@ -325,5 +326,21 @@ class AssetController extends BaseController
             return $this->_return([], 200, '添加成功');
         }
         return $this->_returnError(500);
+    }
+    
+    /**
+     * 新增库存
+     */
+    public function actionAddAsset()
+    {
+        $model = new AssetListForm();
+    
+        $param = \Yii::$app->request->post();
+        $data['AssetListForm'] = $param;
+        if ($model->load($data) && $model->validate() &&  $model->save()) {
+            return $this->_return([]);
+        } else {
+            return $this->_return($model->errors, 400);
+        }
     }
 }
