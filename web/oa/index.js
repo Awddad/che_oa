@@ -9177,6 +9177,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$refs[formName].validate(function (valid) {
                 if (valid) {
+                    var files = '';
+                    if (_this.fileList != null) {
+                        files = _this.fileList.map(function (data) {
+                            return data.response.data[0];
+                        });
+                    }
                     if (type != 'payment') {
                         var data = {
                             apply_id: _this.apply_id,
@@ -9187,9 +9193,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             create_cai_wu_log: _this.radio,
                             shou_kuan_time: Date.parse(new Date(_this.ruleForm.applyDate)),
                             type: _this.ruleForm.bankType,
-                            files: _this.fileList.map(function (data) {
-                                return data.response.data[0];
-                            }),
+                            files: files,
                             tips: _this.ruleForm.tips
                         };
                         _this.$emit("OnSubmitConfirmModal", data);
@@ -9204,9 +9208,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             create_cai_wu_log: _this.radio,
                             fu_kuan_time: Date.parse(new Date(_this.ruleForm.applyDate)),
                             type: 7,
-                            files: _this.fileList.map(function (data) {
-                                return data.response.data[0];
-                            }),
+                            files: files,
                             tips: _this.ruleForm.tips
                         };
                         _this.$emit("OnSubmitConfirmModal", _data);
@@ -18731,6 +18733,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -18821,12 +18827,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             var value = Number(curr);
                             if (!isNaN(value)) {
                                 var pcvalue = prev * 1 + curr * 1;
-                                pcvalue = pcvalue.toFixed(2);
-                                return pcvalue;
+                                return pcvalue.toFixed(2);
                             } else {
                                 return prev.toFixed(2);
                             }
                         }, 0);
+                        sums[index] = '￥ ' + sums[index];
                     } else {
                         sums[index] = '';
                     }
@@ -20545,7 +20551,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this4 = this;
 
             //console.log(row);
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            this.$confirm('确认撤销该申请吗？ 撤销该申请后，将不会继续进行审批流程。', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -20563,7 +20569,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     if (response.data.code == 200) {
                         _this4.$message({
                             type: 'success',
-                            message: '删除成功!'
+                            message: '撤销成功!'
                         });
                         _this4.ondispatch();
                     }
@@ -22214,7 +22220,11 @@ var app = {
             state.isnav = data;
         },
         SET_pagenation: function SET_pagenation(state, data) {
-            state.pagenation = data;
+            if (data <= 768) {
+                localStorage.setItem('pagenation', 0);
+            } else {
+                localStorage.setItem('pagenation', 1);
+            }
         }
     },
     actions: {
@@ -38115,7 +38125,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "prop": "money",
       "label": "报销金额",
       "width": "120"
-    }
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(scope) {
+        return [_vm._v("\n                            ￥ " + _vm._s(scope.row.money) + "\n                        ")]
+      }
+    }])
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "type_name",
@@ -39831,7 +39847,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "const_wrap mb-md"
   }, [_c('h1', {
-    staticClass: "mb-md"
+    staticClass: "mb-md mt-0"
   }, [_vm._v("报销单")]), _vm._v(" "), _c('table', {
     attrs: {
       "width": "100%"
@@ -46714,4 +46730,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?190e555266ba9cdf27d7
+//# sourceMappingURL=index.js.map?f096304b9758398de5f1
