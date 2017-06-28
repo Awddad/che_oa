@@ -18,6 +18,7 @@ use Yii;
  * @property string $phone
  * @property string $access_token
  * @property integer $last_login_time
+ * @property integer $company_id
  */
 class Person extends \yii\db\ActiveRecord
 {
@@ -36,7 +37,7 @@ class Person extends \yii\db\ActiveRecord
     {
         return [
             [['person_id', 'org_id'], 'required'],
-            [['person_id', 'org_id', 'is_delete', 'last_login_time'], 'integer'],
+            [['person_id', 'org_id', 'is_delete', 'last_login_time', 'company_id'], 'integer'],
             [['person_name', 'org_name', 'email', 'org_full_name'], 'string', 'max' => 255],
             [['profession'], 'string', 'max' => 4],
             [['phone'], 'string', 'max' => 11],
