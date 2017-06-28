@@ -101,13 +101,13 @@ class PayLogic extends BaseLogic
                     $typeName = '申请报销';
                     $money = $model->expense->money;
                 } elseif ($model->type == 2) {
-                    $typeName = '申请报销';
+                    $typeName = '申请借款';
                     $money = $model->loan->money;
                 }elseif ($model->type == 4) {
-                    $typeName = '申请报销';
+                    $typeName = '申请付款';
                     $money = $model->applyPay->money;
                 }else {
-                    $typeName = '申请借款';
+                    $typeName = '申请请购';
                     $money = $model->applyBuy->money;
                 }
 
