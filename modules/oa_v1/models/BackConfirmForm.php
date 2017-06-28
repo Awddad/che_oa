@@ -102,6 +102,7 @@ class BackConfirmForm extends CaiWuShouKuan
             }
             $apply = Apply::findOne($this->apply_id);
             $apply->status = 99; //订单完成
+            $apply->next_des = '完成';
             $apply->cai_wu_person_id = $person->person_id;
             $apply->cai_wu_time = time();
             $apply->cai_wu_person = $person->person_name;
