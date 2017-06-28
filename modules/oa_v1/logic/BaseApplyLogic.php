@@ -15,6 +15,7 @@ use app\models\ApplyBuyList;
 use app\models\ApplyDemandList;
 use app\models\ApprovalLog;
 use app\models\AssetGetList;
+use app\models\CaiWuFuKuan;
 
 
 /**
@@ -107,12 +108,12 @@ class BaseApplyLogic extends Logic
     
         if($apply->status == 99) {
             if ($apply->cai_wu_need == 2) {
-                $caiWuFuKuan = Apply::findOne($apply->apply_id);
+                $caiWuFuKuan = CaiWuFuKuan::findOne($apply->apply_id);
                 $data[] = [
                     "title" => "财务确认",
-                    "name" => $caiWuFuKuan->person,
+                    "name" => $apply->cai_wu_person,
                     "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
-                    "org" => PersonLogic::instance()->getOrgNameByPersonId($caiWuFuKuan->person_id),
+                    "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
                     "status" => 2,
                     'diff_time' => $caiWuFuKuan->create_time - $apply->create_time
                 ];

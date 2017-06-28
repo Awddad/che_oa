@@ -239,6 +239,7 @@ class AssetController extends BaseController
             'sn_number' => $assetList->sn_number,
             'price' => $assetList->price,
             'status' => $assetList->status,
+            'status_name' => $assetList::STATUS[$assetList->status],
         ];
         
         return $this->_return($data);
