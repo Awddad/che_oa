@@ -34,7 +34,7 @@ class BaoxiaoController extends BaseController
 			
 			if($model -> validate()){
 				if($apply_id = $model -> saveBaoxiao() ){
-					$model -> saveAccount($file_config['pdf']);
+					$model -> saveAccount($file_config['pdf'], $this->arrPersonInfo);
 					return $this -> _return($apply_id,200);
 				}else{
 					return $this -> _return($model -> getErrors(),404);
