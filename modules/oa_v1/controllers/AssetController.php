@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\models\Apply;
+use app\models\ApplyDemand;
 use app\models\Asset;
 use app\models\AssetGetList;
 use app\models\AssetList;
@@ -229,7 +230,15 @@ class AssetController extends BaseController
     public function actionAssetDetail($asset_list_id)
     {
         $assetList = AssetList::findOne($asset_list_id);
-        
+        /**
+         * @var ApplyDemand $demand
+         */
+        $demand = ApplyDemand::find()->where(['apply_buy_id' => $assetList->apply_buy_id])->one();
+        if ($demand) {
+            $demandId = $demand->apply_id;
+        } else {
+            $demandId = null;
+        }
         $data = [
             'asset_type_name' => $assetList->asset->asset_type_name,
             'asset_brand_name' => $assetList->asset->asset_brand_name,
@@ -240,6 +249,8 @@ class AssetController extends BaseController
             'price' => $assetList->price,
             'status' => $assetList->status,
             'status_name' => $assetList::STATUS[$assetList->status],
+            'apply_buy_id' => $assetList->apply_buy_id,
+            'apply_demand_id' => $demandId
         ];
         
         return $this->_return($data);
