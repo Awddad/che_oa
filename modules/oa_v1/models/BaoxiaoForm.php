@@ -271,13 +271,17 @@ class BaoxiaoForm extends BaseForm
 		}
 		return $res;
 	}
-	
-	public function saveAccount($dir)
+    
+    /**
+     * @param $dir
+     * @param appmodel\Person $person
+     */
+	public function saveAccount($dir, $person)
 	{
 		$arrInfo = [
 			'apply_date' => date('Y年m月d日',$this -> create_time),
 			'apply_id' => $this -> apply_id,
-			'org_full_name' => $this -> title,
+			'org_full_name' => $person->org_full_name,
 			'person' => $this -> user['name'],
 			'bank_name' => $this -> bank_name.$this -> bank_name_des,
 			'bank_card_id' => $this -> bank_card_id,
