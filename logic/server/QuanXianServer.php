@@ -56,8 +56,9 @@ class QuanXianServer extends Server
             'positions' => $this->preUrl . '/organizations/positions',//职位列表
             'all_user' => $this->preUrl . '/users',//组织架构下所有人
             'add_user' => $this->preUrl . '/users/create',//添加用户
-            'update_user' => $this->preUrl . '/users/%b/update',//修改用户
-            'delete_user' => $this->preUrl . '/users/%b/delete',//删除用户
+            'update_user' => $this->preUrl . '/users/%d/update',//修改用户
+            'delete_user' => $this->preUrl . '/users/%d/delete',//删除用户
+            'user_detail' => $this->preUrl . '/users/detail',//用户详情
         ];
     }
     
@@ -568,20 +569,21 @@ class QuanXianServer extends Server
     		foreach($arrOrgListTmp as $val)
     		{
     			$arrOrgList[$val['org_id']] = $val['org_name'];
-    		}
-    		//构造入库数据
-    		//$arrPerson = [];//oa_person表的入库数据
-    		$arrEmployee = [];//oa_employee表的入库数据
-    		$arrBankList = [];//oa_person_bank_info表的入库数据
-    		foreach($arrRtn['data']['data'] as $val)
-    		{
-    			$arrEmployee[] = [
+            }
+            // 构造入库数据
+            // $arrPerson = [];//oa_person表的入库数据
+            $arrEmployee = []; // oa_employee表的入库数据
+            $arrBankList = []; // oa_person_bank_info表的入库数据
+            foreach ($arrRtn['data']['data'] as $val) {
+                $arrEmployee[] = [
     					'person_id' => $val['id'],
     					'name' => $val['name'],
     					'org_id' => $val['organization_id'],
     					'profession' => $val['position_id'],
     					'phone' => $val['phone'],
     					'email' => $val['email'],
+                        'status' => 2,
+                        'employee_type' => EmployeeType::find()->where(['slug'=>'shiyong'])->one()->id,
     			];
     			//银行卡信息
     			if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
@@ -602,7 +604,7 @@ class QuanXianServer extends Server
     		//更新入库 - oa_employee
     		$strTable = Employee::tableName();
     		$arrKeys = array_keys($arrEmployee[0]);
-    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id');
+    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id',['status','employee_type']);
     		$result= Yii::$app->db->createCommand($strSql)->execute();
     	
     		//更新入库 - oa_person_bank_info表
@@ -631,7 +633,7 @@ class QuanXianServer extends Server
     			'email' => $params['email'],
     			'password' => $password,
     			'password_confirmation' => $password,
-    			'role_ids' => [$params['roles_id']],
+    			'role' => [$params['roles_id']],
     			'organization_id' => $params['org_id'],
     			'phone' => $params['phone'],
     			'position_id' => $params['position_id'],
@@ -639,9 +641,9 @@ class QuanXianServer extends Server
     	$arrRtn = $this->thisHttpPost($this->arrApiUrl['add_user'], $arrPost);
     	if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && $arrRtn['data']['id'] > 0)//接口处理数据成功
     	{
-    		return $arrRtn['data']['id'];
+    		return ['status'=>true,'id'=>$arrRtn['data']['id']];
     	}
-    	return false;
+    	return ['status'=>false,'msg'=>$arrRtn['message']];
     }
     
     /**
@@ -687,6 +689,74 @@ class QuanXianServer extends Server
     	return false;
     }
     
+    /**
+     * 脚本：为权限系统所有用户添加OA普通员工权限
+     */
+    public function addOaRoles()
+    {
+        return true;
+        //拉取所有员工
+        $arrPost = [
+            '_token' => $this->_token,
+            'page' => 1,
+            'per_page' => 100000//一次拉取所有员工
+        ];
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['all_user'], $arrPost);
+        if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) &&!empty($arrRtn['data']['data']))//接口处理数据成功
+        {
+            //OA普通员工权限
+            $role = Role::find()->where(['slug'=>'yuangong'])->one();
+            
+            foreach($arrRtn['data']['data'] as $val)
+            {
+                //获取员工详情（主要是权限）
+                $userDetail = $this->curlGetUserDetail($val['id'], ['show_project_roles'=>1]);
+                
+                if($userDetail){
+                    foreach($userDetail['project_roles'] as $v){
+                        $roles[] = $v['role_id'];
+                    }
+                    $roles[] = $role['id'];//给用户添加OA普通员工权限
+                    
+                    $arrPost = [
+                        '_token' => $this->_token,
+                        'name' => $userDetail['name'],
+                        'email' => $userDetail['email'],
+                        'roles' => $roles,
+                    ];
+                    $url = sprintf($this->arrApiUrl['update_user'],(int)$userDetail['id']);
+                    $res = $this->thisHttpPost($url, $arrPost);
+                    unset($arrPost);
+                    unset($roles);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 与权限系统交互 获取用户详情
+     * @param int $user_id  用户id
+     * @param array $params  参数 [show_project_roles，show_bank_cards]
+     * @return array
+     */
+    public function curlGetUserDetail($user_id,$params)
+    {
+        $arrGet = [
+            '_token' => $this->_token,
+            'id' => $user_id,
+            'show_project_roles' => isset($params['show_project_roles']) ? $params['show_project_roles'] :0,
+            'show_bank_cards' => isset($params['show_bank_cards']) ? $params['show_bank_cards'] :0,
+        ];
+        $url = $this->arrApiUrl['user_detail'].'?'.http_build_query($arrGet);
+        $arrRtn = $this->httpGet($url);
+        
+        if($arrRtn['success'] == 1 && is_array($arrRtn['data'])){
+            return $arrRtn['data'];
+        }
+        return false;
+    }
     
     /**
      * @功能：将curl请求包一层，以便记录与权限系统的交互log
