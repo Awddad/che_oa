@@ -205,7 +205,7 @@ class EmployeeForm extends BaseForm
         }
          
         return [
-            'data' => $data,
+            'res' => $data,
             'page' => BackLogic::instance()->pageFix($pagination)
         ];
     }
