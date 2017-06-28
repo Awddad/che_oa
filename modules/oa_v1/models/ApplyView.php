@@ -264,7 +264,7 @@ class ApplyView extends BaseForm
 	   $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
 	   $data = [
 	       'leave_time'=>date('Y年m月d日',strtotime($leave->leave_time)),
-	       'dex' => $leave->des,
+	       'des' => $leave->des,
 	       'stock_status' => $leave->stock_status ? '是' : '否',
 	       'finance_status' => $leave->finance_status ? '是' : '否',
 	       'account_status' => $leave->account_status ? '是' : '否',
