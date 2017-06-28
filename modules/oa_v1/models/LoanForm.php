@@ -162,6 +162,7 @@ class LoanForm extends BaseForm
             'tips' => $this->tips,
             'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
             'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
+            'caiwu' => '--'
         ]);
         if ($rst) {
             $pdfUrl = $filePath.$applyId.'.pdf';
