@@ -16,6 +16,7 @@ use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
 use app\modules\oa_v1\logic\RegionLogic;
+use app\models\Person;
 
 /**
  * 申请单详情
@@ -265,6 +266,7 @@ class ApplyView extends BaseForm
 	   $data = [
 	       'leave_time'=>date('Y年m月d日',strtotime($leave->leave_time)),
 	       'des' => $leave->des,
+	       'profession' => Person::find()->where(['person_id'=>$apply->person_id])->one()->profession,
 	       'stock_status' => $leave->stock_status ? '是' : '否',
 	       'finance_status' => $leave->finance_status ? '是' : '否',
 	       'account_status' => $leave->account_status ? '是' : '否',
