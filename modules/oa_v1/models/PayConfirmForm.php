@@ -114,55 +114,7 @@ class PayConfirmForm extends CaiWuFuKuan
             $transaction->rollBack();
             throw $exception;
         }
-        if($apply->type == 1) {
-            $arrInfo = [
-                'apply_date' => date('Y年m月d日',$this -> create_time),
-                'apply_id' => $apply -> apply_id,
-                'org_full_name' => $person->org_full_name,
-                'person' => $apply->person,
-                'bank_name' => $apply->expense->bank_name.$apply->expense-> bank_name_des,
-                'bank_card_id' => $apply->expense -> bank_card_id,
-                'approval_person' =>$apply->approval_persons,//多个人、分隔
-                'copy_person' => $apply->copy_person,//多个人、分隔
-                'list' => [],
-                'tips' => '--',
-                'caiwu' => $person->person_name
-            ];
-            $baoXiaoList = BaoXiaoList::find()->where(['apply_id' => $apply->apply_id])->all();
-            foreach($baoXiaoList as $v){
-                $arrInfo['list'][] = [
-                    'type_name' => $v['type_name'],
-                    'money' => \Yii::$app->formatter->asCurrency($v['money']),
-                    'detail' => @$v['des']
-                ];
-            }
-            $root_path = \Yii::$app -> basePath.'/web'.$apply->apply_list_pdf;
-            if(!file_exists($root_path)){
-                unlink($root_path);
-            }
-            $myPdf = new MyTcPdf();
-            $myPdf -> createBaoXiaoDanPdf($root_path, $arrInfo);
-        } elseif($apply->type == 2) {
-            $pdf = new  MyTcPdf();
-            $root_path = \Yii::$app -> basePath.'/web'.$apply->apply_list_pdf;
-            if(!file_exists($root_path)){
-                unlink($root_path);
-            }
-            $pdf->createJieKuanDanPdf($root_path, [
-                'apply_date' => date('Y年m月d日'),
-                'apply_id' => $apply->apply_id,
-                'org_full_name' => $person->org_full_name,
-                'person' => $person->person_name,
-                'bank_name' => $this->bank_name,
-                'bank_card_id' => $this->bank_card_id,
-                'money' => \Yii::$app->formatter->asCurrency($this->money),
-                'detail' => $this->des,
-                'tips' => $this->tips,
-                'approval_person' =>$apply->approval_persons,//多个人、分隔
-                'copy_person' => $apply->copy_person,//多个人、分隔
-                'caiwu' => $person->person_name
-            ]);
-        }
+        
         if(\Yii::$app->request->post('create_cai_wu_log')) {
             $param = [];
             $param['organization_id'] = $person->org_id;
