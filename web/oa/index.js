@@ -13279,12 +13279,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         this.$store.dispatch('Make_collections_table', { page_size: 10 }).then(function (response) {
             var data = response.data.data;
-            if (data.length > 0) {
-                _this.currentpage = data.pages.currentPage;
-                _this.total = data.pages.totalCount;
+            if (data) {
+                _this.currentpage = data.pages.currentPage == null ? 1 : data.pages.currentPage;
+                _this.total = data.pages.totalCount == null ? '1' : data.pages.totalCount;
+                _this.pageSize = data.pages.perPage;
+            } else {
+                _this.currentpage = 1;
+                _this.total = 1;
             }
         });
-        //console.log(this.pagenation);
     },
 
     computed: __WEBPACK_IMPORTED_MODULE_5_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_vuex__["b" /* mapGetters */])(['pagenation']), {
@@ -13312,10 +13315,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.dispatch('Make_collections_table', this.searchData()).then(function (response) {
                 var data = response.data.data;
-                if (data.length > 0) {
-                    _this2.currentpage = data.pages.currentPage;
-                    _this2.total = data.pages.totalCount;
+                if (data) {
+                    _this2.currentpage = data.pages.currentPage == null ? 1 : data.pages.currentPage;
+                    _this2.total = data.pages.totalCount == null ? '1' : data.pages.totalCount;
                     _this2.pageSize = data.pages.perPage;
+                } else {
+                    _this2.currentpage = 1;
+                    _this2.total = 1;
                 }
             });
         },
@@ -13666,7 +13672,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         this.$store.dispatch('Payment_table', { page_size: 10 }).then(function (response) {
             var data = response.data.data;
-            if (data.length > 0) {
+            if (data) {
                 _this.currentpage = data.pages.currentPage == null ? 1 : data.pages.currentPage;
                 _this.total = data.pages.totalCount == null ? '1' : data.pages.totalCount;
             } else {
@@ -13701,9 +13707,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.dispatch('Payment_table', this.searchData()).then(function (response) {
                 var data = response.data.data;
-                _this2.currentpage = data.pages.currentPage == null ? '1' : data.pages.currentPage;
-                _this2.total = data.pages.totalCount == null ? '1' : data.pages.totalCount;
-                _this2.pageSize = data.pages.perPage;
+                if (data) {
+                    _this2.currentpage = data.pages.currentPage == null ? '1' : data.pages.currentPage;
+                    _this2.total = data.pages.totalCount == null ? '1' : data.pages.totalCount;
+                    _this2.pageSize = data.pages.perPage;
+                }
             });
         },
         handleSizeChange: function handleSizeChange(val) {
@@ -30527,8 +30535,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-table-column', {
     attrs: {
-      "type": "index",
-      "prop": "index",
+      "prop": "id",
       "label": "序号",
       "width": "65"
     }
@@ -32012,8 +32019,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-table-column', {
     attrs: {
-      "type": "index",
-      "prop": "index",
+      "prop": "id",
       "label": "序号",
       "width": "65"
     }
@@ -46856,4 +46862,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?55edcf198bf35aaecc68
+//# sourceMappingURL=index.js.map?17023ff7677f664994f3
