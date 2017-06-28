@@ -2856,6 +2856,7 @@ module.exports = defaults;
 "use strict";
 /* unused harmony export DateTime */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SpendTime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return spendTime; });
 var DateTime = function DateTime() {
   var date = new Date();
   var year = date.getFullYear() + '年';
@@ -2911,6 +2912,20 @@ var SpendTime = function SpendTime(begin, end) {
   if (days > 0 || hours > 0) string += hours + '小时';
   string += minutes + '分钟';
 
+  return string;
+};
+
+var spendTime = function spendTime(time) {
+  var days = void 0,
+      hours = void 0,
+      minutes = void 0,
+      string = '';
+  days = Math.floor(time / 86400);
+  hours = Math.floor(time % 86400 / 3600);
+  minutes = Math.floor(time % 3600 / 60);
+  if (days > 0) string += days + '天';
+  if (days > 0 || hours > 0) string += hours + '小时';
+  string += minutes + '分钟';
   return string;
 };
 
@@ -14197,16 +14212,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.approvable = this.$route.query.approvable;
         this.$store.dispatch('Detais_list', { apply_id: this.apply_id, type: this.type }).then(function (response) {
             var data = response.data.data;
+            //console.log(data);
             //步骤条
             _this.steps = data.flow;
             for (var i = 0; i < _this.steps.length; i += 1) {
                 var step = _this.steps[i];
                 if (i != _this.steps.length - 1) {
                     _this.steps[i].content = step.name + ' &nbsp; ' + step.date + '<br>' + step.org;
-                    if (step.diff_time) _this.steps[i].content += '<br>耗费: ' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__components_common_js__["a" /* SpendTime */])(step.diff_time);
+                    if (step.diff_time) _this.steps[i].content += '<br>耗费: ' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__components_common_js__["b" /* spendTime */])(step.diff_time);
                     if (step.des) _this.steps[i].content += '<br>说明: ' + step.des;
                 } else {
-                    _this.steps[i].content = step.status == 2 ? step.date + '完成<br>总共耗费: ' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__components_common_js__["a" /* SpendTime */])(data.create_time) : '';
+                    _this.steps[i].content = step.status == 2 ? step.date + '完成<br>总共耗费: ' + __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__components_common_js__["b" /* spendTime */])(step.diff_time) : '';
                 }
 
                 switch (_this.steps[i].status) {
@@ -46804,4 +46820,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?dc27ea01eb24d24fe6c5
+//# sourceMappingURL=index.js.map?b23e4c73d1d453d7a643
