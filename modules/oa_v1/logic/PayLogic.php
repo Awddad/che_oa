@@ -31,8 +31,9 @@ class PayLogic extends BaseLogic
         $type = \Yii::$app->request->post('type');
 
         $query = Apply::find()->where([
-            'status' => 4,
             'cai_wu_need' => 2
+        ])->andWhere([
+            'in', 'status', [4, 99]
         ]);
         //筛选
         if ($type) {
@@ -117,7 +118,8 @@ class PayLogic extends BaseLogic
                     'type_name' => $typeName,
                     'apply_id' => $model->apply_id,
                     'title' => $model->title,
-                    'money' => $money
+                    'money' => $money,
+                    'status' => $model->status
                 ];
             }
             return [
