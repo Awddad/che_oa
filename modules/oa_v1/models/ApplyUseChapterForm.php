@@ -93,7 +93,7 @@ class ApplyUseChapterForm extends BaseForm
             'apply_id' => $applyId,
             'org_full_name' => $user->org_full_name,
             'person' => $user['person_name'],
-            'chapter_type' => ApplyUseChapter::STATUS['$this->chapter_type'],
+            'chapter_type' => ApplyUseChapter::STATUS[$this->chapter_type],
             'chapter_name' => $this->name,
             'des' => $this->des ? : '--',
             'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
