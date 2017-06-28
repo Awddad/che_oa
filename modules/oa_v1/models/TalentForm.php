@@ -323,7 +323,7 @@ class TalentForm extends BaseForm
 	    	    'work_time' => $v->work_time,
 	    	    'status' => $this->status_arr[$v->status],
 	    	    'status_value' => $v->status,
-	    	    'person_type' => $v->person_type > 0 ? $v->type->name : '',
+	    	    'person_type' => $v->person_type > 0 ? $v->personType->name : '',
 	    	];
 	    }
 	    
