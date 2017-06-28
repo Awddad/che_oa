@@ -82,6 +82,26 @@ class TalentController extends BaseController
     }
     
     /**
+     * 录用
+     */
+    public function actionEmploy()
+    {
+        $post = yii::$app->request->post();
+        $model = new TalentForm();
+        $model->setScenario($model::SCENARIO_EMPLOY);
+        $model->load(['TalentForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->employ($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    
+    /**
      * 列表
      */
     public function actionGetList()
