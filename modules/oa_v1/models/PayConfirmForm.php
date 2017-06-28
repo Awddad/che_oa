@@ -133,15 +133,15 @@ class PayConfirmForm extends CaiWuFuKuan
                 $jieKuan->status = 99;
                 $jieKuan->get_money_time = time();
                 $jieKuan->save();
-                $param['other_name'] = $person->person_name;
+                $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->loan->bank_card_id;
                 $param['other_bank'] = $apply->loan->bank_name;
             } elseif($apply->type == 4){
-                $param['other_name'] = $person->person_name;
+                $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->applyPay->bank_card_id;
                 $param['other_bank'] = $apply->applyPay->bank_name;
             } else {
-                $param['other_name'] = $person->person_name;
+                $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->applyBuy->bank_card_id;
                 $param['other_bank'] = $apply->applyBuy->bank_name;
             }
