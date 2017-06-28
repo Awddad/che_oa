@@ -14321,7 +14321,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.chapter_type = data.info.chapter_type;
                     _this.chapter_name = data.info.name;
                     _this.des = data.info.des == null ? '--' : data.info.des;
-                    console.log(data);
+                    //console.log(data);
                     break;
                 case '8':
                     _this.des = data.info.des;
@@ -15119,7 +15119,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var isxlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             var isdoc = file.type === 'application/msword';
             var isdocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && isxlsx && isdocx) {
+            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && !isxlsx && !isdocx) {
                 this.$message.error('上传文件格式错误，必须是jpg,gif,png,xls,xlsx,doc,docx中的一种!');
             }
             return isjpg || isgif || ispng || isxls || isxlsx || isdoc || isdocx;
@@ -16472,7 +16472,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var isxlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             var isdoc = file.type === 'application/msword';
             var isdocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && isxlsx && isdocx) {
+            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && !isxlsx && !isdocx) {
                 this.$message.error('上传文件格式错误，必须是jpg,gif,png,xls,xlsx,doc,docx中的一种!');
             }
             return isjpg || isgif || ispng || isxls || isxlsx || isdoc || isdocx;
@@ -16534,7 +16534,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             var fujian = this.fileList.map(function (data) {
-                return data.response.data;
+                return data.response.data[0];
             });
 
             var data = {
@@ -16931,7 +16931,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //审批单下载
         approve_attachment_download: function approve_attachment_download() {
-            window.open(this.app_attachment);
+            window.open(this.serverUrl + this.app_attachment_url);
         },
 
         //附件下载
@@ -18868,7 +18868,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         beforeUpload: function beforeUpload(file) {
-            //console.log(file.type);
+            console.log(file.type);
             var isjpg = file.type === 'image/jpeg';
             var isgif = file.type === 'image/gif';
             var ispng = file.type === 'image/png';
@@ -18876,7 +18876,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var isxlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             var isdoc = file.type === 'application/msword';
             var isdocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && isxlsx && isdocx) {
+            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && !isxlsx && !isdocx) {
                 this.$message.error('上传文件格式错误，必须是jpg,gif,png,xls,xlsx,doc,docx中的一种!');
             }
             return isjpg || isgif || ispng || isxls || isxlsx || isdoc || isdocx;
@@ -19475,7 +19475,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         Tolink: function Tolink(index, row) {
             //console.log(index, row);
-            this.$router.push({ path: '/approvalinfo', query: { apply_id: row.apply_id } });
+            this.$router.push({ path: '/approvals/details', query: { apply_id: row.apply_id, type: 2 } });
         },
         isClear: function isClear(formName) {
             this.$refs[formName].resetFields();
@@ -30886,7 +30886,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "des": _vm.des,
       "caiwuConfirm": _vm.caiwuConfirm
     }
-  }) : _vm._e(), _vm._v(" "), _c('div', {
+  }) : _vm._e(), _vm._v(" "), (_vm.type != 3) ? _c('div', {
     staticClass: "attachment-table mt-lg"
   }, [_c('el-row', {
     attrs: {
@@ -30952,7 +30952,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }, [_vm._v("下载\n                            ")])]
       }
     }])
-  })], 1)], 1)], 1)], 1), _vm._v(" "), (_vm.status == '4') ? _c('div', {
+  })], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), (_vm.status == '4') ? _c('div', {
     staticClass: "mt-lg"
   }, [_c('label', {
     staticClass: "f-l",
@@ -31538,6 +31538,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('el-upload', {
     staticClass: "upload-demo",
     attrs: {
+      "name": "files",
       "multiple": "",
       "on-success": _vm.handlefileChange,
       "on-remove": _vm.handlefileRemove,
@@ -46752,4 +46753,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?6a9c7a72d498c96e9aaf
+//# sourceMappingURL=index.js.map?4a1640645a26702bb715
