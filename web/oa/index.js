@@ -9189,12 +9189,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             org_id: _this.ruleForm.department,
                             bank_card_id: _this.ruleForm.bank.split("/")[0],
                             bank_name: _this.ruleForm.bank.split("/")[2].split("-")[0],
+                            account_id: _this.ruleForm.bank.split("/")[3],
                             shou_kuan_id: _this.ruleForm.flow,
                             create_cai_wu_log: _this.radio,
                             shou_kuan_time: Date.parse(new Date(_this.ruleForm.applyDate)),
                             type: _this.ruleForm.bankType,
                             files: files,
                             tips: _this.ruleForm.tips
+
                         };
                         _this.$emit("OnSubmitConfirmModal", data);
                         _this.$refs[formName].resetFields();
@@ -9204,6 +9206,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             org_id: _this.ruleForm.department,
                             bank_card_id: _this.ruleForm.bank.split("/")[0],
                             bank_name: _this.ruleForm.bank.split("/")[2].split("-")[0],
+                            account_id: _this.ruleForm.bank.split("/")[3],
                             fu_kuan_id: _this.ruleForm.flow,
                             create_cai_wu_log: _this.radio,
                             fu_kuan_time: Date.parse(new Date(_this.ruleForm.applyDate)),
@@ -22207,7 +22210,7 @@ var app = {
                     }
                 }*/
             } else {
-                alert(state.sidebar.opened);
+                //alert(state.sidebar.opened);
                 if (state.sidebar.opened) {
                     localStorage.setItem("sidebarStatus", 1);
                 } else {
@@ -23568,6 +23571,7 @@ var reimburse = {
                         }
                     }
                 }
+                //console.log(data.tabledata.des);
             } catch (err) {
                 _didIteratorError = true;
                 _iteratorError = err;
@@ -23583,8 +23587,7 @@ var reimburse = {
                 }
             }
 
-            console.log(data.tabledata.des);
-            result = { money: data.tabledata.money, type_name: ctype, des: data.tabledata.des == '' ? '--' : data.tabledata.des, type: bxType };
+            result = { money: parseFloat(data.tabledata.money).toFixed(2), type_name: ctype, des: data.tabledata.des == '' ? '--' : data.tabledata.des, type: bxType };
             commit('SET_reimburse_tabledata', result);
         },
         //删除一条报销记录
@@ -31999,7 +32002,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.Onconfirm(scope.$index, scope.row)
             }
           }
-        }, [_vm._v("付款确认")]) : _vm._e()]
+        }, [_vm._v("收款确认")]) : _vm._e()]
       }
     }])
   })], 1)], 1), _vm._v(" "), _c('el-row', {
@@ -38376,7 +38379,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "close-on-press-escape": _vm.hide
     }
   }, [_c('div', {
-    staticClass: "const_wrap mb-md"
+    staticClass: "const_wrap mb-md mt-0"
   }, [_c('h1', {
     staticClass: "mb-md mt-0"
   }, [_vm._v("用章单")]), _vm._v(" "), _c('table', {
@@ -40860,7 +40863,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       key: key,
       attrs: {
         "label": item.name_short,
-        "value": item.number + '/' + item.bank_name_des + '/' + item.name_short
+        "value": item.number + '/' + item.bank_name_des + '/' + item.name_short + '/' + item.id
       }
     })
   }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
@@ -41222,7 +41225,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       key: key,
       attrs: {
         "label": item.name_short,
-        "value": item.number + '/' + item.bank_name_des + '/' + item.name_short
+        "value": item.number + '/' + item.bank_name_des + '/' + item.name_short + '/' + item.id
       }
     })
   }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
@@ -41942,7 +41945,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "const_wrap mb-md"
   }, [_c('h1', {
-    staticClass: "mb-md"
+    staticClass: "mb-md mt-0"
   }, [_vm._v("借款单")]), _vm._v(" "), _c('table', {
     attrs: {
       "width": "100%"
@@ -42829,7 +42832,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('div', {
     staticClass: "const_wrap mb-md"
   }, [_c('h1', {
-    staticClass: "mb-md"
+    staticClass: "mb-md mt-0"
   }, [_vm._v("还款单")]), _vm._v(" "), _c('table', {
     attrs: {
       "width": "100%"
@@ -46730,4 +46733,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?f096304b9758398de5f1
+//# sourceMappingURL=index.js.map?0f44a1b0a14569adf20d
