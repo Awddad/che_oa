@@ -100,7 +100,6 @@ class ApprovalLog extends \yii\db\ActiveRecord
      */
     public function setApprovalPerson()
     {
-        Yii::error('11111111');
         $this->is_to_me_now = true;
         return $this->save();
     }
