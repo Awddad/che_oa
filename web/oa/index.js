@@ -14197,7 +14197,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.approvable = this.$route.query.approvable;
         this.$store.dispatch('Detais_list', { apply_id: this.apply_id, type: this.type }).then(function (response) {
             var data = response.data.data;
-            console.log(data.next_des);
             //步骤条
             _this.steps = data.flow;
             for (var i = 0; i < _this.steps.length; i += 1) {
@@ -14277,7 +14276,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }
 
-            switch (_this.$route.query.type) {
+            switch (_this.$route.query.type.toString()) {
                 case '1':
                     _this.counter = data.info.money;
                     _this.tableData = data.info.list;
@@ -14317,6 +14316,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.chapter_type = data.info.chapter_type;
                     _this.chapter_name = data.info.name;
                     _this.des = data.info.des == null ? '--' : data.info.des;
+                    console.log(data);
                     break;
                 case '8':
                     _this.des = data.info.des;
@@ -16543,8 +16543,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             };
 
             this.$store.dispatch('Chapter_Add', data).then(function (response) {
-                _this.loading = false;
-                _this.$router.push({ path: '/success', query: { apply_id: response.data.data, type: 7 } });
+                if (response.data.code == 200) {
+                    _this.loading = false;
+                    _this.$router.push({ path: '/success', query: { apply_id: response.data.data, type: 7 } });
+                } else {
+                    _this.$message(response.data.message);
+                }
             }).catch(function (err) {
                 _this.loading = false;
             });
@@ -18994,6 +18998,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue__ = __webpack_require__(459);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue__);
+//
+//
+//
+//
 //
 //
 //
@@ -30490,7 +30498,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "prop": "money",
       "label": "金额",
-      "width": "120"
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -30502,7 +30510,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "prop": "operation",
       "label": "操作",
-      "width": "130"
+      "width": "140"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -31965,7 +31973,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "prop": "money",
       "label": "金额",
-      "width": "100"
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -31977,7 +31985,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "prop": "operation",
       "label": "操作",
-      "width": "125"
+      "width": "140"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -37318,7 +37326,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "prop": "money",
       "label": "借款金额",
       "width": "120"
-    }
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function(scope) {
+        return [_vm._v("\n                            ￥ " + _vm._s(scope.row.money) + "\n                        ")]
+      }
+    }])
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "get_money_time",
@@ -46733,4 +46747,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?0f44a1b0a14569adf20d
+//# sourceMappingURL=index.js.map?0448f2b9d4c38922182a
