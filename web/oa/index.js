@@ -13255,7 +13255,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.total = data.pages.totalCount;
             }
         });
-        console.log(this.pagenation);
+        //console.log(this.pagenation);
     },
 
     computed: __WEBPACK_IMPORTED_MODULE_5_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_vuex__["b" /* mapGetters */])(['pagenation']), {
@@ -15015,6 +15015,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -16230,6 +16233,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_chapter_submitModal_vue__ = __webpack_require__(449);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_chapter_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_chapter_submitModal_vue__);
 
+//
+//
+//
 //
 //
 //
@@ -18708,6 +18714,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -18960,6 +18969,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue__ = __webpack_require__(459);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue__);
+//
+//
+//
 //
 //
 //
@@ -31537,8 +31549,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
-    staticClass: "ml-92 mb-lg"
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l mt-10",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 20,
+      "sm": 20
+    }
   }, [_c('el-button', {
     attrs: {
       "type": "primary"
@@ -31554,7 +31579,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -33493,8 +33518,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
-    staticClass: "ml-97 mb-lg"
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l mt-10",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 20,
+      "sm": 20
+    }
   }, [_c('el-button', {
     attrs: {
       "type": "primary"
@@ -33510,7 +33548,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -34999,7 +35037,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "summary": _vm.summary,
       "suggest": _vm.suggest
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.type = '11') ? _c('applyleave-sheet', {
+  }) : _vm._e(), _vm._v(" "), (_vm.type == '11') ? _c('applyleave-sheet', {
     attrs: {
       "date": _vm.date,
       "applyID": _vm.apply_id,
@@ -37385,8 +37423,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
-    staticClass: "ml-120 mb-lg"
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w120 f14 mb-md t-r t-xs-l mt-10",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 20,
+      "sm": 20
+    }
   }, [_c('el-button', {
     attrs: {
       "type": "primary"
@@ -37402,7 +37453,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -38225,8 +38276,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
-    staticClass: "ml-92 mb-lg"
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l mt-10",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 20,
+      "sm": 20
+    }
   }, [_c('el-button', {
     attrs: {
       "type": "primary"
@@ -38242,7 +38306,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -46611,4 +46675,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?a9f1709038ef1496bf0f
+//# sourceMappingURL=index.js.map?72ead8fcab5cba50cbd4
