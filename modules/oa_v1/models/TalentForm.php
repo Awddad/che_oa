@@ -9,6 +9,7 @@ use app\modules\oa_v1\logic\BackLogic;
 use app\models\Employee;
 use yii;
 use app\models\EmployeeType;
+use app\models\Region;
 
 /**
  * 人才表单
@@ -269,6 +270,8 @@ class TalentForm extends BaseForm
 	    //人才库
 	    if($talent){
 	        $query->andWhere(['talent'=>1]);
+	    }else{
+	        $query->andWhere(['talent'=>0]);
 	    }
 	    //状态
 	    if($status){
@@ -320,10 +323,11 @@ class TalentForm extends BaseForm
 	    	    'sex' => $v->sex == 1 ? '女' : '男',
 	    	    'age' => $v->age,
 	    	    'educational' => $v->edu->educational,
-	    	    'work_time' => $v->work_time,
+	    	    'work_time' => $v->work_time.'年',
 	    	    'status' => $this->status_arr[$v->status],
 	    	    'status_value' => $v->status,
 	    	    'person_type' => $v->person_type > 0 ? $v->personType->name : '',
+	    	    'location' => Region::findOne($v->current_location)->name,
 	    	];
 	    }
 	    
