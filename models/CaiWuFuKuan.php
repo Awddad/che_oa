@@ -21,6 +21,7 @@ use Yii;
  * @property string $pics
  * @property integer $create_time
  * @property integer $is_told_cai_wu_success
+ * @property integer $account_id
  *
  */
 class CaiWuFuKuan extends \yii\db\ActiveRecord
