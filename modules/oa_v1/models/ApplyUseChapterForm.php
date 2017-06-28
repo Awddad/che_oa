@@ -134,6 +134,7 @@ class ApplyUseChapterForm extends BaseForm
     /**
      *
      * 保存需求单
+     *
      * @return ApplyUseChapter
      * @throws Exception
      */
@@ -141,7 +142,7 @@ class ApplyUseChapterForm extends BaseForm
     {
         $model = new ApplyUseChapter();
         $model->apply_id = $this->apply_id;
-        $model->files = $this->files ? json_encode($this->files): '';;
+        $model->files = $this->files ? json_encode($this->files): '';
         $model->chapter_type = $this->chapter_type;
         $model->name = $this->name;
         $model->des = $this->des;
