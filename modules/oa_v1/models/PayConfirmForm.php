@@ -94,6 +94,8 @@ class PayConfirmForm extends CaiWuFuKuan
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
+            //js 和 PHP 时间戳相差1000
+            $this->shou_kuan_time = $this->fu_kuan_time /1000;
             $this->org_name = Org::findOne($this->org_id)->org_name;
             $this->create_time = time();
             if (!$this->save()) {
@@ -154,6 +156,9 @@ class PayConfirmForm extends CaiWuFuKuan
             if($rst['success'] == 1) {
                 $this->is_told_cai_wu_success = 1;
                 $this->update();
+            } elseif($rst['success'] == 0) {
+                $this->is_told_cai_wu_success = 2;
+                $this->update();
             }
         } else {
             $flag = true;
@@ -164,6 +169,7 @@ class PayConfirmForm extends CaiWuFuKuan
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
                 ])->payment($param);
+                
                 if(!$rst['success'] == 1) {
                     $flag = false;
                 }

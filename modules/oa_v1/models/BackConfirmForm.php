@@ -93,6 +93,8 @@ class BackConfirmForm extends CaiWuShouKuan
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
         try{
+            //js 和 PHP 时间戳相差1000
+            $this->shou_kuan_time = $this->shou_kuan_time /1000;
             $this->org_name = Org::findOne($this->org_id)->org_name;
             //$this->create_time = time();
             if (!$this->save()) {
@@ -109,7 +111,7 @@ class BackConfirmForm extends CaiWuShouKuan
             $param['account_id'] = $person->person_id;
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
-            $param['time'] = date('Y-m-d H:i:s', $this->shou_kuan_time);;
+            $param['time'] = date('Y-m-d H:i:s', $this->shou_kuan_time);
             $param['remark'] = $this->tips;
 
             //收入 可为空
@@ -144,6 +146,9 @@ class BackConfirmForm extends CaiWuShouKuan
         ])->payment($param);
         if($rst['success'] == 1) {
             $this->is_told_cai_wu_success = 1;
+            $this->update();
+        }elseif($rst['success'] == 0) {
+            $this->is_told_cai_wu_success = 2;
             $this->update();
         }
 
