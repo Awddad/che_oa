@@ -82,10 +82,6 @@ table tr{height:40px;}
             </tr>
             {$strListHtml}
             <tr>
-                <td style="background-color:#f2f2f2" colspan="2">备注信息</td>
-                <td colspan="4">{$arrInfo['tips']}</td>
-            </tr>
-            <tr>
                 <td style="background-color:#f2f2f2">审批人</td>
                 <td>{$arrInfo['approval_person']}</td>
                 <td style="background-color:#f2f2f2">抄送人</td>
@@ -287,4 +283,73 @@ TABLEHTML;
         return is_file($strSaveName);
     }
     
+    
+    /**
+     * 创建PDF
+     *
+     * @param $pdfName
+     * @param $param
+     * @param $type
+     *
+     * @return  boolean
+     */
+    public function createdPdf($pdfName, $param, $type)
+    {
+        if(pathinfo($pdfName, PATHINFO_EXTENSION) != 'pdf')
+        {
+            return false;//文件类型不是pdf
+        }
+        $strHtml = $this->$type($param);
+        $pdf = new TCPDF();
+        $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
+        $pdf->AddPage();
+        $pdf->writeHTML($strHtml, true, false, true, false, '');
+        $pdf->lastPage();
+        $pdf->Output($pdfName, 'F');//只保存 F    保存与输出 FI 只输出I
+        return is_file($pdfName);
+    }
+    
+    
+    public function useChapter($param)
+    {
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">用章申请</h2>  
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['chapter_type']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['chapter_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+    }
 }

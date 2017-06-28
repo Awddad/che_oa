@@ -16,6 +16,8 @@ use app\models\Job;
 use app\models\EmployeeType;
 use app\models\Employee;
 use Overtrue\Pinyin\Pinyin;
+use yii\helpers\ArrayHelper;
+
 class QuanXianServer extends Server
 {
     /*
@@ -254,7 +256,8 @@ class QuanXianServer extends Server
                     'email' => $val['email'],
                     'phone' => $val['phone'],
                     'bqq_open_id' => $val['bqq_open_id'],
-                    'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] ))
+                    'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] )),
+                    'company_id' => $this->getCompanyId($val['organization_id'], $arrOrgListTmp)
                 ];
                 //银行卡信息
                 if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
@@ -364,8 +367,44 @@ class QuanXianServer extends Server
             array_unshift($arrOrgName, $arrOrgList[$orgId]['org_name']);
             $orgId = $arrOrgList[$orgId]['pid'];
         }
+        if(count($arrOrgName) > 1) {
+            array_shift($arrOrgName);
+        }
         $strOrgFullName = implode('-', $arrOrgName);
         return $strOrgFullName;
+    }
+    
+    /**
+     * 得到公司ID
+     *
+     * @param $orgId
+     * @param array $arrOrgListTmp
+     * @return int|mixed
+     */
+    public function getCompanyId($orgId, $arrOrgListTmp = [])
+    {
+        if(empty($arrOrgListTmp))
+        {
+            $arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+        }
+        foreach($arrOrgListTmp as $val)
+        {
+            $arrOrgList[$val['org_id']] = $val;
+        }
+        $arrOrgIds = [];
+        while(isset($arrOrgList[$orgId]))
+        {
+            array_unshift($arrOrgIds, $arrOrgList[$orgId]['org_id']);
+            $orgId = $arrOrgList[$orgId]['pid'];
+        }
+        if(empty($arrOrgIds)) {
+            return 0;
+        }
+        
+        if(count($arrOrgIds) > 1) {
+            return $arrOrgIds[1];
+        }
+        return $arrOrgIds[0];
     }
     
     

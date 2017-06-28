@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\controllers;
 
 use app\models\Menu;
 use app\models\User;
+use app\modules\oa_v1\logic\PersonLogic;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
@@ -144,7 +145,9 @@ class BaseController extends Controller
                 $objRoleOrgMod = RoleOrgPermission::findOne(['person_id' => $personId, 'role_id' => $intRoleId]);
                 if($objRoleOrgMod)//设置过数据权限
                 {
-                    $this->arrPersonRoleInfo['permissionOrgIds'] = explode(',', $objRoleOrgMod->org_ids);
+                    $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
+                    $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
+                    $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
                 }
                 $result = true;//取库获取到数据了
                 \Yii::$app->cache->set($strCacheKey, $this->arrPersonRoleInfo);

@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 
 
+use app\logic\MyTcPdf;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use yii\base\Model;
@@ -281,5 +282,31 @@ class BaseForm extends Model
     public function createApplyTitle($user)
     {
         return $user['person_name'] . '的' . $this->typeArr[$this->type] . '申请';
+    }
+    
+    /**
+     * 创建PDF
+     *
+     * @param $param
+     * @param $type
+     *
+     * @return string
+     */
+    public function createPdf($param, $type)
+    {
+        $pdf = new  MyTcPdf();
+        $basePath = \Yii::$app->basePath.'/web';
+        $filePath = '/upload/pdf/'.date('Y-m-d').'/';
+        $rootPath = $basePath.$filePath;
+        if (!file_exists($rootPath)) {
+            @mkdir($rootPath, 0777, true);
+        }
+        $rst = $pdf->createdPdf($rootPath.$this->apply_id.'.pdf', $param, $type);
+        if ($rst) {
+            $pdfUrl = $filePath.$this->apply_id.'.pdf';
+        } else {
+            $pdfUrl = '';
+        }
+        return $pdfUrl;
     }
 }

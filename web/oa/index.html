@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>OA系统</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
   <style>
     /*{color: #333333;}*/
     html{
@@ -22,14 +22,14 @@
     h3{font-size: 16px;}
     a{ color:#108EE9; text-decoration: none;}
     li{ list-style: none;}
-    .container{padding:20px;}
+    .container{padding:0 20px 20px;}
     .f-l{float: left}
     .f-r{float: right}
     .t-l{text-align: left;}
     .t-c{text-align: center;}
     .t-r{text-align: right;}
     .c-red{color: #ff4949}
-    .b_gray{background: #F7F7F7;}
+    .b_gray{background-color: #F7F7F7;}
     .none{display: none !important;}
     .clear{ clear: both}
 
@@ -51,7 +51,7 @@
     .mr-md{ margin-right: 16px;}
     .mr-sm{ margin-right: 8px;}
     .mr4{ margin-right: 4px;}
-    .line{ height: 1px; background-color: #E6E6E6; border:0; }
+    .line{ position: relative; left: 0; max-width: 1000px; height: 1px; background-color: #E6E6E6; border:0; }
 
 
     .el-menu--dark{
@@ -103,8 +103,11 @@
     }
 
     /*上传文件列表*/
-    .el-upload-list{ overflow: hidden; max-width: 680px !important;}
+    .el-upload-list{ overflow: hidden; max-width: 680px !important; padding-top: 6px !important;}
+    .el-upload-list__item:first-child{ margin-top:4px !important;}
     .el-upload-list li{overflow: hidden; float: left; width: 31%; border:1px solid #E9E9E9; margin:4px 1%; }
+
+    .attachment-wrap{ max-width: 960px;}
 
     @media (min-width: 768px) {
       .w92,.w97,.w120{line-height: 34px;}
@@ -133,7 +136,7 @@
       }
       .el-dialog{
           width: auto !important;
-          min-width: 320px !important;
+          min-width: 100% !important;
           left: 0 !important;
           -webkit-transform: translateX(0) !important;
           transform: translateX(0) !important;
@@ -152,6 +155,8 @@
         width: 90% !important;
       }
       .el-upload-list li{ width: 100%; margin:4px 0;}
+      .el-picker-panel__body,.el-date-range-picker{ min-width: 255px !important;  }
+      .el-date-range-picker__content{ float: none !important;width: 100% !important;}
     }
   </style>
   <script>
@@ -175,6 +180,6 @@
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?cc5a23b19e4c0d6f4d31"></script><script type="text/javascript" src="vendor.js?9f646ad681dfc4542b62"></script><script type="text/javascript" src="index.js?150c8096127a04faa85b"></script></body>
+<script type="text/javascript" src="manifest.js?051eaeb8bae36713c992"></script><script type="text/javascript" src="vendor.js?8872bfc4b30ea0d123cc"></script><script type="text/javascript" src="index.js?3711fc7a9ded5572cd42"></script></body>
 
 </html>
