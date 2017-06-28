@@ -111,6 +111,7 @@ class BackConfirmForm extends CaiWuShouKuan
             $transaction->rollBack();
             throw $exception;
         }
+        
         if(\Yii::$app->request->post('create_cai_wu_log')) {
             $param = [];
             $param['organization_id'] = $person->org_id;
@@ -140,7 +141,7 @@ class BackConfirmForm extends CaiWuShouKuan
     
             $param['trade_number'] = $this->shou_kuan_id;
             $param['order_number'] = $this->apply_id;
-            $param['order_type'] = 1;
+            $param['order_type'] = 104;
             $rst = ThirdServer::instance([
                 'token' => \Yii::$app->params['cai_wu']['token'],
                 'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']

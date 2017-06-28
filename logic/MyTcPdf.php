@@ -12,7 +12,7 @@ class MyTcPdf {
      * @功能：              生成报销单PDF文件
      * @作者：              王雕
      * @创建时间：          2017-05-15
-     * @param array $strSaveName   保存的文件名 
+     * @param string $strSaveName   保存的文件名
      * @param array $arrInfo       格式：$arrInfo = [
                                         'apply_date' => '2017年5月5日',
                                         'apply_id' => '20170505102037012134', 
@@ -87,7 +87,7 @@ table tr{height:40px;}
                 <td style="background-color:#f2f2f2">抄送人</td>
                 <td>{$arrInfo['copy_person']}</td>
                 <td style="background-color:#f2f2f2">财务确认</td>
-                <td>财务确认</td>
+                <td>{$arrInfo['caiwu']}</td>
             </tr>
         </table>
     </div>
@@ -172,7 +172,7 @@ table tr{height:40px;}
             <td colspan="2" style="background-color:#f2f2f2">抄送人</td>
             <td colspan="2">{$arrInfo['copy_person']}</td>
             <td colspan="2" style="background-color:#f2f2f2">财务确认</td>
-            <td colspan="2"> 财务确认</td>
+            <td colspan="2"> {$arrInfo['caiwu']}</td>
         </tr>
     </table>
 </div>
@@ -269,7 +269,7 @@ table tr{height:40px;}
             <td style="background-color:#f2f2f2">抄送人</td>
             <td>{$arrInfo['copy_person']}</td>
             <td style="background-color:#f2f2f2">财务确认</td>
-            <td>财务确认</td>
+            <td>{$arrInfo['caiwu']}</td>
         </tr>
     </table>
 </div>

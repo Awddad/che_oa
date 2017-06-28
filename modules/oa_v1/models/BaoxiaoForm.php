@@ -288,7 +288,8 @@ class BaoxiaoForm extends BaseForm
 			'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
 			'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
 			'list' => [],
-			'tips' => '--'
+			'tips' => '--',
+            'caiwu' => '--'
 		];
 		foreach($this -> bao_xiao_list as $v){
 			$arrInfo['list'][] = [
