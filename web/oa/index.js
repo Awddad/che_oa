@@ -13233,7 +13233,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             //收付款确认
             apply_id: '',
-            status: '财务确认', //审批状态
+            status: '', //审批状态
             confirm_info: [],
             confirm_department: [],
             confirm_bank: [],
@@ -13359,6 +13359,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.confirm_loading = false;
             this.isCollectPayment = true;
             this.apply_id = row.apply_id;
+            this.status = row.status;
             switch (row.type_name) {
                 case '申请报销':
                     this.type = 1;
@@ -13617,7 +13618,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             //收付款确认
             apply_id: '',
-            status: '财务确认', //审批状态
+            status: '', //审批状态
             confirm_info: [],
             confirm_department: [],
             confirm_bank: [],
@@ -13737,6 +13738,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.confirm_loading = false;
             this.isCollectPayment = true;
             this.apply_id = row.apply_id;
+            this.status = row.status;
             switch (row.type_name) {
                 case '申请报销':
                     this.type = 1;
@@ -13881,6 +13883,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18_vuex__ = __webpack_require__(3);
 
 
+//
+//
+//
+//
 //
 //
 //
@@ -14239,7 +14245,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.status = '完成';
                     break
             }*/
-            _this.attachment = data.info.pics == "" ? [] : data.info.pics;
+            _this.attachment = data.info.files == "" ? [] : data.info.files;
             _this.app_attachment_url = data.pdf;
             //console.log(this.app_attachment_url);
             _this.org = _this.$store.getters.org_full_name;
@@ -14382,7 +14388,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //附件下载
         attachment_download: function attachment_download(index, row) {
-            window.open(row.url);
+            window.open(this.serverUrl + row.url);
         },
         Pass_approve: function Pass_approve(des) {
             var _this2 = this;
@@ -16720,6 +16726,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -16788,7 +16798,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: __WEBPACK_IMPORTED_MODULE_4_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_13_vuex__["b" /* mapGetters */])(['org_full_name'])),
+    computed: __WEBPACK_IMPORTED_MODULE_4_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_13_vuex__["b" /* mapGetters */])(['org_full_name', 'serverUrl'])),
     created: function created() {
         var _this = this;
 
@@ -16912,7 +16922,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //附件下载
         attachment_download: function attachment_download(index, row) {
-            window.open(row.url);
+            window.open(this.serverUrl + row.url);
         },
         ToggleDialog: function ToggleDialog() {
             this.isCollectPayment = false;
@@ -22167,7 +22177,7 @@ var Global = {
 var app = {
     state: {
         sidebar: {
-            opened: !+localStorage.sidebarStatus
+            opened: !+localStorage.getItem('sidebarStatus')
         },
         isnav: localStorage.getItem('isnav') || '1',
         theme: 'default',
@@ -22191,10 +22201,11 @@ var app = {
                     }
                 }*/
             } else {
+                alert(state.sidebar.opened);
                 if (state.sidebar.opened) {
-                    localStorage.sidebarStatus = 1;
+                    localStorage.setItem("sidebarStatus", 1);
                 } else {
-                    localStorage.sidebarStatus = 0;
+                    localStorage.setItem('sidebarStatus', 0);
                 }
                 state.sidebar.opened = !state.sidebar.opened;
             }
@@ -27638,7 +27649,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".bill-info .info-wrap[data-v-bcd7cb40]{max-width:960px;padding:16px 20px;border:1px solid #add8f7;border-radius:4px;background:#ecf6fd}.bill-info .info-wrap .avarter[data-v-bcd7cb40]{margin-right:20px}.bill-info .info-wrap .infobox[data-v-bcd7cb40]{margin-left:78px;font-size:12px;line-height:22px}.bill-info .info-wrap .infobox .blod[data-v-bcd7cb40]{font-weight:700;font-size:14px}.bill-info .info-wrap .infobox .el-col[data-v-bcd7cb40]{color:rgba(0,0,0,.65)!important}.steps[data-v-bcd7cb40]{display:-webkit-box;display:-ms-flexbox;display:flex;width:100%;max-width:1000px}.steps .step[data-v-bcd7cb40]{-webkit-box-flex:20;-ms-flex:20;flex:20;color:#999;box-sizing:border-box}.steps .step .step-header[data-v-bcd7cb40]{position:relative;margin-bottom:10px;width:100%;height:28px}.steps .step .step-header .icon[data-v-bcd7cb40]{width:28px;height:28px;border-radius:50%;font-size:14px;line-height:28px;text-align:center;border:1px solid #999;box-sizing:border-box}.steps .step .step-header .line[data-v-bcd7cb40]{position:absolute;left:0;top:14px;width:100%;height:1px;padding-left:56px;padding-right:28px;background:none;box-sizing:border-box}.steps .step .step-header .line[data-v-bcd7cb40]:before{content:\"\";width:100%;height:100%;background:#999;display:block}.steps .step .step-title[data-v-bcd7cb40]{margin:10px 0;font-size:14px;font-weight:400;white-space:nowrap}.steps .step .step-content[data-v-bcd7cb40]{font-size:12px;font-weight:400;padding-bottom:20px}.steps .step[data-v-bcd7cb40]:last-child{-webkit-box-flex:1;-ms-flex:1;flex:1}.steps .step:last-child .step-header .line[data-v-bcd7cb40]:before{background:none}.steps .step.process .step-header .icon[data-v-bcd7cb40]{border-color:#108ee9;color:#fff;background:#108ee9}.steps .step.process .step-title[data-v-bcd7cb40]{color:#000}.steps .step.finish .step-header .icon[data-v-bcd7cb40]{border-color:#108ee9;color:#108ee9}.steps .step.finish .step-header .line[data-v-bcd7cb40]:before{background:#108ee9}.steps .step.error .step-header .icon[data-v-bcd7cb40]{border-color:#fc5746;color:#fc5746}.steps .step.error .step-title[data-v-bcd7cb40]{color:#fc5746}.steps .step.success[data-v-bcd7cb40]{-webkit-box-flex:1;-ms-flex:auto;flex:auto}.steps .step.success .step-header .icon[data-v-bcd7cb40]{border-color:#13ce66;color:#fff;background:#13ce66}@media screen and (max-width:480px){.steps[data-v-bcd7cb40]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.steps .step[data-v-bcd7cb40]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.steps .step .step-header[data-v-bcd7cb40]{margin:0;-webkit-box-flex:1;-ms-flex:1;flex:1;height:118px}.steps .step .step-header .icon[data-v-bcd7cb40]{width:24px;height:24px;line-height:24px;font-size:10px}.steps .step .step-header .line[data-v-bcd7cb40]{left:14px;top:0;padding:40px 0 12px;width:1px;height:100%}.steps .step .step-body[data-v-bcd7cb40]{padding:0 0 0 20px;-webkit-box-flex:9;-ms-flex:9;flex:9}.steps .step .step-body .step-title[data-v-bcd7cb40]{margin-top:0;line-height:26px}}", ""]);
+exports.push([module.i, ".bill-info .info-wrap[data-v-bcd7cb40]{padding:16px 20px;border:1px solid #add8f7;border-radius:4px;background:#ecf6fd}.bill-info .info-wrap .avarter[data-v-bcd7cb40]{margin-right:20px}.bill-info .info-wrap .infobox[data-v-bcd7cb40]{margin-left:78px;font-size:12px;line-height:22px}.bill-info .info-wrap .infobox .blod[data-v-bcd7cb40]{font-weight:700;font-size:14px}.bill-info .info-wrap .infobox .el-col[data-v-bcd7cb40]{color:rgba(0,0,0,.65)!important}.steps[data-v-bcd7cb40]{display:-webkit-box;display:-ms-flexbox;display:flex;width:100%}.steps .step[data-v-bcd7cb40]{-webkit-box-flex:20;-ms-flex:20;flex:20;color:#999;box-sizing:border-box}.steps .step .step-header[data-v-bcd7cb40]{position:relative;margin-bottom:10px;width:100%;height:28px}.steps .step .step-header .icon[data-v-bcd7cb40]{width:28px;height:28px;border-radius:50%;font-size:14px;line-height:28px;text-align:center;border:1px solid #999;box-sizing:border-box}.steps .step .step-header .line[data-v-bcd7cb40]{position:absolute;left:0;top:14px;width:100%;height:1px;padding-left:56px;padding-right:28px;background:none;box-sizing:border-box}.steps .step .step-header .line[data-v-bcd7cb40]:before{content:\"\";width:100%;height:100%;background:#999;display:block}.steps .step .step-title[data-v-bcd7cb40]{margin:10px 0;font-size:14px;font-weight:400;white-space:nowrap}.steps .step .step-content[data-v-bcd7cb40]{font-size:12px;font-weight:400;padding-bottom:20px}.steps .step[data-v-bcd7cb40]:last-child{-webkit-box-flex:1;-ms-flex:1;flex:1}.steps .step:last-child .step-header .line[data-v-bcd7cb40]:before{background:none}.steps .step.process .step-header .icon[data-v-bcd7cb40]{border-color:#108ee9;color:#fff;background:#108ee9}.steps .step.process .step-title[data-v-bcd7cb40]{color:#000}.steps .step.finish .step-header .icon[data-v-bcd7cb40]{border-color:#108ee9;color:#108ee9}.steps .step.finish .step-header .line[data-v-bcd7cb40]:before{background:#108ee9}.steps .step.error .step-header .icon[data-v-bcd7cb40]{border-color:#fc5746;color:#fc5746}.steps .step.error .step-title[data-v-bcd7cb40]{color:#fc5746}.steps .step.success[data-v-bcd7cb40]{-webkit-box-flex:1;-ms-flex:auto;flex:auto}.steps .step.success .step-header .icon[data-v-bcd7cb40]{border-color:#13ce66;color:#fff;background:#13ce66}@media screen and (max-width:480px){.steps[data-v-bcd7cb40]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.steps .step[data-v-bcd7cb40]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.steps .step .step-header[data-v-bcd7cb40]{margin:0;-webkit-box-flex:1;-ms-flex:1;flex:1;height:118px}.steps .step .step-header .icon[data-v-bcd7cb40]{width:24px;height:24px;line-height:24px;font-size:10px}.steps .step .step-header .line[data-v-bcd7cb40]{left:14px;top:0;padding:40px 0 12px;width:1px;height:100%}.steps .step .step-body[data-v-bcd7cb40]{padding:0 0 0 20px;-webkit-box-flex:9;-ms-flex:9;flex:9}.steps .step .step-body .step-title[data-v-bcd7cb40]{margin-top:0;line-height:26px}}", ""]);
 
 // exports
 
@@ -27750,7 +27761,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".app-levelbar.el-breadcrumb[data-v-fa834bec]{display:inline-block;font-size:14px;line-height:50px;margin-left:20px}.app-levelbar.el-breadcrumb .no-redirect[data-v-fa834bec]{color:#97a8be;cursor:text}", ""]);
+exports.push([module.i, ".app-levelbar.el-breadcrumb[data-v-fa834bec]{display:block;border-bottom:1px solid rgba(0,0,0,.1);font-size:12px;line-height:21px;padding-bottom:5px;margin:16px}.app-levelbar.el-breadcrumb .no-redirect[data-v-fa834bec]{color:#97a8be;cursor:text}", ""]);
 
 // exports
 
@@ -30851,12 +30862,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "attachment-table mt-lg"
-  }, [_c('label', {
-    staticClass: "f-l",
-    staticStyle: {
-      "width": "50px"
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
     }
-  }, [_vm._v("附件：")]), _vm._v(" "), _c('el-table', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("附件：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "upload-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 16
+    }
+  }, [_c('el-table', {
     staticStyle: {
       "max-width": "661px",
       "margin-left": "50px"
@@ -30902,10 +30923,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.attachment_download(scope.$index, scope.row)
             }
           }
-        }, [_vm._v("下载\n                    ")])]
+        }, [_vm._v("下载\n                            ")])]
       }
     }])
-  })], 1)], 1), _vm._v(" "), (_vm.status == '4') ? _c('div', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), (_vm.status == '4') ? _c('div', {
     staticClass: "mt-lg"
   }, [_c('label', {
     staticClass: "f-l",
@@ -35093,17 +35114,26 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "city": _vm.city,
       "rental": _vm.rental
     }
-  }) : _vm._e(), _vm._v(" "), _c('div', {
+  }) : _vm._e(), _vm._v(" "), (_vm.type != '3') ? _c('div', {
     staticClass: "attachment-table mt-lg"
-  }, [_c('label', {
-    staticClass: "f-l",
-    staticStyle: {
-      "width": "50px"
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
     }
-  }, [_vm._v("附件：")]), _vm._v(" "), _c('el-table', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("附件：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "upload-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 16
+    }
+  }, [_c('el-table', {
     staticStyle: {
-      "max-width": "661px",
-      "margin-left": "50px"
+      "max-width": "661px"
     },
     attrs: {
       "data": _vm.attachment,
@@ -35114,24 +35144,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "index",
       "label": "序号",
-      "width": "80"
+      "width": "150"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "name",
       "label": "附件名",
-      "width": "400"
+      "width": "210"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "ext",
       "label": "格式",
-      "width": "100"
+      "width": "150"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "label": "操作",
-      "width": "80"
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -35146,10 +35176,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.attachment_download(scope.$index, scope.row)
             }
           }
-        }, [_vm._v("下载\n                    ")])]
+        }, [_vm._v("下载\n                            ")])]
       }
     }])
-  })], 1)], 1), _vm._v(" "), _c('subapprove', {
+  })], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('subapprove', {
     attrs: {
       "approvable": _vm.approvable
     },
@@ -39843,26 +39873,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('tbody', [_c('tr', [_c('td', {
     staticClass: "b_gray",
     attrs: {
-      "width": "180"
+      "width": "33.333333%"
     }
   }, [_vm._v("类别")]), _vm._v(" "), _c('td', {
     staticClass: "b_gray",
     attrs: {
-      "width": "180"
+      "width": "33.333333%"
     }
   }, [_vm._v("金额")]), _vm._v(" "), _c('td', {
-    staticClass: "b_gray"
+    staticClass: "b_gray",
+    attrs: {
+      "width": "33.333333%"
+    }
   }, [_vm._v("明细")])]), _vm._v(" "), _vm._l((this.$store.state.reimburse.reimburse_tabledata), function(item) {
     return _c('tr', [_c('td', [_vm._v(_vm._s(item.type_name))]), _vm._v(" "), _c('td', {
-      staticClass: "t-r"
-    }, [_vm._v(_vm._s((item.money * 1).toFixed(2)))]), _vm._v(" "), _c('td', {
+      staticClass: "t-l"
+    }, [_vm._v("￥ " + _vm._s((item.money * 1).toFixed(2)))]), _vm._v(" "), _c('td', {
       staticClass: "t-l"
     }, [_vm._v(_vm._s(item.des == '' ? '--' : item.des))])])
   }), _vm._v(" "), _c('tr', [_c('td', {
     staticClass: "t-c"
   }, [_vm._v("金额合计")]), _vm._v(" "), _c('td', {
-    staticClass: "t-r"
-  }, [_vm._v("¥ " + _vm._s(_vm.total))]), _vm._v(" "), _c('td', [_vm._v(" ")])])], 2)]), _vm._v(" "), _c('table', {
+    staticClass: "t-l"
+  }, [_vm._v("￥ " + _vm._s(_vm.total))]), _vm._v(" "), _c('td', [_vm._v(" ")])])], 2)]), _vm._v(" "), _c('table', {
     attrs: {
       "width": "100%"
     }
@@ -40710,7 +40743,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 /***/ (function(module, exports) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return (_vm.status == '4' && _vm.type == 'payment') ? _c('el-dialog', {
+  return (_vm.status == 4 && _vm.type == 'payment') ? _c('el-dialog', {
     attrs: {
       "title": _vm.title,
       "visible": _vm.isCollectPayment,
@@ -41056,7 +41089,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.OnsubmitForm('ruleForm', _vm.type)
       }
     }
-  }, [_vm._v("确 定")])], 1)], 1) : _c('el-dialog', {
+  }, [_vm._v("确 定")])], 1)], 1) : (_vm.status == 4 && _vm.type == 'collection') ? _c('el-dialog', {
     attrs: {
       "title": _vm.title,
       "visible": _vm.isCollectPayment,
@@ -41411,7 +41444,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.OnsubmitForm('ruleForm', _vm.type)
       }
     }
-  }, [_vm._v("确 定")])], 1)], 1)
+  }, [_vm._v("确 定")])], 1)], 1) : _vm._e()
 },staticRenderFns: []}
 
 /***/ }),
@@ -46681,4 +46714,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?3711fc7a9ded5572cd42
+//# sourceMappingURL=index.js.map?190e555266ba9cdf27d7
