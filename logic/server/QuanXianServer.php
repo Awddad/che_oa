@@ -391,6 +391,10 @@ class QuanXianServer extends Server
         {
             $arrOrgList[$val['org_id']] = $val;
         }
+        if($arrOrgList[$orgId]['pid'] == 1) {
+            return $arrOrgList[$orgId]['org_id'];
+        }
+        
         $arrOrgIds = [];
         while(isset($arrOrgList[$orgId]))
         {
