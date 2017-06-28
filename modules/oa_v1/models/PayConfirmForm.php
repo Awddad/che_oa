@@ -107,6 +107,13 @@ class PayConfirmForm extends CaiWuFuKuan
             $apply->cai_wu_time = time();
             $apply->cai_wu_person = $person->person_name;
             $apply->save();
+            
+            $transaction->commit();
+        } catch (Exception $exception) {
+            $transaction->rollBack();
+            throw $exception;
+        }
+        if(\Yii::$app->request->post('create_cai_wu_log')) {
             $param = [];
             $param['organization_id'] = $person->org_id;
             $param['account_id'] = $this->account_id;
@@ -114,7 +121,7 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['money'] = $this->getMoney($apply);
             $param['time'] = date('Y-m-d H:i:s', $this->fu_kuan_time);
             $param['remark'] = $this->tips;
-
+    
             if($apply->type == 1) {
                 $param['other_name'] = $person->person_name;
                 $param['other_card'] = $apply->expense->bank_card_id;
@@ -138,44 +145,40 @@ class PayConfirmForm extends CaiWuFuKuan
                 $param['other_card'] = $apply->applyBuy->bank_card_id;
                 $param['other_bank'] = $apply->applyBuy->bank_name;
             }
-
+    
             $param['trade_number'] = $this->fu_kuan_id;
             $param['order_number'] = $this->apply_id;
             $param['order_type'] = 1;
-            $transaction->commit();
-        } catch (Exception $exception) {
-            $transaction->rollBack();
-            throw $exception;
-        }
-        if($apply->type == 2) {
-            $rst = ThirdServer::instance([
-                'token' => \Yii::$app->params['cai_wu']['token'],
-                'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-            ])->payment($param);
-            if($rst['success'] == 1) {
-                $this->is_told_cai_wu_success = 1;
-                $this->update();
-            } elseif($rst['success'] == 0) {
-                $this->is_told_cai_wu_success = 2;
-                $this->update();
-            }
-        } else {
-            $flag = true;
-            foreach ($apply->baoXiaoList as $v) {
-                $param['tag_id'] = $v->type;  //没有 type字段呀
-                $param['money'] = $v->money;
+            if($apply->type == 2) {
                 $rst = ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
                 ])->payment($param);
-                
-                if(!$rst['success'] == 1) {
-                    $flag = false;
+                if($rst['success'] == 1) {
+                    $this->is_told_cai_wu_success = 1;
+                    $this->update();
+                } elseif($rst['success'] == 0) {
+                    $this->is_told_cai_wu_success = 2;
+                    $this->update();
                 }
-            }
-            if($flag) {
-                $this->is_told_cai_wu_success = 1;
-                $this->update();
+            } else {
+                $flag = true;
+                foreach ($apply->baoXiaoList as $v) {
+                    $param['tag_id'] = $v->type;  //没有 type字段呀
+                    $param['money'] = $v->money;
+                    $rst = ThirdServer::instance([
+                        'token' => \Yii::$app->params['cai_wu']['token'],
+                        'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                    ])->payment($param);
+            
+                    if(!$rst['success'] == 1) {
+                        $flag = false;
+                    }
+                }
+                if($flag) {
+                    $this->is_told_cai_wu_success = 1;
+                    $this->update();
+                }
             }
         }
         return true;
