@@ -3,9 +3,7 @@ namespace app\modules\oa_v1\controllers;
 
 use yii;
 use app\modules\oa_v1\models\TalentForm;
-use app\models\Talent;
 use app\models\Educational;
-use app\models\Job;
 use app\models\PersonType;
 
 /**
@@ -70,7 +68,32 @@ class TalentController extends BaseController
     {
         $post = yii::$app->request->post();
         $model = new TalentForm();
-        $res = $model->joinTalent($post['id'],$this->arrPersonInfo);
+        $model->setScenario($model::SCENARIO_JOIN);
+        $model->load(['TalentForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->joinTalent($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    
+    /**
+     * 录用
+     */
+    public function actionEmploy()
+    {
+        $post = yii::$app->request->post();
+        $model = new TalentForm();
+        $model->setScenario($model::SCENARIO_EMPLOY);
+        $model->load(['TalentForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->employ($this->arrPersonInfo);
         if($res['status']){
             return $this->_return('成功');
         }else{
@@ -107,21 +130,6 @@ class TalentController extends BaseController
         return $this->_return($data);
     }
     
-    /**
-     * 获得职位
-     */
-    public function actionGetJob()
-    {
-        $res = Job::find()->where(['is_delete'=>0])->all();
-        $data = [];
-        foreach($res as $v){
-            $data[] = [
-                'label' => $v['name'],
-                'value' => $v['id'],
-            ];
-        }
-        return $this->_return($data);
-    }
     
     /**
      * 获得人才类型

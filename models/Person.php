@@ -12,6 +12,7 @@ use Yii;
  * @property string $person_name
  * @property integer $org_id
  * @property string $org_name
+ * @property string $org_full_name
  * @property integer $is_delete
  * @property string $profession
  * @property string $email

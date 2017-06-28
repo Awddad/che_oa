@@ -251,6 +251,9 @@ class ApplyController extends BaseController
 	    return $this->_return($res);
 	}
 	
+	/**
+	 * 获得地区列表
+	 */
 	public function actionGetRegion()
 	{
 	    $res = RegionLogic::instance()->getRegion();
