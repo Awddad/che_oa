@@ -383,7 +383,7 @@ class QuanXianServer extends Server
      */
     public function getCompanyId($orgId, $arrOrgListTmp = [])
     {
-        $orgIds = ArrayHelper::getColumn(Org::find()->where(['pid' => 1])->all(), 'id');
+        $orgIds = ArrayHelper::getColumn(Org::find()->where(['pid' => 1])->all(), 'org_id');
         if(in_array($orgId, $orgIds)) {
             return $orgId;
         }
