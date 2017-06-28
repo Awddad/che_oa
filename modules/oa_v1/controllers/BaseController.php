@@ -33,7 +33,7 @@ use app\models\Person;
 class BaseController extends Controller
 {
     /**
-     * @var User $arrPersonInfo
+     * @var User|array $arrPersonInfo
      */
     public $arrPersonInfo = [];//用户登录信息保存
     
