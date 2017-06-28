@@ -9126,11 +9126,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'ConfirmModal',
-    props: ['apply_id', 'info', 'departments', 'bank', 'bankType', 'loading', 'title', 'type', 'isCollectPayment', 'status'],
+    props: ['apply_id', 'info', 'departments', 'bank', 'bankType', 'loading', 'title', 'type', 'isCollectPayment', 'status', 'bxtype'],
     data: function data() {
         return {
             ruleForm: {
@@ -9216,6 +9219,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         _this.$emit("OnSubmitConfirmModal", data);
                         _this.$refs[formName].resetFields();
                     } else {
+                        var _type = '';
+                        if (_this.bxtype == 1) {
+                            _type = 2;
+                        } else {
+                            _type = _this.ruleForm.bankType;
+                        }
                         var _data = {
                             apply_id: _this.apply_id,
                             org_id: _this.ruleForm.department,
@@ -9225,7 +9234,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                             fu_kuan_id: _this.ruleForm.flow,
                             create_cai_wu_log: _this.radio,
                             fu_kuan_time: Date.parse(new Date(_this.ruleForm.applyDate)),
-                            type: 7,
+                            type: _type,
                             files: files,
                             tips: _this.ruleForm.tips
                         };
@@ -13615,6 +13624,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -13647,7 +13657,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             confirm_type: '',
             isCollectPayment: false,
             confirm_title: '',
-            data_type: ''
+            data_type: '',
+            type: ''
         };
     },
     created: function created() {
@@ -30644,6 +30655,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "bankType": _vm.confirm_bankType,
       "loading": _vm.confirm_loading,
       "type": _vm.confirm_type,
+      "bxtype": _vm.type,
       "status": _vm.status,
       "isCollectPayment": _vm.isCollectPayment
     },
@@ -40971,7 +40983,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "prop": "bankType"
     }
-  }, [_c('el-select', {
+  }, [(_vm.bxtype == 1) ? _c('el-select', {
     staticStyle: {
       "width": "100%"
     },
@@ -40991,7 +41003,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "1",
       "value": "自动生成，无需选择"
     }
-  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  })], 1) : _c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
+    attrs: {
+      "placeholder": "请选择"
+    },
+    model: {
+      value: (_vm.ruleForm.bankType),
+      callback: function($$v) {
+        _vm.ruleForm.bankType = $$v
+      },
+      expression: "ruleForm.bankType"
+    }
+  }, _vm._l((_vm.bankType), function(item, key) {
+    return _c('el-option', {
+      key: key,
+      attrs: {
+        "label": item.label,
+        "value": item.value
+      }
+    })
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
       "gutter": 10
     }
@@ -46820,4 +46854,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?b23e4c73d1d453d7a643
+//# sourceMappingURL=index.js.map?4ad97932f9df0b9f5396
