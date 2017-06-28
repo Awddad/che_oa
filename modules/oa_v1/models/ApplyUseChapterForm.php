@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApplyUseChapter;
+use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
@@ -79,14 +80,25 @@ class ApplyUseChapterForm extends BaseForm
     }
     
     /**
-     * @param User $user
+     * @param Person $user
      * @return Apply
      * @throws \Exception
      */
     public function save($user)
     {
         $applyId = $this->apply_id;
-        $pdfUrl = '';
+        
+        $pdfUrl = $this->createPdf([
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $applyId,
+            'org_full_name' => $user->org_full_name,
+            'person' => $user['person_name'],
+            'chapter_type' => ApplyUseChapter::STATUS['$this->chapter_type'],
+            'chapter_name' => $this->name,
+            'des' => $this->des ? : '--',
+            'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
+            'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
+        ], 'useChapter');
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
         
         $apply = new Apply();
