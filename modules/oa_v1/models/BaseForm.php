@@ -288,8 +288,11 @@ class BaseForm extends Model
      * 创建PDF
      *
      * @param $param
+     * @param $type
+     *
+     * @return string
      */
-    public function createPdf($param)
+    public function createPdf($param, $type)
     {
         $pdf = new  MyTcPdf();
         $basePath = \Yii::$app->basePath.'/web';
@@ -298,11 +301,12 @@ class BaseForm extends Model
         if (!file_exists($rootPath)) {
             @mkdir($rootPath, 0777, true);
         }
-        $rst = $pdf->useChapter($rootPath.$this->apply_id.'.pdf', $param);
+        $rst = $pdf->createdPdf($rootPath.$this->apply_id.'.pdf', $param, $type);
         if ($rst) {
             $pdfUrl = $filePath.$this->apply_id.'.pdf';
         } else {
             $pdfUrl = '';
         }
+        return $pdfUrl;
     }
 }
