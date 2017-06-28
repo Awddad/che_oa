@@ -18,6 +18,7 @@ class TalentForm extends BaseForm
 	const SCENARIO_COMMUNION = 'communion';//沟通
 	const SCENARIO_TEST = 'test';//考试
 	const SCENARIO_FACE = 'face';//面试
+	const SCENARIO_JOIN = 'join';//加入人才库
 	
 	public $name;
 	public $phone;
@@ -29,6 +30,7 @@ class TalentForm extends BaseForm
 	public $current_location;
 	public $id;
 	public $status;
+	public $talent_type;
 	
 	public $status_arr = [
 	    '1' => '待沟通',
@@ -52,7 +54,14 @@ class TalentForm extends BaseForm
 		        'on'=>[self::SCENARIO_ADD_ZHAOPIN ,self::SCENARIO_COMMUNION ,self::SCENARIO_TEST,self::SCENARIO_FACE ],
 		        'message'=>'{attribute}不能为空',
 		    ],
+		    [
+		        ['id','talent_type'],
+		        'required',
+		        'on'=>[self::SCENARIO_JOIN],
+		        'message'=>'{attribute}不能为空',
+		    ],
 		    ['id','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
+		    ['talent_type','exist','targetClass'=>'\app\models\PersonType','targetAttribute'=>'id','message'=>'类型不存在！'],
 		    ['status','in', 'range' => [0, 1],'message'=>'操作错误！'],//0：不通过 1：通过
 		    ['name','string','max'=>20,'message'=>'姓名错误！'],
 		    ['phone','match','pattern'=>'/^1\d{10}$/','message'=>'手机号不正确!'],
@@ -73,6 +82,7 @@ class TalentForm extends BaseForm
 	        self::SCENARIO_COMMUNION =>['id','status'],
 	        self::SCENARIO_TEST =>['id','status'],
 	        self::SCENARIO_FACE => ['id','status'],
+	        self::SCENARIO_JOIN => ['id','talent_type'],
 	    ];
 	}
 	/**
@@ -195,15 +205,16 @@ class TalentForm extends BaseForm
 	 * 移入人才库
 	 * @param array $user 登入用户
 	 */
-	public function joinTalent($id,$user)
+	public function joinTalent($user)
 	{
-	    $model = $model = Talent::findOne($id);
+	    $model = $model = Talent::findOne(['id'=>$this->id,'talent'=>0]);
 	    if(empty($model)){
-	        return ['status'=>false,'msg'=>'人不存在'];
+	        return ['status'=>false,'msg'=>'人已在人才库'];
 	    }
 	    $model->talent = 1;
+	    $model->person_type = $this->talent_type;
 	    if($model->save()){
-	        TalentLogic::instance()->addLog($id,'移入人才库',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
+	        TalentLogic::instance()->addLog($this->id,'移入人才库',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
 	        return ['status'=>true];
 	    }else{
 	        return ['status'=>false,'msg'=>current($model->getFirstErrors())];
