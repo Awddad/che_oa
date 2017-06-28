@@ -71,9 +71,9 @@ class PayLogic extends BaseLogic
                 ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
-//        $query->andWhere([
-//            'in', 'org_id', $orgIds
-//        ]);
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);

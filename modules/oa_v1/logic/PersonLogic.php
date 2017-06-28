@@ -34,14 +34,14 @@ class PersonLogic extends BaseLogic
     /**
      * 获取筛选
      *
-     * @param $personId
+     * @param Person $person
      *
      * @return array
      */
-    public function getSelectPerson($personId)
+    public function getSelectPerson($person)
     {
-        $persons = Person::find()->where([
-            '!=', 'person_id', $personId
+        $persons = Person::find()->where(['company_id' => $person->company_id])->andWhere([
+            '!=', 'person_id', $person->person_id
         ])->orderBy('person_id desc')->all();
         $data = [];
         foreach ($persons as $person) {
@@ -176,5 +176,20 @@ class PersonLogic extends BaseLogic
     	$orgArr =  $this->getParentOrg($org);
     	$orgArr[] = $org->org_short_name ? $org->org_short_name : $org->org_name;
     	return implode('-', $orgArr);
+    }
+    
+    /**
+     * 获取公司组织架构ID
+     *
+     * @param Person $person
+     *
+     * @return $data
+     */
+    public function getCompanyOrgIds($person)
+    {
+        $companies = Person::find()->select('org_id')->where([
+            'person_id' => $person->person_name
+        ])->all();
+        return ArrayHelper::getColumn($companies, 'org_id');
     }
 }
