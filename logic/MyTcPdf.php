@@ -351,5 +351,6 @@ table tr{height:40px;}
     </table>
 </div>
 TABLEHTML;
+        return $strHtml;
     }
 }
