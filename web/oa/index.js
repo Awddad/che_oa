@@ -20595,12 +20595,17 @@ __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].beforeEach(function (to
         // 判断当前用户是否已拉取完user_info信息
         __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].dispatch('GetInfo').then(function (res) {
             // 拉取user_info
-            var roles = [res.data.data.roleName];
-            __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].dispatch('GenerateRoutes', { roles: roles }).then(function (response) {
-                // 生成可访问的路由表
-                __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].addRoutes(__WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].getters.addRouters); // 动态添加可访问路由表
-                next({ path: to.path, query: to.query }); // hack方法 确保addRoutes已完成
-            });
+            console.log(res.data.code);
+            if (res.data.code == 200) {
+                var roles = [res.data.data.roleName];
+                __WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].dispatch('GenerateRoutes', { roles: roles }).then(function (response) {
+                    // 生成可访问的路由表
+                    __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].addRoutes(__WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].getters.addRouters); // 动态添加可访问路由表
+                    next({ path: to.path, query: to.query }); // hack方法 确保addRoutes已完成
+                });
+            } else {
+                location.href = res.data.data.login_url;
+            }
         }).catch(function (err) {
             console.log(err);
         });
@@ -38671,7 +38676,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "width": "15%"
     }
-  }, [_vm._v("财务确认")])])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("--")])])])])]), _vm._v(" "), _c('div', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -41140,7 +41145,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.Tolink(scope.$index, scope.row)
             }
           }
-        }, [_vm._v("\n                        详情\n                    ")]), _vm._v(" "), _c('el-button', {
+        }, [_vm._v("\n                        详情\n                    ")]), _vm._v(" "), (scope.row.status == 1 || scope.row.status == 11) ? _c('el-button', {
           class: {
             none: _vm.btnstatus(scope.row)
           },
@@ -41153,7 +41158,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.Toexit(scope.$index, scope.row)
             }
           }
-        }, [_vm._v("\n                        撤销\n                    ")])]
+        }, [_vm._v("\n                        撤销\n                    ")]) : _vm._e()]
       }
     }])
   })], 1)], 1), _vm._v(" "), _c('el-row', {
@@ -45427,4 +45432,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[227]);
-//# sourceMappingURL=index.js.map?bce72eb569782f43e3bc
+//# sourceMappingURL=index.js.map?0ef41eb911998b05f22e
