@@ -15095,16 +15095,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.fileList = fileList;
         },
         beforeUpload: function beforeUpload(file) {
-            console.log(file.type);
+            //console.log(file.type);
             var isjpg = file.type === 'image/jpeg';
             var isgif = file.type === 'image/gif';
             var ispng = file.type === 'image/png';
             var isxls = file.type === 'application/vnd.ms-excel';
+            var isxlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             var isdoc = file.type === 'application/msword';
-            if (!isjpg && !isgif && !ispng && !isxls && !isdoc) {
+            var isdocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && isxlsx && isdocx) {
                 this.$message.error('上传文件格式错误，必须是jpg,gif,png,xls,xlsx,doc,docx中的一种!');
             }
-            return isjpg || isgif || ispng || isxls || isdoc;
+            return isjpg || isgif || ispng || isxls || isxlsx || isdoc || isdocx;
         },
 
         //提交选中审批人
@@ -16446,16 +16448,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.fileList = fileList;
         },
         beforeUpload: function beforeUpload(file) {
-            console.log(file.type);
+            //console.log(file.type);
             var isjpg = file.type === 'image/jpeg';
             var isgif = file.type === 'image/gif';
             var ispng = file.type === 'image/png';
             var isxls = file.type === 'application/vnd.ms-excel';
+            var isxlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             var isdoc = file.type === 'application/msword';
-            if (!isjpg && !isgif && !ispng && !isxls && !isdoc) {
+            var isdocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && isxlsx && isdocx) {
                 this.$message.error('上传文件格式错误，必须是jpg,gif,png,xls,xlsx,doc,docx中的一种!');
             }
-            return isjpg || isgif || ispng || isxls || isdoc;
+            return isjpg || isgif || ispng || isxls || isxlsx || isdoc || isdocx;
         },
 
         //提交选中审批人
@@ -18836,16 +18840,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         beforeUpload: function beforeUpload(file) {
-            console.log(file.type);
+            //console.log(file.type);
             var isjpg = file.type === 'image/jpeg';
             var isgif = file.type === 'image/gif';
             var ispng = file.type === 'image/png';
             var isxls = file.type === 'application/vnd.ms-excel';
+            var isxlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
             var isdoc = file.type === 'application/msword';
-            if (!isjpg && !isgif && !ispng && !isxls && !isdoc) {
+            var isdocx = file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            if (!isjpg && !isgif && !ispng && !isxls && !isdoc && isxlsx && isdocx) {
                 this.$message.error('上传文件格式错误，必须是jpg,gif,png,xls,xlsx,doc,docx中的一种!');
             }
-            return isjpg || isgif || ispng || isxls || isdoc;
+            return isjpg || isgif || ispng || isxls || isxlsx || isdoc || isdocx;
         },
         handlefileRemove: function handlefileRemove(file, fileList) {
             //图片移除
@@ -46675,4 +46681,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?72ead8fcab5cba50cbd4
+//# sourceMappingURL=index.js.map?3711fc7a9ded5572cd42
