@@ -20603,7 +20603,7 @@ __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].beforeEach(function (to
                     __WEBPACK_IMPORTED_MODULE_3__router__["a" /* default */].addRoutes(__WEBPACK_IMPORTED_MODULE_5__store__["a" /* default */].getters.addRouters); // 动态添加可访问路由表
                     next({ path: to.path, query: to.query }); // hack方法 确保addRoutes已完成
                 });
-            } else {
+            } else if (res.data.code == 401) {
                 location.href = res.data.data.login_url;
             }
         }).catch(function (err) {
@@ -21383,7 +21383,7 @@ function CurDate() {
     var month = date.getMonth() + 1 + '月';
     var day = date.getDate() + '日';
     var dateTime = year + month + day;
-    console.log(dateTime);
+    //console.log(dateTime);
     return dateTime;
 }
 
@@ -23324,12 +23324,15 @@ var userinfo = {
             return new __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise___default.a(function (resolve, reject) {
                 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__api_public__["B" /* getInfo */])().then(function (response) {
                     var data = response.data;
-                    //console.log(data.data.roleId);
-                    commit('SET_ROLES', [data.data.roleName]);
-                    commit('SET_NAME', data.data.userinfo.person_name);
-                    commit('SET_UID', data.data.userinfo.person_id);
-                    commit('SET_org_full_name', data.data.userinfo.org_full_name);
-                    resolve(response);
+                    if (data.code == 200) {
+                        commit('SET_ROLES', [data.data.roleName]);
+                        commit('SET_NAME', data.data.userinfo.person_name);
+                        commit('SET_UID', data.data.userinfo.person_id);
+                        commit('SET_org_full_name', data.data.userinfo.org_full_name);
+                        resolve(response);
+                    } else if (data.code == 401) {
+                        location.href = data.data.login_url;
+                    }
                 }).catch(function (error) {
                     reject(error);
                 });
@@ -45432,4 +45435,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[227]);
-//# sourceMappingURL=index.js.map?0ef41eb911998b05f22e
+//# sourceMappingURL=index.js.map?150c8096127a04faa85b
