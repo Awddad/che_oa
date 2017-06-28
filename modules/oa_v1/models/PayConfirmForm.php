@@ -26,7 +26,6 @@ use yii\web\UploadedFile;
  */
 class PayConfirmForm extends CaiWuFuKuan
 {
-
     /**
      * @inheritdoc
      */
@@ -36,11 +35,11 @@ class PayConfirmForm extends CaiWuFuKuan
             [
                 [
                     'apply_id', 'org_id', 'bank_card_id', 'fu_kuan_id', 'fu_kuan_time', 'type',
-                    'bank_name'
+                    'bank_name', 'account_id'
                 ],
                 'required'
             ],
-            [['org_id', 'type', 'fu_kuan_time', 'create_time'], 'integer'],
+            [['org_id', 'type', 'fu_kuan_time', 'create_time', 'account_id'], 'integer'],
             [['tips', 'pics'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
             [['org_name', 'bank_name', 'bank_name_des', 'fu_kuan_id'], 'string', 'max' => 255],
@@ -110,7 +109,7 @@ class PayConfirmForm extends CaiWuFuKuan
             $apply->save();
             $param = [];
             $param['organization_id'] = $person->org_id;
-            $param['account_id'] = $person->person_id;
+            $param['account_id'] = $this->account_id;
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
             $param['time'] = date('Y-m-d H:i:s', $this->fu_kuan_time);

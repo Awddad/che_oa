@@ -37,11 +37,11 @@ class BackConfirmForm extends CaiWuShouKuan
             [
                 [
                     'apply_id', 'org_id', 'bank_card_id', 'bank_name', 'shou_kuan_id',
-                    'shou_kuan_time', 'create_cai_wu_log', 'type'
+                    'shou_kuan_time', 'create_cai_wu_log', 'type', 'account_id'
                 ],
                 'required'
             ],
-            [['org_id', 'type', 'shou_kuan_time', 'create_cai_wu_log'], 'integer'],
+            [['org_id', 'type', 'shou_kuan_time', 'create_cai_wu_log', 'account_id'], 'integer'],
             [['tips', 'pics'], 'string'],
             [['apply_id', 'org_name', 'bank_name', 'bank_name_des', 'shou_kuan_id'], 'string', 'max' => 255],
             ['bank_name_des', 'default', 'value' => ''],
@@ -108,7 +108,7 @@ class BackConfirmForm extends CaiWuShouKuan
             $apply->save();
             $param = [];
             $param['organization_id'] = $person->org_id;
-            $param['account_id'] = $person->person_id;
+            $param['account_id'] = $this->account_id;
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
             $param['time'] = date('Y-m-d H:i:s', $this->shou_kuan_time);
