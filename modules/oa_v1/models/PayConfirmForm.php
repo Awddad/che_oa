@@ -126,7 +126,7 @@ class PayConfirmForm extends CaiWuFuKuan
                 'copy_person' => $apply->copy_person,//多个人、分隔
                 'list' => [],
                 'tips' => '--',
-                'cauwu' => $person->person_name
+                'caiwu' => $person->person_name
             ];
             $baoXiaoList = BaoXiaoList::find()->where(['apply_id' => $apply->apply_id])->all();
             foreach($baoXiaoList as $v){
@@ -160,7 +160,7 @@ class PayConfirmForm extends CaiWuFuKuan
                 'tips' => $this->tips,
                 'approval_person' =>$apply->approval_persons,//多个人、分隔
                 'copy_person' => $apply->copy_person,//多个人、分隔
-                'cauwu' => $person->person_name
+                'caiwu' => $person->person_name
             ]);
         }
         if(\Yii::$app->request->post('create_cai_wu_log')) {
