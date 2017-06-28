@@ -133,9 +133,9 @@ class BackConfirmForm extends CaiWuShouKuan
                     $jieKuan->is_pay_back = 1;
                     $jieKuan->save();
                 }
-                //    $param['other_name'] = $person->person_name;
-                //    $param['other_card'] = $apply->payBack->bank_card_id;
-                //    $param['other_bank'] = $apply->payBack->bank_name;
+                $param['other_name'] = $apply->person;
+                $param['other_card'] = $apply->payBack->bank_card_id;
+                $param['other_bank'] = $apply->payBack->bank_name;
             }
     
             $param['trade_number'] = $this->shou_kuan_id;
