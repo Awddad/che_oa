@@ -112,7 +112,7 @@ class BackConfirmForm extends CaiWuShouKuan
             throw $exception;
         }
         
-        if(\Yii::$app->request->post('create_cai_wu_log')) {
+        if(\Yii::$app->request->post('create_cai_wu_log') == 1) {
             $param = [];
             $param['organization_id'] = $person->org_id;
             $param['account_id'] = $this->account_id;
