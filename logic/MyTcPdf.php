@@ -82,10 +82,6 @@ table tr{height:40px;}
             </tr>
             {$strListHtml}
             <tr>
-                <td style="background-color:#f2f2f2" colspan="2">备注信息</td>
-                <td colspan="4">{$arrInfo['tips']}</td>
-            </tr>
-            <tr>
                 <td style="background-color:#f2f2f2">审批人</td>
                 <td>{$arrInfo['approval_person']}</td>
                 <td style="background-color:#f2f2f2">抄送人</td>
