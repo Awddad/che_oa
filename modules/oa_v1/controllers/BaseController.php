@@ -78,47 +78,41 @@ class BaseController extends Controller
      */
     public function beforeAction($action)
     {
-        $strOsType = \Yii::$app->session->get('os_type', 'web');//默认是web版的
-        if($strOsType == 'web')//web版的使用单点登录
-        {
-            if(YII_ENV_DEV){//建华test
-            	$objPerson = Person::findOne(['person_id' => 272]);
-            	$arrRoleIds = explode(',', $objPerson->role_ids);
-            	$intRoleId = $arrRoleIds[0];
-                Yii::$app->session->set('ROLE_ID', $intRoleId);
-            }else{
-            	$session = Yii::$app->session;
-            	$objPerson = $session->get('USER_INFO');
-            	$intRoleId = $session->get('ROLE_ID');
-            }
-            if(empty($objPerson) || !$intRoleId) {
-                $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
-                header("Content-type: application/json");
-                echo json_encode($this->_return(['login_url' => $loginUrl], 401));
-                die();
-            }
-            $this->arrPersonInfo = $objPerson;
-    
-            $this->setUserRoleInfo($intRoleId);
+        if(YII_ENV_DEV){//建华test
+            $objPerson = Person::findOne(['person_id' => 272]);
+            $arrRoleIds = explode(',', $objPerson->role_ids);
+            $intRoleId = $arrRoleIds[0];
+            Yii::$app->session->set('ROLE_ID', $intRoleId);
+        }else{
+            $session = Yii::$app->session;
+            $objPerson = $session->get('USER_INFO');
+            $intRoleId = $session->get('ROLE_ID');
+        }
+        if(empty($objPerson) || !$intRoleId) {
+            $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
+            header("Content-type: application/json");
+            echo json_encode($this->_return(['login_url' => $loginUrl], 401));
+            die();
+        }
+        $this->arrPersonInfo = $objPerson;
 
-            //权限管理
-            $roleInfo = Role::findOne($this->roleId);
-            $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
-            $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
-    
-            if ($action->id == 'index') {
-                $url_one = '/' . $action->controller->id;
-                if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
-                    throw new HttpException(403);
-                }
-            } else {
-                if (!in_array($requestUrlArr, $roleArr) && in_array($requestUrlArr, $allMenu)) {
-                    throw new HttpException(403);
-                }
+        $this->setUserRoleInfo($intRoleId);
+
+        //权限管理
+        $roleInfo = Role::findOne($this->roleId);
+        $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
+        $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
+        $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
+
+        if ($action->id == 'index') {
+            $url_one = '/' . $action->controller->id;
+            if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                throw new HttpException(403);
             }
         } else {
-            //app 版本的登录   先预留
+            if (!in_array($requestUrlArr, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                throw new HttpException(403);
+            }
         }
         return parent::beforeAction($action);
     }
