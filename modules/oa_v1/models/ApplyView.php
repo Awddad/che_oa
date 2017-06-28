@@ -77,8 +77,7 @@ class ApplyView extends BaseForm
 				'bank_card_id' => $baoxiao->bank_card_id,
 				'bank_name' => $baoxiao->bank_name,
 				'bank_des' => $baoxiao->bank_name_des,
-				'file' => json_decode($baoxiao->files),
-				'pics' => explode(',', $baoxiao->pics),
+				'files' => json_decode($baoxiao->files),
 				'list' => []
 		];
         /**
@@ -110,7 +109,7 @@ class ApplyView extends BaseForm
 			'bank_des' => $loan->bank_name_des,
 			'tips' => $loan->tips,
 			'des' => $loan->des,
-			'pics' => explode(',', $loan->pics),
+			'files' => json_decode($loan->pics),
 			'is_pay_back' => $loan->is_pay_back
 		];
 		return $data;
