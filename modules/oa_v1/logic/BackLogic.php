@@ -82,7 +82,7 @@ class BackLogic extends BaseLogic
     public function canConfirmList($orgIds)
     {
         $query = Apply::find()->where([
-            'status' => 4
+            'in', 'status',  [4, 99]
         ]);
         $query->andWhere([
             'type' => 3
@@ -149,7 +149,8 @@ class BackLogic extends BaseLogic
                     'type'  => $model->type,
                     'apply_id' => $model->apply_id,
                     'title' => $model->title,
-                    'money' => $money
+                    'money' => $money,
+                    'status' => $model->status
                 ];
             }
             return [
