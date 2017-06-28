@@ -333,9 +333,9 @@ table tr{height:40px;}
             <td colspan="2">{$param['person']}</td>
         </tr>
         <tr>
-            <td style="background-color:#f2f2f2">部门</td>
+            <td style="background-color:#f2f2f2">印章类型</td>
             <td colspan="2">{$param['chapter_type']}</td>
-            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td style="background-color:#f2f2f2"> 印章名称</td>
             <td colspan="2">{$param['chapter_name']}</td>
         </tr>
         <tr>
