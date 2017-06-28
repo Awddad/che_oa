@@ -15034,6 +15034,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -15067,7 +15070,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             isconstshow: false,
             iscopyshow: false,
             iscardshow: false,
-            issubmitshow: false
+            issubmitshow: false,
+            counter: 0
         };
     },
 
@@ -15100,15 +15104,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$router.push({ path: '/' });
         },
         handlefileChange: function handlefileChange(response, file, fileList) {
-            if (fileList.length > 7) {
-                message.error('上传文件数量已达上限!');
+            this.counter = this.counter + 1;
+            if (file.response.code == 1012) {
+                this.$message.error('文件格式错误，必须是jpg,gif,png,pdf,xls,xlsx,doc,docx中的一种!');
+                this.fileList.splice(this.counter - 1, 1);
+                this.counter = this.counter - 1;
             } else {
-                this.fileList = fileList;
+                if (this.counter > 14) {
+                    this.$message.error('上传文件数量已达上限!');
+                    this.fileList = fileList.slice(0, 14);
+                    this.counter = this.fileList.length;
+                } else {
+                    this.fileList = fileList;
+                }
             }
         },
         handlefileRemove: function handlefileRemove(file, fileList) {
             //图片移除
             this.fileList = fileList;
+        },
+        errorchange: function errorchange(err, file, fileList) {
+            this.$message(err);
         },
         beforeUpload: function beforeUpload(file) {
             //console.log(file.type);
@@ -16357,6 +16373,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -16386,7 +16407,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             loading: false,
             isconstshow: false,
             iscopyshow: false,
-            issubmitshow: false
+            issubmitshow: false,
+            counter: 0
         };
     },
 
@@ -16453,15 +16475,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.dispatch('Deleterows', rows);
         },
         handlefileChange: function handlefileChange(response, file, fileList) {
-            if (fileList.length > 7) {
-                message.error('上传文件数量已达上限!');
+            this.counter = this.counter + 1;
+            if (file.response.code == 1012) {
+                this.$message.error('文件格式错误，必须是jpg,gif,png,pdf,xls,xlsx,doc,docx中的一种!');
+                this.fileList.splice(this.counter - 1, 1);
+                this.counter = this.counter - 1;
             } else {
-                this.fileList = fileList;
+                if (this.counter > 14) {
+                    this.$message.error('上传文件数量已达上限!');
+                    this.fileList = fileList.slice(0, 14);
+                    this.counter = this.fileList.length;
+                } else {
+                    this.fileList = fileList;
+                }
             }
         },
         handlefileRemove: function handlefileRemove(file, fileList) {
             //图片移除
             this.fileList = fileList;
+        },
+        errorchange: function errorchange(err, file, fileList) {
+            this.$message(err);
         },
         beforeUpload: function beforeUpload(file) {
             //console.log(file.type);
@@ -18749,6 +18783,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -18783,7 +18818,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             iscopyshow: false,
             iscardshow: false,
             issubmitshow: false,
-            selectloading: true
+            selectloading: true,
+            counter: 0
         };
     },
 
@@ -18861,11 +18897,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$store.dispatch('Deleterows', rows);
         },
         handlefileChange: function handlefileChange(response, file, fileList) {
-            if (fileList.length > 7) {
-                message.error('上传文件数量已达上限!');
+            this.counter = this.counter + 1;
+            if (file.response.code == 1012) {
+                this.$message.error('文件格式错误，必须是jpg,gif,png,pdf,xls,xlsx,doc,docx中的一种!');
+                this.fileList.splice(this.counter - 1, 1);
+                this.counter = this.counter - 1;
             } else {
-                this.fileList = fileList;
+                if (this.counter > 14) {
+                    this.$message.error('上传文件数量已达上限!');
+                    this.fileList = fileList.slice(0, 14);
+                    this.counter = this.fileList.length;
+                } else {
+                    this.fileList = fileList;
+                }
             }
+        },
+        errorchange: function errorchange(err, file, fileList) {
+            this.$message(err);
         },
         beforeUpload: function beforeUpload(file) {
             console.log(file.type);
@@ -31540,6 +31588,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "name": "files",
       "multiple": "",
+      "file-list": _vm.fileList,
       "on-success": _vm.handlefileChange,
       "on-remove": _vm.handlefileRemove,
       "before-upload": _vm.beforeUpload,
@@ -33510,7 +33559,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "multiple": "",
       "name": "files",
       "action": _vm.BaseUrl,
-      "before-upload": _vm.beforeUpload,
+      "file-list": _vm.fileList,
+      "on-error": _vm.errorchange,
       "on-success": _vm.handlefileChange,
       "on-remove": _vm.handlefileRemove
     }
@@ -38281,9 +38331,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "multiple": "",
       "name": "files",
+      "file-list": _vm.fileList,
       "action": _vm.BaseUrl,
       "method": "post",
-      "before-upload": _vm.beforeUpload,
+      "on-error": _vm.errorchange,
       "on-success": _vm.handlefileChange,
       "on-remove": _vm.handlefileRemove
     }
@@ -46753,4 +46804,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?4a1640645a26702bb715
+//# sourceMappingURL=index.js.map?dc27ea01eb24d24fe6c5
