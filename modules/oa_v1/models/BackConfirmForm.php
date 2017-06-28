@@ -106,6 +106,12 @@ class BackConfirmForm extends CaiWuShouKuan
             $apply->cai_wu_time = time();
             $apply->cai_wu_person = $person->person_name;
             $apply->save();
+            $transaction->commit();
+        } catch (Exception $exception) {
+            $transaction->rollBack();
+            throw $exception;
+        }
+        if(\Yii::$app->request->post('create_cai_wu_log')) {
             $param = [];
             $param['organization_id'] = $person->org_id;
             $param['account_id'] = $this->account_id;
@@ -113,7 +119,7 @@ class BackConfirmForm extends CaiWuShouKuan
             $param['money'] = $this->getMoney($apply);
             $param['time'] = date('Y-m-d H:i:s', $this->shou_kuan_time);
             $param['remark'] = $this->tips;
-
+    
             //收入 可为空
             if($apply->type == 3) {
                 //借款单操作
@@ -127,31 +133,26 @@ class BackConfirmForm extends CaiWuShouKuan
                     $jieKuan->is_pay_back = 1;
                     $jieKuan->save();
                 }
-            //    $param['other_name'] = $person->person_name;
-            //    $param['other_card'] = $apply->payBack->bank_card_id;
-            //    $param['other_bank'] = $apply->payBack->bank_name;
+                //    $param['other_name'] = $person->person_name;
+                //    $param['other_card'] = $apply->payBack->bank_card_id;
+                //    $param['other_bank'] = $apply->payBack->bank_name;
             }
-
+    
             $param['trade_number'] = $this->shou_kuan_id;
             $param['order_number'] = $this->apply_id;
             $param['order_type'] = 1;
-            $transaction->commit();
-        } catch (Exception $exception) {
-            $transaction->rollBack();
-            throw $exception;
+            $rst = ThirdServer::instance([
+                'token' => \Yii::$app->params['cai_wu']['token'],
+                'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+            ])->payment($param);
+            if ($rst['success'] == 1) {
+                $this->is_told_cai_wu_success = 1;
+                $this->update();
+            } elseif ($rst['success'] == 0) {
+                $this->is_told_cai_wu_success = 2;
+                $this->update();
+            }
         }
-        $rst = ThirdServer::instance([
-            'token' => \Yii::$app->params['cai_wu']['token'],
-            'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-        ])->payment($param);
-        if($rst['success'] == 1) {
-            $this->is_told_cai_wu_success = 1;
-            $this->update();
-        }elseif($rst['success'] == 0) {
-            $this->is_told_cai_wu_success = 2;
-            $this->update();
-        }
-
         return true;
     }
 
