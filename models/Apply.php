@@ -38,7 +38,7 @@ class Apply extends \yii\db\ActiveRecord
     const STATUS_FAIL = 2;//审核失败
     const STATUS_REVOKED = 3;//申请撤销
     const STATUS_CONFIRM = 4;//财务确认
-    const STATUS_OK = 99;//申请撤销
+    const STATUS_OK = 99;//审核完成
 
     /**
      * @inheritdoc

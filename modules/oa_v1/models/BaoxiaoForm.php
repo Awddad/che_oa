@@ -288,10 +288,10 @@ class BaoxiaoForm extends BaseForm
 		];
 		foreach($this -> bao_xiao_list as $v){
 			$arrInfo['list'][] = [
-					'type_name' => $v['type_name'],
-					'money' => \Yii::$app->formatter->asCurrency($v['money']),
-					'detail' => @$v['des']
-					];
+                'type_name' => $v['type_name'],
+                'money' => \Yii::$app->formatter->asCurrency($v['money']),
+                'detail' => @$v['des']
+            ];
 		}
 		$base_dir = str_replace('\\', '/', Yii::$app -> basePath);
 		$root_path = $base_dir.'/web'.$dir;
