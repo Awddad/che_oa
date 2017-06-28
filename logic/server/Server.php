@@ -28,7 +28,8 @@ class Server extends Logic
      */
     public function httpGet($url)
     {
-        $this->httpSend($url);
+        $this->data .= '请求链接：'.$url.PHP_EOL;
+        return $this->httpSend($url);
     }
 
     /**

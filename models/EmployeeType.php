@@ -12,6 +12,8 @@ use yii\behaviors\TimestampBehavior;
  * @property string $name
  * @property integer $add_time
  * @property integer $update_time
+ * @property integer $default 
+ * @property string $slug 
  */
 class EmployeeType extends \yii\db\ActiveRecord
 {
@@ -29,8 +31,8 @@ class EmployeeType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['add_time', 'update_time'], 'integer'],
-            [['name'], 'string', 'max' => 20],
+            [['add_time', 'update_time', 'default'], 'integer'],
+		    [['name', 'slug'], 'string', 'max' => 20],
         ];
     }
 
@@ -44,6 +46,8 @@ class EmployeeType extends \yii\db\ActiveRecord
             'name' => 'Name',
             'add_time' => 'Add Time',
             'update_time' => 'Update Time',
+            'default' => 'Default', 
+		    'slug' => 'Slug', 
         ];
     }
     

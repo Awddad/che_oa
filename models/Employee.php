@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "oa_employee".
  *
  * @property integer $id
+ * @property string $empno
  * @property string $name
  * @property integer $org_id
  * @property integer $profession
@@ -26,6 +27,7 @@ use Yii;
  * @property integer $educational
  * @property integer $current_location
  * @property string $birthday
+ * @property integer $employee_type
  * @property integer $person_id
  */
 class Employee extends \yii\db\ActiveRecord
@@ -44,8 +46,8 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['org_id', 'profession', 'political', 'marriage', 'status', 'type', 'educational', 'current_location', 'person_id'], 'integer'],
-            [['name', 'entry_time', 'leave_time'], 'string', 'max' => 20],
+            [['org_id', 'profession', 'political', 'marriage', 'status', 'type', 'educational', 'current_location', 'employee_type', 'person_id'], 'integer'],
+            [['empno', 'name', 'entry_time', 'leave_time'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
             [['email'], 'string', 'max' => 50],
             [['id_card', 'birthday'], 'string', 'max' => 25],
@@ -62,6 +64,7 @@ class Employee extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'empno' => 'Empno',
             'name' => 'Name',
             'org_id' => 'Org ID',
             'profession' => 'Profession',
@@ -80,7 +83,35 @@ class Employee extends \yii\db\ActiveRecord
             'educational' => 'Educational',
             'current_location' => 'Current Location',
             'birthday' => 'Birthday',
+            'employee_type' => 'Employee Type',
             'person_id' => 'Person ID',
         ];
+    }
+    
+    /**
+     * 员工类型
+     * @return ActiveQuery
+     */
+    public function getEmployeeType()
+    {
+        return $this->hasOne(EmployeeType::className(), ['id'=>'employee_type']);
+    }
+    
+    /**
+     * 职位
+     * @return ActiveQuery
+     */
+    public function getJob()
+    {
+        return $this->hasOne(Job::className(), ['id'=>'profession']);
+    }
+    
+    /**
+     * 帐号
+     * @return ActiveQuery
+     */
+    public function getAccount()
+    {
+        return $this->hasOne(EmployeeAccount::className(),['employee_id'=>'id']);
     }
 }
