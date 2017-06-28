@@ -122,9 +122,9 @@ class BackLogic extends BaseLogic
         $pagination = new Pagination(['totalCount' => $totalCount]);
 
         //当前页
-        $currentPage = \Yii::$app->request->post('currentPage') ?: 1;
+        $currentPage = \Yii::$app->request->post('page') ?: 1;
         //每页显示条数
-        $perPage = \Yii::$app->request->post('perPage') ?: 20;
+        $perPage = \Yii::$app->request->post('page_size') ?: 20;
 
         $pagination->setPageSize($perPage, true);
 
