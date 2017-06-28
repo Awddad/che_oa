@@ -13781,6 +13781,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             var data_type = '';
+            this.type = row.type;
             if (this.type == 1 || this.type == 2 || this.type == 4 || this.type == 5) {
                 this.confirm_type = 'payment';
                 this.confirm_title = '付款确认';
@@ -13838,6 +13839,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.confirm_loading = true;
             var data_type = '';
+            console.log(this.type);
             if (this.type == 1 || this.type == 2 || this.type == 4 || this.type == 5) {
                 data_type = 'Payment_confirm_form';
             } else if (this.type == 3) {
@@ -46854,4 +46856,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[229]);
-//# sourceMappingURL=index.js.map?4ad97932f9df0b9f5396
+//# sourceMappingURL=index.js.map?55edcf198bf35aaecc68
