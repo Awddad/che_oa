@@ -385,7 +385,7 @@ class QuanXianServer extends Server
     {
         echo $orgId;
         $orgIds = ArrayHelper::getColumn(Org::find()->where(['pid' => 1])->all(), 'org_id');
-        print_r($orgIds);die;
+        print_r($orgIds);
         if(in_array($orgId, $orgIds)) {
             return $orgId;
         }
