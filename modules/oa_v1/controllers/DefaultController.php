@@ -182,7 +182,7 @@ class DefaultController extends BaseController
     /**
      * 获取 PDF
      * @param $apply_id
-     * @return int
+     * @return array
      */
     public function actionGetPdf($apply_id)
     {
@@ -197,10 +197,19 @@ class DefaultController extends BaseController
             case 3:
                 $pdf = PdfLogic::instance()->payBackPdf($apply);
                 break;
+            case 4:
+                $pdf = PdfLogic::instance()->applyPayPdf($apply);
+                break;
+            case 5:
+                $pdf = PdfLogic::instance()->applyBuyPdf($apply);
+                break;
             case 7:
                 $pdf = PdfLogic::instance()->useChapter($apply);
                 break;
         }
-        return $pdf;
+        return $this->_return([
+            'pdf' => $pdf,
+            'host' => 'http://'.$_SERVER['HTTP_HOST']
+        ]);
     }
 }

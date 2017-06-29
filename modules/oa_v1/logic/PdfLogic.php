@@ -182,4 +182,137 @@ class PdfLogic extends Logic
         
         return $root_path;
     }
+    
+    /**
+     * 付款申请
+     *
+     * @param Apply $apply
+     *
+     * @return string
+     */
+    public function applyPayPdf($apply)
+    {
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => $person->org_full_name,
+            'person' => $person->person_name,
+            'to_name' => $apply->applyPay->to_name,
+            'to_name' => $apply->applyPay->bank_card_id,
+            'des' => $apply->applyUseChapter->des ? : '--',
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+    
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply, true);
+        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        return '/web/pdf/'.$apply->apply_id.'.pdf';
+    }
+    
+    /**
+     * 请购
+     *
+     * @param $apply
+     * @return string
+     */
+    public function applyBuyPdf($apply)
+    {
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => $person->org_full_name,
+            'person' => $person->person_name,
+        
+            'des' => $apply->applyUseChapter->des ? : '--',
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+    
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply, true);
+        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        return '/web/pdf/'.$apply->apply_id.'.pdf';
+    }
+    
+    /**
+     * 需求单
+     *
+     * @param $apply
+     * @return string
+     */
+    public function applyDemand($apply)
+    {
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => $person->org_full_name,
+            'person' => $person->person_name,
+        
+            'des' => $apply->applyUseChapter->des ? : '--',
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+    
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply, true);
+        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        return '/web/pdf/'.$apply->apply_id.'.pdf';
+    }
+    
+    /**
+     * 资产获取
+     *
+     * @param $apply
+     * @return string
+     */
+    public function assetGet($apply)
+    {
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => $person->org_full_name,
+            'person' => $person->person_name,
+        
+            'des' => $apply->applyUseChapter->des ? : '--',
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+    
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply, true);
+        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        return '/web/pdf/'.$apply->apply_id.'.pdf';
+    }
+    
+    /**
+     * 资产归还
+     *
+     * @param $apply
+     * @return string
+     */
+    public function assetBack($apply)
+    {
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日'),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => $person->org_full_name,
+            'person' => $person->person_name,
+        
+            'des' => $apply->applyUseChapter->des ? : '--',
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+    
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply, true);
+        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        return '/web/pdf/'.$apply->apply_id.'.pdf';
+    }
+    
 }
