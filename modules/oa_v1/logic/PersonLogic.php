@@ -40,7 +40,7 @@ class PersonLogic extends BaseLogic
      */
     public function getSelectPerson($person)
     {
-        $persons = Person::find()->where(['org_id' => $person->company_id])->andWhere([
+        $persons = Person::find()->where(['company_id' => $person->company_id])->andWhere([
             '!=', 'person_id', $person->person_id
         ])->orderBy('person_id desc')->all();
         $data = [];
