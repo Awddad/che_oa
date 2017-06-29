@@ -163,10 +163,13 @@ class TalentForm extends BaseForm
 	            $model->status = 3;
 	            break;
 	        case self::SCENARIO_FACE://面试
+	            return ['status'=>false,'msg'=>'面试通过请录用'];
+	            /*
 	            $content = '面试通过';
 	            $model->status_face = $model->status_face ?: 1;
 	            $model->status = 5;
 	            break;
+	            */
 	        default:
 	            return ['status'=>false,'msg'=>'场景错误'];
 	    }
@@ -284,7 +287,7 @@ class TalentForm extends BaseForm
 	                case 2://待考试
 	                    $orwhere .= " or status = 2";
 	                    break;
-	                case 3://带面试
+	                case 3://待面试
 	                	$orwhere .= " or status = 3";
 	                    break;
 	                case 4://不通过
@@ -357,14 +360,15 @@ class TalentForm extends BaseForm
 	    $model->entry_time = $this->entry_time;
 	    $tran = yii::$app->db->beginTransaction();
 	    try{
-	        if(!$model->save()){
+	        if(!$model->save()){//添加人事表
 	            throw new Exception(current($model->getFirstErrors()));
 	        }
+	        $talent->status_face = $talent->status_face ?: 1;
 	        $talent->employee_id = $model->id;
-	        if(!$talent->save()){
+	        if(!$talent->save()){//保存人才信息
 	            throw new Exception(current($talent->getFirstErrors()));
 	        }
-	        TalentLogic::instance()->addLog($this->id,'录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
+	        TalentLogic::instance()->addLog($this->id,'面试通过，录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
 	        $tran->commit();
 	        return ['status'=>true];
 	    }catch(\Exception $e){
@@ -404,6 +408,7 @@ class TalentForm extends BaseForm
 	            }
 	            break;
 	        case self::SCENARIO_FACE://面试
+	        case self::SCENARIO_EMPLOY://录用
 	            if($model->status_test == 0){
 	                $this->addError('SCENARIO','还未考试');
 	                return false;
