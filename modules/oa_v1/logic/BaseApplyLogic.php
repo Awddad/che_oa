@@ -17,6 +17,7 @@ use app\models\ApprovalLog;
 use app\models\AssetGetList;
 use app\models\CaiWuFuKuan;
 use app\models\CaiWuShouKuan;
+use app\models\Person;
 
 
 /**
@@ -221,7 +222,7 @@ class BaseApplyLogic extends Logic
             'copy_person' => $apply->copy_person,
             'approval_persons' => $apply->approval_persons ? : '--',
         	'pdf' => $apply->apply_list_pdf,
-            'org' => implode('-', PersonLogic::instance()->getOrgName($apply->personInfo)),
+            'org' => Person::findOne($apply->person_id)->org_full_name,
             'status' => $apply->status
         ];
     }
