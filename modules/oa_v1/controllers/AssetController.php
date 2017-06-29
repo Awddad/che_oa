@@ -207,7 +207,7 @@ class AssetController extends BaseController
                 ]);
                 if($assetGetList) {
                     $person = Person::findOne($assetGetList->person_id);
-                    $org = PersonLogic::instance()->getOrgName($person);
+                    $org = $person->org_full_name;
                     $data[$k]['use_person'] = $person->person_name;
                     $data[$k]['org'] = implode('-', $org);
                     $data[$k]['use_day'] = ceil((time() - $assetGetList->created_at)/ 86400);
@@ -284,13 +284,13 @@ class AssetController extends BaseController
          */
         foreach ($model as $k => $v) {
             $person = Person::findOne($v->person_id);
-            $org = PersonLogic::instance()->getOrgName($person);
+            $org = $person->org_full_name;
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'person_name' => $person->person_name,
-                'org' => implode('-', $org),
+                'org' => $org,
                 'type' => $v::TYPE[$v->type],
                 'des' => $v->des
             ];

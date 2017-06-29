@@ -86,9 +86,8 @@ class JiekuanController extends BaseController
         foreach ($model as $k => $v) {
             if(!$v->apply)
                 continue;
-            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
-
-
+            $org = $v->apply->personInfo->org_full_name;
+            
             $data[] = [
                 'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'apply_id' => $v->apply_id,
@@ -157,11 +156,11 @@ class JiekuanController extends BaseController
         foreach ($model as $v) {
             if(!$v->apply)
                 continue;
-            $org = PersonLogic::instance()->getOrgName($v->apply->personInfo);
+            $org = $v->apply->personInfo->org_full_name;
             $data[] = [
                 'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
                 'person' => $v->apply->person,
-                'org' => implode('-', $org),
+                'org' => $org,
                 'money' => Yii::$app->formatter->asCurrency($v->money),
                 'des' => $v->des,
             ];

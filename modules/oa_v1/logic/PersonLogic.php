@@ -44,14 +44,16 @@ class PersonLogic extends BaseLogic
             '!=', 'person_id', $person->person_id
         ])->orderBy('person_id desc')->all();
         $data = [];
-        foreach ($persons as $person) {
-        	if($person->org_id <= 0){
+        /**
+         * @var Person $v
+         */
+        foreach ($persons as $v) {
+        	if($v->org_id <= 0){
         		continue;
         	}
-            $orgArr = $this->getOrgName($person);
-            $personName = $person->person_name. ' '. implode('-', $orgArr);
+            $personName = $v->person_name. ' '. $v->org_full_name;
             $data[] = [
-                'id' => $person->person_id,
+                'id' => $v->person_id,
                 'name' => $personName
             ];
         }
@@ -131,8 +133,7 @@ class PersonLogic extends BaseLogic
     public function getOrgNameByPersonId($person_id)
     {
     	$person = Person::findOne($person_id);
-    	$orgArr = $this -> getOrgName($person);
-    	return implode('-', $orgArr);
+    	return $person->org_full_name;
     }
 
     /**
