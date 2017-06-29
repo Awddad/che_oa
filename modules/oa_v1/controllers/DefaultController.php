@@ -207,9 +207,9 @@ class DefaultController extends BaseController
                 $pdf = PdfLogic::instance()->useChapter($apply);
                 break;
         }
-        return $this->_return([
-            'pdf' => $pdf,
-            'host' => 'http://'.$_SERVER['HTTP_HOST']
-        ]);
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.$pdf['name'].'"');
+        header('Content-Transfer-Encoding: binary');
+        readfile($pdf['path']);
     }
 }
