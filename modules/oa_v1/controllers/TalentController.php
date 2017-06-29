@@ -90,7 +90,7 @@ class TalentController extends BaseController
         $model = new TalentForm();
         $model->setScenario($model::SCENARIO_EMPLOY);
         $model->load(['TalentForm'=>$post]);
-        if(!$model->validate()){
+        if(!$model->validate() || !$model->checkScenario()){
             return $this->_returnError(403,current($model->getFirstErrors()));
         }
         $res = $model->employ($this->arrPersonInfo);
