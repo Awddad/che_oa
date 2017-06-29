@@ -8,7 +8,6 @@
 
 namespace app\modules\oa_v1\controllers;
 
-use app\models\Apply;
 use app\models\ApplyDemand;
 use app\models\Asset;
 use app\models\AssetGetList;
@@ -16,7 +15,6 @@ use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use app\modules\oa_v1\models\AssetListForm;
 use Yii;
 use app\modules\oa_v1\logic\AssetLogic;

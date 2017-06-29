@@ -15,6 +15,8 @@ use yii\base\Model;
 use yii\db\Exception;
 
 /**
+ * 资产库存列表
+ *
  * Class AssetListForm
  * @package app\modules\oa_v1\models
  */

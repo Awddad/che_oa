@@ -11,13 +11,14 @@ namespace app\modules\oa_v1\models;
 use app\models\Apply;
 use app\models\ApplyUseChapter;
 use app\models\Person;
-use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use yii\db\Exception;
 
 
 /**
+ * 用章申请
+ *
  * Class ApplyUseChapterForm
  * @package app\modules\oa_v1\models
  */

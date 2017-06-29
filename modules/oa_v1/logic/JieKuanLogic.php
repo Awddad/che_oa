@@ -4,8 +4,13 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
 use app\models\Apply;
-use app\models\JieKuan;
 
+/**
+ * 在借款列表
+ *
+ * Class JieKuanLogic
+ * @package app\modules\oa_v1\logic
+ */
 class JieKuanLogic extends Logic
 {
 

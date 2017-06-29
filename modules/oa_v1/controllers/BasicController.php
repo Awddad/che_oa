@@ -12,8 +12,18 @@ use app\modules\oa_v1\models\BasicEmployeeForm;
 use app\models\AssetType;
 
 
+/**
+ * 基础数据
+ *
+ * Class BasicController
+ * @package app\modules\oa_v1\controllers
+ */
 class BasicController extends BaseController
 {
+    /**
+     * 获取所有资产类型
+     * @return array
+     */
     public function actionGetTypeAll()
     {
         $model = new BasicAssetForm();
@@ -21,6 +31,9 @@ class BasicController extends BaseController
         return $this->_return($res);
     }
     
+    /**
+     * @return array
+     */
 	public function actionGetTypeList()
 	{
 		$params = yii::$app->request->get();
