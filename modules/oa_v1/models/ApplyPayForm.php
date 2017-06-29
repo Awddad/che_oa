@@ -11,7 +11,6 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApplyPay;
-use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;

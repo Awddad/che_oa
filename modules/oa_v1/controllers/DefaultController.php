@@ -5,11 +5,11 @@ namespace app\modules\oa_v1\controllers;
 use app\logic\MyTcPdf;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
-use app\models\BaoXiao;
 use app\models\BaoXiaoList;
 use app\models\JieKuan;
 use app\models\Person;
 use app\models\Role;
+use app\modules\oa_v1\logic\PdfLogic;
 use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Menu;
@@ -188,86 +188,14 @@ class DefaultController extends BaseController
     {
         $apply = Apply::findOne($apply_id);
         if(in_array($apply->type, [1,2,3,4,5]) && $apply->status == 99 && $apply->apply_list_pdf) {
-            $person = Person::findOne($apply->person_id);
             if($apply->type == 1) {
-                $arrInfo = [
-                    'apply_date' => date('Y年m月d日',$this -> create_time),
-                    'apply_id' => $apply -> apply_id,
-                    'org_full_name' => $person->org_full_name,
-                    'person' => $apply->person,
-                    'bank_name' => $apply->expense->bank_name.$apply->expense-> bank_name_des,
-                    'bank_card_id' => $apply->expense -> bank_card_id,
-                    'approval_person' =>$apply->approval_persons,//多个人、分隔
-                    'copy_person' => $apply->copy_person,//多个人、分隔
-                    'list' => [],
-                    'tips' => '--',
-                    'caiwu' => $person->person_name
-                ];
-                $baoXiaoList = BaoXiaoList::find()->where(['apply_id' => $apply->apply_id])->all();
-                foreach($baoXiaoList as $v){
-                    $arrInfo['list'][] = [
-                        'type_name' => $v['type_name'],
-                        'money' => \Yii::$app->formatter->asCurrency($v['money']),
-                        'detail' => @$v['des']
-                    ];
-                }
-                $root_path = \Yii::$app -> basePath.'/web'.$apply->apply_list_pdf;
-                if(!file_exists($root_path)){
-                    unlink($root_path);
-                }
-                $myPdf = new MyTcPdf();
-                $myPdf -> createBaoXiaoDanPdf($root_path, $arrInfo);
+                $pdf = PdfLogic::instance()->expensePdf($apply);
             } elseif($apply->type == 2) {
-                $pdf = new  MyTcPdf();
-                $root_path = \Yii::$app -> basePath.'/web'.$apply->apply_list_pdf;
-                if(!file_exists($root_path)){
-                    unlink($root_path);
-                }
-                $pdf->createJieKuanDanPdf($root_path, [
-                    'apply_date' => date('Y年m月d日'),
-                    'apply_id' => $apply->apply_id,
-                    'org_full_name' => $person->org_full_name,
-                    'person' => $person->person_name,
-                    'bank_name' => $this->bank_name,
-                    'bank_card_id' => $this->bank_card_id,
-                    'money' => \Yii::$app->formatter->asCurrency($this->money),
-                    'detail' => $this->des,
-                    'tips' => $this->tips,
-                    'approval_person' =>$apply->approval_persons,//多个人、分隔
-                    'copy_person' => $apply->copy_person,//多个人、分隔
-                    'caiwu' => $person->person_name
-                ]);
+                $pdf = PdfLogic::instance()->loanPdf($apply);
             } elseif($apply->type == 3) {
-                $pdf = new  MyTcPdf();
-                $root_path = \Yii::$app -> basePath.'/web'.$apply->apply_list_pdf;
-                if(!file_exists($root_path)){
-                    unlink($root_path);
-                }
-                $getBackList = [];
-                foreach ($apply->PayBack->apply_ids as $apply_id) {
-                    $back = JieKuan::findOne($apply_id);
-                    $data[] = [
-                        'create_time' => date('Y-m-d H:i', $apply->create_time),
-                        'money' => \Yii::$app->formatter->asCurrency($back->money),
-                        'detail' => $back->des
-                    ];
-                }
-                $pdf->createHuanKuanDanPdf($root_path, [
-                    'list' => $getBackList,
-                    'apply_date' => date('Y年m月d日'),
-                    'apply_id' => $apply->apply_id,
-                    'org_full_name' => $person->org_full_name,
-                    'person' => $apply->person,
-                    'bank_name' => $apply->PayBack->bank_name,
-                    'bank_card_id' => $apply->PayBack->bank_card_id,
-                    'des' => $apply->PayBack->des,
-                    'approval_person' =>$apply->approval_persons,//多个人、分隔
-                    'copy_person' => $apply->copy_person,//多个人、分隔
-                    'caiwu' => '--'
-                ]);
+                $pdf = PdfLogic::instance()->payBackPdf($apply);
             }
-            
-            return $apply->apply_list_pdf;
+            return $pdf;
         } else {
             return $apply->apply_list_pdf;
         }

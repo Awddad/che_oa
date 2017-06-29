@@ -2,7 +2,6 @@
 
 namespace app\modules\oa_v1\logic;
 
-use app\models\Apply;
 use Yii;
 use app\models\ApprovalLog;
 

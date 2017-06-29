@@ -9,10 +9,8 @@
 namespace app\modules\oa_v1\controllers;
 
 
-use app\models\Apply;
 use app\models\CaiWuFuKuan;
 use app\modules\oa_v1\logic\BackLogic;
-use app\modules\oa_v1\logic\PayLogic;
 use app\modules\oa_v1\models\BackConfirmForm;
 
 
@@ -51,10 +49,7 @@ class BackConfirmController extends BaseController
         }
         $model = new BackConfirmForm();
         $post['BackConfirmForm'] = \Yii::$app->request->post();
-//        $files = $model->saveUploadFile('pics');
-//        if($files) {
-//            $data['BackConfirmForm']['pics']  = $files;
-//        }
+
         if ($model->load($post) &&  $model->validate() && $model->saveConfirm($this->arrPersonInfo)) {
             return $this->_return('');
         } else {

@@ -9,10 +9,14 @@
 namespace app\modules\oa_v1\controllers;
 
 
-use app\models\Apply;
-use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\modules\oa_v1\models\ApplyUseChapterForm;
 
+
+/**
+ * 用章
+ * Class ApplyUseChapterController
+ * @package app\modules\oa_v1\controllers
+ */
 class ApplyUseChapterController extends BaseController
 {
     

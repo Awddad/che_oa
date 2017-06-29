@@ -9,36 +9,41 @@ use TCPDF;
 class MyTcPdf {
     
     /**
-     * @功能：              生成报销单PDF文件
-     * @作者：              王雕
-     * @创建时间：          2017-05-15
-     * @param string $strSaveName   保存的文件名
-     * @param array $arrInfo       格式：$arrInfo = [
-                                        'apply_date' => '2017年5月5日',
-                                        'apply_id' => '20170505102037012134', 
-                                        'org_full_name' => '南京汽车销售有限公司-中规车一区-涟水店', 
-                                        'person' => '马聪', 
-                                        'bank_name' => '中国银行丰庄支行', 
-                                        'bank_card_id' => '622262132132141241451', 
-                                        'list' => [
-                                            [
-                                                'type_name' => '差旅费', 
-                                                'money' => '1182.00', 
-                                                'detail' => '两天的差旅费，具体项目见附件明细'
-                                            ],
-                                            //....
-                                        ], 
-                                        'approval_person' => '陈贵、李财',//多个人、分隔 
-                                        'copy_person' => '张三',//多个人、分隔 
-                                    ];
+     * 创建PDF
+     *
+     * @param $pdfName
+     * @param $param
+     * @param $type
+     *
+     * @return  boolean
      */
-    public function createBaoXiaoDanPdf($strSaveName, $arrInfo)
+    public function createdPdf($pdfName, $param, $type)
     {
-        if(pathinfo($strSaveName, PATHINFO_EXTENSION) != 'pdf')
+        if(pathinfo($pdfName, PATHINFO_EXTENSION) != 'pdf')
         {
             return false;//文件类型不是pdf
         }
-        // html 具体样式等前端提供，此处先写个demo
+        $strHtml = $this->$type($param);
+        $pdf = new TCPDF();
+        $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
+        $pdf->AddPage();
+        $pdf->writeHTML($strHtml, true, false, true, false, '');
+        $pdf->lastPage();
+        $pdf->Output($pdfName, 'F');//只保存 F    保存与输出 FI 只输出I
+        return is_file($pdfName);
+    }
+    
+    
+    /**
+     * @功能：              生成报销单PDF文件
+     * @作者：              王雕
+     * @创建时间：          2017-05-15
+     * @param array $arrInfo
+     *
+     * @return boolean
+     */
+    public function baoxiao($arrInfo)
+    {
         $strListHtml = '';
         foreach($arrInfo['list'] as $val)
         {
@@ -93,13 +98,7 @@ table tr{height:40px;}
     </div>
 </div>
 TABLEHTML;
-        $pdf = new TCPDF();
-        $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
-        $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, false, false, false, '');
-        $pdf->lastPage();
-        $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I
-        return is_file($strSaveName);
+        return $strHtml;
     }
     
     
@@ -107,27 +106,11 @@ TABLEHTML;
      * @功能：              生成借款单PDF文件
      * @作者：              王雕
      * @创建时间：          2017-05-15
-     * @param string $strSaveName   保存的文件名
-     * @param array $arrInfo       格式：$arrInfo = [
-                                        'apply_date' => '2017年5月5日',
-                                        'apply_id' => '20170505102037012134', 
-                                        'org_full_name' => '南京汽车销售有限公司-中规车一区-涟水店', 
-                                        'person' => '马聪', 
-                                        'bank_name' => '中国银行丰庄支行', 
-                                        'bank_card_id' => '622262132132141241451', 
-                                        'money' => '1265.00', 
-                                        'detail' => '还款测试', 
-                                        'tips' => '你小样', 
-                                        'approval_person' => '陈贵、李财',//多个人、分隔 
-                                        'copy_person' => '张三',//多个人、分隔 
-                                    ];
+     * @param array $arrInfo
+     * @return boolean
      */
-    public function createJieKuanDanPdf($strSaveName, $arrInfo)
+    public function loan($arrInfo)
     {
-        if(pathinfo($strSaveName, PATHINFO_EXTENSION) != 'pdf')
-        {
-            return false;//文件类型不是pdf
-        }
         $strHtml = <<<TABLEHTML
 <style>
 .bg{background:rgba(204, 204, 204, 1)}
@@ -177,46 +160,19 @@ table tr{height:40px;}
     </table>
 </div>
 TABLEHTML;
-        $pdf = new TCPDF();
-        $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
-        $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, false, true, false, '');
-        $pdf->lastPage();
-        $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I    
-        return is_file($strSaveName);
+        return $strHtml;
     }
     
-/**
+    /**
      * @功能：              生成报销单PDF文件
      * @作者：              王雕
      * @创建时间：          2017-05-15
-     * @param string $strSaveName   保存的文件名
-     * @param array $arrInfo       格式：$arrInfo = [
-                                        'apply_date' => '2017年5月5日',
-                                        'apply_id' => '20170505102037012134', 
-                                        'org_full_name' => '南京汽车销售有限公司-中规车一区-涟水店', 
-                                        'person' => '马聪', 
-                                        'bank_name' => '中国银行丰庄支行', 
-                                        'bank_card_id' => '622262132132141241451', 
-                                        'list' => [
-                                            [
-                                                'create_time' => '2017-05-12 12:12',
-                                                'money' => '1182.00', 
-                                                'detail' => '两天的差旅费，具体项目见附件明细'
-                                            ],
-                                            //....
-                                        ], 
-                                        'tips' => '备注信息', 
-                                        'approval_person' => '陈贵、李财',//多个人、分隔 
-                                        'copy_person' => '张三',//多个人、分隔 
-                                    ];
+     * @param array $arrInfo
+     *
+     * @return boolean
      */
-    public function createHuanKuanDanPdf($strSaveName, $arrInfo)
+    public function payBack($arrInfo)
     {
-        if(pathinfo($strSaveName, PATHINFO_EXTENSION) != 'pdf')
-        {
-            return false;//文件类型不是pdf
-        }
         // html 具体样式等前端提供，此处先写个demo
         $strListHtml = '';
         foreach($arrInfo['list'] as $val)
@@ -274,39 +230,7 @@ table tr{height:40px;}
     </table>
 </div>
 TABLEHTML;
-        $pdf = new TCPDF();
-        $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
-        $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, false, true, false, '');
-        $pdf->lastPage();
-        $pdf->Output($strSaveName, 'F');//只保存 F    保存与输出 FI 只输出I
-        return is_file($strSaveName);
-    }
-    
-    
-    /**
-     * 创建PDF
-     *
-     * @param $pdfName
-     * @param $param
-     * @param $type
-     *
-     * @return  boolean
-     */
-    public function createdPdf($pdfName, $param, $type)
-    {
-        if(pathinfo($pdfName, PATHINFO_EXTENSION) != 'pdf')
-        {
-            return false;//文件类型不是pdf
-        }
-        $strHtml = $this->$type($param);
-        $pdf = new TCPDF();
-        $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
-        $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, false, true, false, '');
-        $pdf->lastPage();
-        $pdf->Output($pdfName, 'F');//只保存 F    保存与输出 FI 只输出I
-        return is_file($pdfName);
+        return $strListHtml;
     }
     
     

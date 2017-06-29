@@ -2,14 +2,12 @@
 
 namespace app\modules\oa_v1\controllers;
 
-use app\models\Org;
 use app\modules\oa_v1\logic\BackLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use app\models\JieKuan;
 use yii\data\Pagination;
-use yii\helpers\ArrayHelper;
 
 /**
  * 借款相关接口信息
