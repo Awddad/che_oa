@@ -4,7 +4,6 @@ namespace app\modules\oa_v1\controllers;
 
 use Yii;
 use app\modules\oa_v1\models\BaoxiaoForm;
-use yii\web\UploadedFile;
 
 
 class BaoxiaoController extends BaseController

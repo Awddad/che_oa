@@ -11,7 +11,6 @@ namespace app\modules\oa_v1\controllers;
 
 use app\models\ApplyDemand;
 use app\modules\oa_v1\logic\BaseLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use app\models\Apply;
 use yii\data\Pagination;

@@ -6,8 +6,19 @@ use yii;
 use app\modules\oa_v1\models\ApplyOpenForm;
 use app\models\Apply;
 
+/**
+ * 申请开店
+ *
+ * Class ApplyOpenController
+ * @package app\modules\oa_v1\controllers
+ */
 class ApplyOpenController extends BaseController
 {
+    /**
+     * 新增店铺接口
+     *
+     * @return array
+     */
     public function actionAddApply()
     {
         $post = yii::$app->request->post();

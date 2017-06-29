@@ -4,6 +4,13 @@ namespace app\modules\oa_v1\controllers;
 use yii;
 use app\modules\oa_v1\models\ApplyPositiveForm;
 
+
+/**
+ * 转正申请
+ *
+ * Class ApplyPositiveController
+ * @package app\modules\oa_v1\controllers
+ */
 class ApplyPositiveController extends BaseController
 {
 	public function actionAddApply()

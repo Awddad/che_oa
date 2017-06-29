@@ -4,6 +4,12 @@ namespace app\modules\oa_v1\controllers;
 use yii;
 use app\modules\oa_v1\models\ApplyTransferForm;
 
+/**
+ * 调职申请
+ *
+ * Class ApplyTransferController
+ * @package app\modules\oa_v1\controllers
+ */
 class ApplyTransferController extends BaseController
 {
 	public function actionAddApply()

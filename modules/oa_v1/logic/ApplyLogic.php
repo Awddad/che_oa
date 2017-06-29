@@ -4,7 +4,6 @@ namespace app\modules\oa_v1\logic;
 
 
 use app\models as appmodel;
-use app\models\JieKuan;
 use yii\data\Pagination;
 /**
  * 申请单逻辑
@@ -15,8 +14,10 @@ class ApplyLogic extends BaseLogic
 {
 	/**
 	 * 获取申请列表
-	 * @param unknown_type $search
-	 * @param unknown_type $user
+	 * @param array $search
+	 * @param array $user
+     *
+     * @return array
 	 */
 	public function getApplyList($search,$user)
 	{

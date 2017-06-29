@@ -5,7 +5,6 @@ namespace app\modules\oa_v1\controllers;
 use app\logic\MyTcPdf;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
-use app\models\BaoXiao;
 use app\models\BaoXiaoList;
 use app\models\JieKuan;
 use app\models\Person;

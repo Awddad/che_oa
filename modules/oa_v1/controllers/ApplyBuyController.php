@@ -13,7 +13,6 @@ use app\models\ApplyBuy;
 use app\models\ApplyBuyList;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\BaseLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use app\models\Apply;
 use app\modules\oa_v1\models\ApplyBuyForm;

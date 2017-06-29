@@ -5,7 +5,6 @@ use yii\helpers\ArrayHelper;
 
 use Yii;
 use app\models as appmodel;
-use yii\web\UploadedFile;
 use app\logic\MyTcPdf;
 use app\modules\oa_v1\logic\PersonLogic;
 

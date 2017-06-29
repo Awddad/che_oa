@@ -4,11 +4,19 @@ namespace app\modules\oa_v1\logic;
 use app\models\Org;
 use yii\helpers\ArrayHelper;
 
+/**
+ * 组织架构逻辑
+ *
+ * Class OrgLogic
+ * @package app\modules\oa_v1\logic
+ */
 class OrgLogic extends BaseLogic
 {
     /**
      * 获得组织架构树形图
      * @param int $pid
+     *
+     * @return  array
      */
     public function getOrgTree($pid = 0)
     {
@@ -28,7 +36,9 @@ class OrgLogic extends BaseLogic
     
     /**
      * 获得所有子组织
-     * @param unknown $pid
+     * @param int $pid
+     *
+     * @return array
      */
     public function getAllChildID($pid = 0)
     {
