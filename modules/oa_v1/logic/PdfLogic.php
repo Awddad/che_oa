@@ -12,7 +12,6 @@ namespace app\modules\oa_v1\logic;
 use app\logic\Logic;
 use app\logic\MyTcPdf;
 use app\models\Apply;
-use app\models\ApplyPay;
 use app\models\ApplyUseChapter;
 use app\models\BaoXiaoList;
 use app\models\JieKuan;
@@ -30,6 +29,11 @@ class PdfLogic extends Logic
      */
     public function expensePdf($apply)
     {
+        $myPdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
         $person = Person::findOne($apply->person_id);
         $arrInfo = [
             'apply_date' => date('Y年m月d日',$apply->create_time),
@@ -52,11 +56,13 @@ class PdfLogic extends Logic
                 'detail' => @$v['des']
             ];
         }
-        $myPdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        
         $myPdf->createdPdf($root_path, $arrInfo, 'baoxiao');
         
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -67,6 +73,11 @@ class PdfLogic extends Logic
      */
     public function loanPdf($apply)
     {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
         $person = Person::findOne($apply->person_id);
        
         $arrInfo =  [
@@ -83,10 +94,12 @@ class PdfLogic extends Logic
             'copy_person' => $apply->copy_person ?: '--',//多个人、分隔
             'caiwu' => $apply->cai_wu_person ? : '--'
         ];
-        $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        
         $pdf->createdPdf($root_path, $arrInfo, 'loan');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -97,6 +110,12 @@ class PdfLogic extends Logic
      */
     public function payBackPdf($apply)
     {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        
         $person = Person::findOne($apply->person_id);
         $getBackList = [];
         $loanIds = explode(',', $apply->payBack->jie_kuan_ids);
@@ -121,10 +140,11 @@ class PdfLogic extends Logic
             'copy_person' => $apply->copy_person ? :  '--',//多个人、分隔
             'caiwu' => $apply->cai_wu_person ? : '--'
         ];
-        $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
         $pdf->createdPdf($root_path, $arrInfo, 'payBack');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -135,54 +155,48 @@ class PdfLogic extends Logic
      */
     public function useChapter($apply)
     {
-        if($apply->apply_list_pdf && !\Yii::$app->request->get('debug')) {
-            return $apply->apply_list_pdf;
+        $root_path = $this->getFilePath($apply);
+        if(!file_exists($root_path)){
+            $pdf = new MyTcPdf();
+            $person = Person::findOne($apply->person_id);
+            $arrInfo = [
+                'apply_date' => date('Y年m月d日'),
+                'apply_id' => $apply->apply_id,
+                'org_full_name' => $person->org_full_name,
+                'person' => $person->person_name,
+                'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
+                'chapter_name' => $apply->applyUseChapter->name,
+                'des' => $apply->applyUseChapter->des ?: '--',
+                'approval_person' => $apply->approval_persons,//多个人、分隔
+                'copy_person' => $apply->copy_person ?: '--',//多个人、分隔
+            ];
+    
+            $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
         }
-        $person = Person::findOne($apply->person_id);
-        $arrInfo = [
-            'apply_date' => date('Y年m月d日'),
-            'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
-            'person' => $person->person_name,
-            'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
-            'chapter_name' => $apply->applyUseChapter->name,
-            'des' => $apply->applyUseChapter->des ? : '--',
-            'approval_person' =>$apply->approval_persons,//多个人、分隔
-            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
         ];
-    
-        $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
-        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
     }
-    
     
     /**
      * PDF 文件路径
      *
-     * @param $apply
-     * @param bool $flag 是否需要重新生成
+     * @param Apply $apply
      *
      * @return string
      */
-    protected function getFilePath($apply, $flag = false)
+    protected function getFilePath($apply)
     {
-        if($apply->apply_list_pdf) {
-            $root_path = \Yii::$app -> basePath.'/web'.$apply->apply_list_pdf;
-            if($flag) {
-                if(file_exists($root_path)){
-                    unlink($root_path);
-                }
-            }
-        } else {
-            $root_path = \Yii::$app->basePath . '/web/pdf/'.date('Ymd'). '/' . $apply->apply_id . '.pdf';
-            if (!file_exists($root_path)) {
-                @mkdir($root_path, 0777, true);
-            }
+        $basePath = \Yii::$app->basePath.'/web';
+        $filePath = '/upload/pdf/loan/'.date('Y-m-d').'/';
+        $rootPath = $basePath.$filePath;
+        if (!file_exists($rootPath)) {
+            @mkdir($rootPath, 0777, true);
         }
-        
-        return $root_path;
+        $file = $rootPath.$apply->apply_id.'.pdf';
+        return $file;
     }
     
     /**
@@ -194,6 +208,8 @@ class PdfLogic extends Logic
      */
     public function applyPayPdf($apply)
     {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
         $person = Person::findOne($apply->person_id);
         $arrInfo = [
             'apply_date' => date('Y年m月d日'),
@@ -211,10 +227,12 @@ class PdfLogic extends Logic
             'caiwu' => $apply->cai_wu_person ? : '--'
         ];
     
-        $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        
         $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -238,9 +256,12 @@ class PdfLogic extends Logic
         ];
     
         $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        $root_path = $this->getFilePath($apply);
         $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -264,9 +285,12 @@ class PdfLogic extends Logic
         ];
     
         $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        $root_path = $this->getFilePath($apply);
         $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -290,9 +314,12 @@ class PdfLogic extends Logic
         ];
     
         $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        $root_path = $this->getFilePath($apply);
         $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
     /**
@@ -316,9 +343,12 @@ class PdfLogic extends Logic
         ];
     
         $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply, true);
+        $root_path = $this->getFilePath($apply);
         $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
-        return '/web/pdf/'.$apply->apply_id.'.pdf';
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
     
 }
