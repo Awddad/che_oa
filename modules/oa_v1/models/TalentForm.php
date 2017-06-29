@@ -316,7 +316,6 @@ class TalentForm extends BaseForm
 	    
 	    $data = [];
 	    foreach($res as $k => $v){
-	        $person_type = 
 	    	$data[] = [
 	    	    'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
 	    	    'talent_id' => $v->id,
