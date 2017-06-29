@@ -35,13 +35,12 @@ class PersonLogic extends BaseLogic
      * 获取筛选
      *
      * @param Person $person
-     * @param array $orgIds
      *
      * @return array
      */
-    public function getSelectPerson($person, $orgIds)
+    public function getSelectPerson($person)
     {
-        $persons = Person::find()->where(['in', 'org_id', $orgIds])->andWhere([
+        $persons = Person::find()->where(['org_id' => $person->company_id])->andWhere([
             '!=', 'person_id', $person->person_id
         ])->orderBy('person_id desc')->all();
         $data = [];
