@@ -24,6 +24,9 @@ class MyTcPdf {
             return false;//文件类型不是pdf
         }
         $strHtml = $this->$type($param);
+        if(\Yii::$app->request->get('debug')) {
+            echo $strHtml;die;
+        }
         $pdf = new TCPDF();
         $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
         $pdf->AddPage();
@@ -142,7 +145,7 @@ table tr{height:40px;}
             <td colspan="9" style="background-color:#f2f2f2">事由</td>
         </tr>
         <tr>
-            <td colspan="3">￥{$arrInfo['money']}</td>
+            <td colspan="3">{$arrInfo['money']}</td>
             <td colspan="9">{$arrInfo['detail']}</td>
         </tr>
         <tr>
@@ -230,7 +233,7 @@ table tr{height:40px;}
     </table>
 </div>
 TABLEHTML;
-        return $strListHtml;
+        return $strHtml;
     }
     
     

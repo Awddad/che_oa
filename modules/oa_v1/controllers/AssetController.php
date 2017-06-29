@@ -312,7 +312,7 @@ class AssetController extends BaseController
              $this->_returnError(400);
         }
         
-        $rst= AssetLogic::instance()->updateAssetList($param);
+        $rst= AssetLogic::instance()->updateAssetList($param, $this->arrPersonInfo);
         if($rst) {
             return $this->_return([]);
         }

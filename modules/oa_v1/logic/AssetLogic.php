@@ -330,7 +330,7 @@ class AssetLogic extends Logic
             case 3:
                 $des = '归还, 审批单号：' . $applyId;
                 break;
-            default:
+            case 1:
                 $des = '首次领用';
                 break;
         }
@@ -464,10 +464,11 @@ class AssetLogic extends Logic
      * 报废，丢失操作
      *
      * @param $param
+     * @param Person $person
      * @return bool
      * @throws Exception
      */
-    public function updateAssetList($param)
+    public function updateAssetList($param, $person)
     {
         $assetList = AssetList::findOne($param['asset_list_id']);
         $assetList->status = $param['status'];
@@ -475,7 +476,7 @@ class AssetLogic extends Logic
         try {
             if ($assetList->save()) {
                 $type = $param['status'] == 3 ? 4 : 5;
-                AssetLogic::instance()->addAssetListLog('', $param['asset_list_id'], null, $type, $param['des']);
+                AssetLogic::instance()->addAssetListLog($person->person_id, $param['asset_list_id'], null, $type, $param['des']);
             }
             $transaction->commit();
             return true;
