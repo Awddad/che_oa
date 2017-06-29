@@ -187,17 +187,20 @@ class DefaultController extends BaseController
     public function actionGetPdf($apply_id)
     {
         $apply = Apply::findOne($apply_id);
-        if(in_array($apply->type, [1,2,3,4,5]) && $apply->status == 99 && $apply->apply_list_pdf) {
-            if($apply->type == 1) {
+        switch ($apply->type){
+            case 1:
                 $pdf = PdfLogic::instance()->expensePdf($apply);
-            } elseif($apply->type == 2) {
+                break;
+            case 2:
                 $pdf = PdfLogic::instance()->loanPdf($apply);
-            } elseif($apply->type == 3) {
+                break;
+            case 3:
                 $pdf = PdfLogic::instance()->payBackPdf($apply);
-            }
-            return $pdf;
-        } else {
-            return $apply->apply_list_pdf;
+                break;
+            case 7:
+                $pdf = PdfLogic::instance()->useChapter($apply);
+                break;
         }
+        return $pdf;
     }
 }
