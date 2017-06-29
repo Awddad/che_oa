@@ -12,10 +12,12 @@ namespace app\modules\oa_v1\logic;
 use app\logic\Logic;
 use app\logic\MyTcPdf;
 use app\models\Apply;
+use app\models\ApplyPay;
 use app\models\ApplyUseChapter;
 use app\models\BaoXiaoList;
 use app\models\JieKuan;
 use app\models\Person;
+use app\models\TagTree;
 
 class PdfLogic extends Logic
 {
@@ -40,7 +42,7 @@ class PdfLogic extends Logic
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
             'list' => [],
             'tips' => '--',
-            'caiwu' => $person->person_name
+            'caiwu' => $apply->cai_wu_person ? : '--'
         ];
         $baoXiaoList = BaoXiaoList::find()->where(['apply_id' => $apply->apply_id])->all();
         foreach($baoXiaoList as $v){
@@ -79,7 +81,7 @@ class PdfLogic extends Logic
             'tips' => $apply->loan->tips,
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ?: '--',//多个人、分隔
-            'caiwu' => $person->person_name
+            'caiwu' => $apply->cai_wu_person ? : '--'
         ];
         $pdf = new MyTcPdf();
         $root_path = $this->getFilePath($apply, true);
@@ -117,7 +119,7 @@ class PdfLogic extends Logic
             'des' => $apply->payBack->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? :  '--',//多个人、分隔
-            'caiwu' => '--'
+            'caiwu' => $apply->cai_wu_person ? : '--'
         ];
         $pdf = new MyTcPdf();
         $root_path = $this->getFilePath($apply, true);
@@ -199,10 +201,14 @@ class PdfLogic extends Logic
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
             'to_name' => $apply->applyPay->to_name,
-            'to_name' => $apply->applyPay->bank_card_id,
+            'bank_card_id' => $apply->applyPay->bank_card_id,
+            'bank_name' => $apply->applyPay->bank_name,
+            'pay_type' => TagTree::findOne($apply->applyPay->pay_type)->name,
+            'money' => $apply->applyPay->money,
             'des' => $apply->applyUseChapter->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+            'caiwu' => $apply->cai_wu_person ? : '--'
         ];
     
         $pdf = new MyTcPdf();
