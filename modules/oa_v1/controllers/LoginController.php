@@ -29,6 +29,9 @@ class LoginController extends Controller
     public function actionIndex()
     {
         $session = Yii::$app->session;
+        /**
+         * @var Person $objPerson
+         */
         $objPerson = $session->get('USER_INFO');
         $param = Yii::$app->request->get();
         $osType = ArrayHelper::getValue($param, 'os_type', 'web');
@@ -56,6 +59,10 @@ class LoginController extends Controller
                 $session->set('USER_INFO', $objPerson);
             } elseif ($osType == 'crm') {
                 $uid = Yii::$app->request->get('uid');
+                // uid 不相等时 清除session
+                if ($objPerson->person_id != $uid) {
+                    Yii::$app->getSession()->destroy();
+                }
                 $time = Yii::$app->request->get('time');
                 $sign = Yii::$app->request->get('sign');
                 if ($sign == md5($osType.$uid.$time.'che.com')) {
