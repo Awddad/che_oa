@@ -44,13 +44,14 @@ class BasicController extends BaseController
 			'res' => []
 		];
 		foreach($res['data'] as $k => $v){
-			$data['res'][] = [
-					'number' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
-			        'id' => $v['id'],
-					'name' => $v['name'],
-			        'has_child' => $v['has_child'] ? 1 : 0, 
-					'update_time' => date('Y-m-d H:i:s', $v['update_time']),
-			];
+			$tmp = [
+                'number' => ($data['page']['currentPage'] - 1) * $data['page']['perPage'] + $k + 1,
+                'id' => $v['id'],
+                'name' => $v['name'],
+                'update_time' => date('Y-m-d H:i:s', $v['update_time'])
+            ];
+            $v['has_child'] && $tmp['children'] = $model->getAssetTypeByParent($v['id']);
+            $data['res'][] = $tmp;
 		}
 		return $this->_return($data);
 	}

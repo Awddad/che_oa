@@ -276,6 +276,20 @@ class BasicAssetForm extends BaseForm
 	    return $data;
 	}
 	
+	public function getAssetTypeByParent($pid)
+	{
+	    $res = AssetType::findAll(['parent_id'=>$pid]);
+	    $data = [];
+	    foreach($res as $v){
+	        $data[] = [
+	            'id'=>$v->id,
+	            'name' =>$v->name,
+	            'time'=>date('Y-m-d H:i:s', $v->update_time)
+	        ];
+	    }
+	    return $data;
+	}
+	
 	/**
 	 * 获得品牌列表
 	 * @param array $params

@@ -28,7 +28,9 @@ class TalentLogic extends BaseLogic
 		$model->person_name = $person_name;
 		$model->person_id = $person_id;
 		try{
-			$model->insert();
+			if(!$model->insert()){
+			    throw new \Exception('error');
+			}
 		}catch (\Exception $e){
 			yii::info("人才日志错误 {$person_name} {$content} {$model->data}");
 		}catch (\Throwable $e){
