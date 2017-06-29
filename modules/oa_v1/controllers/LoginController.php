@@ -72,7 +72,11 @@ class LoginController extends Controller
         } else {
             $session->set('ROLE_ID', $arrRoleIds[0]);
         }
-        header('Location: /oa/index.html');
+        if($osType == 'crm') {
+            header('Location: /oa/index.html#/adminhome?isnav=0');
+        } else {
+            header('Location: /oa/index.html#/adminhome');
+        }
         exit();
     }
 }
