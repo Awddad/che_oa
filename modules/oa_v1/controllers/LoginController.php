@@ -68,15 +68,17 @@ class LoginController extends Controller
                 }
             }
         }
-        // uid 不相等时 清除session
-        if ($objPerson->person_id != $uid) {
-            Yii::$app->getSession()->destroy();
-        }
-        $time = Yii::$app->request->get('time');
-        $sign = Yii::$app->request->get('sign');
-        if ($sign == md5($osType.$uid.$time.'che.com')) {
-            $objPerson = Person::findOne(['person_id' => $uid]);
-            $session->set('USER_INFO', $objPerson);
+        if ($osType == 'crm') {
+            // uid 不相等时 清除session
+            if ($objPerson->person_id != $uid) {
+                Yii::$app->getSession()->destroy();
+            }
+            $time = Yii::$app->request->get('time');
+            $sign = Yii::$app->request->get('sign');
+            if ($sign == md5($osType . $uid . $time . 'che.com')) {
+                $objPerson = Person::findOne(['person_id' => $uid]);
+                $session->set('USER_INFO', $objPerson);
+            }
         }
         
         $intRoleId = intval(Yii::$app->request->get('role_id'));

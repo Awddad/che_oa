@@ -28,12 +28,10 @@ class BaoxiaoController extends BaseController
 			$model -> title = $model -> createApplyTitle($this->arrPersonInfo);
 			$model -> create_time = time();
 			$model -> user = array('id'=>$this->arrPersonInfo['person_id'],'name'=>$this->arrPersonInfo['person_name'],'org_id'=>$this->arrPersonInfo['org_id']);
-			//$model -> fujian  = $model -> saveFile(UploadedFile::getInstancesByName('fujian'),$file_config['fujian']);
-			//$model -> pic  = $model -> saveFile(UploadedFile::getInstancesByName('pic'),$file_config['pic']);
 			
 			if($model -> validate()){
 				if($apply_id = $model -> saveBaoxiao() ){
-					$model -> saveAccount($file_config['pdf'], $this->arrPersonInfo);
+					//$model -> saveAccount($file_config['pdf'], $this->arrPersonInfo);
 					return $this -> _return($apply_id,200);
 				}else{
 					return $this -> _return($model -> getErrors(),404);
