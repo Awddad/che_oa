@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\logic;
 use app\logic\Logic;
 use app\logic\MyTcPdf;
 use app\models\Apply;
+use app\models\ApplyBuyList;
 use app\models\ApplyUseChapter;
 use app\models\BaoXiaoList;
 use app\models\JieKuan;
@@ -156,7 +157,7 @@ class PdfLogic extends Logic
     public function useChapter($apply)
     {
         $root_path = $this->getFilePath($apply);
-        if(!file_exists($root_path)){
+        if(!file_exists($root_path) || \Yii::$app->request->get('debug')){
             $pdf = new MyTcPdf();
             $person = Person::findOne($apply->person_id);
             $arrInfo = [
@@ -210,6 +211,9 @@ class PdfLogic extends Logic
     {
         $pdf = new MyTcPdf();
         $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
         $person = Person::findOne($apply->person_id);
         $arrInfo = [
             'apply_date' => date('Y年m月d日'),
@@ -221,14 +225,14 @@ class PdfLogic extends Logic
             'bank_name' => $apply->applyPay->bank_name,
             'pay_type' => TagTree::findOne($apply->applyPay->pay_type)->name,
             'money' => $apply->applyPay->money,
-            'des' => $apply->applyUseChapter->des ? : '--',
+            'des' => $apply->applyPay->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
             'caiwu' => $apply->cai_wu_person ? : '--'
         ];
     
         
-        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        $pdf->createdPdf($root_path, $arrInfo, 'applyPay');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
@@ -238,26 +242,56 @@ class PdfLogic extends Logic
     /**
      * 请购
      *
-     * @param $apply
+     * @param Apply $apply
      * @return string
      */
     public function applyBuyPdf($apply)
     {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
         $person = Person::findOne($apply->person_id);
         $arrInfo = [
             'apply_date' => date('Y年m月d日'),
             'apply_id' => $apply->apply_id,
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
-        
-            'des' => $apply->applyUseChapter->des ? : '--',
+            
+            'to_name' => $apply->applyBuy->to_name,
+            'bank_card_id' => $apply->applyBuy->bank_card_id,
+            'bank_name' => $apply->applyBuy->bank_name,
+            
+            'des' => $apply->applyBuy->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+            'caiwu' => $apply->cai_wu_person ? : '--'
         ];
-    
-        $pdf = new MyTcPdf();
-        $root_path = $this->getFilePath($apply);
-        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        
+        $list = [];
+        $total = 0;
+        $buyList = ApplyBuyList::find()->where(['apply_id' => $apply->apply_id])->all();
+        /**
+         * @var ApplyBuyList $v
+         */
+        foreach ($buyList as $v) {
+            $list[] = [
+                'asset_type_name' => $v->asset_type_name,
+                'asset_brand_name' => $v->asset_brand_name,
+                'name' => $v->name,
+                'price' => \Yii::$app->formatter->asCurrency($v->price),
+                'amount' => $v->amount,
+                'total' =>\Yii::$app->formatter->asCurrency($v->price * $v->amount),
+            ];
+            $total += $v->price * $v->amount;
+        }
+        $total = \Yii::$app->formatter->asCurrency($total);
+        $arrInfo['list'] = $list;
+        $arrInfo['total'] = $total;
+        
+        
+        $pdf->createdPdf($root_path, $arrInfo, 'applyBuy');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
