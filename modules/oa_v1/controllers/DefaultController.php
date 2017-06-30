@@ -203,8 +203,17 @@ class DefaultController extends BaseController
             case 5:
                 $pdf = PdfLogic::instance()->applyBuyPdf($apply);
                 break;
+            case 6:
+                $pdf = PdfLogic::instance()->applyDemand($apply);
+                break;
             case 7:
                 $pdf = PdfLogic::instance()->useChapter($apply);
+                break;
+            case 8:
+                $pdf = PdfLogic::instance()->assetGet($apply);
+                break;
+            case 9:
+                $pdf = PdfLogic::instance()->assetBack($apply);
                 break;
         }
         header('Content-Type: application/octet-stream');
