@@ -236,7 +236,12 @@ TABLEHTML;
         return $strHtml;
     }
     
-    
+    /**
+     * 用章
+     *
+     * @param $param
+     * @return string
+     */
     public function useChapter($param)
     {
         $strHtml = <<<TABLEHTML
@@ -264,6 +269,345 @@ table tr{height:40px;}
             <td colspan="2">{$param['chapter_type']}</td>
             <td style="background-color:#f2f2f2"> 印章名称</td>
             <td colspan="2">{$param['chapter_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 付款确认
+     *
+     * @param $param
+     * @return string
+     */
+    public function applyPay($param)
+    {
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">用章申请</h2>  
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+         <tr>
+            <td style="background-color:#f2f2f2">对方名称</td>
+            <td colspan="2">{$param['to_name']}</td>
+            <td style="background-color:#f2f2f2"> 对方银行卡</td>
+            <td colspan="2">{$param['bank_card_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">对方开户行</td>
+            <td colspan="5">{$param['bank_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">付款类型</td>
+            <td colspan="2">{$param['pay_type']}</td>
+            <td style="background-color:#f2f2f2"> 金额</td>
+            <td colspan="2">{$param['money']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td>{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td>{$param['copy_person']}</td>
+            <td style="background-color:#f2f2f2">财务确认</td>
+            <td>{$param['caiwu']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 收款确认
+     *
+     * @param $param
+     * @return string
+     */
+    public function applyBuy($param)
+    {
+        $strListHtml = '';
+        foreach($param['list'] as $val)
+        {
+            $strListHtml .= '<tr>
+                <td>'.$val['asset_type_name'].'</td>
+                <td>'.$val['asset_brand_name'].'</td>
+                <td>'.$val['name'].'</td>
+                <td>'.$val['price'].'</td>
+                <td>'.$val['amount'].'</td>
+                <td>'.$val['total'].'</td>
+            </tr>';
+        }
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">用章申请</h2>  
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">对方名称</td>
+            <td colspan="2">{$param['to_name']}</td>
+            <td style="background-color:#f2f2f2"> 对方银行卡</td>
+            <td colspan="2">{$param['bank_card_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">对方开户行</td>
+            <td colspan="5">{$param['bank_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">类别</td>
+            <td style="background-color:#f2f2f2">品牌</td>
+            <td style="background-color:#f2f2f2">名称</td>
+            <td style="background-color:#f2f2f2">单价</td>
+            <td style="background-color:#f2f2f2">数量</td>
+            <td style="background-color:#f2f2f2">小计</td>
+        </tr>
+        {$strListHtml}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>总计</td>
+            <td>{$param['total']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td>{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td>{$param['copy_person']}</td>
+            <td style="background-color:#f2f2f2">财务确认</td>
+            <td>{$param['caiwu']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 需求单
+     *
+     * @param $param
+     * @return string
+     */
+    public function demand($param)
+    {
+        $strListHtml = '';
+        foreach($param['list'] as $val)
+        {
+            $strListHtml .= '<tr>
+                <td colspan="3">'.$val['name'].'</td>
+                <td colspan="3">'.$val['amount'].'</td>
+            </tr>';
+        }
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">需求单</h2>  
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="background-color:#f2f2f2">名称</td>
+            <td colspan="3" style="background-color:#f2f2f2">数量</td>
+        </tr>
+        {$strListHtml}
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 固定资产领取
+     * @param $param
+     * @return string
+     */
+    public function assetGet($param)
+    {
+        $strListHtml = '';
+        foreach($param['list'] as $val)
+        {
+            $strListHtml .= '<tr>
+                <td>'.$val['asset_type_name'].'</td>
+                <td colspan="2">'.$val['asset_brand_name'].'</td>
+                <td>'.$val['name'].'</td>
+                <td colspan="2">'.$val['price'].'</td>
+            </tr>';
+        }
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">固定资产领取表</h2>  
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">类别</td>
+            <td colspan="2" style="background-color:#f2f2f2">品牌</td>
+            <td style="background-color:#f2f2f2">名称</td>
+            <td colspan="2" style="background-color:#f2f2f2">价格</td>
+        </tr>
+        {$strListHtml}
+        <tr>
+            <td></td>
+            <td colspan="2"></td>
+            <td>总计</td>
+            <td colspan="2">{$param['total']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 固定资产领取
+     * @param $param
+     * @return string
+     */
+    public function assetBack($param)
+    {
+        $strListHtml = '';
+        foreach($param['list'] as $val)
+        {
+            $strListHtml .= '<tr>
+                <td colspan="2">'.$val['asset_type_name'].'</td>
+                <td>'.$val['asset_brand_name'].'</td>
+                <td>'.$val['name'].'</td>
+                <td>'.$val['price'].'</td>
+                <td>'.$val['asset_number'].'</td>
+            </tr>';
+        }
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">固定资产领取表</h2>  
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td colspan="2"style="background-color:#f2f2f2">类别</td>
+            <td style="background-color:#f2f2f2">品牌</td>
+            <td style="background-color:#f2f2f2">名称</td>
+            <td style="background-color:#f2f2f2">价格</td>
+            <td style="background-color:#f2f2f2">库存编号</td>
+        </tr>
+        {$strListHtml}
+        <tr>
+            <td colspan="2"></td>
+            <td></td>
+            <td>总计</td>
+            <td>{$param['total']}</td>
+            <td></td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>

@@ -155,31 +155,7 @@ class BackForm extends BaseForm
     public function save($user)
     {
         $applyId = $this->apply_id;
-        $pdf = new  MyTcPdf();
-        $basePath = \Yii::$app->basePath.'/web';
-        $filePath = '/upload/pdf/payback/'.date('Y-m-d').'/';
-        $rootPath = $basePath.$filePath;
-        if (!file_exists($rootPath)) {
-            @mkdir($rootPath, 0777, true);
-        }
-        $rst = $pdf->createHuanKuanDanPdf($rootPath.$applyId.'.pdf', [
-            'list' => $this->getBackList(),
-            'apply_date' => date('Y年m月d日'),
-            'apply_id' => $applyId,
-            'org_full_name' => PersonLogic::instance()->getOrgNameByPersonId($user['person_id']),
-            'person' => $user['person_name'],
-            'bank_name' => $this->bank_name,
-            'bank_card_id' => $this->bank_card_id,
-            'des' => $this->des,
-            'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
-            'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
-            'caiwu' => '--'
-        ]);
-        if ($rst) {
-            $pdfUrl = $filePath.$applyId.'.pdf';
-        } else {
-            $pdfUrl = '';
-        }
+        $pdfUrl = '';
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
         $apply = new Apply();
         $apply->apply_id = $applyId;

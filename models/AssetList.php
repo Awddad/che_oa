@@ -16,6 +16,7 @@ use Yii;
  * @property integer $status
  * @property integer $apply_buy_id
  * @property integer $created_at
+ * @property integer $person_id
  */
 class AssetList extends \yii\db\ActiveRecord
 {
@@ -41,7 +42,7 @@ class AssetList extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'status', 'created_at'], 'integer'],
+            [['asset_id', 'status', 'created_at', 'person_id'], 'integer'],
             [['price'], 'number'],
             ['apply_buy_id', 'string', 'max' => 20],
             [['asset_number', 'stock_number'], 'string', 'max' => 15],

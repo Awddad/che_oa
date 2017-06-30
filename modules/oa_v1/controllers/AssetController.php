@@ -196,20 +196,14 @@ class AssetController extends BaseController
                 'stock_number' => $v->stock_number,
                 'asset_number' => $v->asset_number,
                 'status' => $v::STATUS[$v->status],
-                'price' => Yii::$app->formatter->asCurrency($v->price)
+                'price' => Yii::$app->formatter->asCurrency($v->price),
+                'org' => '',
+                'use_person' => ''
             ];
-            if($v->status == 2) {
-                $assetGetList = AssetGetList::findOne([
-                    'asset_list_id' => $v->id,
-                    'status' => 1
-                ]);
-                if($assetGetList) {
-                    $person = Person::findOne($assetGetList->person_id);
-                    $org = $person->org_full_name;
-                    $data[$k]['use_person'] = $person->person_name;
-                    $data[$k]['org'] = implode('-', $org);
-                    $data[$k]['use_day'] = ceil((time() - $assetGetList->created_at)/ 86400);
-                }
+            if($v->status == 2 && $v->person_id) {
+                $person = Person::findOne($v->person_id);
+                $data['use_person'] = $person->person_name;
+                $data['org'] = $person->org_full_name;
             }
         }
         return $this->_return([
@@ -248,8 +242,15 @@ class AssetController extends BaseController
             'status' => $assetList->status,
             'status_name' => $assetList::STATUS[$assetList->status],
             'apply_buy_id' => $assetList->apply_buy_id,
-            'apply_demand_id' => $demandId
+            'apply_demand_id' => $demandId,
+            'org' => '',
+            'use_person' => ''
         ];
+        if($assetList->status == 2 && $assetList->person_id) {
+            $person = Person::findOne($assetList->person_id);
+            $data['use_person'] = $person->person_name;
+            $data['org'] = $person->org_full_name;
+        }
         
         return $this->_return($data);
     }
@@ -340,6 +341,8 @@ class AssetController extends BaseController
     
     /**
      * 新增库存
+     *
+     * @return array
      */
     public function actionAddAsset()
     {

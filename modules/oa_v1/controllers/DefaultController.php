@@ -182,7 +182,7 @@ class DefaultController extends BaseController
     /**
      * 获取 PDF
      * @param $apply_id
-     * @return int
+     * @return array
      */
     public function actionGetPdf($apply_id)
     {
@@ -197,10 +197,28 @@ class DefaultController extends BaseController
             case 3:
                 $pdf = PdfLogic::instance()->payBackPdf($apply);
                 break;
+            case 4:
+                $pdf = PdfLogic::instance()->applyPayPdf($apply);
+                break;
+            case 5:
+                $pdf = PdfLogic::instance()->applyBuyPdf($apply);
+                break;
+            case 6:
+                $pdf = PdfLogic::instance()->applyDemand($apply);
+                break;
             case 7:
                 $pdf = PdfLogic::instance()->useChapter($apply);
                 break;
+            case 8:
+                $pdf = PdfLogic::instance()->assetGet($apply);
+                break;
+            case 9:
+                $pdf = PdfLogic::instance()->assetBack($apply);
+                break;
         }
-        return $pdf;
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.$pdf['name'].'"');
+        header('Content-Transfer-Encoding: binary');
+        readfile($pdf['path']);
     }
 }

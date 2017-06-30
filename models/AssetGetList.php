@@ -19,6 +19,16 @@ use yii\behaviors\TimestampBehavior;
  */
 class AssetGetList extends \yii\db\ActiveRecord
 {
+    //申请中
+    const STATUS_APPLY = 1;
+    //已领用
+    const STATUS_GET = 2;
+    //审核失败
+    const STATUS_GET_FAIL = 3;
+    //申请归还中
+    const STATUS_BACK_IN = 4;
+    //已归还
+    const STATUS_BACK_SUCCESS = 5;
     /**
      * @inheritdoc
      */
@@ -33,7 +43,7 @@ class AssetGetList extends \yii\db\ActiveRecord
      */
     const STATUS = [
         1 => '申请中',
-        2 => '已发放',
+        2 => '已领用',
         3 => '审核失败',
         4 => '申请归还中',
         5 => '已归还'
