@@ -2133,7 +2133,7 @@ module.exports = {
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://www.cheoa.com', // api的base_urlhttp://192.168.1.128:8010
+    baseURL: '', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
 
@@ -3351,6 +3351,7 @@ var asyncRouterMap = [{
     redirect: '/basicData/AssetClass',
     name: '基础数据',
     meta: { role: ['yuangong', 'caiwu'] },
+    hidden: true,
     children: [{ path: 'AssetBrand', component: __WEBPACK_IMPORTED_MODULE_26__views_BasicData_AssetBrand_vue___default.a, name: '资产品牌管理' }, { path: 'AssetClass', component: __WEBPACK_IMPORTED_MODULE_27__views_BasicData_AssetClass_vue___default.a, name: '资产类别管理' }, { path: 'personnelClass', component: __WEBPACK_IMPORTED_MODULE_28__views_BasicData_personnelClass_vue___default.a, name: '人才类型管理' }, { path: 'staffInformation', component: __WEBPACK_IMPORTED_MODULE_29__views_BasicData_staffInformation_vue___default.a, name: '员工信息类型管理' }]
 }, {
     path: '/Store',
@@ -21226,6 +21227,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         } else {
             this.isshow = true;
         }
+        this.$store.dispatch('Setpagenation', document.body.clientWidth);
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        window.onresize = function () {
+            _this.$store.dispatch('Setpagenation', document.body.clientWidth);
+        };
     }
 });
 
@@ -22309,8 +22318,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: 'http://www.cheoa.com/oa_v1/upload/file',
-        serverUrl: 'http://www.cheoa.com',
+        BaseUrl: '/oa_v1/upload/file',
+        serverUrl: '',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -22601,14 +22610,13 @@ var app = {
         sidebar: {
             opened: !+localStorage.getItem('sidebarStatus')
         },
-        isnav: localStorage.getItem('isnav') || '1',
+        isnav: localStorage.getItem('isnav') || 1,
         theme: 'default',
         livenewsChannels: __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('livenewsChannels') || '[]',
-        pagenation: localStorage.getItem('pagenation') || '1'
+        pagenation: 1
     },
     mutations: {
         TOGGLE_SIDEBAR: function TOGGLE_SIDEBAR(state, data) {
-            //console.log(state.isnav);
             if (state.isnav == 0) {
                 /*if (data <= 768) {
                     Cookies.set('sidebarStatus', 0);
@@ -22637,9 +22645,9 @@ var app = {
         },
         SET_pagenation: function SET_pagenation(state, data) {
             if (data <= 768) {
-                localStorage.setItem('pagenation', 0);
+                state.pagenation = 0;
             } else {
-                localStorage.setItem('pagenation', 1);
+                state.pagenation = 1;
             }
         }
     },
@@ -27417,7 +27425,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "header[data-v-0ca79d5b]{position:fixed;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-0ca79d5b]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-0ca79d5b]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-0ca79d5b]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-0ca79d5b]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}", ""]);
+exports.push([module.i, "header[data-v-0ca79d5b]{position:fixed;z-index:1000000;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-0ca79d5b]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-0ca79d5b]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-0ca79d5b]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-0ca79d5b]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}", ""]);
 
 // exports
 
@@ -28159,7 +28167,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "header[data-v-ea34d632]{position:absolute;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-ea34d632]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-ea34d632]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-ea34d632]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-ea34d632]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}.home-wrap[data-v-ea34d632]{padding-left:20px}.home-wrap h3[data-v-ea34d632]{clear:both;margin:0;padding:15px 0 28px}.home-wrap ul[data-v-ea34d632]{font-size:0;padding-left:0;overflow:hidden}.home-wrap ul li[data-v-ea34d632]{display:inline-block}.home-wrap ul li.icon-reimburse a[data-v-ea34d632]{background:url(" + __webpack_require__(418) + ") 0 0 no-repeat;background-size:100% 100%}.home-wrap ul li.icon-applyloan a[data-v-ea34d632]{background:url(" + __webpack_require__(423) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(424) + ") 50% no-repeat}.home-wrap ul li.icon-forpayment a[data-v-ea34d632]{background:url(" + __webpack_require__(425) + ") 50% no-repeat}.home-wrap ul li.icon-purchase a[data-v-ea34d632]{background:url(" + __webpack_require__(426) + ") 50% no-repeat}.home-wrap ul li.icon-demand a[data-v-ea34d632]{background:url(" + __webpack_require__(427) + ") 50% no-repeat}.home-wrap ul li.icon-assetsrecipients a[data-v-ea34d632]{background:url(" + __webpack_require__(428) + ") 50% no-repeat}.home-wrap ul li.icon-assetsreturn a[data-v-ea34d632]{background:url(" + __webpack_require__(429) + ") 50% no-repeat}.home-wrap ul li.icon-chapter a[data-v-ea34d632]{background:url(" + __webpack_require__(430) + ") 50% no-repeat}.home-wrap ul li.icon-positive a[data-v-ea34d632]{background:url(" + __webpack_require__(419) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(420) + ") 50% no-repeat}.home-wrap ul li.icon-approvetransfer a[data-v-ea34d632]{background:url(" + __webpack_require__(421) + ") 50% no-repeat}.home-wrap ul li.icon-newstore a[data-v-ea34d632]{background:url(" + __webpack_require__(422) + ") 50% no-repeat}.home-wrap ul li.applyicon a[data-v-ea34d632]{display:block;width:110px;height:80px;line-height:80px;margin:0 16px 20px 0;padding-left:56px;text-decoration:none;background-size:100% 100%;font-size:16px;color:#fff;font-weight:700}@media screen and (min-width:414px) and (max-width:768px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:118px;height:88px;line-height:88px;padding-left:66px;font-size:16px;margin-right:15px}}@media screen and (min-width:375px) and (max-width:413px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{margin-right:10px}}@media screen and (max-width:374px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:90px;height:67px;line-height:67px;padding-left:50px;font-size:14px;margin-right:10px}}.body[data-v-ea34d632]{max-width:640px;min-height:100%;background-color:#f5f5f5!important}.app-home-wrap[data-v-ea34d632]{padding-top:64px}.app-home-wrap .group[data-v-ea34d632]{overflow:hidden;margin-bottom:20px;background-color:#fff}.app-home-wrap h3[data-v-ea34d632]{height:48px;line-height:48px;font-size:14px;margin:0;padding:0 15px}.app-home-wrap ul[data-v-ea34d632]{margin:0;padding:0}.app-home-wrap ul li[data-v-ea34d632]{float:left;text-align:center;padding-bottom:20px}.app-home-wrap ul li.icon-reimburse span[data-v-ea34d632]{background:url(" + __webpack_require__(413) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-reimburse a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(412) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan span[data-v-ea34d632]{background:url(" + __webpack_require__(405) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(404) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment span[data-v-ea34d632]{background:url(" + __webpack_require__(415) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(414) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme span[data-v-ea34d632]{background:url(" + __webpack_require__(417) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(416) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already span[data-v-ea34d632]{background:url(" + __webpack_require__(403) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already a:hover span[data-v-ea34d632]{background:url(" + __webpack_require__(402) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend span[data-v-ea34d632]{background:url(" + __webpack_require__(411) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(410) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend span[data-v-ea34d632]{background:url(" + __webpack_require__(407) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(406) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter span[data-v-ea34d632]{background:url(" + __webpack_require__(409) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(408) + ") 0 0 no-repeat}.app-home-wrap ul li a[data-v-ea34d632]{font-size:12px;color:#999}.app-home-wrap ul li a span[data-v-ea34d632]{display:block;width:4em;height:4em;margin:0 1.87em;background-size:100% 100%!important}", ""]);
+exports.push([module.i, "header[data-v-ea34d632]{position:absolute;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-ea34d632]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-ea34d632]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-ea34d632]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-ea34d632]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}.home-wrap[data-v-ea34d632]{padding-left:20px}.home-wrap h3[data-v-ea34d632]{clear:both;margin:0;padding:15px 0 28px}.home-wrap ul[data-v-ea34d632]{font-size:0;padding-left:0;overflow:hidden}.home-wrap ul li[data-v-ea34d632]{display:inline-block}.home-wrap ul li.icon-reimburse a[data-v-ea34d632]{background:url(" + __webpack_require__(418) + ") 0 0 no-repeat;background-size:100% 100%}.home-wrap ul li.icon-applyloan a[data-v-ea34d632]{background:url(" + __webpack_require__(423) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(424) + ") 50% no-repeat}.home-wrap ul li.icon-forpayment a[data-v-ea34d632]{background:url(" + __webpack_require__(425) + ") 50% no-repeat}.home-wrap ul li.icon-purchase a[data-v-ea34d632]{background:url(" + __webpack_require__(426) + ") 50% no-repeat}.home-wrap ul li.icon-demand a[data-v-ea34d632]{background:url(" + __webpack_require__(427) + ") 50% no-repeat}.home-wrap ul li.icon-assetsrecipients a[data-v-ea34d632]{background:url(" + __webpack_require__(428) + ") 50% no-repeat}.home-wrap ul li.icon-assetsreturn a[data-v-ea34d632]{background:url(" + __webpack_require__(429) + ") 50% no-repeat}.home-wrap ul li.icon-chapter a[data-v-ea34d632]{background:url(" + __webpack_require__(430) + ") 50% no-repeat}.home-wrap ul li.icon-positive a[data-v-ea34d632]{background:url(" + __webpack_require__(419) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(420) + ") 50% no-repeat}.home-wrap ul li.icon-approvetransfer a[data-v-ea34d632]{background:url(" + __webpack_require__(421) + ") 50% no-repeat}.home-wrap ul li.icon-newstore a[data-v-ea34d632]{background:url(" + __webpack_require__(422) + ") 50% no-repeat}.home-wrap ul li.applyicon a[data-v-ea34d632]{display:block;width:110px;height:80px;line-height:80px;margin:0 16px 20px 0;padding-left:56px;text-decoration:none;background-size:100% 100%;font-size:16px;color:#fff;font-weight:700}@media screen and (min-width:414px) and (max-width:768px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:118px;height:88px;line-height:88px;padding-left:66px;font-size:16px;margin-right:15px}}@media screen and (min-width:375px) and (max-width:413px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{margin-right:10px}}@media screen and (max-width:374px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:90px;height:67px;line-height:67px;padding-left:50px;font-size:14px;margin-right:10px}}.body[data-v-ea34d632]{max-width:640px;min-height:100%;background-color:#f5f5f5!important}.app-home-wrap[data-v-ea34d632]{padding-top:64px}.app-home-wrap .group[data-v-ea34d632]{overflow:hidden;margin-bottom:20px;background-color:#fff}.app-home-wrap h3[data-v-ea34d632]{height:48px;line-height:48px;font-size:14px;margin:0;padding:0 15px}.app-home-wrap ul[data-v-ea34d632]{margin:0;padding:0}.app-home-wrap ul li[data-v-ea34d632]{float:left;width:25vw;font-size:0;text-align:center;padding-bottom:20px}.app-home-wrap ul li.icon-reimburse span[data-v-ea34d632]{background:url(" + __webpack_require__(413) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-reimburse a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(412) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan span[data-v-ea34d632]{background:url(" + __webpack_require__(405) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(404) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment span[data-v-ea34d632]{background:url(" + __webpack_require__(415) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(414) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme span[data-v-ea34d632]{background:url(" + __webpack_require__(417) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(416) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already span[data-v-ea34d632]{background:url(" + __webpack_require__(403) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already a:hover span[data-v-ea34d632]{background:url(" + __webpack_require__(402) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend span[data-v-ea34d632]{background:url(" + __webpack_require__(411) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(410) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend span[data-v-ea34d632]{background:url(" + __webpack_require__(407) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(406) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter span[data-v-ea34d632]{background:url(" + __webpack_require__(409) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(408) + ") 0 0 no-repeat}.app-home-wrap ul li a[data-v-ea34d632]{font-size:12px;color:#999;display:block;text-align:center}.app-home-wrap ul li a span[data-v-ea34d632]{display:block;width:13.333333vw;height:13.333333vw;margin:0 auto;background-size:100% 100%!important}.app-home-wrap ul li a b[data-v-ea34d632]{display:block;text-align:center;padding-top:5px;font-size:12px;font-weight:500}", ""]);
 
 // exports
 
@@ -43949,73 +43957,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/repayment"
     }
-  }, [_vm._v("申请还款")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-forpayment"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/forpayment"
-    }
-  }, [_vm._v("申请付款")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-purchase"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/purchase"
-    }
-  }, [_vm._v("申请请购")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', {
+  }, [_vm._v("申请还款")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', {
     staticClass: "el-col el-col-24"
   }, [_c('li', {
-    staticClass: "applyicon icon-demand"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/demand"
-    }
-  }, [_vm._v("发起需求单")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-assetsrecipients"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/assetsrecipients"
-    }
-  }, [_vm._v("固定资产领用")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-assetsreturn"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/assetsreturn"
-    }
-  }, [_vm._v("固定资产归还")])], 1), _vm._v(" "), _c('li', {
     staticClass: "applyicon icon-chapter"
   }, [_c('router-link', {
     attrs: {
       "to": "/chapter"
     }
-  }, [_vm._v("申请用章")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("人事相关")]), _vm._v(" "), _c('ul', {
-    staticClass: "el-col el-col-24"
-  }, [_c('li', {
-    staticClass: "applyicon icon-positive"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/positive"
-    }
-  }, [_vm._v("申请转正")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-applyloan"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/applyleave"
-    }
-  }, [_vm._v("申请离职")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-approvetransfer"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/approvetransfer"
-    }
-  }, [_vm._v("申请调职")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("门店相关")]), _vm._v(" "), _c('ul', {
-    staticClass: "el-col el-col-24"
-  }, [_c('li', {
-    staticClass: "applyicon icon-newstore"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/newstore"
-    }
-  }, [_vm._v("申请开店")])], 1)])]) : _c('div', {
+  }, [_vm._v("申请用章")])], 1)])]) : _c('div', {
     staticClass: "body"
   }, [_c('div', {
     staticClass: "app-home-wrap"
@@ -44027,25 +43977,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/approvals/waitme"
     }
-  }, [_c('span'), _vm._v("待我审批")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("待我审批")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-already"
   }, [_c('router-link', {
     attrs: {
       "to": "/approvals/alreadyapproval"
     }
-  }, [_c('span'), _vm._v("我已审批")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("我已审批")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-mysend"
   }, [_c('router-link', {
     attrs: {
       "to": "/approvals/mysend"
     }
-  }, [_c('span'), _vm._v("我发起的")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("我发起的")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-ccsend"
   }, [_c('router-link', {
     attrs: {
       "to": "/approvals/ccsend"
     }
-  }, [_c('span'), _vm._v("抄给我的")])], 1)])]), _vm._v(" "), _c('div', {
+  }, [_c('span'), _c('b', [_vm._v("抄给我的")])])], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "group"
   }, [_c('h3', [_vm._v("财务相关")]), _vm._v(" "), _c('ul', [_c('li', {
     staticClass: "icon-reimburse"
@@ -44053,7 +44003,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/reimburse"
     }
-  }, [_c('span'), _vm._v("申请报销")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("申请报销")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-applyloan"
   }, [_c('router-link', {
     attrs: {
@@ -44061,7 +44011,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "icon-applyloan"
-  }), _vm._v("申请借款")])], 1), _vm._v(" "), _c('li', {
+  }), _c('b', [_vm._v("申请借款")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-repayment"
   }, [_c('router-link', {
     attrs: {
@@ -44069,7 +44019,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "icon-repayment"
-  }), _vm._v("申请还款")])], 1)])]), _vm._v(" "), _c('div', {
+  }), _c('b', [_vm._v("申请还款")])])], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "group"
   }, [_c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', [_c('li', {
     staticClass: "icon-chapter"
@@ -44077,7 +44027,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/chapter"
     }
-  }, [_c('span'), _vm._v("申请用章")])], 1)])])])])
+  }, [_c('span'), _c('b', [_vm._v("申请用章")])])], 1)])])])])
 },staticRenderFns: []}
 
 /***/ }),
@@ -48185,4 +48135,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?64a6b7068c3d6ff6d5aa
+//# sourceMappingURL=index.js.map?84953051980f7fe27c4f
