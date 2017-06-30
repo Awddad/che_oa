@@ -325,7 +325,7 @@ class AssetController extends BaseController
      *
      * @return array
      */
-    public function addSnNumber()
+    public function actionAddSnNumber()
     {
         $param = Yii::$app->request->post();
     
