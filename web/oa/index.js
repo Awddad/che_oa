@@ -19630,9 +19630,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var constdata = this.$store.state.repayment.repayment_constdata;
+            var apply_ids = this.repayment_select_record.map(function (data) {
+                return data.apply_id;
+            });
             this.$refs[formName].validate(function (valid) {
                 if (valid) {
-                    if (constdata.length > 0) {
+                    if (constdata.length > 0 && apply_ids.length > 0) {
                         _this.bank = _this.ruleForm.code;
                         _this.des = _this.ruleForm.des;
                         _this.issubmitshow = true;
@@ -19676,7 +19679,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 apply_ids: apply_ids,
                 des: this.des
             };
-
             this.$store.dispatch('Repayment_Add', resultdata).then(function (response) {
                 _this2.loading = false;
                 _this2.issubmitshow = false;
@@ -21230,12 +21232,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$store.dispatch('Setpagenation', document.body.clientWidth);
     },
     mounted: function mounted() {
-        var _this = this;
-
-        window.onresize = function () {
-            _this.$store.dispatch('Setsidebar');
-            _this.$store.dispatch('Setpagenation', document.body.clientWidth);
-        };
+        /*window.onresize = ()=>{
+            this.$store.dispatch('Setsidebar');
+            this.$store.dispatch('Setpagenation',document.body.clientWidth);
+        }*/
     }
 });
 
@@ -48143,4 +48143,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?15af85b359c1e5d47c78
+//# sourceMappingURL=index.js.map?6d49568cb272b4dc90ae
