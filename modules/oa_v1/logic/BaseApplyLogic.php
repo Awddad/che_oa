@@ -82,10 +82,10 @@ class BaseApplyLogic extends Logic
                     $data[] = [
                         "title" => "完成",
                         "name" => '',
-                        "date"=> date('Y-m-d H:i', $v->approval_time),
+                        "date"=> date('Y-m-d H:i', $apply->create_time),
                         "org" => '',
                         "status" => 2,
-                        'diff_time' => $diff_time
+                        'diff_time' => $v->approval_time - $apply->create_time
                     ];
                 }
             }
@@ -129,7 +129,7 @@ class BaseApplyLogic extends Logic
                         "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
                         "org" => '',
                         "status" => 2,
-                        'diff_time' => $caiWuShouKuan->shou_kuan_time - $perTime
+                        'diff_time' => $caiWuShouKuan->shou_kuan_time - $apply->create_time
                     ];
                 } else {
                     $caiWuFuKuan = CaiWuFuKuan::findOne($apply->apply_id);
@@ -147,7 +147,7 @@ class BaseApplyLogic extends Logic
                         "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
                         "org" => '',
                         "status" => 2,
-                        'diff_time' => $caiWuFuKuan->create_time - $perTime
+                        'diff_time' => $caiWuFuKuan->create_time - $apply->create_time
                     ];
     
                 }
