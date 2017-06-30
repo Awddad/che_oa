@@ -182,11 +182,12 @@ class DefaultController extends BaseController
     /**
      * 获取 PDF
      * @param $apply_id
-     * @return array
+     *
      */
     public function actionGetPdf($apply_id)
     {
         $apply = Apply::findOne($apply_id);
+        $pdf = [];
         switch ($apply->type){
             case 1:
                 $pdf = PdfLogic::instance()->expensePdf($apply);
@@ -216,9 +217,28 @@ class DefaultController extends BaseController
                 $pdf = PdfLogic::instance()->assetBack($apply);
                 break;
         }
+        if(!empty($pdf)) {
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$pdf['name'].'"');
+            header('Content-Transfer-Encoding: binary');
+            readfile($pdf['path']);
+        } else {
+            echo '未找到文件';
+        }
+    }
+    
+    /**
+     * 下载链接，前端无法设置下载
+     *
+     * @param $path
+     * @param $name
+     */
+    public function actionDown($path, $name)
+    {
+        $rootPath = Yii::$app->basePath. '/web'.$path;
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="'.$pdf['name'].'"');
+        header('Content-Disposition: attachment; filename="'.$rootPath.'"');
         header('Content-Transfer-Encoding: binary');
-        readfile($pdf['path']);
+        readfile($name);
     }
 }

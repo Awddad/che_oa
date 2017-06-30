@@ -11,7 +11,10 @@ namespace app\commands;
 use app\models\Asset;
 use app\models\AssetBrand;
 use app\models\AssetList;
+use app\models\AssetListLog;
 use app\models\AssetType;
+use app\models\Person;
+use app\modules\oa_v1\logic\AssetLogic;
 use SebastianBergmann\CodeCoverage\Report\PHP;
 use Yii;
 use moonland\phpexcel\Excel;
@@ -32,11 +35,7 @@ class AssetExportController extends Controller
             'setIndexSheetByName' => true,
         ]);
         array_shift($data);
-        $insertData = [];
-        $num = 0;
-        $free = 0;
         foreach ($data as $k => $v) {
-            
             $assetTypeA = $this->getAssetType($v["A"]);
             $assetTypeB = $this->getAssetType($v["B"], $assetTypeA->id);
             $assetBrand = $this->getAssetBrand($v["C"]);
@@ -51,11 +50,12 @@ class AssetExportController extends Controller
                 $asset->price = $v['K'] ? : 0;
                 $asset->save();
             }
-            $num++;
-            if($v['G'] == '未使用') {
-                $free++;
-            }
-          
+            /**
+             * @var Person $person
+             */
+            $person = Person::find()->where(['person_name' => $v['H']])->one();
+    
+            $personId = 0;
             $assetList = new AssetList();
             $assetList->asset_id = $asset->id;
             $assetList->asset_number = $v['E'] ? : '';
@@ -63,12 +63,33 @@ class AssetExportController extends Controller
             $assetList->price = $v['K'] ? : 0;
             $assetList->status = $this->status[trim($v['G'])];
             $assetList->created_at = time();
+            if($this->status[trim($v['G'])] == 2) {
+                if($person) {
+                    $personId = $person->person_id;
+                    $assetList->person_id = $personId;
+                    $des = $person->person_name.'使用中';
+                } else {
+                    $des = '未知-使用中';
+                }
+            }
             $assetList->save();
+            $asset->amount += 1;
+            if($v['G'] == '未使用') {
+                $asset->free_amount += 1;
+            }
+            if($this->status[trim($v['G'])] == 1){
+                $des = '首次入库';
+            }
+            if($this->status[trim($v['G'])] == 3){
+                $des = '报废';
+            }
+            if($this->status[trim($v['G'])] == 4){
+                $des = '丢失';
+            }
+            $desc = isset($v['L']) ?  trim($v['L']) : $des;
+            $this->addAssetListLog($assetList->id, $desc, $personId);
             echo '第'.$k . '条' .PHP_EOL;
         }
-        $asset->amount = $num;
-        $asset->free_amount = $free;
-        $asset->save();
     }
     
     public function getAssetType($name, $pid = 0)
@@ -95,8 +116,18 @@ class AssetExportController extends Controller
         return $assetBrand;
     }
     
-    public function getAsset($name)
+    public function addAssetListLog($assetListId, $des = null, $personId = 0)
     {
+        $log = new AssetListLog();
+        $log->person_id = $personId;
+        $log->asset_list_id = $assetListId;
+        $log->type = 2;
+        $log->des = $des;
         
+        $log->created_at = time();
+        if ($log->save()) {
+            return true;
+        }
+        throw new \yii\base\Exception('日志保存失败');
     }
 }
