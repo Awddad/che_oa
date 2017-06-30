@@ -13,7 +13,10 @@ use app\logic\Logic;
 use app\logic\MyTcPdf;
 use app\models\Apply;
 use app\models\ApplyBuyList;
+use app\models\ApplyDemandList;
 use app\models\ApplyUseChapter;
+use app\models\AssetGetList;
+use app\models\AssetList;
 use app\models\BaoXiaoList;
 use app\models\JieKuan;
 use app\models\Person;
@@ -82,7 +85,7 @@ class PdfLogic extends Logic
         $person = Person::findOne($apply->person_id);
        
         $arrInfo =  [
-            'apply_date' => date('Y年m月d日'),
+            'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
@@ -130,7 +133,7 @@ class PdfLogic extends Logic
         }
         $arrInfo =  [
             'list' => $getBackList,
-            'apply_date' => date('Y年m月d日'),
+            'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
             'org_full_name' => $person->org_full_name,
             'person' => $apply->person,
@@ -161,7 +164,7 @@ class PdfLogic extends Logic
             $pdf = new MyTcPdf();
             $person = Person::findOne($apply->person_id);
             $arrInfo = [
-                'apply_date' => date('Y年m月d日'),
+                'apply_date' => date('Y年m月d日', $apply->create_time),
                 'apply_id' => $apply->apply_id,
                 'org_full_name' => $person->org_full_name,
                 'person' => $person->person_name,
@@ -191,7 +194,7 @@ class PdfLogic extends Logic
     protected function getFilePath($apply)
     {
         $basePath = \Yii::$app->basePath.'/web';
-        $filePath = '/upload/pdf/loan/'.date('Y-m-d').'/';
+        $filePath = '/upload/pdf/';
         $rootPath = $basePath.$filePath;
         if (!file_exists($rootPath)) {
             @mkdir($rootPath, 0777, true);
@@ -216,7 +219,7 @@ class PdfLogic extends Logic
         }
         $person = Person::findOne($apply->person_id);
         $arrInfo = [
-            'apply_date' => date('Y年m月d日'),
+            'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
@@ -254,7 +257,7 @@ class PdfLogic extends Logic
         }
         $person = Person::findOne($apply->person_id);
         $arrInfo = [
-            'apply_date' => date('Y年m月d日'),
+            'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
@@ -301,26 +304,41 @@ class PdfLogic extends Logic
     /**
      * 需求单
      *
-     * @param $apply
+     * @param Apply $apply
      * @return string
      */
     public function applyDemand($apply)
     {
-        $person = Person::findOne($apply->person_id);
-        $arrInfo = [
-            'apply_date' => date('Y年m月d日'),
-            'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
-            'person' => $person->person_name,
-        
-            'des' => $apply->applyUseChapter->des ? : '--',
-            'approval_person' =>$apply->approval_persons,//多个人、分隔
-            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
-        ];
     
-        $pdf = new MyTcPdf();
         $root_path = $this->getFilePath($apply);
-        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        if(!file_exists($root_path) || \Yii::$app->request->get('debug')) {
+            $person = Person::findOne($apply->person_id);
+            $arrInfo = [
+                'apply_date' => date('Y年m月d日', $apply->create_time),
+                'apply_id' => $apply->apply_id,
+                'org_full_name' => $person->org_full_name,
+                'person' => $person->person_name,
+        
+                'des' => $apply->applyDemand->des ?: '--',
+                'approval_person' => $apply->approval_persons,//多个人、分隔
+                'copy_person' => $apply->copy_person ?: '--',//多个人、分隔
+            ];
+            $list = [];
+    
+            $demandList = ApplyDemandList::find()->where(['apply_id' => $apply->apply_id])->all();
+            /**
+             * @var ApplyDemandList $v
+             */
+            foreach ($demandList as $v) {
+                $list[] = [
+                    'name' => $v->name,
+                    'amount' => $v->amount
+                ];
+            }
+            $arrInfo['list'] = $list;
+            $pdf = new MyTcPdf();
+            $pdf->createdPdf($root_path, $arrInfo, 'demand');
+        }
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
@@ -342,14 +360,31 @@ class PdfLogic extends Logic
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
         
-            'des' => $apply->applyUseChapter->des ? : '--',
+            'des' => $apply->assetGet->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
         ];
-    
+        $list = [];
+        $total = 0;
+        $assetGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
+        /**
+         * @var AssetGetList $v
+         */
+        foreach ($assetGetList as $v) {
+            $list[] = [
+                'asset_type_name' => $v->asset->asset_type_name,
+                'asset_brand_name' => $v->asset->asset_brand_name,
+                'name' => $v->asset->name,
+                'price' => \Yii::$app->formatter->asCurrency($v->asset->price)
+            ];
+            $total += $v->asset->price;
+        }
+        
+        $arrInfo['list'] = $list;
+        $arrInfo['total'] = \Yii::$app->formatter->asCurrency($total);
         $pdf = new MyTcPdf();
         $root_path = $this->getFilePath($apply);
-        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        $pdf->createdPdf($root_path, $arrInfo, 'assetGet');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
@@ -371,14 +406,35 @@ class PdfLogic extends Logic
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
         
-            'des' => $apply->applyUseChapter->des ? : '--',
+            'des' => $apply->assetBack->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
         ];
     
+        $list = [];
+        $total = 0;
+        $assetListIds = explode(',', $apply->assetBack->asset_list_ids);
+        $assetGetList = AssetList::find()->where(['in', 'id', $assetListIds])->all();
+        /**
+         * @var AssetList $v
+         */
+        foreach ($assetGetList as $v) {
+            $list[] = [
+                'asset_type_name' => $v->asset->asset_type_name,
+                'asset_brand_name' => $v->asset->asset_brand_name,
+                'name' => $v->asset->name,
+                'asset_number' => $v->asset_number,
+                'price' => \Yii::$app->formatter->asCurrency($v->asset->price)
+            ];
+            $total += $v->asset->price;
+        }
+    
+        $arrInfo['list'] = $list;
+        $arrInfo['total'] = \Yii::$app->formatter->asCurrency($total);
+    
         $pdf = new MyTcPdf();
         $root_path = $this->getFilePath($apply);
-        $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
+        $pdf->createdPdf($root_path, $arrInfo, 'assetBack');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
