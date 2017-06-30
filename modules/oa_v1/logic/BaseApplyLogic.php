@@ -48,6 +48,7 @@ class BaseApplyLogic extends Logic
         
         if(!empty($approvalLog)) {
             $count = count($approvalLog);
+            $perTime = $apply->create_time;
             foreach ($approvalLog as $k => $v){
                 $status = $diff_time = 0;
                 $title = $v->approval_person.'审批';
@@ -58,12 +59,14 @@ class BaseApplyLogic extends Logic
                 }
                 if($v->result == 1) {
                     $status = 2;
-                    $diff_time = $v->approval_time - $apply->create_time;
+                    $diff_time = $v->approval_time - $perTime;
+                    $perTime = $v->approval_time ;
                 }
                 if($v->result == 2) {
                     $status = 3;
-                    $diff_time = $v->approval_time - $apply->create_time;
+                    $diff_time = $v->approval_time - $perTime;
                     $title .= '不通过';
+                    $perTime = $v->approval_time ;
                 }
                 
                 $data[] = [
@@ -79,10 +82,10 @@ class BaseApplyLogic extends Logic
                     $data[] = [
                         "title" => "完成",
                         "name" => '',
-                        "date"=> date('Y-m-d H:i', $v->approval_time),
+                        "date"=> date('Y-m-d H:i', $apply->create_time),
                         "org" => '',
                         "status" => 2,
-                        'diff_time' => $diff_time
+                        'diff_time' => $v->approval_time - $apply->create_time
                     ];
                 }
             }
@@ -93,7 +96,7 @@ class BaseApplyLogic extends Logic
                 "name" => '',
                 "date"=> '',
                 "org" => '',
-                'diff_time' => time() - $apply->create_time,
+                'diff_time' => time() - $perTime,
                 "status" => 1
             ];
         }
@@ -118,7 +121,7 @@ class BaseApplyLogic extends Logic
                         "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
                         "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
                         "status" => 2,
-                        'diff_time' => $caiWuShouKuan->shou_kuan_time - $apply->create_time
+                        'diff_time' => $caiWuShouKuan->shou_kuan_time - $perTime
                     ];
                     $data[] = [
                         "title" => "完成",
@@ -136,7 +139,7 @@ class BaseApplyLogic extends Logic
                         "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
                         "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
                         "status" => 2,
-                        'diff_time' => $caiWuFuKuan->create_time - $apply->create_time
+                        'diff_time' => $caiWuFuKuan->create_time - $perTime
                     ];
                     $data[] = [
                         "title" => "完成",

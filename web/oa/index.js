@@ -2117,6 +2117,7 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export service */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(131);
@@ -2133,9 +2134,11 @@ module.exports = {
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://www.cheoa.com', // api的base_urlhttp://192.168.1.128:8010
+    baseURL: '', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
+
+console.log();
 
 // request拦截器
 service.interceptors.request.use(function (config) {
@@ -3351,6 +3354,7 @@ var asyncRouterMap = [{
     redirect: '/basicData/AssetClass',
     name: '基础数据',
     meta: { role: ['yuangong', 'caiwu'] },
+    hidden: true,
     children: [{ path: 'AssetBrand', component: __WEBPACK_IMPORTED_MODULE_26__views_BasicData_AssetBrand_vue___default.a, name: '资产品牌管理' }, { path: 'AssetClass', component: __WEBPACK_IMPORTED_MODULE_27__views_BasicData_AssetClass_vue___default.a, name: '资产类别管理' }, { path: 'personnelClass', component: __WEBPACK_IMPORTED_MODULE_28__views_BasicData_personnelClass_vue___default.a, name: '人才类型管理' }, { path: 'staffInformation', component: __WEBPACK_IMPORTED_MODULE_29__views_BasicData_staffInformation_vue___default.a, name: '员工信息类型管理' }]
 }, {
     path: '/Store',
@@ -17156,7 +17160,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             //console.log(typeof(this.$route.query.type));
-            switch (_this.$route.query.type) {
+            switch (_this.$route.query.type.toString()) {
                 case '1':
                     _this.counter = data.info.money;
                     _this.tableData = data.info.list;
@@ -19626,9 +19630,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             var constdata = this.$store.state.repayment.repayment_constdata;
+            var apply_ids = this.repayment_select_record.map(function (data) {
+                return data.apply_id;
+            });
             this.$refs[formName].validate(function (valid) {
                 if (valid) {
-                    if (constdata.length > 0) {
+                    if (constdata.length > 0 && apply_ids.length > 0) {
                         _this.bank = _this.ruleForm.code;
                         _this.des = _this.ruleForm.des;
                         _this.issubmitshow = true;
@@ -19672,7 +19679,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 apply_ids: apply_ids,
                 des: this.des
             };
-
             this.$store.dispatch('Repayment_Add', resultdata).then(function (response) {
                 _this2.loading = false;
                 _this2.issubmitshow = false;
@@ -20246,8 +20252,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isnav'])),
 	beforeCreate: function beforeCreate() {
-		var isnav = this.$route.query.isnav == null ? '1' : this.$route.query.isnav;
-		var pagenation = this.$route.query.pagenation == null ? '1' : this.$route.query.pagenation;
+		var isnav = this.$route.query.isnav == null ? 1 : this.$route.query.isnav;
+		var pagenation = this.$route.query.pagenation == null ? 1 : this.$route.query.pagenation;
 		localStorage.isnav = isnav;
 		this.$store.dispatch('SetIsnav', isnav);
 		if (document.body.clientWidth <= 768) {
@@ -21217,15 +21223,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isnav']), {
         sidebar: function sidebar() {
+            //console.log(this.$store.state.app.sidebar.opened);
             return this.$store.state.app.sidebar;
         }
     }),
     created: function created() {
-        if (this.isnav == 1) {
-            this.isshow = false;
-        } else {
-            this.isshow = true;
-        }
+        this.$store.dispatch('Setsidebar');
+        this.$store.dispatch('Setpagenation', document.body.clientWidth);
+    },
+    mounted: function mounted() {
+        /*window.onresize = ()=>{
+            this.$store.dispatch('Setsidebar');
+            this.$store.dispatch('Setpagenation',document.body.clientWidth);
+        }*/
     }
 });
 
@@ -22309,8 +22319,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: 'http://www.cheoa.com/oa_v1/upload/file',
-        serverUrl: 'http://www.cheoa.com',
+        BaseUrl: '/oa_v1/upload/file',
+        serverUrl: '/',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -22599,47 +22609,47 @@ var Global = {
 var app = {
     state: {
         sidebar: {
-            opened: !+localStorage.getItem('sidebarStatus')
+            opened: localStorage.getItem('sidebarStatus') || false
         },
-        isnav: localStorage.getItem('isnav') || '1',
+        isnav: localStorage.getItem('isnav') || 1,
         theme: 'default',
         livenewsChannels: __WEBPACK_IMPORTED_MODULE_0_js_cookie___default.a.get('livenewsChannels') || '[]',
-        pagenation: localStorage.getItem('pagenation') || '1'
+        pagenation: 1
     },
     mutations: {
         TOGGLE_SIDEBAR: function TOGGLE_SIDEBAR(state, data) {
-            //console.log(state.isnav);
-            if (state.isnav == 0) {
-                /*if (data <= 768) {
-                    Cookies.set('sidebarStatus', 0);
-                    state.sidebar.opened = !1;
-                } else {
-                    if(!state.sidebar.opened){
-                        Cookies.set('sidebarStatus', 1);
-                        state.sidebar.opened = !0;
-                    }else{
-                        Cookies.set('sidebarStatus', 0);
-                        state.sidebar.opened = !1;
-                    }
-                }*/
+            if (!state.sidebar.opened) {
+                localStorage.setItem("sidebarStatus", true);
             } else {
-                //alert(state.sidebar.opened);
-                if (state.sidebar.opened) {
-                    localStorage.setItem("sidebarStatus", 1);
-                } else {
-                    localStorage.setItem('sidebarStatus', 0);
-                }
-                state.sidebar.opened = !state.sidebar.opened;
+                localStorage.setItem('sidebarStatus', false);
             }
+            state.sidebar.opened = !state.sidebar.opened;
         },
         SET_Isnav: function SET_Isnav(state, data) {
             state.isnav = data;
         },
         SET_pagenation: function SET_pagenation(state, data) {
             if (data <= 768) {
-                localStorage.setItem('pagenation', 0);
+                state.pagenation = 0;
             } else {
-                localStorage.setItem('pagenation', 1);
+                state.pagenation = 1;
+            }
+        },
+        TOGGLE_Setsidebar: function TOGGLE_Setsidebar(state, data) {
+            // console.log(state.sidebar.opened,localStorage.getItem("sidebarStatus"));
+            if (document.body.clientWidth <= 768) {
+                if (localStorage.getItem("sidebarStatus") != null && state.sidebar.opened == true) {
+                    localStorage.setItem("sidebarStatus", false);
+                    state.sidebar.opened = false;
+                } else if (localStorage.getItem("sidebarStatus") == null) {
+                    localStorage.setItem("sidebarStatus", true);
+                    state.sidebar.opened = true;
+                }
+            } else {
+                if (localStorage.getItem("sidebarStatus") != null && state.sidebar.opened == false) {
+                    localStorage.setItem("sidebarStatus", true);
+                    state.sidebar.opened = true;
+                }
             }
         }
     },
@@ -22658,7 +22668,13 @@ var app = {
             var commit = _ref3.commit;
 
             commit('SET_pagenation', data);
+        },
+        Setsidebar: function Setsidebar(_ref4) {
+            var commit = _ref4.commit;
+
+            commit('TOGGLE_Setsidebar');
         }
+
     }
 };
 
@@ -27403,7 +27419,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".success_wrap[data-v-09c21faa]{width:90%;margin:0 auto;padding:50px 0}.success_wrap p[data-v-09c21faa]{line-height:1.5;padding:0 15px}.success_wrap .stepbox[data-v-09c21faa]{padding:16px 32px;background-color:#f7f7f7}.success_wrap .stepbox .ant-steps .ant-steps-title[data-v-09c21faa]{background:none!important}@media (max-width:768px){.success_wrap[data-v-09c21faa]{width:100%}.success_wrap p[data-v-09c21faa]{text-align:left}}.steps[data-v-09c21faa]{margin:64px auto;display:-webkit-box;display:-ms-flexbox;display:flex;width:100%}.steps .step[data-v-09c21faa]{-webkit-box-flex:20;-ms-flex:20;flex:20;color:#999;box-sizing:border-box}.steps .step .step-header[data-v-09c21faa]{position:relative;margin-bottom:10px;width:100%;height:28px}.steps .step .step-header .icon[data-v-09c21faa]{width:28px;height:28px;border-radius:50%;font-size:14px;line-height:28px;text-align:center;border:1px solid #999;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]{position:absolute;left:0;top:14px;width:100%;height:1px;padding-left:56px;padding-right:28px;background:none;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]:before{content:\"\";width:100%;height:100%;background:#999;display:block}.steps .step .step-title[data-v-09c21faa]{margin:10px 0;font-size:14px;font-weight:400;white-space:nowrap}.steps .step .step-content[data-v-09c21faa]{font-size:12px;font-weight:400;padding-bottom:20px}.steps .step[data-v-09c21faa]:last-child{-webkit-box-flex:1;-ms-flex:1;flex:1}.steps .step:last-child .step-header .line[data-v-09c21faa]:before{background:none}.steps .step.process .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#fff;background:#108ee9}.steps .step.process .step-title[data-v-09c21faa]{color:#000}.steps .step.finish .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#108ee9}.steps .step.finish .step-header .line[data-v-09c21faa]:before{background:#108ee9}.steps .step.error .step-header .icon[data-v-09c21faa]{border-color:#fc5746;color:#fc5746}.steps .step.error .step-title[data-v-09c21faa]{color:#fc5746}.steps .step.success[data-v-09c21faa]{-webkit-box-flex:1;-ms-flex:auto;flex:auto}.steps .step.success .step-header .icon[data-v-09c21faa]{border-color:#13ce66;color:#fff;background:#13ce66}@media screen and (max-width:768px){.success_wrap p[data-v-09c21faa]{text-align:justify}.steps[data-v-09c21faa]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.steps .step[data-v-09c21faa]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.steps .step .step-header[data-v-09c21faa]{margin:0;-webkit-box-flex:1;-ms-flex:1;flex:1;height:65px}.steps .step .step-header .icon[data-v-09c21faa]{width:24px;height:24px;line-height:24px;font-size:10px}.steps .step .step-header .line[data-v-09c21faa]{left:14px;top:0;padding:40px 0 12px;width:1px;height:100%}.steps .step .step-body[data-v-09c21faa]{padding:0 0 0 20px;-webkit-box-flex:9;-ms-flex:9;flex:9}.steps .step .step-body .step-title[data-v-09c21faa]{margin-top:0;line-height:26px}}", ""]);
+exports.push([module.i, ".success_wrap[data-v-09c21faa]{width:90%;margin:0 auto;padding:50px 0}.success_wrap p[data-v-09c21faa]{line-height:1.5;padding:0 15px}.success_wrap .stepbox[data-v-09c21faa]{padding:16px 32px;background-color:#f7f7f7}.success_wrap .stepbox .ant-steps .ant-steps-title[data-v-09c21faa]{background:none!important}@media (max-width:768px){.success_wrap[data-v-09c21faa]{width:100%}.success_wrap p[data-v-09c21faa]{text-align:left}}.steps[data-v-09c21faa]{margin:64px auto;display:-webkit-box;display:-ms-flexbox;display:flex;width:100%}.steps .step[data-v-09c21faa]{-webkit-box-flex:20;-ms-flex:20;flex:20;color:#999;box-sizing:border-box}.steps .step .step-header[data-v-09c21faa]{position:relative;margin-bottom:10px;width:100%;height:28px}.steps .step .step-header .icon[data-v-09c21faa]{width:28px;height:28px;border-radius:50%;font-size:14px;line-height:28px;text-align:center;border:1px solid #999;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]{position:absolute;left:0;top:14px;width:100%;height:1px;padding-left:56px;padding-right:28px;background:none;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]:before{content:\"\";width:100%;height:100%;background:#999;display:block}.steps .step .step-title[data-v-09c21faa]{margin:10px 0;font-size:14px;font-weight:400;white-space:nowrap}.steps .step .step-content[data-v-09c21faa]{font-size:12px;font-weight:400;padding-bottom:20px}.steps .step[data-v-09c21faa]:last-child{-webkit-box-flex:1;-ms-flex:1;flex:1}.steps .step:last-child .step-header .line[data-v-09c21faa]:before{background:none}.steps .step.process .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#fff;background:#108ee9}.steps .step.process .step-title[data-v-09c21faa]{color:#000}.steps .step.finish .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#108ee9}.steps .step.finish .step-header .line[data-v-09c21faa]:before{background:#108ee9}.steps .step.error .step-header .icon[data-v-09c21faa]{border-color:#fc5746;color:#fc5746}.steps .step.error .step-title[data-v-09c21faa]{color:#fc5746}.steps .step.success[data-v-09c21faa]{-webkit-box-flex:1;-ms-flex:auto;flex:auto}.steps .step.success .step-header .icon[data-v-09c21faa]{border-color:#13ce66;color:#fff;background:#13ce66}@media screen and (max-width:768px){.success_wrap[data-v-09c21faa]{padding-top:104px}.success_wrap p[data-v-09c21faa]{text-align:justify}.steps[data-v-09c21faa]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;margin:10px 0}.steps .step[data-v-09c21faa]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.steps .step .step-header[data-v-09c21faa]{margin:0;-webkit-box-flex:1;-ms-flex:1;flex:1;height:65px}.steps .step .step-header .icon[data-v-09c21faa]{width:24px;height:24px;line-height:24px;font-size:10px}.steps .step .step-header .line[data-v-09c21faa]{left:14px;top:0;padding:40px 0 12px;width:1px;height:100%}.steps .step .step-body[data-v-09c21faa]{padding:0 0 0 20px;-webkit-box-flex:9;-ms-flex:9;flex:9}.steps .step .step-body .step-title[data-v-09c21faa]{margin-top:0;line-height:26px}}", ""]);
 
 // exports
 
@@ -27417,7 +27433,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "header[data-v-0ca79d5b]{position:fixed;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-0ca79d5b]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-0ca79d5b]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-0ca79d5b]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-0ca79d5b]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}", ""]);
+exports.push([module.i, "header[data-v-0ca79d5b]{position:fixed;z-index:1000000;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-0ca79d5b]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-0ca79d5b]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-0ca79d5b]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-0ca79d5b]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}", ""]);
 
 // exports
 
@@ -28159,7 +28175,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "header[data-v-ea34d632]{position:absolute;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-ea34d632]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-ea34d632]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-ea34d632]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-ea34d632]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}.home-wrap[data-v-ea34d632]{padding-left:20px}.home-wrap h3[data-v-ea34d632]{clear:both;margin:0;padding:15px 0 28px}.home-wrap ul[data-v-ea34d632]{font-size:0;padding-left:0;overflow:hidden}.home-wrap ul li[data-v-ea34d632]{display:inline-block}.home-wrap ul li.icon-reimburse a[data-v-ea34d632]{background:url(" + __webpack_require__(418) + ") 0 0 no-repeat;background-size:100% 100%}.home-wrap ul li.icon-applyloan a[data-v-ea34d632]{background:url(" + __webpack_require__(423) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(424) + ") 50% no-repeat}.home-wrap ul li.icon-forpayment a[data-v-ea34d632]{background:url(" + __webpack_require__(425) + ") 50% no-repeat}.home-wrap ul li.icon-purchase a[data-v-ea34d632]{background:url(" + __webpack_require__(426) + ") 50% no-repeat}.home-wrap ul li.icon-demand a[data-v-ea34d632]{background:url(" + __webpack_require__(427) + ") 50% no-repeat}.home-wrap ul li.icon-assetsrecipients a[data-v-ea34d632]{background:url(" + __webpack_require__(428) + ") 50% no-repeat}.home-wrap ul li.icon-assetsreturn a[data-v-ea34d632]{background:url(" + __webpack_require__(429) + ") 50% no-repeat}.home-wrap ul li.icon-chapter a[data-v-ea34d632]{background:url(" + __webpack_require__(430) + ") 50% no-repeat}.home-wrap ul li.icon-positive a[data-v-ea34d632]{background:url(" + __webpack_require__(419) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(420) + ") 50% no-repeat}.home-wrap ul li.icon-approvetransfer a[data-v-ea34d632]{background:url(" + __webpack_require__(421) + ") 50% no-repeat}.home-wrap ul li.icon-newstore a[data-v-ea34d632]{background:url(" + __webpack_require__(422) + ") 50% no-repeat}.home-wrap ul li.applyicon a[data-v-ea34d632]{display:block;width:110px;height:80px;line-height:80px;margin:0 16px 20px 0;padding-left:56px;text-decoration:none;background-size:100% 100%;font-size:16px;color:#fff;font-weight:700}@media screen and (min-width:414px) and (max-width:768px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:118px;height:88px;line-height:88px;padding-left:66px;font-size:16px;margin-right:15px}}@media screen and (min-width:375px) and (max-width:413px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{margin-right:10px}}@media screen and (max-width:374px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:90px;height:67px;line-height:67px;padding-left:50px;font-size:14px;margin-right:10px}}.body[data-v-ea34d632]{max-width:640px;min-height:100%;background-color:#f5f5f5!important}.app-home-wrap[data-v-ea34d632]{padding-top:64px}.app-home-wrap .group[data-v-ea34d632]{overflow:hidden;margin-bottom:20px;background-color:#fff}.app-home-wrap h3[data-v-ea34d632]{height:48px;line-height:48px;font-size:14px;margin:0;padding:0 15px}.app-home-wrap ul[data-v-ea34d632]{margin:0;padding:0}.app-home-wrap ul li[data-v-ea34d632]{float:left;text-align:center;padding-bottom:20px}.app-home-wrap ul li.icon-reimburse span[data-v-ea34d632]{background:url(" + __webpack_require__(413) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-reimburse a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(412) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan span[data-v-ea34d632]{background:url(" + __webpack_require__(405) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(404) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment span[data-v-ea34d632]{background:url(" + __webpack_require__(415) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(414) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme span[data-v-ea34d632]{background:url(" + __webpack_require__(417) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(416) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already span[data-v-ea34d632]{background:url(" + __webpack_require__(403) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already a:hover span[data-v-ea34d632]{background:url(" + __webpack_require__(402) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend span[data-v-ea34d632]{background:url(" + __webpack_require__(411) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(410) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend span[data-v-ea34d632]{background:url(" + __webpack_require__(407) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(406) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter span[data-v-ea34d632]{background:url(" + __webpack_require__(409) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(408) + ") 0 0 no-repeat}.app-home-wrap ul li a[data-v-ea34d632]{font-size:12px;color:#999}.app-home-wrap ul li a span[data-v-ea34d632]{display:block;width:4em;height:4em;margin:0 1.87em;background-size:100% 100%!important}", ""]);
+exports.push([module.i, "header[data-v-ea34d632]{position:absolute;width:100%;max-width:640px;margin:0 auto;padding:20px 0 0;background-color:#fdc235}header a[data-v-ea34d632]{position:absolute;left:0;top:20px;padding:13px 16px}header a span[data-v-ea34d632]{display:block;width:16px;height:16px;background:url(" + __webpack_require__(99) + ") 0 0 no-repeat;background-size:100% 100%}header a[data-v-ea34d632]:active{-webkit-tap-highlight-color:transparent}header .title[data-v-ea34d632]{margin:0 44px;line-height:44px;text-align:center;font-size:16px;font-weight:500}.home-wrap[data-v-ea34d632]{padding-left:20px}.home-wrap h3[data-v-ea34d632]{clear:both;margin:0;padding:15px 0 28px}.home-wrap ul[data-v-ea34d632]{font-size:0;padding-left:0;overflow:hidden}.home-wrap ul li[data-v-ea34d632]{display:inline-block}.home-wrap ul li.icon-reimburse a[data-v-ea34d632]{background:url(" + __webpack_require__(418) + ") 0 0 no-repeat;background-size:100% 100%}.home-wrap ul li.icon-applyloan a[data-v-ea34d632]{background:url(" + __webpack_require__(423) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(424) + ") 50% no-repeat}.home-wrap ul li.icon-forpayment a[data-v-ea34d632]{background:url(" + __webpack_require__(425) + ") 50% no-repeat}.home-wrap ul li.icon-purchase a[data-v-ea34d632]{background:url(" + __webpack_require__(426) + ") 50% no-repeat}.home-wrap ul li.icon-demand a[data-v-ea34d632]{background:url(" + __webpack_require__(427) + ") 50% no-repeat}.home-wrap ul li.icon-assetsrecipients a[data-v-ea34d632]{background:url(" + __webpack_require__(428) + ") 50% no-repeat}.home-wrap ul li.icon-assetsreturn a[data-v-ea34d632]{background:url(" + __webpack_require__(429) + ") 50% no-repeat}.home-wrap ul li.icon-chapter a[data-v-ea34d632]{background:url(" + __webpack_require__(430) + ") 50% no-repeat}.home-wrap ul li.icon-positive a[data-v-ea34d632]{background:url(" + __webpack_require__(419) + ") 50% no-repeat}.home-wrap ul li.icon-repayment a[data-v-ea34d632]{background:url(" + __webpack_require__(420) + ") 50% no-repeat}.home-wrap ul li.icon-approvetransfer a[data-v-ea34d632]{background:url(" + __webpack_require__(421) + ") 50% no-repeat}.home-wrap ul li.icon-newstore a[data-v-ea34d632]{background:url(" + __webpack_require__(422) + ") 50% no-repeat}.home-wrap ul li.applyicon a[data-v-ea34d632]{display:block;width:110px;height:80px;line-height:80px;margin:0 16px 20px 0;padding-left:56px;text-decoration:none;background-size:100% 100%;font-size:16px;color:#fff;font-weight:700}@media screen and (min-width:414px) and (max-width:768px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:118px;height:88px;line-height:88px;padding-left:66px;font-size:16px;margin-right:15px}}@media screen and (min-width:375px) and (max-width:413px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{margin-right:10px}}@media screen and (max-width:374px){.home-wrap[data-v-ea34d632]{padding-left:15px}.home-wrap ul li.applyicon a[data-v-ea34d632]{width:90px;height:67px;line-height:67px;padding-left:50px;font-size:14px;margin-right:10px}}.body[data-v-ea34d632]{max-width:640px;min-height:100%;background-color:#f5f5f5!important}.app-home-wrap[data-v-ea34d632]{padding-top:64px}.app-home-wrap .group[data-v-ea34d632]{overflow:hidden;margin-bottom:20px;background-color:#fff}.app-home-wrap h3[data-v-ea34d632]{height:48px;line-height:48px;font-size:14px;margin:0;padding:0 15px}.app-home-wrap ul[data-v-ea34d632]{margin:0;padding:0}.app-home-wrap ul li[data-v-ea34d632]{float:left;width:25vw;font-size:0;text-align:center;padding-bottom:20px}.app-home-wrap ul li.icon-reimburse span[data-v-ea34d632]{background:url(" + __webpack_require__(413) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-reimburse a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(412) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan span[data-v-ea34d632]{background:url(" + __webpack_require__(405) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-applyloan a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(404) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment span[data-v-ea34d632]{background:url(" + __webpack_require__(415) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-repayment a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(414) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme span[data-v-ea34d632]{background:url(" + __webpack_require__(417) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-waitme a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(416) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already span[data-v-ea34d632]{background:url(" + __webpack_require__(403) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-already a:hover span[data-v-ea34d632]{background:url(" + __webpack_require__(402) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend span[data-v-ea34d632]{background:url(" + __webpack_require__(411) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-mysend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(410) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend span[data-v-ea34d632]{background:url(" + __webpack_require__(407) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-ccsend a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(406) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter span[data-v-ea34d632]{background:url(" + __webpack_require__(409) + ") 0 0 no-repeat}.app-home-wrap ul li.icon-chapter a:active span[data-v-ea34d632]{background:url(" + __webpack_require__(408) + ") 0 0 no-repeat}.app-home-wrap ul li a[data-v-ea34d632]{font-size:12px;color:#999;display:block;text-align:center}.app-home-wrap ul li a span[data-v-ea34d632]{display:block;width:13.333333vw;height:13.333333vw;margin:0 auto;background-size:100% 100%!important}.app-home-wrap ul li a b[data-v-ea34d632]{display:block;text-align:center;padding-top:5px;font-size:12px;font-weight:500}", ""]);
 
 // exports
 
@@ -37371,7 +37387,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "app-wrapper",
     class: {
-      'hideSidebar': !_vm.sidebar.opened
+      'hideSidebar': _vm.sidebar.opened
     }
   }, [(_vm.isnav == 1) ? _c('div', {
     staticClass: "sidebar-wrapper"
@@ -37380,7 +37396,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })], 1) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "main-container",
     class: {
-      'app-container': _vm.isshow
+      'app-container': _vm.isnav == 0
     }
   }, [_c('Headbar'), _vm._v(" "), _c('app-main')], 1)])
 },staticRenderFns: []}
@@ -43949,73 +43965,15 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/repayment"
     }
-  }, [_vm._v("申请还款")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-forpayment"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/forpayment"
-    }
-  }, [_vm._v("申请付款")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-purchase"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/purchase"
-    }
-  }, [_vm._v("申请请购")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', {
+  }, [_vm._v("申请还款")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', {
     staticClass: "el-col el-col-24"
   }, [_c('li', {
-    staticClass: "applyicon icon-demand"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/demand"
-    }
-  }, [_vm._v("发起需求单")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-assetsrecipients"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/assetsrecipients"
-    }
-  }, [_vm._v("固定资产领用")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-assetsreturn"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/assetsreturn"
-    }
-  }, [_vm._v("固定资产归还")])], 1), _vm._v(" "), _c('li', {
     staticClass: "applyicon icon-chapter"
   }, [_c('router-link', {
     attrs: {
       "to": "/chapter"
     }
-  }, [_vm._v("申请用章")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("人事相关")]), _vm._v(" "), _c('ul', {
-    staticClass: "el-col el-col-24"
-  }, [_c('li', {
-    staticClass: "applyicon icon-positive"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/positive"
-    }
-  }, [_vm._v("申请转正")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-applyloan"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/applyleave"
-    }
-  }, [_vm._v("申请离职")])], 1), _vm._v(" "), _c('li', {
-    staticClass: "applyicon icon-approvetransfer"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/approvetransfer"
-    }
-  }, [_vm._v("申请调职")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("门店相关")]), _vm._v(" "), _c('ul', {
-    staticClass: "el-col el-col-24"
-  }, [_c('li', {
-    staticClass: "applyicon icon-newstore"
-  }, [_c('router-link', {
-    attrs: {
-      "to": "/newstore"
-    }
-  }, [_vm._v("申请开店")])], 1)])]) : _c('div', {
+  }, [_vm._v("申请用章")])], 1)])]) : _c('div', {
     staticClass: "body"
   }, [_c('div', {
     staticClass: "app-home-wrap"
@@ -44027,25 +43985,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/approvals/waitme"
     }
-  }, [_c('span'), _vm._v("待我审批")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("待我审批")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-already"
   }, [_c('router-link', {
     attrs: {
       "to": "/approvals/alreadyapproval"
     }
-  }, [_c('span'), _vm._v("我已审批")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("我已审批")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-mysend"
   }, [_c('router-link', {
     attrs: {
       "to": "/approvals/mysend"
     }
-  }, [_c('span'), _vm._v("我发起的")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("我发起的")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-ccsend"
   }, [_c('router-link', {
     attrs: {
       "to": "/approvals/ccsend"
     }
-  }, [_c('span'), _vm._v("抄给我的")])], 1)])]), _vm._v(" "), _c('div', {
+  }, [_c('span'), _c('b', [_vm._v("抄送给我")])])], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "group"
   }, [_c('h3', [_vm._v("财务相关")]), _vm._v(" "), _c('ul', [_c('li', {
     staticClass: "icon-reimburse"
@@ -44053,7 +44011,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/reimburse"
     }
-  }, [_c('span'), _vm._v("申请报销")])], 1), _vm._v(" "), _c('li', {
+  }, [_c('span'), _c('b', [_vm._v("申请报销")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-applyloan"
   }, [_c('router-link', {
     attrs: {
@@ -44061,7 +44019,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "icon-applyloan"
-  }), _vm._v("申请借款")])], 1), _vm._v(" "), _c('li', {
+  }), _c('b', [_vm._v("申请借款")])])], 1), _vm._v(" "), _c('li', {
     staticClass: "icon-repayment"
   }, [_c('router-link', {
     attrs: {
@@ -44069,7 +44027,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('span', {
     staticClass: "icon-repayment"
-  }), _vm._v("申请还款")])], 1)])]), _vm._v(" "), _c('div', {
+  }), _c('b', [_vm._v("申请还款")])])], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "group"
   }, [_c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', [_c('li', {
     staticClass: "icon-chapter"
@@ -44077,7 +44035,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/chapter"
     }
-  }, [_c('span'), _vm._v("申请用章")])], 1)])])])])
+  }, [_c('span'), _c('b', [_vm._v("申请用章")])])], 1)])])])])
 },staticRenderFns: []}
 
 /***/ }),
@@ -48185,4 +48143,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?64a6b7068c3d6ff6d5aa
+//# sourceMappingURL=index.js.map?6d49568cb272b4dc90ae

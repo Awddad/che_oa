@@ -325,14 +325,14 @@ class AssetController extends BaseController
      *
      * @return array
      */
-    public function addSnNumber()
+    public function actionSnNumber()
     {
         $param = Yii::$app->request->post();
     
         if(empty($param) || !isset($param['asset_list_id'])  || !isset($param['sn_number'])) {
             $this->_returnError(400);
         }
-        $rst = AssetList::updateAll(['sn_number' => $param['sn_number'], ['id' => $param['asset_list_id']]]);
+        $rst = AssetList::updateAll(['sn_number' => $param['sn_number']], ['id' => $param['asset_list_id']]);
         if($rst) {
             return $this->_return([], 200, '添加成功');
         }
