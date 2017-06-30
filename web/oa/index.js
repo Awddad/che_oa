@@ -2138,7 +2138,7 @@ var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
     timeout: 5000 // 请求超时时间
 });
 
-console.log(service);
+console.log();
 
 // request拦截器
 service.interceptors.request.use(function (config) {
@@ -22646,8 +22646,7 @@ var app = {
                     state.sidebar.opened = true;
                 }
             } else {
-                if (localStorage.getItem("sidebarStatus") != null && state.sidebar.opened == true) {
-                    alert(0);
+                if (localStorage.getItem("sidebarStatus") != null && state.sidebar.opened == false) {
                     localStorage.setItem("sidebarStatus", true);
                     state.sidebar.opened = true;
                 }
@@ -48144,4 +48143,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?4e967639ba05c1961a52
+//# sourceMappingURL=index.js.map?15af85b359c1e5d47c78
