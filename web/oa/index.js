@@ -2133,7 +2133,7 @@ module.exports = {
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: '', // api的base_urlhttp://192.168.1.128:8010
+    baseURL: 'http://www.cheoa.com', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
 
@@ -3317,7 +3317,8 @@ var constantRouterMap = [
     component: __WEBPACK_IMPORTED_MODULE_2__views_main_Layout_vue___default.a,
     redirect: '/adminhome',
     noDropdown: true,
-    children: [{ path: 'adminhome', component: __WEBPACK_IMPORTED_MODULE_3__views_adminhome_vue___default.a, name: '首页' }, { path: 'reimburse', component: __WEBPACK_IMPORTED_MODULE_4__views_Home_reimburse_vue___default.a, name: '申请报销' }, { path: 'applyloan', component: __WEBPACK_IMPORTED_MODULE_5__views_Home_applyloan_vue___default.a, name: '申请借款' }, { path: 'repayment', component: __WEBPACK_IMPORTED_MODULE_6__views_Home_repayment_vue___default.a, name: '申请还款' }, { path: 'forpayment', component: __WEBPACK_IMPORTED_MODULE_7__views_Home_forpayment_vue___default.a, name: '申请付款' }, { path: 'purchase', component: __WEBPACK_IMPORTED_MODULE_8__views_Home_purchase_vue___default.a, name: '申请请购' }, { path: 'demand', component: __WEBPACK_IMPORTED_MODULE_9__views_Home_demand_vue___default.a, name: '发起需求' }, { path: 'chapter', component: __WEBPACK_IMPORTED_MODULE_10__views_Home_chapter_vue___default.a, name: '申请用章' }, { path: 'assetsrecipients', component: __WEBPACK_IMPORTED_MODULE_11__views_Home_assetsRecipients_vue___default.a, name: '固定资产领用' }, { path: 'assetsReturn', component: __WEBPACK_IMPORTED_MODULE_12__views_Home_assetsReturn_vue___default.a, name: '固定资产归还' }, { path: 'positive', component: __WEBPACK_IMPORTED_MODULE_14__views_Home_positive_vue___default.a, name: '申请转正' }, { path: 'applyleave', component: __WEBPACK_IMPORTED_MODULE_13__views_Home_applyleave_vue___default.a, name: '申请离职' }, { path: 'approvetransfer', component: __WEBPACK_IMPORTED_MODULE_15__views_Home_approveTransfer_vue___default.a, name: '申请调职' }, { path: 'newstore', component: __WEBPACK_IMPORTED_MODULE_16__views_Home_newStore_vue___default.a, name: '申请开店', meta: { role: ['tuozhan'] } }, { path: 'success', component: __WEBPACK_IMPORTED_MODULE_17__views_Home_Success_vue___default.a, hidden: true, name: '申请提交成功' }]
+    children: [{ path: 'adminhome', component: __WEBPACK_IMPORTED_MODULE_3__views_adminhome_vue___default.a, name: '首页' }, { path: 'reimburse', component: __WEBPACK_IMPORTED_MODULE_4__views_Home_reimburse_vue___default.a, name: '申请报销' }, { path: 'applyloan', component: __WEBPACK_IMPORTED_MODULE_5__views_Home_applyloan_vue___default.a, name: '申请借款' }, { path: 'repayment', component: __WEBPACK_IMPORTED_MODULE_6__views_Home_repayment_vue___default.a, name: '申请还款' }, { path: 'forpayment', component: __WEBPACK_IMPORTED_MODULE_7__views_Home_forpayment_vue___default.a, name: '申请付款' }, { path: 'purchase', component: __WEBPACK_IMPORTED_MODULE_8__views_Home_purchase_vue___default.a, name: '申请请购' }, { path: 'demand', component: __WEBPACK_IMPORTED_MODULE_9__views_Home_demand_vue___default.a, name: '发起需求' }, { path: 'chapter', component: __WEBPACK_IMPORTED_MODULE_10__views_Home_chapter_vue___default.a, name: '申请用章' }, { path: 'assetsrecipients', component: __WEBPACK_IMPORTED_MODULE_11__views_Home_assetsRecipients_vue___default.a, name: '固定资产领用' }, { path: 'assetsReturn', component: __WEBPACK_IMPORTED_MODULE_12__views_Home_assetsReturn_vue___default.a, name: '固定资产归还' }, { path: 'positive', component: __WEBPACK_IMPORTED_MODULE_14__views_Home_positive_vue___default.a, name: '申请转正' }, { path: 'applyleave', component: __WEBPACK_IMPORTED_MODULE_13__views_Home_applyleave_vue___default.a, name: '申请离职' }, { path: 'approvetransfer', component: __WEBPACK_IMPORTED_MODULE_15__views_Home_approveTransfer_vue___default.a, name: '申请调职' }, { path: 'newstore', component: __WEBPACK_IMPORTED_MODULE_16__views_Home_newStore_vue___default.a, name: '申请开店' }, //meta: { role: ['tuozhan'] }
+    { path: 'success', component: __WEBPACK_IMPORTED_MODULE_17__views_Home_Success_vue___default.a, hidden: true, name: '申请提交成功' }]
 }];
 
 /* harmony default export */ __webpack_exports__["a"] = (new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
@@ -10377,6 +10378,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -10950,6 +10965,39 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -11823,6 +11871,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -12042,6 +12093,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_object_values__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_object_values___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_object_values__);
 
+//
+//
+//
 //
 //
 //
@@ -12568,6 +12622,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -12789,6 +12846,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_element_ui_packages_row_src_row__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_element_ui_packages_col_src_col__ = __webpack_require__(29);
 
+//
+//
+//
 //
 //
 //
@@ -14726,6 +14786,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -15282,15 +15399,75 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ApproveTransfer_submitModal_vue__ = __webpack_require__(441);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ApproveTransfer_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_ApproveTransfer_submitModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ApproveTransfer_submitModal_vue__ = __webpack_require__(441);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_ApproveTransfer_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_ApproveTransfer_submitModal_vue__);
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15399,10 +15576,10 @@ var name = '';
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'approveTransfer',
     components: {
-        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue___default.a,
-        ConstModal: __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue___default.a,
-        CopyModal: __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue___default.a,
-        SubmitModal: __WEBPACK_IMPORTED_MODULE_4__components_ApproveTransfer_submitModal_vue___default.a
+        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue___default.a,
+        ConstModal: __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue___default.a,
+        CopyModal: __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue___default.a,
+        SubmitModal: __WEBPACK_IMPORTED_MODULE_5__components_ApproveTransfer_submitModal_vue___default.a
     },
     data: function data() {
         return {
@@ -15431,7 +15608,7 @@ var name = '';
         };
     },
 
-    computed: {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
         cpperson: function cpperson() {
             return this.$store.state.global.cpPerson;
         },
@@ -15451,7 +15628,7 @@ var name = '';
         positions: function positions() {
             return this.$store.state.global.position_data;
         }
-    },
+    }),
     created: function created() {
         this.$store.dispatch('Position_List'); //职位数据初始化
         this.$store.dispatch('OrganizationalStructure'); //部门数据初始化
@@ -15626,17 +15803,35 @@ var name = '';
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_assetsRecipients_TableModal_vue__ = __webpack_require__(448);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_assetsRecipients_TableModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_assetsRecipients_TableModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_assetsRecipients_SubmitModal_vue__ = __webpack_require__(447);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_assetsRecipients_SubmitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_assetsRecipients_SubmitModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_assetsRecipients_TableModal_vue__ = __webpack_require__(448);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_assetsRecipients_TableModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_assetsRecipients_TableModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstCopyPerson_vue__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_ConstCopyPerson_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ConstModal_ConstModal_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_ConstModal_ConstModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_CopyModal_CopyModal_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_CopyModal_CopyModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_assetsRecipients_SubmitModal_vue__ = __webpack_require__(447);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_assetsRecipients_SubmitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_assetsRecipients_SubmitModal_vue__);
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15749,11 +15944,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'assetsRecipients',
     components: {
-        TableModal: __WEBPACK_IMPORTED_MODULE_1__components_assetsRecipients_TableModal_vue___default.a,
-        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue___default.a,
-        ConstModal: __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue___default.a,
-        CopyModal: __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue___default.a,
-        SubmitModal: __WEBPACK_IMPORTED_MODULE_5__components_assetsRecipients_SubmitModal_vue___default.a
+        TableModal: __WEBPACK_IMPORTED_MODULE_2__components_assetsRecipients_TableModal_vue___default.a,
+        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_3__components_ConstCopyPerson_vue___default.a,
+        ConstModal: __WEBPACK_IMPORTED_MODULE_4__components_ConstModal_ConstModal_vue___default.a,
+        CopyModal: __WEBPACK_IMPORTED_MODULE_5__components_CopyModal_CopyModal_vue___default.a,
+        SubmitModal: __WEBPACK_IMPORTED_MODULE_6__components_assetsRecipients_SubmitModal_vue___default.a
     },
     data: function data() {
         return {
@@ -15774,7 +15969,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
         ApplyID: function ApplyID() {
             return this.$store.state.assetsRecipients.assetsRecipients_addApplyID;
         },
@@ -15787,7 +15982,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         copydata: function copydata() {
             return this.$store.state.assetsRecipients.assetsRecipients_copydata;
         }
-    },
+    }),
     created: function created() {
         var _this = this;
 
@@ -15965,15 +16160,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_assetsReturn_SubmitModal_vue__ = __webpack_require__(449);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_assetsReturn_SubmitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_assetsReturn_SubmitModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_assetsReturn_SubmitModal_vue__ = __webpack_require__(449);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_assetsReturn_SubmitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_assetsReturn_SubmitModal_vue__);
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -16074,10 +16283,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'assetsReturn',
     components: {
-        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue___default.a,
-        ConstModal: __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue___default.a,
-        CopyModal: __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue___default.a,
-        SubmitModal: __WEBPACK_IMPORTED_MODULE_4__components_assetsReturn_SubmitModal_vue___default.a
+        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_2__components_ConstCopyPerson_vue___default.a,
+        ConstModal: __WEBPACK_IMPORTED_MODULE_3__components_ConstModal_ConstModal_vue___default.a,
+        CopyModal: __WEBPACK_IMPORTED_MODULE_4__components_CopyModal_CopyModal_vue___default.a,
+        SubmitModal: __WEBPACK_IMPORTED_MODULE_5__components_assetsReturn_SubmitModal_vue___default.a
     },
     data: function data() {
         return {
@@ -16100,7 +16309,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
         ApplyID: function ApplyID() {
             return this.$store.state.assetsReturn.assetsReturn_addApplyID;
         },
@@ -16113,7 +16322,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         copydata: function copydata() {
             return this.$store.state.assetsReturn.assetsReturn_copydata;
         }
-    },
+    }),
     created: function created() {
         var _this = this;
 
@@ -17796,6 +18005,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -18048,6 +18301,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_positive_SubmitModal_vue__ = __webpack_require__(455);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_positive_SubmitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_positive_SubmitModal_vue__);
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -22013,8 +22309,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: '/oa_v1/upload/file',
-        serverUrl: '',
+        BaseUrl: 'http://www.cheoa.com/oa_v1/upload/file',
+        serverUrl: 'http://www.cheoa.com',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -32721,22 +33017,38 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "150px"
+      "model": _vm.ruleForm
     }
   }, [_c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("调职申请表")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("调职申请表")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "所属部门：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("所属部门：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "old_org",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择部门'
       }]
     }
   }, [_c('el-cascader', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择",
       "options": _vm.org,
@@ -32749,21 +33061,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.old_org"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "职位：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("职位：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "old_profession",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择职位'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -32782,21 +33107,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": item.value + '/' + item.label
       }
     })
-  }))], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "入职日期：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("入职日期：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "entry_time",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择入职日期'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "date",
       "placeholder": "选择日期"
@@ -32808,21 +33146,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.entry_time"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "调职原因：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("调职原因：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "des",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择调整前职位'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "textarea",
       "placeholder": "请输入调职原因"
@@ -32834,17 +33185,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.des"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "调职后部门：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("调职后部门：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "target_org",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择部门'
       }]
     }
   }, [_c('el-cascader', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择",
       "options": _vm.org,
@@ -32857,21 +33225,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.target_org"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "调整后职位：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("调整后职位：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "target_profession",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择职位'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -32890,21 +33271,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": item.value + '/' + item.label
       }
     })
-  }))], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "调职日期：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("调职日期：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "transfer_time",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择入职日期'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "date",
       "placeholder": "选择日期"
@@ -32916,10 +33310,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.transfer_time"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "上传附件：",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("上传附件：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-upload', {
     staticClass: "upload-demo",
@@ -32936,12 +33339,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v("  点击上传")])], 1)], 1), _vm._v(" "), _c('h3', {
+  }), _vm._v(" 点击上传")])], 1)], 1)], 1), _vm._v(" "), _c('h3', {
     staticClass: "mt-md mb-md"
-  }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "审批人：",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("审批人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -32952,10 +33367,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleConstDialog": _vm.ToggleConstDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "抄送人：",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("抄送人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -32966,10 +33393,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w110 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-button', {
     attrs: {
@@ -32986,7 +33423,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1), _vm._v(" "), _c('ConstModal', {
+  }, [_vm._v("取 消")])], 1)], 1)], 1), _vm._v(" "), _c('ConstModal', {
     attrs: {
       "isconstshow": _vm.isconstshow,
       "constdata": _vm.constdata,
@@ -34321,7 +34758,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "container"
-  }, [_c('TableModal', {
+  }, [_c('table-modal', {
     attrs: {
       "istableshow": _vm.istableshow
     },
@@ -34329,7 +34766,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "ontableadd": _vm.ontableadd,
       "ToggleTableDialog": _vm.ToggleTableDialog
     }
-  }), _vm._v(" "), _c('ConstModal', {
+  }), _vm._v(" "), _c('const-modal', {
     attrs: {
       "isconstshow": _vm.isconstshow,
       "constdata": _vm.constdata,
@@ -34340,7 +34777,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "ToggleConstDialog": _vm.ToggleConstDialog,
       "DeleteConstPerson": _vm.DeleteConstPerson
     }
-  }), _vm._v(" "), _c('CopyModal', {
+  }), _vm._v(" "), _c('copy-modal', {
     attrs: {
       "iscopyshow": _vm.iscopyshow,
       "copydata": _vm.copydata,
@@ -34351,7 +34788,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "ToggleCopyDialog": _vm.ToggleCopyDialog,
       "DeleteCopyPerson": _vm.DeleteCopyPerson
     }
-  }), _vm._v(" "), _c('SubmitModal', {
+  }), _vm._v(" "), _c('submit-modal', {
     attrs: {
       "issubmitshow": _vm.issubmitshow,
       "loading": _vm.loading,
@@ -35988,6 +36425,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('el-dialog', {
+    staticClass: "constom-md-dialog",
     attrs: {
       "title": "增加请购明细",
       "visible": _vm.istableshow,
@@ -36005,21 +36443,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "model": _vm.ruleForm
     }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("类别：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "类别",
-      "label-width": "97px",
       "prop": "asset_type",
       "rules": [{
         required: true,
         message: '请选择类别'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-cascader', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "options": _vm.qgtypedata
     },
@@ -36030,10 +36481,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.asset_type"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "品牌",
-      "label-width": "97px",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("品牌：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "brand",
       "rules": [{
         required: true,
@@ -36041,6 +36506,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -36059,10 +36527,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": item.id + '/' + item.name
       }
     })
-  }))], 1), _vm._v(" "), _c('el-form-item', {
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "名称",
-      "label-width": "97px",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("名称：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "name",
       "rules": [{
         required: true,
@@ -36070,6 +36552,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请输入",
       "value": "111"
@@ -36081,10 +36566,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.name"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "单价",
-      "label-width": "97px",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("单价：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "price",
       "rules": [{
         required: true,
@@ -36092,6 +36591,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请输入"
     },
@@ -36102,10 +36604,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.price"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "数量",
-      "label-width": "97px",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("数量：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "amount",
       "rules": [{
         required: true,
@@ -36113,6 +36629,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input-number', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "step": 1,
       "min": 1
@@ -36124,7 +36643,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.amount"
     }
-  })], 1)], 1), _vm._v(" "), _c('div', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('div', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -36559,23 +37078,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('el-row', {
     staticClass: "search-wrap mb-lg"
-  }, [_c('el-row', [_c('el-col', {
+  }, [_c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("关键字：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "关键字",
       "prop": "keywords"
     }
   }, [_c('el-input', {
     attrs: {
-      "placeholder": "序号/类型"
+      "placeholder": "请输入"
     },
     model: {
       value: (_vm.ruleForm.keywords),
@@ -36584,16 +37117,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.keywords"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("申请时间：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "申请时间",
       "prop": "applyDate"
     }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "daterange",
       "placeholder": "选择日期范围"
@@ -36605,7 +37156,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.applyDate"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', [_c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     staticClass: "t-r",
     attrs: {
       "span": 24
@@ -36625,7 +37176,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isClear('ruleForm')
       }
     }
-  }, [_vm._v("清除")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("清除")])], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     staticClass: "t-l"
   }, [_c('el-col', {
     staticStyle: {
@@ -36669,20 +37220,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "name",
-      "label": "类型",
-      "width": "400"
+      "label": "类型"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "update_time",
       "label": "更新时间",
       "sortable": "custom",
-      "width": "250"
+      "width": "350"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "operation",
-      "label": "操作"
+      "label": "操作",
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -37090,26 +37641,38 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "150px"
+      "model": _vm.ruleForm
     }
   }, [_c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("转正申请表")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("转正申请表")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "入职日期：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("入职日期：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "entry_time",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择入职日期'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "date",
       "placeholder": "选择日期"
@@ -37121,21 +37684,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.entry_time"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "试用期职位：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("试用期职位：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "job",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请选择试用期职位'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -37154,19 +37730,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": item.value + '/' + item.label
       }
     })
-  }))], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "试用期业绩自述：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("试用期业绩自述：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "prosecution",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请输入试用期业绩自述'
       }]
-    }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
     }
   }, [_c('el-input', {
     staticStyle: {
@@ -37184,19 +37770,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.prosecution"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "试用期工作总结：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("试用期工作总结：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "summary",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请输入试用期工作总结'
       }]
-    }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
     }
   }, [_c('el-input', {
     staticStyle: {
@@ -37214,19 +37810,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.summary"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "对公司意见和建议：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("对公司意见和建议：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "suggest",
-      "label-width": "150px",
       "rules": [{
         required: true,
         message: '请输入对公司意见和建议'
       }]
-    }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
     }
   }, [_c('el-input', {
     staticStyle: {
@@ -37244,12 +37850,23 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.suggest"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "上传附件：",
-      "label-width": "150px"
+      "gutter": 10
     }
-  }, [_c('el-upload', {
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("上传附件：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', [_c('el-upload', {
     staticClass: "upload-demo",
     attrs: {
       "multiple": "",
@@ -37263,12 +37880,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v("  点击上传")])], 1)], 1), _vm._v(" "), _c('h3', {
-    staticClass: "mt-md mb-md"
-  }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-form-item', {
+  }), _vm._v(" 点击上传")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('h3', {
+    staticClass: "mt-0 mb-md"
+  }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "审批人：",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("审批人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -37279,10 +37908,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleConstDialog": _vm.ToggleConstDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "抄送人：",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("抄送人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -37293,10 +37934,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "",
-      "label-width": "150px"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-button', {
     attrs: {
@@ -37313,7 +37964,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1), _vm._v(" "), _c('ConstModal', {
+  }, [_vm._v("取 消")])], 1)], 1)], 1), _vm._v(" "), _c('ConstModal', {
     attrs: {
       "isconstshow": _vm.isconstshow,
       "constdata": _vm.constdata,
@@ -38685,23 +39336,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('el-row', {
     staticClass: "search-wrap mb-lg"
-  }, [_c('el-row', [_c('el-col', {
+  }, [_c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("关键字：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "关键字",
       "prop": "keywords"
     }
   }, [_c('el-input', {
     attrs: {
-      "placeholder": "序号/类型"
+      "placeholder": "请输入"
     },
     model: {
       value: (_vm.ruleForm.keywords),
@@ -38710,16 +39375,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.keywords"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("申请时间：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "申请时间",
       "prop": "applyDate"
     }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "daterange",
       "placeholder": "选择日期范围"
@@ -38731,7 +39414,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.applyDate"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', [_c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     staticClass: "t-r",
     attrs: {
       "span": 24
@@ -38751,7 +39434,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isClear('ruleForm')
       }
     }
-  }, [_vm._v("清除")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("清除")])], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     staticClass: "t-l"
   }, [_c('el-col', {
     staticStyle: {
@@ -38795,20 +39478,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "name",
-      "label": "类型",
-      "width": "400"
+      "label": "类型"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "update_time",
       "label": "更新时间",
       "sortable": "custom",
-      "width": "250"
+      "width": "350"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "operation",
-      "label": "操作"
+      "label": "操作",
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -39033,25 +39716,39 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "150px"
+      "model": _vm.ruleForm
     }
   }, [_c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("离职申请表")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("离职申请表")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "离职日期：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("离职日期：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "leave_time",
       "rules": [{
         required: true,
         message: '请选择离职日期'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "date",
       "placeholder": "选择日期"
@@ -39063,20 +39760,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.leave_time"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "离职原因：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("离职原因：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "des",
       "rules": [{
         required: true,
         message: '请输入离职原因'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "textarea",
       "placeholder": "请输入离职原因"
@@ -39088,22 +39800,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.des"
     }
-  })], 1)], 1), _vm._v(" "), _c('h3', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("离职交接")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("离职交接")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "物资是否交还：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w120 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("物资是否交还：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "stock_status",
       "rules": [{
         required: true,
         message: '请确认物资是否交还'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -39126,7 +39853,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "否",
       "value": "0"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
       "gutter": 0
     }
@@ -39177,20 +39904,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "状态",
       "width": "100"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "财务是否结算：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("账号密码是否交接：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "finance_status",
       "rules": [{
         required: true,
         message: '请确认财务是否结算'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -39213,7 +39955,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "否",
       "value": "0"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
       "gutter": 0
     }
@@ -39258,20 +40000,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "状态",
       "width": "100"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "账号密码是否交接：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("账号密码是否交接：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "account_status",
       "rules": [{
         required: true,
         message: '请确认账号密码是否交接'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -39294,7 +40051,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "否",
       "value": "0"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
       "gutter": 0
     }
@@ -39335,20 +40092,35 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v("工作手机号")]), _vm._v(" "), _c('td', {
     staticClass: "t-l"
-  }, [_vm._v(_vm._s(_vm.tel))])])])])])], 1), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v(_vm._s(_vm.tel))])])])])])], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "部门工作是否交接：",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("部门工作是否交接：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "work_status",
       "rules": [{
         required: true,
         message: '请确认部门工作是否交接'
       }]
     }
-  }, [_c('el-col', {
-    attrs: {
-      "span": 11
-    }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -39371,11 +40143,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "label": "否",
       "value": "0"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "上传附件"
+      "gutter": 10
     }
-  }, [_c('el-upload', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("上传附件：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', [_c('el-upload', {
     staticClass: "upload-demo",
     attrs: {
       "multiple": "",
@@ -39390,11 +40173,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v("  点击上传")])], 1)], 1), _vm._v(" "), _c('h3', [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-form-item', {
+  }), _vm._v(" 点击上传")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('h3', [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "审批人"
+      "gutter": 10
     }
-  }, [_c('const-copy-person', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("审批人：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', [_c('const-copy-person', {
     attrs: {
       "isapplyright": true,
       "choicetype": 1,
@@ -39403,11 +40199,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleConstDialog": _vm.ToggleConstDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "抄送人"
+      "gutter": 10
     }
-  }, [_c('const-copy-person', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("抄送人：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', [_c('const-copy-person', {
     attrs: {
       "isapplyright": false,
       "choicetype": 2,
@@ -39416,7 +40223,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w150 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("部门工作是否交接：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 12,
+      "md": 10
+    }
+  }, [_c('el-form-item', {
     attrs: {
       "label": ""
     }
@@ -39435,7 +40259,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -39810,14 +40634,28 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("门店申请表")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("门店申请表")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "门店城市",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("门店城市：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "district",
       "rules": [{
         required: true,
@@ -39825,6 +40663,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-cascader', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择",
       "options": _vm.options,
@@ -39837,9 +40678,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.district"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "门店选址",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("门店选址：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "address",
       "rules": [{
         required: true,
@@ -39847,6 +40703,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请输入"
     },
@@ -39857,9 +40716,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.address"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "门店租金",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("门店租金：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
+      "label": "",
       "prop": "rental",
       "rules": [{
         required: true,
@@ -39867,6 +40742,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请输入"
     },
@@ -39877,9 +40755,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.rental"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "门店概述",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("门店概述：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
+      "label": "",
       "prop": "summary",
       "rules": [{
         required: true,
@@ -39887,6 +40781,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "textarea",
       "rows": 3,
@@ -39899,9 +40796,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.summary"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "上传附件"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("上传附件：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-upload', {
     staticClass: "upload-demo",
@@ -39918,9 +40825,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v("  点击上传")])], 1)], 1), _vm._v(" "), _c('h3', [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-form-item', {
+  }), _vm._v(" 点击上传")])], 1)], 1)], 1), _vm._v(" "), _c('h3', [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "审批人"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("审批人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -39931,9 +40851,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleConstDialog": _vm.ToggleConstDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "抄送人"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("抄送人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -39944,9 +40877,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": ""
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-button', {
     attrs: {
@@ -39963,7 +40907,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -40112,23 +41056,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('el-row', {
     staticClass: "search-wrap mb-lg"
-  }, [_c('el-row', [_c('el-col', {
+  }, [_c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("关键字：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "关键字",
       "prop": "keywords"
     }
   }, [_c('el-input', {
     attrs: {
-      "placeholder": "名称/库存编号/使用人"
+      "placeholder": "请输入"
     },
     model: {
       value: (_vm.ruleForm.keywords),
@@ -40137,16 +41095,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.keywords"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("申请时间：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "申请时间",
       "prop": "applyDate"
     }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "daterange",
       "placeholder": "选择日期范围"
@@ -40158,7 +41134,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.applyDate"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', [_c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     staticClass: "t-r",
     attrs: {
       "span": 24
@@ -40178,7 +41154,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isClear('ruleForm')
       }
     }
-  }, [_vm._v("清除")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("清除")])], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     staticClass: "t-l"
   }, [_c('el-col', {
     staticStyle: {
@@ -40222,20 +41198,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "name",
-      "label": "品牌",
-      "width": "400"
+      "label": "品牌"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "update_time",
       "label": "更新时间",
       "sortable": "custom",
-      "width": "250"
+      "width": "350"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "operation",
-      "label": "操作"
+      "label": "操作",
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -40371,6 +41347,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('el-dialog', {
+    staticClass: "constom-md-dialog",
     attrs: {
       "title": "增加需求明细",
       "visible": _vm.istableshow,
@@ -40388,10 +41365,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "model": _vm.ruleForm
     }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("需求名称：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "需求名称",
-      "label-width": "97px",
       "prop": "demand_name",
       "rules": [{
         required: true,
@@ -40399,6 +41390,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请输入"
     },
@@ -40409,10 +41403,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.demand_name"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "数量",
-      "label-width": "97px",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("数量：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 18
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "amount",
       "rules": [{
         required: true,
@@ -40420,6 +41428,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input-number', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "step": 1,
       "min": 1
@@ -40431,7 +41442,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.amount"
     }
-  })], 1)], 1), _vm._v(" "), _c('div', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('div', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -41644,23 +42655,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('el-row', {
     staticClass: "search-wrap mb-lg"
-  }, [_c('el-row', [_c('el-col', {
+  }, [_c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("关键字：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "关键字",
       "prop": "keywords"
     }
   }, [_c('el-input', {
     attrs: {
-      "placeholder": "名称/库存编号/使用人"
+      "placeholder": "请输入"
     },
     model: {
       value: (_vm.ruleForm.keywords),
@@ -41669,16 +42694,34 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.keywords"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     attrs: {
-      "span": 8
+      "xs": 24,
+      "md": 8
+    }
+  }, [_c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-md t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("申请时间：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20,
+      "md": 16
     }
   }, [_c('el-form-item', {
     attrs: {
-      "label": "申请时间",
       "prop": "applyDate"
     }
   }, [_c('el-date-picker', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "daterange",
       "placeholder": "选择日期范围"
@@ -41690,7 +42733,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.applyDate"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', [_c('el-col', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-col', {
     staticClass: "t-r",
     attrs: {
       "span": 24
@@ -41710,7 +42753,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isClear('ruleForm')
       }
     }
-  }, [_vm._v("清除")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+  }, [_vm._v("清除")])], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     staticClass: "t-l"
   }, [_c('el-col', {
     staticStyle: {
@@ -42906,15 +43949,73 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/repayment"
     }
-  }, [_vm._v("申请还款")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', {
+  }, [_vm._v("申请还款")])], 1), _vm._v(" "), _c('li', {
+    staticClass: "applyicon icon-forpayment"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/forpayment"
+    }
+  }, [_vm._v("申请付款")])], 1), _vm._v(" "), _c('li', {
+    staticClass: "applyicon icon-purchase"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/purchase"
+    }
+  }, [_vm._v("申请请购")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("行政相关")]), _vm._v(" "), _c('ul', {
     staticClass: "el-col el-col-24"
   }, [_c('li', {
+    staticClass: "applyicon icon-demand"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/demand"
+    }
+  }, [_vm._v("发起需求单")])], 1), _vm._v(" "), _c('li', {
+    staticClass: "applyicon icon-assetsrecipients"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/assetsrecipients"
+    }
+  }, [_vm._v("固定资产领用")])], 1), _vm._v(" "), _c('li', {
+    staticClass: "applyicon icon-assetsreturn"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/assetsreturn"
+    }
+  }, [_vm._v("固定资产归还")])], 1), _vm._v(" "), _c('li', {
     staticClass: "applyicon icon-chapter"
   }, [_c('router-link', {
     attrs: {
       "to": "/chapter"
     }
-  }, [_vm._v("申请用章")])], 1)])]) : _c('div', {
+  }, [_vm._v("申请用章")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("人事相关")]), _vm._v(" "), _c('ul', {
+    staticClass: "el-col el-col-24"
+  }, [_c('li', {
+    staticClass: "applyicon icon-positive"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/positive"
+    }
+  }, [_vm._v("申请转正")])], 1), _vm._v(" "), _c('li', {
+    staticClass: "applyicon icon-applyloan"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/applyleave"
+    }
+  }, [_vm._v("申请离职")])], 1), _vm._v(" "), _c('li', {
+    staticClass: "applyicon icon-approvetransfer"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/approvetransfer"
+    }
+  }, [_vm._v("申请调职")])], 1)]), _vm._v(" "), _c('h3', [_vm._v("门店相关")]), _vm._v(" "), _c('ul', {
+    staticClass: "el-col el-col-24"
+  }, [_c('li', {
+    staticClass: "applyicon icon-newstore"
+  }, [_c('router-link', {
+    attrs: {
+      "to": "/newstore"
+    }
+  }, [_vm._v("申请开店")])], 1)])]) : _c('div', {
     staticClass: "body"
   }, [_c('div', {
     staticClass: "app-home-wrap"
@@ -43172,16 +44273,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("固定资产领用申请表")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("固定资产领用申请表")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "资产明细"
+      "gutter": 10
     }
-  }, [_c('el-table', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("资产明细：\n            ")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20
+    }
+  }, [_c('el-form-item', [_c('el-table', {
     staticStyle: {
       "width": "100%",
       "margin-bottom": "20px"
@@ -43237,12 +44349,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
               _vm.deleteRow(scope.$index, _vm.tabledata)
             }
           }
-        }, [_vm._v("\n                                删除\n                            ")])]
+        }, [_vm._v("删除\n                                ")])]
       }
     }])
   })], 1), _vm._v(" "), _c('el-button', {
     attrs: {
-      "type": "primary"
+      "type": "primary",
+      "size": "small"
     },
     on: {
       "click": function($event) {
@@ -43251,9 +44364,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         })
       }
     }
-  }, [_vm._v("选择待预用资产")])], 1), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("选择待预用资产")])], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "说明",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("说明：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "des",
       "rules": [{
         required: true,
@@ -43273,9 +44402,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.des"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "上传附件"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("上传附件：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-upload', {
     staticClass: "upload-demo",
@@ -43283,7 +44423,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "multiple": "",
       "on-success": _vm.handlefileChange,
       "on-remove": _vm.handlefileRemove,
-      "action": "http://www.cheoa.com/oa_v1/upload/file"
+      "action": _vm.BaseUrl
     }
   }, [_c('el-button', {
     attrs: {
@@ -43291,11 +44431,26 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v("  点击上传")])], 1)], 1), _vm._v(" "), _c('h3', [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-form-item', {
+  }), _vm._v(" 点击上传")])], 1)], 1)], 1), _vm._v(" "), _c('h3', {
+    staticClass: "mt-0"
+  }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "审批人"
+      "gutter": 10
     }
-  }, [_c('const-copy-person', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("审批人：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', [_c('const-copy-person', {
     attrs: {
       "isapplyright": true,
       "choicetype": 1,
@@ -43304,11 +44459,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleConstDialog": _vm.ToggleConstDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "抄送人"
+      "gutter": 10
     }
-  }, [_c('const-copy-person', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("抄送人：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', [_c('const-copy-person', {
     attrs: {
       "isapplyright": false,
       "choicetype": 2,
@@ -43317,11 +44483,22 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": ""
+      "gutter": 10
     }
-  }, [_c('el-button', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', [_c('el-button', {
     attrs: {
       "type": "primary"
     },
@@ -43336,7 +44513,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -43410,20 +44587,32 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "ruleForm",
     staticClass: "demo-ruleForm",
     attrs: {
-      "model": _vm.ruleForm,
-      "label-width": "100px"
+      "model": _vm.ruleForm
     }
   }, [_c('h3', {
     staticClass: "mb-md"
-  }, [_vm._v("固定资产归还申请表")]), _vm._v(" "), _c('el-form-item', {
+  }, [_vm._v("固定资产归还申请表")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "资产明细"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("资产明细：\n            ")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap mb-md",
+    attrs: {
+      "xs": 24,
+      "sm": 16
     }
   }, [_c('el-table', {
     ref: "multipleTable",
     staticStyle: {
       "width": "100%",
-      "margin-bottom": "20px"
+      "margin-bottom": "7px"
     },
     attrs: {
       "data": _vm.tabledata,
@@ -43470,9 +44659,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "prop": "socket_number",
       "label": "库存编号"
     }
-  })], 1)], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "接收人",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("接收人：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "get_person",
       "rules": [{
         required: true,
@@ -43480,6 +44685,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "placeholder": "请选择"
     },
@@ -43498,9 +44706,25 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "value": item.value
       }
     })
-  }))], 1), _vm._v(" "), _c('el-form-item', {
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "说明",
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("说明：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', {
+    attrs: {
       "prop": "des",
       "rules": [{
         required: true,
@@ -43508,6 +44732,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }]
     }
   }, [_c('el-input', {
+    staticStyle: {
+      "width": "100%"
+    },
     attrs: {
       "type": "textarea",
       "rows": 3,
@@ -43520,16 +44747,27 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "ruleForm.des"
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "上传附件"
+      "gutter": 10
     }
-  }, [_c('el-upload', {
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("上传附件：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "card-wrap",
+    attrs: {
+      "xs": 24,
+      "sm": 10
+    }
+  }, [_c('el-form-item', [_c('el-upload', {
     staticClass: "upload-demo",
     attrs: {
       "multiple": "",
       "on-success": _vm.handlefileChange,
-      "action": "http://127.0.0.1:8081/oa_v1/upload/file"
+      "action": _vm.BaseUrl
     }
   }, [_c('el-button', {
     attrs: {
@@ -43537,9 +44775,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v("  点击上传")])], 1)], 1), _vm._v(" "), _c('h3', [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-form-item', {
+  }), _vm._v(" 点击上传")])], 1)], 1)], 1)], 1), _vm._v(" "), _c('h3', {
+    staticClass: "mt-0"
+  }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "审批人"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_c('span', {
+    staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("审批人：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -43550,9 +44803,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleConstDialog": _vm.ToggleConstDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": "抄送人"
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }, [_vm._v("抄送人：")]), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('const-copy-person', {
     attrs: {
@@ -43563,9 +44827,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "ToggleCopyDialog": _vm.ToggleCopyDialog
     }
-  })], 1), _vm._v(" "), _c('el-form-item', {
+  })], 1)], 1), _vm._v(" "), _c('el-row', {
     attrs: {
-      "label": ""
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 f14 mb-sm t-r t-xs-l",
+    attrs: {
+      "xs": 24
+    }
+  }), _vm._v(" "), _c('el-col', {
+    staticClass: "mb-lg",
+    attrs: {
+      "xs": 24,
+      "sm": 10
     }
   }, [_c('el-button', {
     attrs: {
@@ -43582,7 +44857,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.isVisible('ruleForm')
       }
     }
-  }, [_vm._v("取 消")])], 1)], 1)], 1)
+  }, [_vm._v("取 消")])], 1)], 1)], 1)], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -46910,4 +48185,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?6e7441792ed7f21a8007
+//# sourceMappingURL=index.js.map?64a6b7068c3d6ff6d5aa
