@@ -137,7 +137,7 @@ class AssetBackForm extends BaseForm
      */
     public function saveAssetGetList()
     {
-        $result = AssetGetList::updateAll(['status' => 4], ['in', 'id', $this->asset_back_ids]);
+        $result = AssetGetList::updateAll(['status' => AssetGetList::STATUS_BACK_IN], ['in', 'id', $this->asset_back_ids]);
         if(!$result) {
             throw new Exception('固定资产归还单创建失败');
         }

@@ -225,6 +225,7 @@ class AssetLogic extends Logic
     
     /**
      * 固定资产领取审批通过操作
+     * 在库存中取一条数据给申请人
      *
      * @param Apply $apply
      *
@@ -247,11 +248,13 @@ class AssetLogic extends Logic
             ])->orderBy(['id' => SORT_ASC])->one();
             //改变库存状态
             $assetList->status = 2;
+            $assetList->person_id = $apply->person_id;
             if (!$assetList->save()) {
                 throw new Exception('资产分配失败');
             }
             $v->asset_list_id = $assetList->id;
-            $v->status = 2;
+            $v->status = AssetGetList::STATUS_GET;
+            //更新借款记录
             if (!$v->save()) {
                 throw new Exception('资产分配失败');
             }
@@ -269,7 +272,7 @@ class AssetLogic extends Logic
      */
     public function assetGetCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => 3], ['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_BACK_SUCCESS], ['in', 'id', $apply->apply_id]);
     }
     
     /**
@@ -287,7 +290,7 @@ class AssetLogic extends Logic
          * @var AssetGetList $v
          */
         foreach ($assetGetList as $k => $v) {
-            $v->status = 5;
+            $v->status = AssetGetList::STATUS_BACK_SUCCESS;
             if ($v->save()) {
                 AssetList::updateAll(['status' => 1], ['id' => $v->asset_list_id]);
                 $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id);
@@ -305,7 +308,7 @@ class AssetLogic extends Logic
      */
     public function assetBackCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => 2], ['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET], ['in', 'id', $apply->apply_id]);
     }
     
     
@@ -370,6 +373,9 @@ class AssetLogic extends Logic
                 if($buyList->in_amount != $buyList->amount) {
                     $status = 1;
                 }
+                /**
+                 * @var Asset $asset
+                 */
                 $asset = Asset::find()->where([
                     'asset_type_id' => $buyList->asset_type_id,
                     'asset_brand_id' => $buyList->asset_brand_id,
