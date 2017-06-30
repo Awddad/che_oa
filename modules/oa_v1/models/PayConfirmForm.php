@@ -124,7 +124,7 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['remark'] = $this->tips;
     
             if($apply->type == 1) {
-                $param['other_name'] = $apply->person_name;
+                $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->expense->bank_card_id;
                 $param['other_bank'] = $apply->expense->bank_name;
             } elseif($apply->type == 2) {
