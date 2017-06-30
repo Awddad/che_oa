@@ -2117,6 +2117,7 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* unused harmony export service */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_core_js_promise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(131);
@@ -2136,6 +2137,8 @@ var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
     baseURL: '', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
+
+console.log(service);
 
 // request拦截器
 service.interceptors.request.use(function (config) {
@@ -17157,7 +17160,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             //console.log(typeof(this.$route.query.type));
-            switch (_this.$route.query.type) {
+            switch (_this.$route.query.type.toString()) {
                 case '1':
                     _this.counter = data.info.money;
                     _this.tableData = data.info.list;
@@ -20247,8 +20250,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 	computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isnav'])),
 	beforeCreate: function beforeCreate() {
-		var isnav = this.$route.query.isnav == null ? '1' : this.$route.query.isnav;
-		var pagenation = this.$route.query.pagenation == null ? '1' : this.$route.query.pagenation;
+		var isnav = this.$route.query.isnav == null ? 1 : this.$route.query.isnav;
+		var pagenation = this.$route.query.pagenation == null ? 1 : this.$route.query.pagenation;
 		localStorage.isnav = isnav;
 		this.$store.dispatch('SetIsnav', isnav);
 		if (document.body.clientWidth <= 768) {
@@ -21218,21 +21221,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isnav']), {
         sidebar: function sidebar() {
+            //console.log(this.$store.state.app.sidebar.opened);
             return this.$store.state.app.sidebar;
         }
     }),
     created: function created() {
-        if (this.isnav == 1) {
-            this.isshow = false;
-        } else {
-            this.isshow = true;
-        }
+        this.$store.dispatch('Setsidebar');
         this.$store.dispatch('Setpagenation', document.body.clientWidth);
     },
     mounted: function mounted() {
         var _this = this;
 
         window.onresize = function () {
+            _this.$store.dispatch('Setsidebar');
             _this.$store.dispatch('Setpagenation', document.body.clientWidth);
         };
     }
@@ -22319,7 +22320,7 @@ function CurDate() {
 var Global = {
     state: {
         BaseUrl: '/oa_v1/upload/file',
-        serverUrl: '',
+        serverUrl: '/',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -22608,7 +22609,7 @@ var Global = {
 var app = {
     state: {
         sidebar: {
-            opened: !+localStorage.getItem('sidebarStatus')
+            opened: localStorage.getItem('sidebarStatus') || false
         },
         isnav: localStorage.getItem('isnav') || 1,
         theme: 'default',
@@ -22617,28 +22618,12 @@ var app = {
     },
     mutations: {
         TOGGLE_SIDEBAR: function TOGGLE_SIDEBAR(state, data) {
-            if (state.isnav == 0) {
-                /*if (data <= 768) {
-                    Cookies.set('sidebarStatus', 0);
-                    state.sidebar.opened = !1;
-                } else {
-                    if(!state.sidebar.opened){
-                        Cookies.set('sidebarStatus', 1);
-                        state.sidebar.opened = !0;
-                    }else{
-                        Cookies.set('sidebarStatus', 0);
-                        state.sidebar.opened = !1;
-                    }
-                }*/
+            if (!state.sidebar.opened) {
+                localStorage.setItem("sidebarStatus", true);
             } else {
-                //alert(state.sidebar.opened);
-                if (state.sidebar.opened) {
-                    localStorage.setItem("sidebarStatus", 1);
-                } else {
-                    localStorage.setItem('sidebarStatus', 0);
-                }
-                state.sidebar.opened = !state.sidebar.opened;
+                localStorage.setItem('sidebarStatus', false);
             }
+            state.sidebar.opened = !state.sidebar.opened;
         },
         SET_Isnav: function SET_Isnav(state, data) {
             state.isnav = data;
@@ -22648,6 +22633,24 @@ var app = {
                 state.pagenation = 0;
             } else {
                 state.pagenation = 1;
+            }
+        },
+        TOGGLE_Setsidebar: function TOGGLE_Setsidebar(state, data) {
+            // console.log(state.sidebar.opened,localStorage.getItem("sidebarStatus"));
+            if (document.body.clientWidth <= 768) {
+                if (localStorage.getItem("sidebarStatus") != null && state.sidebar.opened == true) {
+                    localStorage.setItem("sidebarStatus", false);
+                    state.sidebar.opened = false;
+                } else if (localStorage.getItem("sidebarStatus") == null) {
+                    localStorage.setItem("sidebarStatus", true);
+                    state.sidebar.opened = true;
+                }
+            } else {
+                if (localStorage.getItem("sidebarStatus") != null && state.sidebar.opened == true) {
+                    alert(0);
+                    localStorage.setItem("sidebarStatus", true);
+                    state.sidebar.opened = true;
+                }
             }
         }
     },
@@ -22666,7 +22669,13 @@ var app = {
             var commit = _ref3.commit;
 
             commit('SET_pagenation', data);
+        },
+        Setsidebar: function Setsidebar(_ref4) {
+            var commit = _ref4.commit;
+
+            commit('TOGGLE_Setsidebar');
         }
+
     }
 };
 
@@ -27411,7 +27420,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".success_wrap[data-v-09c21faa]{width:90%;margin:0 auto;padding:50px 0}.success_wrap p[data-v-09c21faa]{line-height:1.5;padding:0 15px}.success_wrap .stepbox[data-v-09c21faa]{padding:16px 32px;background-color:#f7f7f7}.success_wrap .stepbox .ant-steps .ant-steps-title[data-v-09c21faa]{background:none!important}@media (max-width:768px){.success_wrap[data-v-09c21faa]{width:100%}.success_wrap p[data-v-09c21faa]{text-align:left}}.steps[data-v-09c21faa]{margin:64px auto;display:-webkit-box;display:-ms-flexbox;display:flex;width:100%}.steps .step[data-v-09c21faa]{-webkit-box-flex:20;-ms-flex:20;flex:20;color:#999;box-sizing:border-box}.steps .step .step-header[data-v-09c21faa]{position:relative;margin-bottom:10px;width:100%;height:28px}.steps .step .step-header .icon[data-v-09c21faa]{width:28px;height:28px;border-radius:50%;font-size:14px;line-height:28px;text-align:center;border:1px solid #999;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]{position:absolute;left:0;top:14px;width:100%;height:1px;padding-left:56px;padding-right:28px;background:none;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]:before{content:\"\";width:100%;height:100%;background:#999;display:block}.steps .step .step-title[data-v-09c21faa]{margin:10px 0;font-size:14px;font-weight:400;white-space:nowrap}.steps .step .step-content[data-v-09c21faa]{font-size:12px;font-weight:400;padding-bottom:20px}.steps .step[data-v-09c21faa]:last-child{-webkit-box-flex:1;-ms-flex:1;flex:1}.steps .step:last-child .step-header .line[data-v-09c21faa]:before{background:none}.steps .step.process .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#fff;background:#108ee9}.steps .step.process .step-title[data-v-09c21faa]{color:#000}.steps .step.finish .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#108ee9}.steps .step.finish .step-header .line[data-v-09c21faa]:before{background:#108ee9}.steps .step.error .step-header .icon[data-v-09c21faa]{border-color:#fc5746;color:#fc5746}.steps .step.error .step-title[data-v-09c21faa]{color:#fc5746}.steps .step.success[data-v-09c21faa]{-webkit-box-flex:1;-ms-flex:auto;flex:auto}.steps .step.success .step-header .icon[data-v-09c21faa]{border-color:#13ce66;color:#fff;background:#13ce66}@media screen and (max-width:768px){.success_wrap p[data-v-09c21faa]{text-align:justify}.steps[data-v-09c21faa]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}.steps .step[data-v-09c21faa]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.steps .step .step-header[data-v-09c21faa]{margin:0;-webkit-box-flex:1;-ms-flex:1;flex:1;height:65px}.steps .step .step-header .icon[data-v-09c21faa]{width:24px;height:24px;line-height:24px;font-size:10px}.steps .step .step-header .line[data-v-09c21faa]{left:14px;top:0;padding:40px 0 12px;width:1px;height:100%}.steps .step .step-body[data-v-09c21faa]{padding:0 0 0 20px;-webkit-box-flex:9;-ms-flex:9;flex:9}.steps .step .step-body .step-title[data-v-09c21faa]{margin-top:0;line-height:26px}}", ""]);
+exports.push([module.i, ".success_wrap[data-v-09c21faa]{width:90%;margin:0 auto;padding:50px 0}.success_wrap p[data-v-09c21faa]{line-height:1.5;padding:0 15px}.success_wrap .stepbox[data-v-09c21faa]{padding:16px 32px;background-color:#f7f7f7}.success_wrap .stepbox .ant-steps .ant-steps-title[data-v-09c21faa]{background:none!important}@media (max-width:768px){.success_wrap[data-v-09c21faa]{width:100%}.success_wrap p[data-v-09c21faa]{text-align:left}}.steps[data-v-09c21faa]{margin:64px auto;display:-webkit-box;display:-ms-flexbox;display:flex;width:100%}.steps .step[data-v-09c21faa]{-webkit-box-flex:20;-ms-flex:20;flex:20;color:#999;box-sizing:border-box}.steps .step .step-header[data-v-09c21faa]{position:relative;margin-bottom:10px;width:100%;height:28px}.steps .step .step-header .icon[data-v-09c21faa]{width:28px;height:28px;border-radius:50%;font-size:14px;line-height:28px;text-align:center;border:1px solid #999;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]{position:absolute;left:0;top:14px;width:100%;height:1px;padding-left:56px;padding-right:28px;background:none;box-sizing:border-box}.steps .step .step-header .line[data-v-09c21faa]:before{content:\"\";width:100%;height:100%;background:#999;display:block}.steps .step .step-title[data-v-09c21faa]{margin:10px 0;font-size:14px;font-weight:400;white-space:nowrap}.steps .step .step-content[data-v-09c21faa]{font-size:12px;font-weight:400;padding-bottom:20px}.steps .step[data-v-09c21faa]:last-child{-webkit-box-flex:1;-ms-flex:1;flex:1}.steps .step:last-child .step-header .line[data-v-09c21faa]:before{background:none}.steps .step.process .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#fff;background:#108ee9}.steps .step.process .step-title[data-v-09c21faa]{color:#000}.steps .step.finish .step-header .icon[data-v-09c21faa]{border-color:#108ee9;color:#108ee9}.steps .step.finish .step-header .line[data-v-09c21faa]:before{background:#108ee9}.steps .step.error .step-header .icon[data-v-09c21faa]{border-color:#fc5746;color:#fc5746}.steps .step.error .step-title[data-v-09c21faa]{color:#fc5746}.steps .step.success[data-v-09c21faa]{-webkit-box-flex:1;-ms-flex:auto;flex:auto}.steps .step.success .step-header .icon[data-v-09c21faa]{border-color:#13ce66;color:#fff;background:#13ce66}@media screen and (max-width:768px){.success_wrap[data-v-09c21faa]{padding-top:104px}.success_wrap p[data-v-09c21faa]{text-align:justify}.steps[data-v-09c21faa]{-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;margin:10px 0}.steps .step[data-v-09c21faa]{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}.steps .step .step-header[data-v-09c21faa]{margin:0;-webkit-box-flex:1;-ms-flex:1;flex:1;height:65px}.steps .step .step-header .icon[data-v-09c21faa]{width:24px;height:24px;line-height:24px;font-size:10px}.steps .step .step-header .line[data-v-09c21faa]{left:14px;top:0;padding:40px 0 12px;width:1px;height:100%}.steps .step .step-body[data-v-09c21faa]{padding:0 0 0 20px;-webkit-box-flex:9;-ms-flex:9;flex:9}.steps .step .step-body .step-title[data-v-09c21faa]{margin-top:0;line-height:26px}}", ""]);
 
 // exports
 
@@ -37379,7 +37388,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "app-wrapper",
     class: {
-      'hideSidebar': !_vm.sidebar.opened
+      'hideSidebar': _vm.sidebar.opened
     }
   }, [(_vm.isnav == 1) ? _c('div', {
     staticClass: "sidebar-wrapper"
@@ -37388,7 +37397,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   })], 1) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "main-container",
     class: {
-      'app-container': _vm.isshow
+      'app-container': _vm.isnav == 0
     }
   }, [_c('Headbar'), _vm._v(" "), _c('app-main')], 1)])
 },staticRenderFns: []}
@@ -43995,7 +44004,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "to": "/approvals/ccsend"
     }
-  }, [_c('span'), _c('b', [_vm._v("抄给我的")])])], 1)])]), _vm._v(" "), _c('div', {
+  }, [_c('span'), _c('b', [_vm._v("抄送给我")])])], 1)])]), _vm._v(" "), _c('div', {
     staticClass: "group"
   }, [_c('h3', [_vm._v("财务相关")]), _vm._v(" "), _c('ul', [_c('li', {
     staticClass: "icon-reimburse"
@@ -48135,4 +48144,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?84953051980f7fe27c4f
+//# sourceMappingURL=index.js.map?4e967639ba05c1961a52
