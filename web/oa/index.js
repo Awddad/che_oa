@@ -21232,12 +21232,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$store.dispatch('Setpagenation', document.body.clientWidth);
     },
     mounted: function mounted() {
-        var _this = this;
-
-        window.onresize = function () {
-            _this.$store.dispatch('Setsidebar');
-            _this.$store.dispatch('Setpagenation', document.body.clientWidth);
-        };
+        /*window.onresize = ()=>{
+            this.$store.dispatch('Setsidebar');
+            this.$store.dispatch('Setpagenation',document.body.clientWidth);
+        }*/
     }
 });
 
@@ -48145,4 +48143,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[230]);
-//# sourceMappingURL=index.js.map?0366266011704b588c70
+//# sourceMappingURL=index.js.map?6d49568cb272b4dc90ae
