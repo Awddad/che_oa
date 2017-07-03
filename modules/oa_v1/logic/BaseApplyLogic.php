@@ -101,7 +101,7 @@ class BaseApplyLogic extends Logic
             ];
         }
     
-        if($apply->cai_wu_need == 2 && $apply->status < 4 ) {
+        if($apply->cai_wu_need == 2 && in_array($apply->status, [1, 2, 3, 11]) ) {
             $data[] = [
                 "title" => "财务确认",
                 "name" => '',
