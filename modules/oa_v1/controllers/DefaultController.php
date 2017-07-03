@@ -235,10 +235,11 @@ class DefaultController extends BaseController
      */
     public function actionDown($path, $name)
     {
+        
         $rootPath = Yii::$app->basePath. '/web'.$path;
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename="'.$rootPath.'"');
+        header('Content-Disposition: attachment; filename="'.$name.'"');
         header('Content-Transfer-Encoding: binary');
-        readfile($name);
+        readfile($rootPath);
     }
 }
