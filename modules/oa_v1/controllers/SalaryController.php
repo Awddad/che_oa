@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\controllers;
 use app\modules\oa_v1\models\SalaryForm;
 use yii\web\UploadedFile;
 use yii;
+use app\modules\oa_v1\logic\SalaryLogic;
 
 /**
  * 薪酬
@@ -12,7 +13,20 @@ use yii;
 class SalaryController extends BaseController
 {
     /**
-     * 导入
+     * 获得token
+     */
+    public function actionGetToken()
+    {
+        $post = yii::$app->request->post();
+        $res = SalaryLogic::instance()->getTokenByPwd($this->arrPersonInfo, $post['pwd']);
+        if($res){
+            return $this->_return($res);
+        }
+        return $this->_returnError(400);
+    }
+    
+    /**
+     * 导入excel
      */
     public function actionImport()
     {
@@ -36,9 +50,16 @@ class SalaryController extends BaseController
      */
     public function actionGetList()
     {
-        $post = yii::$app->request->post();
+        $get = yii::$app->request->get();
+        $logic = SalaryLogic::instance();
+        if(!$logic->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
+            return $this->_returnError(405,null,null);
+        }
         $model = new SalaryForm();
-        $res = $model->getList($post);
+        $res = $model->getList($get,$this->arrPersonInfo,$this->arrPersonRoleInfo);
+        if(!$res){
+            return $this->_returnError(404);
+        }
         return $this->_return($res);
     }
 }
