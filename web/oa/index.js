@@ -3592,7 +3592,6 @@ var asyncRouterMap = [{
     component: __WEBPACK_IMPORTED_MODULE_2__views_main_Layout_vue___default.a,
     redirect: '/Administration/demandList',
     name: '行政',
-    hidden: true,
     children: [{ path: 'demandList', component: __WEBPACK_IMPORTED_MODULE_36__views_Administration_demandList_vue___default.a, name: '需求单列表' }, { path: 'applyList', component: __WEBPACK_IMPORTED_MODULE_37__views_Administration_applyList_vue___default.a, name: '请购列表' }, { path: 'inventoryManagement', component: __WEBPACK_IMPORTED_MODULE_38__views_Administration_inventoryManagement_vue___default.a, name: '库存管理' }, { path: 'inventoryDetails', component: __WEBPACK_IMPORTED_MODULE_39__views_Administration_inventoryDetails_vue___default.a, name: '库存详情', hidden: true }]
 }, {
     path: '/hire',
@@ -13158,7 +13157,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$store.dispatch('ApplyList_table', { page: 1, pageSize: 10 }).then(function (response) {
             var data = response.data.data;
             if (data.list.length > 0) {
-                for (var i = 1; i <= data, list.length; i++) {
+                for (var i = 1; i <= data.list.length; i++) {
                     if (i <= data.pages.perPage) {
                         _this.textstatus.push(false);
                     }
@@ -41671,8 +41670,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       fn: function(scope) {
         return [_c('el-input', {
           attrs: {
-            "value": scope.row.in_amount,
-            "disabled": "{}"
+            "value": scope.row.in_amount
           },
           on: {
             "blur": _vm.inputchange
@@ -50304,44 +50302,50 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('el-table-column', {
     attrs: {
       "prop": "id",
-      "label": "序号"
+      "label": "序号",
+      "width": "65"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "create_time",
-      "label": "申请时间"
+      "label": "申请时间",
+      "width": "150"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "apply_id",
-      "label": "审批单编号"
+      "label": "审批单编号",
+      "width": "200"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "person",
-      "label": "申请人"
+      "label": "申请人",
+      "width": "100"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "org",
-      "label": "部门"
+      "label": "部门",
+      "width": "200"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "detail",
-      "label": "需求内容",
-      "width": "150"
+      "label": "需求内容"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "status",
       "label": "状态",
-      "sortable": "custom"
+      "sortable": "custom",
+      "width": "100"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "prop": "operation",
-      "label": "操作"
+      "label": "操作",
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -54833,4 +54837,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[243]);
-//# sourceMappingURL=index.js.map?593fae1bea8e038e8d05
+//# sourceMappingURL=index.js.map?f459953898f22f27c632
