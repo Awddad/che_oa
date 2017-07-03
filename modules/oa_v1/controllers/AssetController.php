@@ -140,7 +140,8 @@ class AssetController extends BaseController
                 'asset_brand_name' => $v->asset_brand_name,
                 'name' => $v->name,
                 'amount' => $v->amount,
-                'price' => Yii::$app->formatter->asCurrency($v->price)
+                'price' => Yii::$app->formatter->asCurrency($v->price),
+                'total' => Yii::$app->formatter->asCurrency($v->price * $v->amount),
             ];
         }
   

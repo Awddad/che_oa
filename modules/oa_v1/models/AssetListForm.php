@@ -51,6 +51,9 @@ class AssetListForm extends Model
      */
     public function save()
     {
+        /**
+         * @var Asset $asset
+         */
         $asset = Asset::find()->where([
             'asset_type_id' => $this->asset_type_id,
             'asset_brand_id' => $this->asset_brand_id,
@@ -76,7 +79,7 @@ class AssetListForm extends Model
             if (!$asset->save()) {
                 throw new Exception('入库失败');
             }
-            $assetLogic->addAssetList($asset);
+            $assetLogic->addAssetList($asset, $this->amount);
             $transaction->commit();
             return $asset;
         } catch (Exception $e) {

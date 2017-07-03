@@ -398,7 +398,7 @@ class AssetLogic extends Logic
                 if (!$asset->save()) {
                     throw new Exception('入库失败');
                 }
-                $this->addAssetList($asset, $data['apply_id']);
+                $this->addAssetList($asset, $v['amount'], $data['apply_id']);
             }
             ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
             $transaction->commit();
@@ -414,20 +414,22 @@ class AssetLogic extends Logic
      *
      * @param Asset $asset
      * @param string $applyBuyId
+     * @param int $amount
      */
-    public function addAssetList($asset, $applyBuyId = '')
+    public function addAssetList($asset, $amount, $applyBuyId = '')
     {
         $data = [];
         $last = $this->getLastAssetNum();
-        for ($i = 0; $i < $asset->amount; $i++) {
-            $end = $this->formatEnd($last['endNum'] + 1, $last['length']);
+        $endNum = $last['endNum'];
+        for ($i = 0; $i < $amount; $i++) {
+            $endNum++;
             $data[] = [
                 $asset->id,
                 $asset->price,
                 1,
                 time(),
-                $last['begin'] . $end,
-                $last['begin'] . $end,
+                $last['begin'] . $endNum,
+                $last['begin'] . $endNum,
                 $applyBuyId
             ];
         }
@@ -443,27 +445,15 @@ class AssetLogic extends Logic
      */
     public function getLastAssetNum()
     {
+        /**
+         * @var AssetList $lastAssetList
+         */
         $lastAssetList = AssetList::find()->orderBy(['id' => SORT_DESC])->one();
-        $assetNumber = $lastAssetList->asset_number;
-        $begin = substr($assetNumber, 0, -5);
-        $end = substr($assetNumber, -5);
-        $length = strlen($end);
-        $endNum = preg_replace('/^0+/', '', $end);
+        $assetNumber = $lastAssetList->stock_number;
+        $begin = substr($assetNumber, 0, 5);
+        $endNum = substr($assetNumber, -7);
         
-        return compact('begin', 'length', 'endNum');
-    }
-    
-    /**
-     * 格式化
-     *
-     * @param $num
-     * @param $length
-     * @return string
-     */
-    public function formatEnd($num, $length)
-    {
-        $len = $length - strlen($num);
-        return str_pad($num, $len, '0', STR_PAD_LEFT);
+        return compact('begin', 'endNum');
     }
     
     /**
