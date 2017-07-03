@@ -184,7 +184,7 @@ class BasicAssetForm extends BaseForm
     	    $assetType->save();
     	    return ['status'=>true];
 	    }catch(\Exception $e){
-			$transaction->rollBack();
+			//$transaction->rollBack();
 			return ['status'=>false,'msg'=>$e->getMessage()];
 		}
 	}

@@ -225,4 +225,59 @@ class PeopleController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    
+    /**
+     * 修改文件
+     */
+    public function actionFileEdit()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_FILE_EDIT);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->editFiles($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    /**
+     * 获取文件
+     */
+    public function actionFileGet()
+    {
+        $get = yii::$app->request->get();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_FILE_GET);
+        $model->load(['PeopleForm'=>$get]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $data = $model->getFiles($this->arrPersonInfo);
+    
+        return $this->_return($data);
+    }
+    /**
+     * 删除文件
+     */
+    public function actionFileDel()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_FILE_DEL);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->delFiles($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }

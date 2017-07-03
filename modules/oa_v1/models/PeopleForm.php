@@ -19,6 +19,9 @@ class PeopleForm extends BaseForm
     const SCENARIO_ABILITY_EDIT = 'ability_edit';//修改能力评价
     const SCENARIO_ABILITY_GET = 'ability_get';//获得能力评价
     const SCENARIO_ABILITY_DEL = 'ability_del';//删除能力评价
+    const SCENARIO_FILE_EDIT = 'file_edit';//修改能力评价
+    const SCENARIO_FILE_GET = 'file_get';//获得能力评价
+    const SCENARIO_FILE_DEL = 'file_del';//删除能力评价
     
     public $id;
     public $company_name;
@@ -35,6 +38,7 @@ class PeopleForm extends BaseForm
     public $edu;
     public $name;
     public $level;
+    public $files;
     
     public $talent;
     public $employee;
@@ -67,10 +71,18 @@ class PeopleForm extends BaseForm
                 'on' => [self::SCENARIO_ABILITY_EDIT],
                 'message' => '{attribute}不能为空'
             ],
+            [
+                ['files'],
+                'required',
+                'on' => [self::SCENARIO_FILE_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
             ['id','required','on'=>[self::SCENARIO_WORK_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_PROJECT_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_EDU_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_ABILITY_DEL],'message' => '{attribute}不能为空'],
+            ['id','required','on'=>[self::SCENARIO_FILE_DEL],'message' => '{attribute}不能为空'],
+            
             ['talent','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
             ['employee','exist','targetClass'=>'\app\models\Employee','targetAttribute'=>'id','message'=>'员工不存在！'],
             ['start_time','date','format' => 'yyyy-mm','message' => '开始时间不正确'],
@@ -123,6 +135,17 @@ class PeopleForm extends BaseForm
                 ],
                 'message' => '技能不存在！'
             ],
+            [
+                'id',
+                'exist',
+                'targetClass' => '\app\models\PeopleFiles',
+                'on' => [
+                    self::SCENARIO_FILE_EDIT,
+                    self::SCENARIO_FILE_GET,
+                    self::SCENARIO_FILE_DEL
+                ],
+                'message' => '文件不存在！'
+            ],
         ];
     }
     
@@ -141,6 +164,9 @@ class PeopleForm extends BaseForm
             self::SCENARIO_ABILITY_EDIT => ['id','talent','employee','name','level'],
             self::SCENARIO_ABILITY_GET => ['id','talent','employee'],
             self::SCENARIO_ABILITY_DEL => ['id','talent','employee'],
+            self::SCENARIO_FILE_EDIT => ['id','talent','employee','files'],
+            self::SCENARIO_FILE_GET => ['id','talent','employee'],
+            self::SCENARIO_FILE_DEL => ['id','talent','employee'],
         ];
     }
     /**
@@ -441,7 +467,7 @@ class PeopleForm extends BaseForm
             $res = \app\models\PeopleAbility::findOne($this->id);
             $data = [];
             if($res){
-                $data = $this->eduAbility($res);
+                $data = $this->ability($res);
             }
         }else{
             if($this->talent){
@@ -452,7 +478,7 @@ class PeopleForm extends BaseForm
             $data = [];
             if($res){
                 foreach($res as $v){
-                    $data[] = $this->eduAbility($v);
+                    $data[] = $this->ability($v);
                 }
             }
         }
@@ -462,7 +488,7 @@ class PeopleForm extends BaseForm
      * 格式化技能评价
      * @param \app\models\PeopleAbility $model
      */
-    protected function eduAbility($model)
+    protected function ability($model)
     {
         return [
             'id' => $model->id,
@@ -471,7 +497,80 @@ class PeopleForm extends BaseForm
         ];
     }
     
+    /**
+     * 修改文件
+     * @param array $user
+     */
+    public function editFiles($user)
+    {
+        $model = $this->getModel('\app\models\PeopleFiles');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        $model->file = json_encode($this->files);
+         
+        if(!$model->save()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'编辑文件',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+    /**
+     * 删除文件
+     * @param array $user
+     */
+    public function delFiles($user)
+    {
+        $model = $this->getModel('\app\models\PeopleFiles');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        if(!$model->delete()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'删除文件',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
     
+    /**
+     * 获得文件
+     */
+    public function getFiles()
+    {
+        if($this->id){
+            $res = \app\models\PeopleFiles::findOne($this->id);
+            $data = [];
+            if($res){
+                $data = $this->files($res);
+            }
+        }else{
+            if($this->talent){
+                $res = \app\models\PeopleFiles::find()->where(['talent_id'=>$this->talent])->orderBy(['id'=>SORT_ASC])->all();
+            }elseif($this->employee){
+                $res = \app\models\PeopleFiles::find()->where(['employee_id'=>$this->employee])->orderBy(['id'=>SORT_ASC])->all();
+            }
+            $data = [];
+            if($res){
+                foreach($res as $v){
+                    $data[] = $this->files($v);
+                }
+            }
+        }
+        return $data;
+    }
+    /**
+     * 格式化文件
+     * @param \app\models\PeopleFiles $model
+     */
+    protected function files($model)
+    {
+        return [
+            'id' => $model->id,
+            'files' => json_decode($model->file, true),//文件
+        ];
+    }
     
     
     
