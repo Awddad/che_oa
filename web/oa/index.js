@@ -2101,7 +2101,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: '', // api的base_urlhttp://192.168.1.128:8010
+    baseURL: 'http://www.cheoa.com', // api的base_urlhttp://192.168.1.128:8010
     timeout: 5000 // 请求超时时间
 });
 
@@ -18321,7 +18321,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl', 'pagenation']), {
         ApplyID: function ApplyID() {
             return this.$store.state.reimburse.reimburse_addApplyID;
         },
@@ -21598,8 +21598,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: '/oa_v1/upload/file',
-        serverUrl: '',
+        BaseUrl: 'http://www.cheoa.com/oa_v1/upload/file',
+        serverUrl: 'http://www.cheoa.com',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -37422,13 +37422,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('i', {
     staticClass: "el-icon-upload2"
-  }), _vm._v(" 点击上传")])], 1), _vm._v(" "), _c('div', {
+  }), _vm._v(" 点击上传")])], 1), _vm._v(" "), (_vm.pagenation == 1) ? _c('div', {
     staticClass: "modal-download f12 mt-sm"
   }, [_vm._v("\n                    报销差旅费和接待费请上传报销明细。\n                    "), _c('a', {
     attrs: {
       "href": "/template/车城体系财务模板.xlsx"
     }
-  }, [_vm._v("模板下载")])])], 1)], 1), _vm._v(" "), _c('h3', {
+  }, [_vm._v("模板下载")])]) : _vm._e()], 1)], 1), _vm._v(" "), _c('h3', {
     staticClass: "mt-lg mb-md"
   }, [_vm._v("审批人和抄送人")]), _vm._v(" "), _c('el-row', {
     attrs: {
@@ -45407,4 +45407,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[227]);
-//# sourceMappingURL=index.js.map?47fd32f10302077b97ed
+//# sourceMappingURL=index.js.map?2be858bc755c24288e7a
