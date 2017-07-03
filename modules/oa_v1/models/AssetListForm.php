@@ -79,7 +79,7 @@ class AssetListForm extends Model
             if (!$asset->save()) {
                 throw new Exception('入库失败');
             }
-            $assetLogic->addAssetList($asset);
+            $assetLogic->addAssetList($asset, $this->amount);
             $transaction->commit();
             return $asset;
         } catch (Exception $e) {
