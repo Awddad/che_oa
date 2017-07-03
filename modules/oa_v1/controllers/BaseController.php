@@ -75,6 +75,8 @@ class BaseController extends Controller
      * @创建时间：2017-05-04
      * @param $action
      * @return boolean
+     *
+     * @throws HttpException
      */
     public function beforeAction($action)
     {
