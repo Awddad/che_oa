@@ -65,7 +65,7 @@ class LoginController extends Controller
                 if ($sign == md5($osType.$uid.$time.'che.com')) {
                     $objPerson = Person::findOne(['person_id' => $uid]);
                     if (empty($objPerson)) {
-                        die('未找到用户');
+                        die('<h3>您没OA权限，请联系管理员</h3>');
                     }
                     $session->set('USER_INFO', $objPerson);
                 }
@@ -79,7 +79,7 @@ class LoginController extends Controller
             if ($sign == md5($osType . $uid . $time . 'che.com')) {
                 $objPerson = Person::findOne(['person_id' => $uid]);
                 if (empty($objPerson)) {
-                    die('未找到用户');
+                    die('<h3>您没OA权限，请联系管理员</h3>');
                 }
                 $session->set('USER_INFO', $objPerson);
             }
