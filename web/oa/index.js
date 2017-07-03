@@ -2101,7 +2101,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://www.cheoa.com' // api的base_urlhttp://192.168.1.128:8010
+    baseURL: '' // api的base_urlhttp://192.168.1.128:8010
 });
 
 // request拦截器
@@ -21597,8 +21597,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: 'http://www.cheoa.com/oa_v1/upload/file',
-        serverUrl: 'http://www.cheoa.com',
+        BaseUrl: '/oa_v1/upload/file',
+        serverUrl: '',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -45406,4 +45406,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[227]);
-//# sourceMappingURL=index.js.map?2f5db874e31376ad9f70
+//# sourceMappingURL=index.js.map?16b6d9e80da856a4a2c5
