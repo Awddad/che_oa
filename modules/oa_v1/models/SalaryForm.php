@@ -61,7 +61,7 @@ class SalaryForm extends BaseForm
             'setIndexSheetByName' => true,
             'getOnlySheet' => 'Sheet1',
         ]);
-        if($this->checkTitle($arr[1])){
+        if($this->checkTitle($arr[1]) && $arr[2]){
             array_shift($arr);
             $date = date('Ym',strtotime($file_name));
             $s_key = $this->s_key;
@@ -110,7 +110,7 @@ jdf;
             SalaryLogic::instance()->addLog($sql,$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }
-        return ['status'=>false,'msg'=>'文件不正确，请重新下载模版'];
+        return ['status'=>false,'msg'=>'文件不正确，请重新下载模版后填入数据'];
     }
     
     protected function checkTitle($title)
@@ -165,6 +165,7 @@ jdf;
          
         $query = Salary::find()->select([
             'empno' ,
+            'date',
             'cost_depart' ,// '成本中心',
             'depart' ,//varchar(20) NOT NULL DEFAULT '' COMMENT '部门',
             'position',// varchar(20) NOT NULL DEFAULT '' COMMENT '职位',
@@ -232,6 +233,7 @@ jdf;
         
         foreach($res as $k => $v){
             $res[$k]['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
+            $res[$k]['entry_time'] = date('Y-m-d',strtotime($v['entry_time']));
         }
          
         return [

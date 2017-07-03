@@ -360,13 +360,13 @@ class TalentForm extends BaseForm
 	    $tran = yii::$app->db->beginTransaction();
 	    try{
 	        if(!$model->save()){//添加人事表
-	            throw new Exception(current($model->getFirstErrors()));
+	            throw new \Exception(current($model->getFirstErrors()));
 	        }
 	        $talent->status_face = $talent->status_face ?: 1;
 	        $talent->employee_id = $model->id;
 	        $talent->status = 5;
 	        if(!$talent->save()){//保存人才信息
-	            throw new Exception(current($talent->getFirstErrors()));
+	            throw new \Exception(current($talent->getFirstErrors()));
 	        }
 	        TalentLogic::instance()->addLog($this->id,'面试通过，录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
 	        $tran->commit();

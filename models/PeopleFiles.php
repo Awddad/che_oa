@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "oa_people_files".
  *
  * @property integer $id
- * @property string $varchar
+ * @property string $file
  * @property integer $talent_id
  * @property integer $employee_id
  */
@@ -29,7 +29,7 @@ class PeopleFiles extends \yii\db\ActiveRecord
     {
         return [
             [['talent_id', 'employee_id'], 'integer'],
-            [['varchar'], 'string', 'max' => 200],
+            [['file'], 'string', 'max' => 255],
         ];
     }
 
@@ -40,7 +40,7 @@ class PeopleFiles extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'varchar' => 'Varchar',
+            'file' => 'File',
             'talent_id' => 'Talent ID',
             'employee_id' => 'Employee ID',
         ];
