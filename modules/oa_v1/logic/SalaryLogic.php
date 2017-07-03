@@ -8,7 +8,7 @@ use app\models\Employee;
 class SalaryLogic extends BaseLogic
 {
     private $_seeKey = '7/p%^^&haha1>)999';
-
+    private $_token_time = 60;
     
     /**
      * 通过密码获得token
@@ -27,7 +27,7 @@ class SalaryLogic extends BaseLogic
             if ($pwd == md5($_pwd)) {
                 $token = md5($strOs.$person['person_id'].'##'.$pwd.'@'.time());
                 $key = 'salary_access_token_'.$strOs.'_'.$person['person_id'];
-                yii::$app->cache->set($key, $token,10*60);
+                yii::$app->cache->set($key, $token,$this->_token_time);
                 return $token;
 	        }
 	    }

@@ -18,6 +18,7 @@ class PeopleForm extends BaseForm
     const SCENARIO_EDU_EXP_GET = 'edu_exp_get';//获得教育经验
     const SCENARIO_ABILITY_EDIT = 'ability_edit';//修改能力评价
     const SCENARIO_ABILITY_GET = 'ability_get';//获得能力评价
+    const SCENARIO_ABILITY_DEL = 'ability_del';//删除能力评价
     
     public $id;
     public $company_name;
@@ -32,6 +33,8 @@ class PeopleForm extends BaseForm
     public $school_name;
     public $major;
     public $edu;
+    public $name;
+    public $level;
     
     public $talent;
     public $employee;
@@ -58,15 +61,24 @@ class PeopleForm extends BaseForm
                 'on'=>[self::SCENARIO_EDU_EXP_EDIT],
                 'message' => '{attribute}不能为空'
             ],
+            [
+                ['name','level'],
+                'required',
+                'on' => [self::SCENARIO_ABILITY_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
             ['id','required','on'=>[self::SCENARIO_WORK_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_PROJECT_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_EDU_EXP_DEL],'message' => '{attribute}不能为空'],
+            ['id','required','on'=>[self::SCENARIO_ABILITY_DEL],'message' => '{attribute}不能为空'],
             ['talent','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
             ['employee','exist','targetClass'=>'\app\models\Employee','targetAttribute'=>'id','message'=>'员工不存在！'],
             ['start_time','date','format' => 'yyyy-mm','message' => '开始时间不正确'],
             ['end_time','date','format' => 'yyyy-mm','message' => '结束时间不正确'],
             ['company_id','exist','targetClass'=>'\app\models\PeopleWorkExperience','targetAttribute'=>'id','message'=>'公司不存在！'],
             ['edu','exist','targetClass'=>'\app\models\Educational','targetAttribute'=>'id','message'=>'学历不正确！'],
+            ['name','string','max'=>20,'message'=>'技能名太长'],
+            ['level','in', 'range' => [1, 2, 3, 4], 'message'=>'技能等级不正确'],
             [
                 'id',
                 'exist',
@@ -100,6 +112,17 @@ class PeopleForm extends BaseForm
                 ],
                 'message' => '教育经历不存在！'
             ],
+            [
+                'id',
+                'exist',
+                'targetClass' => '\app\models\PeopleAbility',
+                'on' => [
+                    self::SCENARIO_ABILITY_EDIT,
+                    self::SCENARIO_ABILITY_GET,
+                    self::SCENARIO_ABILITY_DEL
+                ],
+                'message' => '技能不存在！'
+            ],
         ];
     }
     
@@ -115,8 +138,9 @@ class PeopleForm extends BaseForm
             self::SCENARIO_EDU_EXP_EDIT => ['id','talent','employee','school_name','major','edu','start_time','end_time'],
             self::SCENARIO_EDU_EXP_DEL => ['id','talent','employee'],
             self::SCENARIO_EDU_EXP_GET => ['id','talent','employee'],
-            self::SCENARIO_ABILITY_EDIT => ['id','talent','employee'],
+            self::SCENARIO_ABILITY_EDIT => ['id','talent','employee','name','level'],
             self::SCENARIO_ABILITY_GET => ['id','talent','employee'],
+            self::SCENARIO_ABILITY_DEL => ['id','talent','employee'],
         ];
     }
     /**
@@ -370,7 +394,82 @@ class PeopleForm extends BaseForm
         ];
     }
     
+    /**
+     * 修改技能评价
+     * @param array $user
+     */
+    public function editAbility($user)
+    {
+        $model = $this->getModel('\app\models\PeopleAbility');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        $model->ability_name = $this->name;
+        $model->level = $this->level;
+         
+        if(!$model->save()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'编辑技能评价',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+    /**
+     * 删除技能评价
+     * @param array $user
+     */
+    public function delAbility($user)
+    {
+        $model = $this->getModel('\app\models\PeopleAbility');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        if(!$model->delete()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'删除技能评价',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
     
+    /**
+     * 获得技能评价
+     */
+    public function getAbility()
+    {
+        if($this->id){
+            $res = \app\models\PeopleAbility::findOne($this->id);
+            $data = [];
+            if($res){
+                $data = $this->eduAbility($res);
+            }
+        }else{
+            if($this->talent){
+                $res = \app\models\PeopleAbility::find()->where(['talent_id'=>$this->talent])->orderBy(['id'=>SORT_ASC])->all();
+            }elseif($this->employee){
+                $res = \app\models\PeopleAbility::find()->where(['employee_id'=>$this->employee])->orderBy(['id'=>SORT_ASC])->all();
+            }
+            $data = [];
+            if($res){
+                foreach($res as $v){
+                    $data[] = $this->eduAbility($v);
+                }
+            }
+        }
+        return $data;
+    }
+    /**
+     * 格式化技能评价
+     * @param \app\models\PeopleAbility $model
+     */
+    protected function eduAbility($model)
+    {
+        return [
+            'id' => $model->id,
+            'name' => $model->ability_name,//技能名
+            'level' => $model->level,//技能等级
+        ];
+    }
     
     
     

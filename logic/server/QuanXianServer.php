@@ -616,15 +616,16 @@ class QuanXianServer extends Server
             $arrBankList = []; // oa_person_bank_info表的入库数据
             foreach ($arrRtn['data']['data'] as $val) {
                 $arrEmployee[] = [
-    					'person_id' => $val['id'],
-    					'name' => $val['name'],
-    					'org_id' => $val['organization_id'],
-    					'profession' => $val['position_id'],
-    					'phone' => $val['phone'],
-    					'email' => $val['email'],
-                        'status' => 2,
-                        'employee_type' => EmployeeType::find()->where(['slug'=>'shiyong'])->one()->id,
-    			];
+                    'person_id' => $val['id'],
+                    'name' => $val['name'],
+                    'org_id' => $val['organization_id'],
+                    'profession' => $val['position_id'],
+                    'phone' => $val['phone'],
+                    'email' => $val['email'],
+                    'status' => 2,
+                    'employee_type' => EmployeeType::find()->where(['slug' => 'shiyong'])->one()->id,
+                    'leave_time' => $val['deleted_at'] ? date('Y-m-d', $val['deleted_at']) : '',
+                ];
     			//银行卡信息
     			if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
     			{
@@ -641,6 +642,15 @@ class QuanXianServer extends Server
     				}
     			}
     		}
+    		//处理arrEmployee
+    		$tmp_employee  = Employee::find()->select('id,person_id')->where(['>','person_id',0])->all();
+    		$employee = [];
+    		foreach($tmp_employee as $v){
+    		    $employee[$v['person_id']] = $v['id'];
+    		}
+    		foreach($arrEmployee as $k=>$v){
+    		    $arrEmployee[$k]['id'] = isset($employee[$v['person_id']])?$employee[$v['person_id']]:null;
+    		}
     		//更新入库 - oa_employee
     		$strTable = Employee::tableName();
     		$arrKeys = array_keys($arrEmployee[0]);
@@ -651,7 +661,7 @@ class QuanXianServer extends Server
     		$strTable = PersonBankInfo::tableName();
     		$arrKeys = array_keys($arrBankList[0]);
     		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrBankList, 'id');
-    		$result = Yii::$app->db->createCommand($strSql)->execute();
+    		Yii::$app->db->createCommand($strSql)->execute();
     		
     		return $result;
     	}
