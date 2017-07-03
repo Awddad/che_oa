@@ -170,4 +170,59 @@ class PeopleController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    
+    /**
+     * 修改技能评价
+     */
+    public function actionAbilityEdit()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_ABILITY_EDIT);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->editAbility($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    /**
+     * 获取技能评价
+     */
+    public function actionAbilityGet()
+    {
+        $get = yii::$app->request->get();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_ABILITY_GET);
+        $model->load(['PeopleForm'=>$get]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $data = $model->getAbility($this->arrPersonInfo);
+    
+        return $this->_return($data);
+    }
+    /**
+     * 删除技能评价
+     */
+    public function actionAbilityDel()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_ABILITY_DEL);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->delAbility($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }
