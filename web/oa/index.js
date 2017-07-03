@@ -17689,12 +17689,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //审批单下载
         approve_attachment_download: function approve_attachment_download() {
-            window.open(window.location.host + '/oa_v1/default/get-pdf?apply_id=' + this.apply_id);
+            window.open('http://' + window.location.host + '/oa_v1/default/get-pdf?apply_id=' + this.apply_id);
         },
 
         //附件下载
         attachment_download: function attachment_download(index, row) {
-            window.open(window.location.host + '/oa_v1/default/down?path=' + row.url + '&name=' + row.name + '.' + row.ext);
+            //console.log('http://'+window.location.host);
+            window.open('http://' + window.location.host + '/oa_v1/default/down?path=' + row.url + '&name=' + row.name + '.' + row.ext);
         },
         Pass_approve: function Pass_approve(des) {
             var _this2 = this;
@@ -20453,12 +20454,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         //审批单下载
         approve_attachment_download: function approve_attachment_download() {
-            window.open(window.location.host + '/oa_v1/default/get-pdf?apply_id=' + this.apply_id);
+            window.open('http://' + window.location.host + '/oa_v1/default/get-pdf?apply_id=' + this.apply_id);
         },
 
         //附件下载
         attachment_download: function attachment_download(index, row) {
-            window.open(window.location.host + '/oa_v1/default/down?path=' + row.url + '&name=' + row.name + '.' + row.ext);
+            window.open('http://' + window.location.host + '/oa_v1/default/down?path=' + row.url + '&name=' + row.name + '.' + row.ext);
         },
         ToggleDialog: function ToggleDialog() {
             this.isCollectPayment = false;
@@ -54832,4 +54833,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[243]);
-//# sourceMappingURL=index.js.map?4857bfe98c1c057ca7f9
+//# sourceMappingURL=index.js.map?593fae1bea8e038e8d05
