@@ -364,6 +364,7 @@ class TalentForm extends BaseForm
 	        }
 	        $talent->status_face = $talent->status_face ?: 1;
 	        $talent->employee_id = $model->id;
+	        $talent->status = 5;
 	        if(!$talent->save()){//保存人才信息
 	            throw new Exception(current($talent->getFirstErrors()));
 	        }

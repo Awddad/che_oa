@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use app\modules\oa_v1\logic\BackLogic;
 use yii\helpers\ArrayHelper;
 use app\models\Salary;
+use app\models\Employee;
 
 class SalaryForm extends BaseForm
 {
@@ -155,7 +156,7 @@ jdf;
     }
     
     
-    public function getList($params)
+    public function getList($params,$user,$arrPersonRole)
     {
         $keywords = ArrayHelper::getValue($params,'keywords',null);
         $page = ArrayHelper::getValue($params,'page',1);
@@ -202,9 +203,19 @@ jdf;
             $keywords = mb_convert_encoding($keywords,'UTF-8','auto');
             $query->andWhere(['like', 'name', $keywords]);
         }
+        //日期
         if($date){
             $date = date('Ym',strtotime($date));
             $query->andWhere(['date'=>$date]);
+        }
+        //权限
+        if(!SalaryLogic::instance()->isHr($arrPersonRole)){
+            $emp = Employee::find()->where(['person_id' => $user['person_id']])->one();
+            if($emp && $emp->empno){
+                $query -> andWhere(['empno' => $emp->empno]);
+            }else{
+                return false;
+            }
         }
         
         //分页
@@ -212,7 +223,7 @@ jdf;
             'defaultPageSize' => $page_size,
             'totalCount' => $query->count(),
         ]);
-         
+        //echo $query->createCommand()->getRawSql();die();
         $res = $query->orderBy("id desc")
         ->offset($pagination->offset)
         ->limit($pagination->limit)
