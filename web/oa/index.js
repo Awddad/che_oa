@@ -2101,8 +2101,7 @@ if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://www.cheoa.com', // api的base_urlhttp://192.168.1.128:8010
-    timeout: 5000 // 请求超时时间
+    baseURL: 'http://www.cheoa.com' // api的base_urlhttp://192.168.1.128:8010
 });
 
 // request拦截器
@@ -45407,4 +45406,4 @@ module.exports = function listToStyles (parentId, list) {
 
 /***/ })
 ],[227]);
-//# sourceMappingURL=index.js.map?2be858bc755c24288e7a
+//# sourceMappingURL=index.js.map?2f5db874e31376ad9f70
