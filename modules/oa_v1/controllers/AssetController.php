@@ -198,13 +198,14 @@ class AssetController extends BaseController
                 'asset_number' => $v->asset_number,
                 'status' => $v::STATUS[$v->status],
                 'price' => Yii::$app->formatter->asCurrency($v->price),
-                'org' => '',
-                'use_person' => ''
             ];
             if($v->status == 2 && $v->person_id) {
                 $person = Person::findOne($v->person_id);
                 $data['use_person'] = $person->person_name;
                 $data['org'] = $person->org_full_name;
+            } else {
+                $data['use_person'] = '--';
+                $data['org'] = '--';
             }
         }
         return $this->_return([
