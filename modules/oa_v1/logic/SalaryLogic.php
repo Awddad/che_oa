@@ -3,11 +3,67 @@ namespace app\modules\oa_v1\logic;
 
 use yii;
 use app\models\SalaryLog;
+use app\models\Employee;
 
 class SalaryLogic extends BaseLogic
 {
+    private $_seeKey = '7/p%^^&haha1>)999';
+
+    
+    /**
+     * 通过密码获得token
+     * @param arra $person 登入用户
+     * @param string $pwd 密码（md5）
+     * @param string $strOs 平台
+     * @return string|boolean
+     */
+    public function getTokenByPwd($person, $pwd,$strOs = 'web')
+    {
+        $emp = Employee::find()->where([
+            'person_id' => $person['person_id']
+        ])->one();
+        if ($emp && $emp->id_card) {
+            $_pwd = substr($emp->id_card, - 6);
+            if ($pwd == md5($_pwd)) {
+                $token = md5($strOs.$person['person_id'].'##'.$pwd.'@'.time());
+                $key = 'salary_access_token_'.$strOs.'_'.$person['person_id'];
+                yii::$app->cache->set($key, $token,10*60);
+                return $token;
+	        }
+	    }
+	    return false;
+	}
 	
+	/**
+	 * 验证token
+	 * @param string $token
+	 * @param array $person 登入用户
+	 * @param string $strOs 平台
+	 */
+	public function checkToken($token,$person,$strOs = 'web')
+	{
+	    if($token){
+	        $key = 'salary_access_token_'.$strOs.'_'.$person['person_id'];
+	        $_token = yii::$app->cache->get($key);
+	        if($token === $_token){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 	
+	/**
+	 * 是否是人事
+	 * @param array $arrPersonRole
+	 */
+	public function isHr($arrPersonRole)
+	{
+	    if(in_array('all_salary',$arrPersonRole['roleInfo'])){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
 	
 	
 	/**
