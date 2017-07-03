@@ -66,18 +66,18 @@ class FileForm extends Model
 
         $rootPath = $basePath.$filePath;
         $data = [];
-        foreach ($files as  $file) {
+        foreach ($files as $file) {
             $ext = $file->getExtension();
-            if (!in_array($ext, ['doc','xlsx','pdf', 'xls', 'docx', 'jpg', 'gif', 'png'])) {
+            if (!in_array($ext, ['doc', 'xlsx', 'pdf', 'xls', 'docx', 'jpg', 'gif', 'png'])) {
                 $this->addError($name, '格式错误');
                 return false;
             }
             //去掉空格
-            $randName = trim($file->name);
+            $randName = md5(trim($file->name) . time()) . '.' . $ext;
             if (!file_exists($rootPath)) {
                 mkdir($rootPath, 0777, true);
             }
-            $fileName = $rootPath.$randName;
+            $fileName = $rootPath . $randName;
             $file->saveAs($fileName);
             //$baseUrl = 'http://'.$_SERVER['HTTP_HOST'];
             $data[] = [
@@ -85,7 +85,7 @@ class FileForm extends Model
                 'ext' => $ext,
                 'url' => $filePath . $randName
             ];
-         
+        
         }
         return $data;
     }
