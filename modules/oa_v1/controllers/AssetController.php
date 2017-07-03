@@ -190,6 +190,14 @@ class AssetController extends BaseController
          * @var AssetList $v
          */
         foreach ($model as $k => $v) {
+            if($v->status == 2 && $v->person_id) {
+                $person = Person::findOne($v->person_id);
+                $usePerson = $person->person_name;
+                $org = $person->org_full_name;
+            } else {
+                $usePerson = '--';
+                $org = '--';
+            }
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
@@ -198,15 +206,9 @@ class AssetController extends BaseController
                 'asset_number' => $v->asset_number,
                 'status' => $v::STATUS[$v->status],
                 'price' => Yii::$app->formatter->asCurrency($v->price),
+                'use_person' => $usePerson,
+                'org' => $org,
             ];
-            if($v->status == 2 && $v->person_id) {
-                $person = Person::findOne($v->person_id);
-                $data['use_person'] = $person->person_name;
-                $data['org'] = $person->org_full_name;
-            } else {
-                $data['use_person'] = '--';
-                $data['org'] = '--';
-            }
         }
         return $this->_return([
             'list' => $data,
