@@ -64,19 +64,23 @@ class LoginController extends Controller
                 $sign = Yii::$app->request->get('sign');
                 if ($sign == md5($osType.$uid.$time.'che.com')) {
                     $objPerson = Person::findOne(['person_id' => $uid]);
+                    if (empty($objPerson)) {
+                        die('未找到用户');
+                    }
                     $session->set('USER_INFO', $objPerson);
                 }
             }
         }
         if ($osType == 'crm') {
-            // uid 不相等时 清除session
-            if ($objPerson->person_id != $uid) {
-                Yii::$app->getSession()->destroy();
-            }
+            // 清除session
+            Yii::$app->getSession()->destroy();
             $time = Yii::$app->request->get('time');
             $sign = Yii::$app->request->get('sign');
             if ($sign == md5($osType . $uid . $time . 'che.com')) {
                 $objPerson = Person::findOne(['person_id' => $uid]);
+                if (empty($objPerson)) {
+                    die('未找到用户');
+                }
                 $session->set('USER_INFO', $objPerson);
             }
         }

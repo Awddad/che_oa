@@ -59,7 +59,7 @@ class QuanxianController extends Controller
             //菜单信息变动
         }
         
-        echo '更新成功，影响数据条数:' . $intResult;
+        echo '更新成功，影响数据条数:' . $intResult ? : 0;
         die();
     }
 }
