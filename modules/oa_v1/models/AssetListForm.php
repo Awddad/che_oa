@@ -51,6 +51,9 @@ class AssetListForm extends Model
      */
     public function save()
     {
+        /**
+         * @var Asset $asset
+         */
         $asset = Asset::find()->where([
             'asset_type_id' => $this->asset_type_id,
             'asset_brand_id' => $this->asset_brand_id,

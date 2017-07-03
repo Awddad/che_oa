@@ -419,8 +419,10 @@ class AssetLogic extends Logic
     {
         $data = [];
         $last = $this->getLastAssetNum();
+        $endNum = $last['endNum'];
         for ($i = 0; $i < $asset->amount; $i++) {
-            $end = $this->formatEnd($last['endNum'] + 1, $last['length']);
+            $endNum++;
+            $end = $this->formatEnd($endNum, $last['length']);
             $data[] = [
                 $asset->id,
                 $asset->price,
@@ -443,11 +445,14 @@ class AssetLogic extends Logic
      */
     public function getLastAssetNum()
     {
+        /**
+         * @var AssetList $lastAssetList
+         */
         $lastAssetList = AssetList::find()->orderBy(['id' => SORT_DESC])->one();
-        $assetNumber = $lastAssetList->asset_number;
-        $begin = substr($assetNumber, 0, -5);
+        $assetNumber = $lastAssetList->stock_number;
+        $begin = substr($assetNumber, 0, 7);
         $end = substr($assetNumber, -5);
-        $length = strlen($end);
+        $length = 5;
         $endNum = preg_replace('/^0+/', '', $end);
         
         return compact('begin', 'length', 'endNum');
