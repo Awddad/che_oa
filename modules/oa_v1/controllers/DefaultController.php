@@ -14,6 +14,7 @@ use app\modules\oa_v1\logic\PdfLogic;
 use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Menu;
+use app\logic\server\QuanXianServer;
 
 
 /**
@@ -260,4 +261,15 @@ class DefaultController extends BaseController
         }
         return $this->_returnError(500, '', '未找到相关项目');
     }
+    
+    /**
+     * 员工数据同步
+     */
+    public function actionSync()
+    {
+        $objQx = new QuanXianServer();
+        $objQx->curlUpdateAllUser();
+        return $this->_return(null);
+    }
+    
 }
