@@ -81,7 +81,7 @@ class ApplyBuyController extends BaseController
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
