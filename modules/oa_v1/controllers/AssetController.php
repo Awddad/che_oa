@@ -162,17 +162,27 @@ class AssetController extends BaseController
         $param = Yii::$app->request->get();
         $query = AssetList::find()->where(['asset_id' => $asset_id]);
     
-        $keyword = ArrayHelper::getValue($param, 'keyword');
-        if($keyword) {
+        $status = ArrayHelper::getValue($param, 'status');
+        if ($status) {
             $query->andWhere([
-                'like','name', $keyword
+                'status' => $status
             ]);
         }
-        $time = ArrayHelper::getValue($param, 'time');;
+    
+        $time = ArrayHelper::getValue($param, 'time');
         if (!empty($time) && strlen($time > 20)) {
             $beforeTime = strtotime(substr($time, 0, 10));
             $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
+        }
+    
+        $keyword = ArrayHelper::getValue($param, 'keyword');
+        if($keyword) {
+            $query->andWhere([
+                'or',
+                ['like','name', $keyword],
+                ['like','asset_number', $keyword],
+            ]);
         }
     
         $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
