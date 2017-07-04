@@ -159,27 +159,29 @@ class AssetController extends BaseController
     public function actionAssetList($asset_id)
     {
         $param = Yii::$app->request->get();
-        $query = AssetList::find()->where(['asset_id' => $asset_id]);
+        $query = AssetList::find()->innerJoin('oa_asset', 'oa_asset.id = oa_asset_list.asset_id')->where([
+            'oa_asset_list.asset_id' => $asset_id
+        ]);
     
         $status = ArrayHelper::getValue($param, 'status');
         if ($status) {
             $query->andWhere([
-                'status' => $status
+                'oa_asset_list.status' => $status
             ]);
         }
     
         $beforeTime = ArrayHelper::getValue($param, 'start_time');;
         $afterTime = ArrayHelper::getValue($param, 'end_time');;
         if ($beforeTime && $afterTime) {
-            $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
+            $query->andWhere(['between', 'oa_asset_list.create_time', $beforeTime, $afterTime]);
         }
     
         $keyword = ArrayHelper::getValue($param, 'keywords');
         if($keyword) {
             $query->andWhere([
                 'or',
-                ['like','name', $keyword],
-                ['like','asset_number', $keyword],
+                ['like','oa_asset.name', $keyword],
+                ['like','oa_asset_list.asset_number', $keyword],
             ]);
         }
     

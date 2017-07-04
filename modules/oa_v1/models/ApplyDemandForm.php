@@ -109,7 +109,7 @@ class ApplyDemandForm extends BaseForm
     public function checkApplyBuyId($attribute)
     {
         if ($this->scenario == self::CONFIRM_BUY) {
-            $applyBuy = ApplyBuy::findOne($this->$attribute);
+            $applyBuy = Apply::findOne($this->$attribute);
             if (!$applyBuy  || $applyBuy->status != 99 ) {
                 $this->addError($attribute, '请购单不存在或者未审核通过');
             }
