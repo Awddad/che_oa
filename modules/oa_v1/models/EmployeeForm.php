@@ -200,7 +200,7 @@ class EmployeeForm extends BaseForm
                 'employee_type' => $v->employee_type > 0 ? $v->employeeType->name : '',
                 'entry_time' => $v->entry_time,
                 'leave_time' => $v->leave_time,
-                'entry' => $v->person_id>0 ? 1:0,//是否已入职 1：已入职  0：未入职
+                'entry' => $v->person_id>0 ? '已入职':'未入职',//是否已入职 1：已入职  0：未入职
             ];
         }
          
