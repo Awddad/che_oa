@@ -118,7 +118,7 @@ class AssetController extends BaseController
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
@@ -162,20 +162,30 @@ class AssetController extends BaseController
         $param = Yii::$app->request->get();
         $query = AssetList::find()->where(['asset_id' => $asset_id]);
     
-        $keyword = ArrayHelper::getValue($param, 'keyword');
-        if($keyword) {
+        $status = ArrayHelper::getValue($param, 'status');
+        if ($status) {
             $query->andWhere([
-                'like','name', $keyword
+                'status' => $status
             ]);
         }
-        $time = ArrayHelper::getValue($param, 'time');;
+    
+        $time = ArrayHelper::getValue($param, 'time');
         if (!empty($time) && strlen($time > 20)) {
             $beforeTime = strtotime(substr($time, 0, 10));
             $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $keyword = ArrayHelper::getValue($param, 'keyword');
+        if($keyword) {
+            $query->andWhere([
+                'or',
+                ['like','name', $keyword],
+                ['like','asset_number', $keyword],
+            ]);
+        }
+    
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
@@ -190,6 +200,14 @@ class AssetController extends BaseController
          * @var AssetList $v
          */
         foreach ($model as $k => $v) {
+            if($v->status == 2 && $v->person_id) {
+                $person = Person::findOne($v->person_id);
+                $usePerson = $person->person_name;
+                $org = $person->org_full_name;
+            } else {
+                $usePerson = '--';
+                $org = '--';
+            }
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
@@ -198,14 +216,9 @@ class AssetController extends BaseController
                 'asset_number' => $v->asset_number,
                 'status' => $v::STATUS[$v->status],
                 'price' => Yii::$app->formatter->asCurrency($v->price),
-                'org' => '',
-                'use_person' => ''
+                'use_person' => $usePerson,
+                'org' => $org,
             ];
-            if($v->status == 2 && $v->person_id) {
-                $person = Person::findOne($v->person_id);
-                $data['use_person'] = $person->person_name;
-                $data['org'] = $person->org_full_name;
-            }
         }
         return $this->_return([
             'list' => $data,
@@ -268,7 +281,7 @@ class AssetController extends BaseController
         $param = Yii::$app->request->get();
         $query = AssetListLog::find()->where(['asset_list_id' => $asset_list_id]);
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
