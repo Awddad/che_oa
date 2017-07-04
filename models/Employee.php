@@ -14,6 +14,7 @@ use Yii;
  * @property integer $profession
  * @property string $phone
  * @property string $email
+ * @property integer $sex
  * @property string $id_card
  * @property string $nation
  * @property integer $political
@@ -26,6 +27,7 @@ use Yii;
  * @property string $leave_time
  * @property integer $educational
  * @property integer $current_location
+ * @property integer $age
  * @property string $birthday
  * @property integer $employee_type
  * @property integer $person_id
@@ -46,14 +48,13 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['org_id', 'profession', 'political', 'marriage', 'status', 'type', 'educational', 'current_location', 'employee_type', 'person_id'], 'integer'],
+            [['org_id', 'profession', 'sex', 'political', 'marriage', 'status', 'type', 'educational', 'current_location', 'age', 'employee_type', 'person_id'], 'integer'],
             [['empno', 'name', 'entry_time', 'leave_time'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
             [['email'], 'string', 'max' => 50],
             [['id_card', 'birthday'], 'string', 'max' => 25],
             [['nation', 'native'], 'string', 'max' => 15],
             [['work_time'], 'string', 'max' => 10],
-            [['person_id'], 'unique'],
         ];
     }
 
@@ -70,6 +71,7 @@ class Employee extends \yii\db\ActiveRecord
             'profession' => 'Profession',
             'phone' => 'Phone',
             'email' => 'Email',
+            'sex' => 'Sex',
             'id_card' => 'Id Card',
             'nation' => 'Nation',
             'political' => 'Political',
@@ -82,6 +84,7 @@ class Employee extends \yii\db\ActiveRecord
             'leave_time' => 'Leave Time',
             'educational' => 'Educational',
             'current_location' => 'Current Location',
+            'age' => 'Age',
             'birthday' => 'Birthday',
             'employee_type' => 'Employee Type',
             'person_id' => 'Person ID',
@@ -104,6 +107,15 @@ class Employee extends \yii\db\ActiveRecord
     public function getJob()
     {
         return $this->hasOne(Job::className(), ['id'=>'profession']);
+    }
+    
+    /**
+     * 组织
+     * @return ActiveQuery
+     */
+    public function getOrg()
+    {
+        return $this->hasOne(Org::className(), ['org_id'=>'org_id']);
     }
     
     /**

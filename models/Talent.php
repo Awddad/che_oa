@@ -117,4 +117,13 @@ class Talent extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Educational::className(), ['id'=>'educational']);
     }
+    
+    /**
+     * 人才类型
+     * @return ActiveQuery
+     */
+    public function getPersonType()
+    {
+        return $this->hasOne(PersonType::className(), ['id'=>'person_type']);
+    }
 }
