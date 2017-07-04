@@ -111,10 +111,9 @@ class AssetController extends BaseController
                 'like','name', $keyword
             ]);
         }
-        $time = ArrayHelper::getValue($param, 'time');;
-        if (!empty($time) && strlen($time > 20)) {
-            $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
+        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
+        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        if ($beforeTime && $afterTime) {
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
@@ -169,10 +168,9 @@ class AssetController extends BaseController
             ]);
         }
     
-        $time = ArrayHelper::getValue($param, 'time');
-        if (!empty($time) && strlen($time > 20)) {
-            $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
+        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
+        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        if ($beforeTime && $afterTime) {
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
@@ -204,9 +202,17 @@ class AssetController extends BaseController
                 $person = Person::findOne($v->person_id);
                 $usePerson = $person->person_name;
                 $org = $person->org_full_name;
+                $use = AssetGetList::find()->where(['status' => 1, 'person_id' =>$v->person_id])->one();
+                if ($use) {
+                    $useDay = round((time()-$use->update_time)/3600/24);
+                } else {
+                    $useDay = '--';
+                }
+                
             } else {
                 $usePerson = '--';
                 $org = '--';
+                $useDay = '--';
             }
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
@@ -218,6 +224,7 @@ class AssetController extends BaseController
                 'price' => Yii::$app->formatter->asCurrency($v->price),
                 'use_person' => $usePerson,
                 'org' => $org,
+                'use_day' => $useDay
             ];
         }
         return $this->_return([

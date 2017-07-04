@@ -74,10 +74,9 @@ class ApplyDemandController extends BaseController
                 ['like','title', $keyword]
             ]);
         }
-        $time = ArrayHelper::getValue($param, 'time');;
-        if (!empty($time) && strlen($time > 20)) {
-            $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
+        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
+        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        if ($beforeTime && $afterTime) {
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
         
@@ -101,7 +100,7 @@ class ApplyDemandController extends BaseController
             $detail = implode(',', ArrayHelper::getColumn($v->applyDemand, 'name'));
             
             $data[] = [
-                'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'apply_id' => $v->apply_id,
                 'create_time' => date('Y-m-d H:i', $v->create_time),
                 'person' => $v->person,
