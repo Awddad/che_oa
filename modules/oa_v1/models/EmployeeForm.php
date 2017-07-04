@@ -116,7 +116,7 @@ class EmployeeForm extends BaseForm
             'roles_id' => Role::find()->where(['slug'=>'yuangong'])->one()->id,
             'org_id'=> $model->org_id,
             'position_id' => $model->profession,
-            'phone' => $model->account->tel,
+            'phone' => $model->account->tel?:$model->phone,
         ];
         //权限系统添加用户
         $objQx = new QuanXianServer();
