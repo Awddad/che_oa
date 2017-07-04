@@ -199,7 +199,7 @@ class ApplyBuyForm extends BaseForm
                 $v['asset_type_id'],
                 AssetLogic::instance()->getAssetType($v['asset_type_id']),
                 $v['asset_brand_id'],
-                AssetLogic::instance()->getAssetType($v['asset_brand_id']),
+                AssetLogic::instance()->getAssetBrand($v['asset_brand_id']),
                 $v['name'],
                 $v['price'],
                 $v['amount'],
