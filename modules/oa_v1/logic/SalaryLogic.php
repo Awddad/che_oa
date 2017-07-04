@@ -8,7 +8,7 @@ use app\models\Employee;
 class SalaryLogic extends BaseLogic
 {
     private $_seeKey = '7/p%^^&haha1>)999';
-    private $_token_time = 60;
+    private $_token_time = 10*60;
     
     /**
      * 通过密码获得token
