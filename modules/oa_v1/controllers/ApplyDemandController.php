@@ -66,7 +66,7 @@ class ApplyDemandController extends BaseController
             'type' => 6
         ]);
         
-        $keyword = ArrayHelper::getValue($param, 'keyword');
+        $keyword = ArrayHelper::getValue($param, 'keywords');
         if($keyword) {
             $query->andWhere([
                 'or',
