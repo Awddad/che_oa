@@ -52,7 +52,8 @@ class SalaryController extends BaseController
     {
         $get = yii::$app->request->get();
         $logic = SalaryLogic::instance();
-        if(!$logic->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
+        //if(!$logic->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
+        if(!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo)){
             return $this->_returnError(405,null,null);
         }
         $model = new SalaryForm();

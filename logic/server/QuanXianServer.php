@@ -657,7 +657,7 @@ class QuanXianServer extends Server
     		//更新入库 - oa_employee
     		$strTable = Employee::tableName();
     		$arrKeys = array_keys($arrEmployee[0]);
-    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id',['status','employee_type']);
+    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id',['status','employee_type','phone','email']);
     		$result= Yii::$app->db->createCommand($strSql)->execute();
                 
             // 更新入库 - oa_person_bank_info表
