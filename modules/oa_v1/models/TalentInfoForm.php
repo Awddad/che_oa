@@ -32,6 +32,14 @@ class TalentInfoForm extends BaseForm
     public $want_salary;
     public $now_salary;
     
+    public $status_arr = [
+        '1' => '待沟通',
+        '2' => '待考试',
+        '3' => '待面试',
+        '4' => '不合适',
+        '5' => '录用',
+    ];
+    
     public function rules()
     {
         return [
@@ -154,7 +162,8 @@ class TalentInfoForm extends BaseForm
             'native' => $model->native,
             'political' => $model->political,
             'nation' => $model->nation,
-            'job_status' => $model->job_status
+            'job_status' => $model->job_status,
+            'status' => $this->status_arr[$model->status]
         ];
         return ['status'=>true,'data'=>$data];
     }
