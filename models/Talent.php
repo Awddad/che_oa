@@ -100,4 +100,21 @@ class Talent extends \yii\db\ActiveRecord
             'employee_id' => 'Employee ID',
         ];
     }
+    /**
+     * 职位
+     * @return ActiveQuery
+     */
+    public function getProfession()
+    {
+        return $this->hasOne(Job::className(), ['id'=>'job']);
+    }
+    
+    /**
+     * 学历
+     * @return ActiveQuery
+     */
+    public function getEdu()
+    {
+        return $this->hasOne(Educational::className(), ['id'=>'educational']);
+    }
 }

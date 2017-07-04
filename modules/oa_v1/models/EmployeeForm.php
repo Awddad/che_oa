@@ -196,7 +196,7 @@ class EmployeeForm extends BaseForm
                 'employee_id' => $v->id,
                 'name' => $v->name,
                 'phone' => $v->phone,
-                'profession' => $v->job->name,
+                'profession' => empty($v->job)?'':$v->job->name,
                 'employee_type' => $v->employee_type > 0 ? $v->employeeType->name : '',
                 'entry_time' => $v->entry_time,
                 'leave_time' => $v->leave_time,
