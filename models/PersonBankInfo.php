@@ -6,7 +6,6 @@ use Yii;
 
 /**
  * This is the model class for table "oa_person_bank_info".
- * 公司员工银行卡信息表
  *
  * @property integer $id
  * @property string $bank_name
@@ -31,10 +30,10 @@ class PersonBankInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'person_id'], 'required'],
-            [['id', 'is_salary', 'person_id'], 'integer'],
+            [['is_salary', 'person_id'], 'integer'],
+            [['person_id'], 'required'],
             [['bank_name', 'bank_name_des'], 'string', 'max' => 255],
-            [['bank_card_id'], 'string', 'max' => 25],
+            [['bank_card_id'], 'string', 'max' => 50],
         ];
     }
 
@@ -44,7 +43,7 @@ class PersonBankInfo extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => '主键id，同步与权限系统',
+            'id' => '主键id',
             'bank_name' => '银行名称',
             'bank_name_des' => '支行名称',
             'bank_card_id' => '银行卡号码',

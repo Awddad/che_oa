@@ -126,4 +126,17 @@ class Employee extends \yii\db\ActiveRecord
     {
         return $this->hasOne(EmployeeAccount::className(),['employee_id'=>'id']);
     }
+    
+    /**
+     * 银行卡
+     * @return ActiveQuery
+     */
+    public function getBankCard()
+    {
+        if($this->person_id){
+            return $this->hasMany(PersonBankInfo::className(),['person_id'=>'person_id']);
+        }else{
+            return null;
+        }
+    }
 }

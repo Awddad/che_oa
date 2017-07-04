@@ -101,4 +101,99 @@ class EmployeeController extends BaseController
         }
     }
     
+    
+    
+    /**
+     * 获得员工帐号信息
+     */
+    public function actionGetAccount()
+    {
+        $id = yii::$app->request->get('id');
+        if($id){
+            $model = new EmployeeInfoForm();
+            $res = $model->getAccount($id);
+            if($res['status']){
+                return $this->_return($res['data']);
+            }else{
+                return $this->_returnError(400,$res['msg']);
+            }
+        }
+        return $this->_returnError(403,'id不能为空');
+    }
+    
+    /**
+     * 编辑员工帐号信息
+     */
+    public function actionEditAccount()
+    {
+        $post = yii::$app->request->post();
+        $model = new EmployeeInfoForm();
+        $model->setScenario($model::SCENARIO_EMP_ACCOUNT_EDIT);
+        $model->load(['EmployeeInfoForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->saveAccount($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    
+    /**
+     * 获得员工银行卡信息
+     */
+    public function actionGetBank()
+    {
+        $id = yii::$app->request->get('id');
+        if($id){
+            $model = new EmployeeInfoForm();
+            $res = $model->getBankCards($id);
+            if($res['status']){
+                return $this->_return($res['data']);
+            }else{
+                return $this->_returnError(400,$res['msg']);
+            }
+        }
+        return $this->_returnError(403,'id不能为空');
+    }
+    /**
+     * 删除银行卡
+     */
+    public function actionDelBank()
+    {
+        $post = yii::$app->request->post();
+        $model = new EmployeeInfoForm();
+        $model->setScenario($model::SCENARIO_EMP_BANK_DEL);
+        $model->load(['EmployeeInfoForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->delBankCard($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    /**
+     * 编辑银行卡
+     */
+    public function actionEditBank()
+    {
+        $post = yii::$app->request->post();
+        $model = new EmployeeInfoForm();
+        $model->setScenario($model::SCENARIO_EMP_BANK_EDIT);
+        $model->load(['EmployeeInfoForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->saveBankCard($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }
