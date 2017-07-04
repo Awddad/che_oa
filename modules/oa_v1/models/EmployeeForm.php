@@ -202,6 +202,7 @@ class EmployeeForm extends BaseForm
                 'entry_time' => $v->entry_time,
                 'leave_time' => $v->leave_time,
                 'entry' => $v->person_id>0 ? '已入职':'未入职',//是否已入职 1：已入职  0：未入职
+                'entry_status' => $v->person_id>0 ? 1 : 0,//是否已入职 1：已入职  0：未入职
                 'org' => empty($org = Org::findOne($v->org_id))?'': ($org->org_short_name ?:$org->org_name),
             ];
             unset($org);
