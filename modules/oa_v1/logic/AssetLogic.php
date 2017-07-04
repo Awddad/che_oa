@@ -123,7 +123,7 @@ class AssetLogic extends Logic
         if (isset($param['keyword'])) {
             $query->andWhere([
                 'or',
-                ['like', 'asset_type_name', $param['keyword']],
+                ['like', 'asset_type_name', $param['keywords']],
                 ['like', 'name', $param['keyword']],
             ]);
         }

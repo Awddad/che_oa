@@ -105,7 +105,7 @@ class AssetController extends BaseController
         $param = Yii::$app->request->get();
         $query = Asset::find()->where([]);
     
-        $keyword = ArrayHelper::getValue($param, 'keyword');
+        $keyword = ArrayHelper::getValue($param, 'keywords');
         if($keyword) {
             $query->andWhere([
                 'like','name', $keyword
@@ -174,7 +174,7 @@ class AssetController extends BaseController
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
-        $keyword = ArrayHelper::getValue($param, 'keyword');
+        $keyword = ArrayHelper::getValue($param, 'keywords');
         if($keyword) {
             $query->andWhere([
                 'or',
