@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\controllers;
 use app\modules\oa_v1\models\EmployeeForm;
 use yii;
 use app\modules\oa_v1\models\EmployeeInfoForm;
+use app\modules\oa_v1\logic\AssetLogic;
 
 /**
  * 员工
@@ -196,4 +197,18 @@ class EmployeeController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    
+    /**
+     * 待归还资产
+     * @return array
+     */
+    public function actionCanBackAsset()
+    {
+        $id = yii::$app->request->get('id');
+        if($id){
+            $data = AssetLogic::instance()->getCanBackAsset($id);
+            return $this->_return($data);
+        }
+        return $this->_returnError(403,'id不能为空');
+    } 
 }
