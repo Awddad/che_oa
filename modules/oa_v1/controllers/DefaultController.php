@@ -3,6 +3,7 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\logic\MyTcPdf;
+use app\logic\server\Server;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\BaoXiaoList;
@@ -241,5 +242,22 @@ class DefaultController extends BaseController
         header('Content-Disposition: attachment; filename="'.$name.'"');
         header('Content-Transfer-Encoding: binary');
         readfile($rootPath);
+    }
+    
+    /**
+     * 获取用户拥有的项目
+     *
+     * @return array
+     */
+    public function actionAllProjects()
+    {
+        $param = Yii::$app->params['quan_xian'];
+        $personId = $this->arrPersonInfo->person_id;
+        $url = $param['auth_api_url'].'/users/'.$personId.'/projects?_token='.$param['auth_token'];
+        $data = Server::instance()->httpGet($url);
+        if(!empty($data) && $data['success'] == true && !empty($data['data'])) {
+            return $this->_return($data['data']);
+        }
+        return $this->_returnError(500, '', '未找到相关项目');
     }
 }

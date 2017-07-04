@@ -33,7 +33,7 @@ use app\models\RoleOrgPermission;
 class BaseController extends Controller
 {
     /**
-     * @var User|array $arrPersonInfo
+     * @var  array |User $arrPersonInfo
      */
     public $arrPersonInfo = [];//用户登录信息保存
     
