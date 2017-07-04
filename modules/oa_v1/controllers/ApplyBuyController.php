@@ -74,10 +74,9 @@ class ApplyBuyController extends BaseController
                 ['like','title', $keyword]
             ]);
         }
-        $time = ArrayHelper::getValue($param, 'time');;
-        if (!empty($time) && strlen($time > 20)) {
-            $beforeTime = strtotime(substr($time, 0, 10));
-            $afterTime = strtotime('+1day', strtotime(substr($time, -10)));
+        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
+        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        if ($beforeTime && $afterTime) {
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
