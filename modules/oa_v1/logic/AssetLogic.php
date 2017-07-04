@@ -368,6 +368,9 @@ class AssetLogic extends Logic
                     throw new Exception('入库失败');
                 }
                 $buyList->in_amount += $v['amount'];
+                if($buyList->amount < $buyList->in_amount) {
+                    throw new Exception('库存错误');
+                }
                 $buyList->save();
                 //采购数 不等于入库数
                 if($buyList->in_amount != $buyList->amount) {
