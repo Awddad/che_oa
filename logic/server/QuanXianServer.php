@@ -61,6 +61,7 @@ class QuanXianServer extends Server
             'update_user' => $this->preUrl . '/users/%d/update',//修改用户
             'delete_user' => $this->preUrl . '/users/%d/delete',//删除用户
             'user_detail' => $this->preUrl . '/users/detail',//用户详情
+            'user_del_bankcards' => $this->preUrl .'/users/bankcards',//删除银行卡
         ];
     }
     
@@ -282,10 +283,12 @@ class QuanXianServer extends Server
             $result = Yii::$app->db->createCommand($strSql)->execute();
             
             //更新入库 - oa_person_bank_info表
+            /* 银行卡信息OA自己维护 2017-07-04
             $strTable = PersonBankInfo::tableName();
             $arrKeys = array_keys($arrBankList[0]);
             $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrBankList, 'id');
-            $result = Yii::$app->db->createCommand($strSql)->execute();
+            $result = Yii::$app->db->createCommand($strSql)->execute(); 
+            */
             /*
             if(!empty($arrBankList))
             {
@@ -656,13 +659,15 @@ class QuanXianServer extends Server
     		$arrKeys = array_keys($arrEmployee[0]);
     		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id',['status','employee_type']);
     		$result= Yii::$app->db->createCommand($strSql)->execute();
-    	
-    		//更新入库 - oa_person_bank_info表
-    		$strTable = PersonBankInfo::tableName();
-    		$arrKeys = array_keys($arrBankList[0]);
-    		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrBankList, 'id');
-    		Yii::$app->db->createCommand($strSql)->execute();
-    		
+                
+            // 更新入库 - oa_person_bank_info表
+            /* 银行卡信息OA自己维护 2017-07-04 
+            $strTable = PersonBankInfo::tableName();
+            $arrKeys = array_keys($arrBankList[0]);
+            $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrBankList, 'id');
+            Yii::$app->db->createCommand($strSql)->execute(); 
+            */
+            
     		return $result;
     	}
     	return false;
@@ -717,7 +722,7 @@ class QuanXianServer extends Server
     
     /**
      * 与权限系统交互 修改用户
-     * @param array $params [name,email,org_id,position_id]
+     * @param array $params [name,email,org_id,position_id,bank_cards]
      * @return boolean
      */
     public function curlEditUser($params)
@@ -729,6 +734,8 @@ class QuanXianServer extends Server
     	];
     	$params['org_id'] && $arrPost['organization_id'] = $params['org_id'];
     	$params['position_id'] && $arrPost['position_id'] = $params['position_id'];
+    	$params['bank_cards'] && $arrPost['bank_cards'] = $params['bank_cards'];
+    	$params['phone'] && $arrPost['phone'] = $params['phone'];
     	
     	$url = sprintf($this->arrApiUrl['update_user'],$params['person_id']);
     	$arrRtn = $this->thisHttpPost($url, $arrPost);
@@ -737,6 +744,32 @@ class QuanXianServer extends Server
     		return true;
     	}
     	return false;
+    }
+    
+    
+    /**
+     * 与权限系统交互 删除银行卡
+     * @param int $user_id 用户id
+     * @param int $bank_id 银行卡id
+     * @return boolean
+     */
+    public function curlDelBank($user_id,$bank_id)
+    {
+        $arrPost = [
+            '_token' => $this->_token,
+            'user_id' => $user_id,
+            'bank_id' => $bank_id,
+        ];
+        $arrRtn = $this->thisHttpPost($this->arrApiUrl['user_del_bankcards'], $arrPost);
+        if( $arrRtn['success'] == 1)//接口处理数据成功
+        {
+            $model = PersonBankInfo::findOne($bank_id);
+            if($model){
+                $model->delete();
+            }
+            return true;
+        }
+        return false;
     }
     
     /**

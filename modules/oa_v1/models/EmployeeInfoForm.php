@@ -7,10 +7,16 @@ use yii\helpers\ArrayHelper;
 use app\models\Employee;
 use app\models\Region;
 use app\models\Political;
+use app\models\EmployeeAccount;
+use app\models\PersonBankInfo;
+use app\logic\server\QuanXianServer;
 
 class EmployeeInfoForm extends BaseForm
 {
     const SCENARIO_EMP_EDIT = 'emp_edit';//员工个人信息修改
+    const SCENARIO_EMP_ACCOUNT_EDIT = 'emp_account_edit';//员工帐号信息修改
+    const SCENARIO_EMP_BANK_EDIT = 'emp_bank_edit';//员工银行卡修改
+    const SCENARIO_EMP_BANK_DEL = 'emp_bank_del';//员工银行卡删除
     
     public $empno;
      
@@ -34,6 +40,13 @@ class EmployeeInfoForm extends BaseForm
     public $emp_type;
     public $org_id;
     
+    public $qq;
+    public $bank_name;
+    public $bank_des;
+    public $card_id;
+    public $is_salary;
+    public $bk_id;
+    
     public function rules()
     {
         return [
@@ -43,8 +56,25 @@ class EmployeeInfoForm extends BaseForm
                 'on' => [self::SCENARIO_EMP_EDIT],
                 'message' => '{attribute}不能为空'
             ],
-            
-            ['id','exist','targetClass'=>'\app\models\Employee','message'=>'员工不存在','on'=>[self::SCENARIO_EMP_EDIT]],
+            [
+                ['id','qq','email','phone'],
+                'required',
+                'on' => [self::SCENARIO_EMP_ACCOUNT_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
+            [
+                ['id','bank_name','bank_des','card_id','is_salary'],
+                'required',
+                'on' => [self::SCENARIO_EMP_BANK_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
+            [
+                ['id','bk_id'],
+                'required',
+                'on' => [self::SCENARIO_EMP_BANK_DEL],
+                'message' => '{attribute}不能为空'
+            ],
+            ['id','exist','targetClass'=>'\app\models\Employee','message'=>'员工不存在'],
             ['profession','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在'],
             ['sex','in', 'range' => [1, 2], 'message'=>'性别不正确'],
             ['phone','match','pattern'=>'/^1\d{10}/','message'=>'手机号不正确'],
@@ -61,6 +91,8 @@ class EmployeeInfoForm extends BaseForm
             ['emp_type','exist','targetClass'=>'\app\models\EmployeeType','targetAttribute'=>'id','message'=>'员工类型不存在'],
             ['location','exist','targetClass'=>'\app\models\Region','targetAttribute'=>'id','message'=>'当前所在地不正确！','on'=>[self::SCENARIO_EMP_EDIT]],
             ['org_id','exist','targetClass'=>'\app\models\Org','message'=>'组织不存在'],
+            ['qq','string','max'=>20],
+            ['bk_id','exist','targetClass'=>'\app\models\PersonBankInfo','targetAttribute'=>'id','message'=>'银行卡不存在']
         ];
     }
     
@@ -68,7 +100,9 @@ class EmployeeInfoForm extends BaseForm
     {
         return [
             self::SCENARIO_EMP_EDIT => ['id','name','empno','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type'],
-            
+            self::SCENARIO_EMP_ACCOUNT_EDIT => ['id','qq','email','phone'],
+            self::SCENARIO_EMP_BANK_EDIT => ['id','bk_id','bank_name','bank_des','card_id','is_salary'],
+            self::SCENARIO_EMP_BANK_DEL => ['id','bk_id']
         ];
     }
     /**
@@ -150,5 +184,120 @@ class EmployeeInfoForm extends BaseForm
         return ['status'=>true,'data'=>$data];
     }
     
+    /**
+     * 修改帐号
+     * @param array $user
+     */
+    public function saveAccount($user)
+    {
+        $model = EmployeeAccount::findOne(['employee_id'=>$this->id]);
+        if(empty($model) && Employee::findOne($this->id)){
+            $model = new EmployeeAccount();
+            $model->employee_id = $this->id;
+        }elseif(empty($model)){
+            return ['status'=>false,'msg'=>'员工不存在'];
+        }
+        $model->qq = $this->qq;
+        $model->email = $this->email;
+        $model->tel = $this->phone;
+        if($model->save()){
+            PeopleLogic::instance()->addLog(0,$model->employee_id,'编辑员工帐号信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }else{
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }
+    }
     
+    /**
+     * 获得帐号
+     * @param int $id 员工id
+     * @return array
+     */
+    public function getAccount($id)
+    {
+        $model = EmployeeAccount::findOne(['employee_id'=>$id]);
+        if(empty($model) && Employee::findOne($id)){
+            return ['status'=>true,'data'=>[]];
+        }elseif(empty($model)){
+            return ['status'=>false,'msg'=>'员工不存在'];
+        }
+        $res = [
+            'qq' => $model->qq,
+            'email' => $model->email,
+            'phone' => $model->tel
+        ];
+        return ['status'=>true,'data'=>$res];;
+    }
+    
+    /**
+     * 获取银行卡
+     * @param int $id
+     * @return array
+     */
+    public function getBankCards($id)
+    {
+        $emp = Employee::findOne($id);
+        if($emp){
+            $data = [];
+            if($cards = $emp->bankCard){
+                foreach($cards as $v){
+                    $data[] = [
+                        'id'=>$v->id,
+                        'bank_name' => $v->bank_name,
+                        'bank_name_des' => $v->bank_name_des,
+                        'bank_card_id' => $v->bank_card_id,
+                        'is_salary' => $v->is_salary,
+                    ];
+                }
+            }
+            return ['status'=>true,'data'=>$data];
+        }else{
+            return ['status'=>false,'msg'=>'员工不存在'];
+        }
+    }
+    
+    /**
+     * 删除银行卡
+     */
+    public function delBankCard($user)
+    {
+        $emp = Employee::findOne($this->id);
+        $model = PersonBankInfo::findOne(['id'=>$this->bk_id,'person_id'=>$emp->person_id]);
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'银行卡不属于该员工'];
+        }
+        if($model->delete()){
+            PeopleLogic::instance()->addLog(0,$this->id,'删除员工银行卡信息',ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }else{
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }
+        
+    }
+    
+    /**
+     * 编辑银行卡
+     */
+    public function saveBankCard($user)
+    {
+        if($this->bk_id){//修改银行卡
+            $model = PersonBankInfo::findOne($this->bk_id);
+            $content = '修改员工银行卡信息';
+        }else{//添加
+            $model = new PersonBankInfo();
+            $model->person_id = Employee::findOne($this->id)->person_id;
+            $content = '添加员工银行卡信息';
+        }
+        $model->bank_card_id = $this->card_id;
+        $model->bank_name = $this->bank_name;
+        $model->bank_name_des = $this->bank_des;
+        $model->is_salary = $this->is_salary;
+        if($model->save()){
+            PeopleLogic::instance()->addLog(0,$this->id,$content,ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }else{
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }
+    }
+       
 }

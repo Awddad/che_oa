@@ -13,6 +13,7 @@ use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\ApplyView;
 use app\modules\oa_v1\logic\Profession;
 use app\modules\oa_v1\logic\RegionLogic;
+use app\models\PersonBankInfo;
 
 class ApplyController extends BaseController
 {
@@ -135,13 +136,24 @@ class ApplyController extends BaseController
 		if ($request->isPost) {
 			$post = $request->post();
 			if ($post ['card_id'] && $post ['bank_name'] && $post ['bank_des']) {
-				$obj = new \app\logic\server\QuanXianServer ();
+				/* $obj = new \app\logic\server\QuanXianServer ();
 				$intPersonId = $this->arrPersonInfo ['person_id'];
 				$strBankName = $post ['bank_name'];
 				$strBankNameDes = $post ['bank_des'];
 				$strCardId = $post ['card_id'];
 				$res = $obj->curlAddUserBankList($intPersonId, $strBankName, $strBankNameDes, $strCardId);
-				return $this->_return(null, $res ? 200 : 404);
+				return $this->_return(null, $res ? 200 : 404); */
+			    $model = new PersonBankInfo();
+			    $model->bank_card_id = $post ['card_id'];
+			    $model->bank_name = $post ['bank_name'];
+			    $model->bank_name_des = $post ['bank_des'];
+			    $model->person_id = $this->arrPersonInfo ['person_id'];
+			    $model->is_salary = 0;
+			    if($model->save()){
+			        return $this->_return();
+			    }else{
+			        return $this->_return(null,404);
+			    }
 			}
 			return $this->_return(null, 403);
 		}
