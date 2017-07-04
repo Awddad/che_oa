@@ -118,7 +118,7 @@ class AssetController extends BaseController
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
@@ -175,7 +175,7 @@ class AssetController extends BaseController
             $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
         }
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
@@ -271,7 +271,7 @@ class AssetController extends BaseController
         $param = Yii::$app->request->get();
         $query = AssetListLog::find()->where(['asset_list_id' => $asset_list_id]);
     
-        $pageSize = ArrayHelper::getValue($param, 'pageSize', 20);
+        $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
     
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
