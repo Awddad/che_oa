@@ -218,6 +218,18 @@ class DefaultController extends BaseController
             case 9:
                 $pdf = PdfLogic::instance()->assetBack($apply);
                 break;
+            case 10:
+                $pdf = PdfLogic::instance()->applyPositive($apply);
+                break;
+            case 11:
+                $pdf = PdfLogic::instance()->applyLeave($apply);
+                break;
+            case 12:
+                $pdf = PdfLogic::instance()->applyTransfer($apply);
+                break;
+            case 13:
+                $pdf = PdfLogic::instance()->applyOpen($apply);
+                break;
         }
         if(!empty($pdf)) {
             header('Content-Type: application/octet-stream');

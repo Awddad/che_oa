@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\Logic;
 use app\models\Apply;
+use yii;
 
 /**
  * 在借款列表
@@ -46,7 +47,7 @@ class JieKuanLogic extends Logic
                 'id' => $k,
                 'time' => date('Y-m-d H:i',$v->create_time),
                 'des' => $v->loan->des,
-                'price' => $v->loan->money,
+                'price' => yii::$app->formatter->asCurrency($v->loan->money),
                 'status' => $status_arr[$v->loan->status],
             ];
         }
