@@ -70,7 +70,7 @@ class TalentInfoForm extends BaseForm
             ['political','exist','targetClass'=>'\app\models\Political','targetAttribute'=>'id','message'=>'政治面貌不存在'],
             ['native','string','max'=>15],//籍贯
             ['work_time','integer','message'=>'工作年限不正确'],
-            ['marriage','in','range'=>[0,1,2],'message'=>'婚姻状况不正确'],
+            ['marriage','in','range'=>[0,1,2,3],'message'=>'婚姻状况不正确'],
             ['job_status','in','range'=>[1,2,3,4],'message'=>'职业状态不正确'],
             ['location','exist','targetClass'=>'\app\models\Region','targetAttribute'=>'id','message'=>'当前所在地不正确！','on'=>[self::SCENARIO_TALENT_EDIT]],
             ['location','string','max'=>100,'on'=>[self::SCENARIO_TALENT_YINGPIN_EDIT]],//应聘地点
@@ -169,6 +169,7 @@ class TalentInfoForm extends BaseForm
             'political' => ($tmp = Political::findOne($model->political)) ? $tmp->political : '',
             'nation' => $model->nation,
             'job_status' => $model->job_status,
+            'marriage' => $model->marriage,
             'status' => $this->status_arr[$model->status]
         ];
         return ['status'=>true,'data'=>$data];
