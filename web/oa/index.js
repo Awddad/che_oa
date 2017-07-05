@@ -22829,7 +22829,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     updated: function updated() {
         this.dxtotal = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* digitUppercase */])(this.counter);
-    }
+    },
+    created: function created() {}
 });
 
 /***/ }),
@@ -23158,10 +23159,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['iscardshow', 'carddata'],
@@ -23195,7 +23192,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     var carddata = _this.ruleForm;
                     _this.$store.dispatch('Add_cardsubmit', { carddata: carddata }).then(function (response) {
                         if (response.data.code == 200) {
-                            _this.$message({ message: '银行卡添加成功！', type: 'success' });
                             _this.$store.dispatch('InitCard');
                         }
                     });
@@ -26553,44 +26549,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-							components: {},
-							props: ['resumeId'],
-							data: function data() {
-														return {
-																					formData: {}
-														};
-							},
+   props: ['resumeId'],
+   data: function data() {
+      return {
+         formData: {}
+      };
+   },
 
-							computed: {
-														basicInfo: function basicInfo() {
-																					return this.$store.state.resume.basic_info;
-														}
-							},
-							created: function created() {
-														var _this = this;
+   computed: {
+      basicInfo: function basicInfo() {
+         return this.$store.state.resume.basic_info;
+      }
+   },
+   created: function created() {
+      var _this = this;
 
-														this.$store.dispatch('Basic_Info', { id: this.resumeId }).then(function (response) {
-																					var data = response.data.data;
-																					_this.$emit('setName', data.name);
-														});
-							},
+      this.$store.dispatch('Basic_Info', { id: this.resumeId }).then(function (response) {
+         var data = response.data.data;
+         _this.$emit('setName', data.name);
+      });
+   },
 
-							methods: {
-														//编辑
-														edit: function edit() {}
-							}
+   methods: {
+      //编辑
+      edit: function edit() {}
+   }
 });
 
 /***/ }),
@@ -32372,6 +32357,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_18_vuex__["b" /* mapGetters */])(['org_full_name', 'uid', 'serverUrl'])),
+    mounted: function mounted() {
+        //console.log(document.getElementsByClassName("attachment-wrap").length);
+        document.getElementsByClassName("attachment-wrap")[0].addEventListener('touchstart', this.eventdefault);
+    },
     created: function created() {
         var _this = this;
 
@@ -32569,6 +32558,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
+        eventdefault: function eventdefault() {
+            //event.preventDefault();
+        },
         Title: function Title() {
             if (this.type == '1') {
                 this.title = '报销';
@@ -45519,7 +45511,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-0649253f]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-0649253f]{text-align:center}.attachment-wrap .const_wrap h1[data-v-0649253f]{font-weight:500}.attachment-wrap .const_wrap table[data-v-0649253f]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-0649253f]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-0649253f]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-0649253f]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-0649253f]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-0649253f]{text-align:center}.attachment-wrap .const_wrap h1[data-v-0649253f]{font-weight:500}.attachment-wrap .const_wrap table[data-v-0649253f]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-0649253f]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-0649253f]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-0649253f]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-0649253f]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45547,7 +45539,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-06f08380]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-06f08380]{text-align:center}.attachment-wrap .const_wrap h1[data-v-06f08380]{font-weight:500}.attachment-wrap .const_wrap table[data-v-06f08380]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-06f08380]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-06f08380]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-06f08380]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-06f08380]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-06f08380]{text-align:center}.attachment-wrap .const_wrap h1[data-v-06f08380]{font-weight:500}.attachment-wrap .const_wrap table[data-v-06f08380]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-06f08380]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-06f08380]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-06f08380]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-06f08380]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45631,7 +45623,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-12877208]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-12877208]{text-align:center}.attachment-wrap .const_wrap h1[data-v-12877208]{font-weight:500}.attachment-wrap .const_wrap table[data-v-12877208]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-12877208]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-12877208]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-12877208]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-12877208]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-12877208]{text-align:center}.attachment-wrap .const_wrap h1[data-v-12877208]{font-weight:500}.attachment-wrap .const_wrap table[data-v-12877208]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-12877208]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-12877208]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-12877208]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-12877208]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45659,7 +45651,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-1504e567]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-1504e567]{text-align:center}.attachment-wrap .const_wrap h1[data-v-1504e567]{font-weight:500}.attachment-wrap .const_wrap table[data-v-1504e567]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-1504e567]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-1504e567]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-1504e567]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-1504e567]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-1504e567]{text-align:center}.attachment-wrap .const_wrap h1[data-v-1504e567]{font-weight:500}.attachment-wrap .const_wrap table[data-v-1504e567]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-1504e567]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-1504e567]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-1504e567]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-1504e567]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45673,7 +45665,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-16c1665e]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-16c1665e]{text-align:center}.attachment-wrap .const_wrap h1[data-v-16c1665e]{font-weight:500}.attachment-wrap .const_wrap table[data-v-16c1665e]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-16c1665e]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-16c1665e]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-16c1665e]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-16c1665e]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-16c1665e]{text-align:center}.attachment-wrap .const_wrap h1[data-v-16c1665e]{font-weight:500}.attachment-wrap .const_wrap table[data-v-16c1665e]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-16c1665e]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-16c1665e]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-16c1665e]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-16c1665e]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45687,7 +45679,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-172b0a50]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-172b0a50]{text-align:center}.attachment-wrap .const_wrap h1[data-v-172b0a50]{font-weight:500}.attachment-wrap .const_wrap table[data-v-172b0a50]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-172b0a50]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-172b0a50]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-172b0a50]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-172b0a50]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-172b0a50]{text-align:center}.attachment-wrap .const_wrap h1[data-v-172b0a50]{font-weight:500}.attachment-wrap .const_wrap table[data-v-172b0a50]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-172b0a50]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-172b0a50]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-172b0a50]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-172b0a50]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45701,7 +45693,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-19b16968]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-19b16968]{text-align:center}.attachment-wrap .const_wrap h1[data-v-19b16968]{font-weight:500}.attachment-wrap .const_wrap table[data-v-19b16968]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-19b16968]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-19b16968]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-19b16968]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-19b16968]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-19b16968]{text-align:center}.attachment-wrap .const_wrap h1[data-v-19b16968]{font-weight:500}.attachment-wrap .const_wrap table[data-v-19b16968]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-19b16968]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-19b16968]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-19b16968]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-19b16968]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45813,7 +45805,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-2aed452a]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-2aed452a]{text-align:center}.attachment-wrap .const_wrap h1[data-v-2aed452a]{font-weight:500}.attachment-wrap .const_wrap table[data-v-2aed452a]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-2aed452a]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-2aed452a]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-2aed452a]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-2aed452a]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-2aed452a]{text-align:center}.attachment-wrap .const_wrap h1[data-v-2aed452a]{font-weight:500}.attachment-wrap .const_wrap table[data-v-2aed452a]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-2aed452a]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-2aed452a]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-2aed452a]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-2aed452a]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45827,7 +45819,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-2b00c854]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-2b00c854]{text-align:center}.attachment-wrap .const_wrap h1[data-v-2b00c854]{font-weight:500}.attachment-wrap .const_wrap table[data-v-2b00c854]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-2b00c854]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-2b00c854]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-2b00c854]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-2b00c854]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-2b00c854]{text-align:center}.attachment-wrap .const_wrap h1[data-v-2b00c854]{font-weight:500}.attachment-wrap .const_wrap table[data-v-2b00c854]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-2b00c854]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-2b00c854]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-2b00c854]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-2b00c854]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45869,7 +45861,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-3a7c1c7e]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-3a7c1c7e]{text-align:center}.attachment-wrap .const_wrap h1[data-v-3a7c1c7e]{font-weight:500}.attachment-wrap .const_wrap table[data-v-3a7c1c7e]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-3a7c1c7e]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-3a7c1c7e]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-3a7c1c7e]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-3a7c1c7e]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-3a7c1c7e]{text-align:center}.attachment-wrap .const_wrap h1[data-v-3a7c1c7e]{font-weight:500}.attachment-wrap .const_wrap table[data-v-3a7c1c7e]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-3a7c1c7e]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-3a7c1c7e]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-3a7c1c7e]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-3a7c1c7e]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -45883,7 +45875,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-3c322bc8]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-3c322bc8]{text-align:center}.attachment-wrap .const_wrap h1[data-v-3c322bc8]{font-weight:500}.attachment-wrap .const_wrap table[data-v-3c322bc8]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-3c322bc8]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-3c322bc8]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-3c322bc8]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-3c322bc8]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-3c322bc8]{text-align:center}.attachment-wrap .const_wrap h1[data-v-3c322bc8]{font-weight:500}.attachment-wrap .const_wrap table[data-v-3c322bc8]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-3c322bc8]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-3c322bc8]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-3c322bc8]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-3c322bc8]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -46331,7 +46323,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-8c39cc1c]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-8c39cc1c]{text-align:center}.attachment-wrap .const_wrap h1[data-v-8c39cc1c]{font-weight:500}.attachment-wrap .const_wrap table[data-v-8c39cc1c]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-8c39cc1c]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-8c39cc1c]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-8c39cc1c]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-8c39cc1c]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-8c39cc1c]{text-align:center}.attachment-wrap .const_wrap h1[data-v-8c39cc1c]{font-weight:500}.attachment-wrap .const_wrap table[data-v-8c39cc1c]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-8c39cc1c]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-8c39cc1c]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-8c39cc1c]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-8c39cc1c]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -46443,7 +46435,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, ".attachment-wrap[data-v-ceec17e0]{padding:0 20px 25px;border-radius:4px;border:1px solid #e9e9e9}.attachment-wrap .const_wrap[data-v-ceec17e0]{text-align:center}.attachment-wrap .const_wrap h1[data-v-ceec17e0]{font-weight:500}.attachment-wrap .const_wrap table[data-v-ceec17e0]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-ceec17e0]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-ceec17e0]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-ceec17e0]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-ceec17e0]{border-bottom:1px solid #e9e9e9}", ""]);
+exports.push([module.i, ".attachment-wrap .const_wrap[data-v-ceec17e0]{text-align:center}.attachment-wrap .const_wrap h1[data-v-ceec17e0]{font-weight:500}.attachment-wrap .const_wrap table[data-v-ceec17e0]{width:100%;border-collapse:collapse;border:0}.attachment-wrap .const_wrap table tr:last-child td[data-v-ceec17e0]{border-bottom:0}.attachment-wrap .const_wrap table td[data-v-ceec17e0]{border:1px solid #e9e9e9;padding:8px;line-height:23px;font-size:12px;color:rgba(0,0,0,.65)}.attachment-wrap .const_wrap table td .b_gray[data-v-ceec17e0]{background:#f2f2f2}.attachment-wrap .const_wrap table:last-child tr:last-child td[data-v-ceec17e0]{border-bottom:1px solid #e9e9e9}", ""]);
 
 // exports
 
@@ -61546,22 +61538,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('p', {
     staticClass: "item"
-  }, [_c('span', [_vm._v("到岗时间：")]), _vm._v(_vm._s(_vm.basicInfo.daogang))])])], 1)], 1)], 1), _vm._v(" "), _c('el-form', [_c('el-row', {
-    attrs: {
-      "gutter": 10
-    }
-  }, [_c('el-col', {
-    staticClass: "w97 f14 mb-sm",
-    attrs: {
-      "xs": 24
-    }
-  }, [_vm._v("：")]), _vm._v(" "), _c('el-col', {
-    staticClass: "mb-lg",
-    attrs: {
-      "xs": 24,
-      "sm": 20
-    }
-  }, [_c('el-form-item', [_c('el-input')], 1)], 1)], 1)], 1)], 1)])
+  }, [_c('span', [_vm._v("到岗时间：")]), _vm._v(_vm._s(_vm.basicInfo.daogang))])])], 1)], 1)], 1)], 1)])
 },staticRenderFns: []}
 
 /***/ }),
@@ -64717,6 +64694,49 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "w92 t-r t-xs-l mb-sm"
   }, [_c('span', {
     staticClass: "c-red mr4"
+  }, [_vm._v("*")]), _vm._v("银行：")]), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20
+    }
+  }, [_c('el-form-item', {
+    attrs: {
+      "prop": "bank_name",
+      "rules": [{
+        required: true,
+        message: '请选择'
+      }]
+    }
+  }, [_c('el-select', {
+    staticStyle: {
+      "width": "100%"
+    },
+    attrs: {
+      "placeholder": "请选择"
+    },
+    model: {
+      value: (_vm.ruleForm.bank_name),
+      callback: function($$v) {
+        _vm.ruleForm.bank_name = $$v
+      },
+      expression: "ruleForm.bank_name"
+    }
+  }, _vm._l((_vm.options), function(item, key) {
+    return _c('el-option', {
+      key: key,
+      attrs: {
+        "label": item.label,
+        "value": item.value
+      }
+    })
+  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 t-r t-xs-l mb-sm"
+  }, [_c('span', {
+    staticClass: "c-red mr4"
   }, [_vm._v("*")]), _vm._v("卡号：")]), _vm._v(" "), _c('el-col', {
     attrs: {
       "xs": 24,
@@ -64759,7 +64779,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "prop": "bank_name",
+      "prop": "bank_des",
       "rules": [{
         required: true,
         message: '请输入开户行'
@@ -64775,24 +64795,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "请输入"
     },
     model: {
-      value: (_vm.ruleForm.bank_name),
+      value: (_vm.ruleForm.bank_des),
       callback: function($$v) {
-        _vm.ruleForm.bank_name = $$v
+        _vm.ruleForm.bank_des = $$v
       },
-      expression: "ruleForm.bank_name"
+      expression: "ruleForm.bank_des"
     }
-  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
-    attrs: {
-      "gutter": 10
-    }
-  }, [_c('el-col', {
-    staticClass: "w92 t-r t-xs-l mb-sm"
-  }), _vm._v(" "), _c('el-col', {
-    attrs: {
-      "xs": 24,
-      "sm": 20
-    }
-  }, [_vm._v("例如：招商银行股份有限公司-上海金沙江路支行")])], 1)], 1), _vm._v(" "), _c('div', {
+  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('div', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -78907,4 +78916,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[329]);
-//# sourceMappingURL=index.js.map?6d1dbebb50053882f196
+//# sourceMappingURL=index.js.map?2fc68774e0feea26d569
