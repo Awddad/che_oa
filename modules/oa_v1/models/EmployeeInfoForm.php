@@ -65,7 +65,7 @@ class EmployeeInfoForm extends BaseForm
                 'message' => '{attribute}不能为空'
             ],
             [
-                ['id','bank_name','bank_des','card_id','is_salary'],
+                ['id','bank_name','card_id','is_salary'],
                 'required',
                 'on' => [self::SCENARIO_EMP_BANK_EDIT],
                 'message' => '{attribute}不能为空'
@@ -266,7 +266,7 @@ class EmployeeInfoForm extends BaseForm
                     $data[] = [
                         'id'=>$v->id,
                         'bank_name' => $v->bank_name,
-                        'bank_name_des' => $v->bank_name_des,
+                        //'bank_name_des' => $v->bank_name_des,
                         'bank_card_id' => $v->bank_card_id,
                         'is_salary' => $v->is_salary,
                     ];
@@ -312,7 +312,7 @@ class EmployeeInfoForm extends BaseForm
         }
         $model->bank_card_id = $this->card_id;
         $model->bank_name = $this->bank_name;
-        $model->bank_name_des = $this->bank_des;
+        //$model->bank_name_des = $this->bank_des;
         $model->is_salary = $this->is_salary;
         if($model->save()){
             PeopleLogic::instance()->addLog(0,$this->id,$content,ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
