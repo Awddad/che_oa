@@ -15,6 +15,7 @@ use app\models\PeopleWorkExperience;
 use app\models\PeopleTrainExperience;
 use app\models\PeopleEduExperience;
 use app\models\PeopleFiles;
+use app\models\PeopleAbility;
 
 /**
  * 人才表单
@@ -168,7 +169,7 @@ class TalentForm extends BaseForm
 	            $model->status = 3;
 	            break;
 	        case self::SCENARIO_FACE://面试
-	            return ['status'=>false,'msg'=>'面试通过请录用'];
+	            return ['status'=>false,'msg'=>'请录用'];
 	            /*
 	            $content = '面试通过';
 	            $model->status_face = $model->status_face ?: 1;
@@ -373,25 +374,22 @@ class TalentForm extends BaseForm
             if (! $talent->save()) { // 保存人才信息
                 throw new \Exception(current($talent->getFirstErrors()));
             }
-            if (
-                //项目经验
-                PeopleProjectExperience::updateAllCounters(['employee_id' => $model->id], ['talent_id' => $talent->id])
-                //工作经验
-               && PeopleWorkExperience::updateAllCounters(['employee_id'=>$model->id],['talent_id'=>$talent->id])
-                //培训经历
-    	       && PeopleTrainExperience::updateAllCounters(['employee_id'=>$model->id],['talent_id'=>$talent->id])
-                //教育经历
-    	       && PeopleEduExperience::updateAllCounters(['employee_id'=>$model->id],['talent_id'=>$talent->id])
-                //文件
-    	       && PeopleFiles::updateAllCounters(['employee_id'=>$model->id],['talent_id'=>$talent->id])
-	        ){
-	            TalentLogic::instance()->addLog($this->id,'面试通过，录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
-	            $tran->commit();
-	            return ['status'=>true];
-            }else{
-                throw new \Exception('系统错误');
-            }
-	        
+            //项目经验
+            PeopleProjectExperience::updateAll(['employee_id'=>$model->id], ['talent_id'=>$talent->id]);
+            //工作经验
+            PeopleWorkExperience::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            //培训经历
+	        PeopleTrainExperience::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            //教育经历
+	        PeopleEduExperience::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            //文件
+	        PeopleFiles::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            //能力
+            PeopleAbility::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            
+            TalentLogic::instance()->addLog($this->id,'面试通过，录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
+            $tran->commit();
+            return ['status'=>true];
 	    }catch(\Exception $e){
 	        $tran->rollBack();
 	        return ['status'=>false,'msg'=>$e->getMessage()];
