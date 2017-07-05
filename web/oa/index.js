@@ -23159,6 +23159,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['iscardshow', 'carddata'],
@@ -23192,6 +23196,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     var carddata = _this.ruleForm;
                     _this.$store.dispatch('Add_cardsubmit', { carddata: carddata }).then(function (response) {
                         if (response.data.code == 200) {
+                            _this.$message({ message: '银行卡添加成功！', type: 'success' });
                             _this.$store.dispatch('InitCard');
                         }
                     });
@@ -64694,49 +64699,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "w92 t-r t-xs-l mb-sm"
   }, [_c('span', {
     staticClass: "c-red mr4"
-  }, [_vm._v("*")]), _vm._v("银行：")]), _vm._v(" "), _c('el-col', {
-    attrs: {
-      "xs": 24,
-      "sm": 20
-    }
-  }, [_c('el-form-item', {
-    attrs: {
-      "prop": "bank_name",
-      "rules": [{
-        required: true,
-        message: '请选择'
-      }]
-    }
-  }, [_c('el-select', {
-    staticStyle: {
-      "width": "100%"
-    },
-    attrs: {
-      "placeholder": "请选择"
-    },
-    model: {
-      value: (_vm.ruleForm.bank_name),
-      callback: function($$v) {
-        _vm.ruleForm.bank_name = $$v
-      },
-      expression: "ruleForm.bank_name"
-    }
-  }, _vm._l((_vm.options), function(item, key) {
-    return _c('el-option', {
-      key: key,
-      attrs: {
-        "label": item.label,
-        "value": item.value
-      }
-    })
-  }))], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
-    attrs: {
-      "gutter": 10
-    }
-  }, [_c('el-col', {
-    staticClass: "w92 t-r t-xs-l mb-sm"
-  }, [_c('span', {
-    staticClass: "c-red mr4"
   }, [_vm._v("*")]), _vm._v("卡号：")]), _vm._v(" "), _c('el-col', {
     attrs: {
       "xs": 24,
@@ -64779,7 +64741,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_c('el-form-item', {
     attrs: {
-      "prop": "bank_des",
+      "prop": "bank_name",
       "rules": [{
         required: true,
         message: '请输入开户行'
@@ -64795,13 +64757,24 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "placeholder": "请输入"
     },
     model: {
-      value: (_vm.ruleForm.bank_des),
+      value: (_vm.ruleForm.bank_name),
       callback: function($$v) {
-        _vm.ruleForm.bank_des = $$v
+        _vm.ruleForm.bank_name = $$v
       },
-      expression: "ruleForm.bank_des"
+      expression: "ruleForm.bank_name"
     }
-  })], 1)], 1)], 1)], 1), _vm._v(" "), _c('div', {
+  })], 1)], 1)], 1), _vm._v(" "), _c('el-row', {
+    attrs: {
+      "gutter": 10
+    }
+  }, [_c('el-col', {
+    staticClass: "w92 t-r t-xs-l mb-sm"
+  }), _vm._v(" "), _c('el-col', {
+    attrs: {
+      "xs": 24,
+      "sm": 20
+    }
+  }, [_vm._v("例如：招商银行股份有限公司-上海金沙江路支行")])], 1)], 1), _vm._v(" "), _c('div', {
     staticClass: "dialog-footer",
     slot: "footer"
   }, [_c('el-button', {
@@ -78916,4 +78889,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[329]);
-//# sourceMappingURL=index.js.map?2fc68774e0feea26d569
+//# sourceMappingURL=index.js.map?204c919fdd736bfe88dd
