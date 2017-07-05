@@ -3,6 +3,7 @@ namespace app\modules\oa_v1\models;
 
 
 
+use app\logic\CnyLogic;
 use app\models\ApplyUseChapter;
 use app\models\AssetBack;
 use app\models\AssetGet;
@@ -84,6 +85,7 @@ class ApplyView extends BaseForm
         /**
          * @var BaoXiaoList $v
          */
+        $total = 0;
 		foreach ($baoxiao->list as $v) {
 			$data['list'][] = [
 					'money' => $v->money,
@@ -91,7 +93,10 @@ class ApplyView extends BaseForm
 					'type' => $v->type,
 					'des' => $v->des
 			];
+            $total += $v['money'];
 		}
+        $data['total_supper'] = $total;
+        $data['total'] = \Yii::$app->formatter->asCurrency($total);
 		return $data;
 	}
 	

@@ -27,18 +27,21 @@ class CnyLogic extends Logic
         $cnyunits = ["", "圆", "角", "分"],
         $grees = ["", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿"];
         list($ns1, $ns2) = explode(".", number_format($money, 2, '.', ''), 2);
+        $ns2Arr = array_filter(array($ns2[1], $ns2[0])); //转为数组
         
-        $ns2 = array_filter(array($ns2[1], $ns2[0])); //转为数组
         
         $arrayTemp = $this->cnyMapUnit(str_split($ns1), $grees);
         
-        $ret = array_merge($ns2, array(implode("", $arrayTemp), "")); //处理整数
+        $ret = array_merge($ns2Arr, array(implode("", $arrayTemp), "")); //处理整数
         
         $arrayTemp = $this->cnyMapUnit($ret, $cnyunits);
         
         $ret = implode("", array_reverse($arrayTemp));     //处理小数
         
-        return str_replace(array_keys($cnums), $cnums, $ret);
+        $moneyReturn =  str_replace(array_keys($cnums), $cnums, $ret);
+        if($ns2 == '00')
+            return $moneyReturn.'整';
+        return $moneyReturn;
     }
     
     
