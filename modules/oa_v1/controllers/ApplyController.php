@@ -150,7 +150,7 @@ class ApplyController extends BaseController
 			    $model->person_id = $this->arrPersonInfo ['person_id'];
 			    $model->is_salary = 0;
 			    if($model->save()){
-			        return $this->_return();
+			        return $this->_return('成功');
 			    }else{
 			        return $this->_return(null,404);
 			    }
