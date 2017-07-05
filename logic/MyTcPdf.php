@@ -63,7 +63,7 @@ table tr{height:40px;}
 </style>
 <div>
     <div>
-        <h2 style="text-align: center;">报销单</h2> 
+        <h2 style="text-align: center;">费用报销单</h2> 
         <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
             <tr>
                 <td style="background-color:#f2f2f2">日期</td>
@@ -89,6 +89,11 @@ table tr{height:40px;}
                 <td style="background-color:#f2f2f2" colspan="2">明细</td>
             </tr>
             {$strListHtml}
+            <tr>
+            <td colspan="2">金额合计</td>
+            <td colspan="2">{$arrInfo['total']}</td>
+            <td colspan="2"></td>
+        </tr>
             <tr>
                 <td style="background-color:#f2f2f2">审批人</td>
                 <td>{$arrInfo['approval_person']}</td>
