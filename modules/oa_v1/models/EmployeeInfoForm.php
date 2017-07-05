@@ -11,6 +11,7 @@ use app\models\EmployeeAccount;
 use app\models\PersonBankInfo;
 use yii;
 use app\modules\oa_v1\logic\EmployeeLogic;
+use app\models\Educational;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -182,7 +183,8 @@ class EmployeeInfoForm extends BaseForm
             'birthday' => $model->birthday,
             'age' => $model->age,
             'work_time' => $model->work_time,
-            'edu' => $model->educational,
+            'edu_id' => $model->educational,
+            'edu' => ($edu = Educational::findOne($model->educational)) ? $edu->educational : '',
             'location_id' => $model->current_location,
             'location' => ($region = Region::findOne($model->current_location)) ? $region->name : '',
             'native' => $model->native,
