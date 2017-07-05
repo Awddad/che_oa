@@ -43,7 +43,7 @@ class BaseController extends Controller
     
     /**
      *不做登录校验的请求的白名单 controller/action格式
-     * @var array 
+     * @var array
      * Yii::$app->controller->module->id    模块名称
      * Yii::$app->controller->id            控制器名称
      * Yii::$app->controller->action->id    方法名称
@@ -83,7 +83,7 @@ class BaseController extends Controller
         //app下载特殊处理
         if(Yii::$app->request->get('type') == 'crm' && Yii::$app->controller->id == 'default'
             && in_array(Yii::$app->controller->action->id, ['get-pdf', 'down'])) {
-            $time = Yii::$app->request->get('type');
+            $time = Yii::$app->request->get('time');
             $sign = Yii::$app->request->get('sign');
             $applyId= Yii::$app->request->get('apply_id');
             $md5 = md5($applyId.$time.'crm');

@@ -15,6 +15,10 @@ use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Menu;
 use app\logic\server\QuanXianServer;
+use app\models\Educational;
+use app\models\Political;
+use app\models\PersonType;
+use app\models\EmployeeType;
 
 
 /**
@@ -218,6 +222,18 @@ class DefaultController extends BaseController
             case 9:
                 $pdf = PdfLogic::instance()->assetBack($apply);
                 break;
+            case 10:
+                $pdf = PdfLogic::instance()->applyPositive($apply);
+                break;
+            case 11:
+                $pdf = PdfLogic::instance()->applyLeave($apply);
+                break;
+            case 12:
+                $pdf = PdfLogic::instance()->applyTransfer($apply);
+                break;
+            case 13:
+                $pdf = PdfLogic::instance()->applyOpen($apply);
+                break;
         }
         if(!empty($pdf)) {
             header('Content-Type: application/octet-stream');
@@ -271,5 +287,64 @@ class DefaultController extends BaseController
         $objQx->curlUpdateAllUser();
         return $this->_return(null);
     }
-    
+    /**
+     * 获得学历
+     */
+    public function actionGetEdu()
+    {
+        $edu = Educational::find()->all();
+        $data = [];
+        foreach ($edu as $v) {
+            $data[] = [
+                'label' => $v->educational,
+                'value' => $v->id,
+            ];
+        }
+        return $this->_return($data);
+    }
+    /**
+     * 获得政治面貌
+     */
+    public function actionGetPolitical()
+    {
+        $political = Political::find()->all();
+        $data = [];
+        foreach ($political as $v) {
+            $data[] = [
+                'label' => $v->political,
+                'value' => $v->id,
+            ];
+        }
+        return $this->_return($data);
+    }
+    /**
+     * 获得人才类型
+     */
+    public function actionGetPersonType()
+    {
+        $personType = PersonType::find()->all();
+        $data = [];
+        foreach ($personType as $v) {
+            $data[] = [
+                'label' => $v->name,
+                'value' => $v->id,
+            ];
+        }
+        return $this->_return($data);
+    }
+    /**
+     * 获得员工类型
+     */
+    public function actionGetEmpType()
+    {
+        $empType = EmployeeType::find()->all();
+        $data = [];
+        foreach ($empType as $v) {
+            $data[] = [
+                'label' => $v->name,
+                'value' => $v->id,
+            ];
+        }
+        return $this->_return($data);
+    }
 }
