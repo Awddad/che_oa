@@ -43,7 +43,7 @@ class BaseController extends Controller
     
     /**
      *不做登录校验的请求的白名单 controller/action格式
-     * @var array 
+     * @var array
      * Yii::$app->controller->module->id    模块名称
      * Yii::$app->controller->id            控制器名称
      * Yii::$app->controller->action->id    方法名称
