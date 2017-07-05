@@ -10,7 +10,6 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\models\Menu;
-use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\filters\auth\CompositeAuth;
@@ -44,7 +43,7 @@ class BaseController extends Controller
     
     /**
      *不做登录校验的请求的白名单 controller/action格式
-     * @var array 
+     * @var array
      * Yii::$app->controller->module->id    模块名称
      * Yii::$app->controller->id            控制器名称
      * Yii::$app->controller->action->id    方法名称
@@ -93,25 +92,17 @@ class BaseController extends Controller
             }
         }
         $session = Yii::$app->session;
-        $objPerson = Person::findOne(270);
-        if (empty($objPerson)) {
-            die('<h3>您没OA权限，请联系管理员</h3>');
+        $objPerson = $session->get('USER_INFO');
+        $intRoleId = $session->get('ROLE_ID');
+        if(empty($objPerson) || !$intRoleId) {
+            $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
+            header("Content-type: application/json");
+            echo json_encode($this->_return(['login_url' => $loginUrl], 401));
+            die();
         }
-        $session->set('USER_INFO', $objPerson);
         $this->arrPersonInfo = $objPerson;
-    
-        $intRoleId = intval(Yii::$app->request->get('role_id'));
-        $arrRoleIds = explode(',', $objPerson->role_ids);
-    
-        if ($intRoleId && in_array($intRoleId, $arrRoleIds)) {
-            $session->set('ROLE_ID', $intRoleId);
-        } else {
-            $session->set('ROLE_ID', $arrRoleIds[0]);
-        }
-        
-        $this->roleId = $session->get('ROLE_ID');
-        
-        $this->setUserRoleInfo($this->roleId);
+
+        $this->setUserRoleInfo($intRoleId);
 
         //权限管理
         $roleInfo = Role::findOne($this->roleId);
