@@ -81,7 +81,8 @@ class BaseController extends Controller
     public function beforeAction($action)
     {
         //app下载特殊处理
-        if(Yii::$app->request->get('type') == 'crm') {
+        if(Yii::$app->request->get('type') == 'crm' && Yii::$app->controller->id == 'default'
+            && Yii::$app->controller->action->id == 'get-pdf') {
             $time = Yii::$app->request->get('type');
             $sign = Yii::$app->request->get('sign');
             $applyId= Yii::$app->request->get('apply_id');
