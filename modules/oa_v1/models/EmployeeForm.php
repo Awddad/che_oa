@@ -12,6 +12,7 @@ use app\logic\server\QuanXianServer;
 use app\models\Role;
 use app\models\EmployeeAccount;
 use app\models\Org;
+use app\modules\oa_v1\logic\EmployeeLogic;
 
 class EmployeeForm extends BaseForm
 {
@@ -110,17 +111,8 @@ class EmployeeForm extends BaseForm
         }
         //获取员工数据
         $model = Employee::findOne($this->employee_id);
-        $params = [
-            'name' => $model->name,
-            'email' => $model->account->email,
-            'roles_id' => Role::find()->where(['slug'=>'yuangong'])->one()->id,
-            'org_id'=> $model->org_id,
-            'position_id' => $model->profession,
-            'phone' => $model->account->tel?:$model->phone,
-        ];
         //权限系统添加用户
-        $objQx = new QuanXianServer();
-        $res = $objQx->curlAddUser($params);
+        $res = EmployeeLogic::instance()->addQxEmp($model);
         if($res['status']){
             //权限系统添加成功 把权限系统的id赋到员工表
             $model->person_id = $res['id'];

@@ -688,7 +688,7 @@ class QuanXianServer extends Server
     			'email' => $params['email'],
     			'password' => $password,
     			'password_confirmation' => $password,
-    			'role' => [$params['roles_id']],
+    			'roles' => [$params['roles']],
     			'organization_id' => $params['org_id'],
     			'phone' => $params['phone'],
     			'position_id' => $params['position_id'],
@@ -732,10 +732,10 @@ class QuanXianServer extends Server
     			'name' => $params['name'],
     			'email' => $params['email'],
     	];
-    	$params['org_id'] && $arrPost['organization_id'] = $params['org_id'];
-    	$params['position_id'] && $arrPost['position_id'] = $params['position_id'];
-    	$params['bank_cards'] && $arrPost['bank_cards'] = $params['bank_cards'];
-    	$params['phone'] && $arrPost['phone'] = $params['phone'];
+    	isset($params['org_id']) && $arrPost['organization_id'] = $params['org_id'];
+    	isset($params['position_id']) && $arrPost['position_id'] = $params['position_id'];
+    	isset($params['bank_cards']) && $arrPost['bank_cards'] = $params['bank_cards'];
+    	isset($params['phone']) && $arrPost['phone'] = $params['phone'];
     	
     	$url = sprintf($this->arrApiUrl['update_user'],$params['person_id']);
     	$arrRtn = $this->thisHttpPost($url, $arrPost);

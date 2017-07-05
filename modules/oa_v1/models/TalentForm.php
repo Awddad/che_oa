@@ -272,7 +272,7 @@ class TalentForm extends BaseForm
 	    }
 	    //结束时间
 	    if($end_time){
-	        $end_time = strtotime($end_time);
+	        $end_time = strtotime($end_time.' 23:59:59');
 	        $query->andWhere(['<=', 'updated_at', $end_time]);
 	    }
 	    //人才库
