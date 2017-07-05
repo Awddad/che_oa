@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\logic;
 
 
+use app\logic\CnyLogic;
 use app\logic\Logic;
 use app\logic\MyTcPdf;
 use app\models\Apply;
@@ -53,7 +54,7 @@ class PdfLogic extends Logic
             'caiwu' => $apply->cai_wu_person ? : ''
         ];
         $baoXiaoList = BaoXiaoList::find()->where(['apply_id' => $apply->apply_id])->all();
-        $total = 0;
+        $total = 0.00;
         foreach($baoXiaoList as $v){
             $arrInfo['list'][] = [
                 'type_name' => $v['type_name'],
@@ -63,6 +64,7 @@ class PdfLogic extends Logic
             $total += $v['money'];
         }
         $arrInfo['total'] = \Yii::$app->formatter->asCurrency($total);
+        $arrInfo['total_supper'] = CnyLogic::instance()->cny($total);
         $myPdf->createdPdf($root_path, $arrInfo, 'baoxiao');
         
         return [
