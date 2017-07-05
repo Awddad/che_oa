@@ -135,7 +135,7 @@ class ApplyController extends BaseController
 		$request = Yii::$app->request;
 		if ($request->isPost) {
 			$post = $request->post();
-			if ($post ['card_id'] && $post ['bank_name'] && $post ['bank_des']) {
+			if ($post ['card_id'] && $post ['bank_name']) {
 				/* $obj = new \app\logic\server\QuanXianServer ();
 				$intPersonId = $this->arrPersonInfo ['person_id'];
 				$strBankName = $post ['bank_name'];
@@ -146,7 +146,7 @@ class ApplyController extends BaseController
 			    $model = new PersonBankInfo();
 			    $model->bank_card_id = $post ['card_id'];
 			    $model->bank_name = $post ['bank_name'];
-			    $model->bank_name_des = $post ['bank_des'];
+			    //$model->bank_name_des = $post ['bank_des'];
 			    $model->person_id = $this->arrPersonInfo ['person_id'];
 			    $model->is_salary = 0;
 			    if($model->save()){
