@@ -5,6 +5,9 @@ use app\models\Talent;
 use app\modules\oa_v1\logic\PeopleLogic;
 use app\models\Job;
 use yii\helpers\ArrayHelper;
+use app\models\Educational;
+use app\models\Political;
+use app\models\Region;
 
 class TalentInfoForm extends BaseForm
 {
@@ -156,11 +159,14 @@ class TalentInfoForm extends BaseForm
             'birthday' => $model->birthday,
             'age' => $model->age,
             'work_time' => $model->work_time,
-            'educational' => $model->educational,
-            'current_location' => $model->current_location,
+            'educational_id' => $model->educational,
+            'educational' => ($edu = Educational::findOne($model->educational)) ? $edu->educational : '',
+            'location_id' => $model->current_location,
+            'location' => ($region = Region::findOne($model->current_location)) ? $region->name : '',
             'daogang' => $model->daogang,
             'native' => $model->native,
-            'political' => $model->political,
+            'political_id' => $model->political,
+            'political' => ($tmp = Political::findOne($model->political)) ? $tmp->political : '',
             'nation' => $model->nation,
             'job_status' => $model->job_status,
             'status' => $this->status_arr[$model->status]
