@@ -114,7 +114,7 @@ class AssetController extends BaseController
         $beforeTime = ArrayHelper::getValue($param, 'start_time');;
         $afterTime = ArrayHelper::getValue($param, 'end_time');;
         if ($beforeTime && $afterTime) {
-            $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
+            $query->andWhere(['between', 'created_at', $beforeTime, $afterTime]);
         }
     
         $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
@@ -173,7 +173,7 @@ class AssetController extends BaseController
         $beforeTime = ArrayHelper::getValue($param, 'start_time');;
         $afterTime = ArrayHelper::getValue($param, 'end_time');;
         if ($beforeTime && $afterTime) {
-            $query->andWhere(['between', 'oa_asset_list.create_time', $beforeTime, $afterTime]);
+            $query->andWhere(['between', 'oa_asset_list.created_at', $beforeTime, $afterTime]);
         }
     
         $keyword = ArrayHelper::getValue($param, 'keywords');
