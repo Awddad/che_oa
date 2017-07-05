@@ -7367,7 +7367,7 @@ $exports.store = store;
 
 // 创建axios实例
 var service = __WEBPACK_IMPORTED_MODULE_1_axios___default.a.create({
-    baseURL: 'http://172.4.0.192' // api的base_url，http://192.168.1.128:8010
+    baseURL: '' // api的base_url，http://192.168.1.128:8010
 });
 
 // request拦截器
@@ -41048,8 +41048,8 @@ function CurDate() {
 
 var Global = {
     state: {
-        BaseUrl: 'http://172.4.0.192/oa_v1/upload/file',
-        serverUrl: 'http://172.4.0.192',
+        BaseUrl: '/oa_v1/upload/file',
+        serverUrl: '',
         curDate: CurDate(),
         bankCard: [], //初始化银行卡信息
         constType: null, //报销类型
@@ -63043,7 +63043,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "city": _vm.city,
       "rental": _vm.rental
     }
-  }) : _vm._e(), _vm._v(" "), (_vm.type != '3' && _vm.pagenation == 1) ? _c('div', {
+  }) : _vm._e(), _vm._v(" "), (_vm.type != '3') ? _c('div', {
     staticClass: "attachment-table mt-lg"
   }, [_c('el-row', {
     attrs: {
@@ -78889,4 +78889,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[329]);
-//# sourceMappingURL=index.js.map?2aa2bd7fed497d45774c
+//# sourceMappingURL=index.js.map?71a15f6610aa1ad68682
