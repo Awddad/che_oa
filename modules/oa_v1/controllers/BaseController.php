@@ -80,6 +80,16 @@ class BaseController extends Controller
      */
     public function beforeAction($action)
     {
+        //app下载特殊处理
+        if(Yii::$app->request->get('type') == 'crm') {
+            $time = Yii::$app->request->get('type');
+            $sign = Yii::$app->request->get('sign');
+            $applyId= Yii::$app->request->get('apply_id');
+            $md5 = md5($applyId.$time.'crm');
+            if($sign == $md5) {
+                return true;
+            }
+        }
         $session = Yii::$app->session;
         $objPerson = $session->get('USER_INFO');
         $intRoleId = $session->get('ROLE_ID');

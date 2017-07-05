@@ -156,8 +156,14 @@ table tr{height:40px;}
             <td colspan="9" style="background-color:#f2f2f2">事由</td>
         </tr>
         <tr>
-            <td colspan="3">{$arrInfo['money']}</td>
-            <td colspan="9">{$arrInfo['detail']}</td>
+            <td colspan="1">小写</td>
+            <td colspan="2">{$arrInfo['money']}</td>
+            <td colspan="9" rowspan="2">{$arrInfo['detail']}</td>
+        </tr>
+        <tr>
+            <td colspan="1">大写</td>
+            <td colspan="2">{$arrInfo['money_supper']}</td>
+            <td colspan="9"></td>
         </tr>
         <tr>
             <td colspan="3" style="background-color:#f2f2f2">备注</td>
@@ -229,6 +235,17 @@ table tr{height:40px;}
             <td style="background-color:#f2f2f2" colspan="2">明细</td>
         </tr>
         {$strListHtml}
+        <tr>
+            <td style="background-color:#f2f2f2" rowspan="2">金额合计</td>
+            <td>小写</td>
+            <td colspan="2">{$arrInfo['total']}</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr>
+            <td>大写</td>
+            <td colspan="2">{$arrInfo['total_supper']}</td>
+            <td colspan="2"></td>
+        </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="2">备注信息</td>
             <td colspan="4">{$arrInfo['des']}</td>
@@ -338,8 +355,15 @@ table tr{height:40px;}
         <tr>
             <td style="background-color:#f2f2f2">付款类型</td>
             <td colspan="2">{$param['pay_type']}</td>
-            <td style="background-color:#f2f2f2"> 金额</td>
-            <td colspan="2">{$param['money']}</td>
+            <td style="background-color:#f2f2f2" rowspan="2">金额</td>
+            <td>小写</td>
+            <td>{$param['money']}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="2"></td>
+            <td>大写</td>
+            <td>{$param['money_supper']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>
@@ -422,9 +446,16 @@ table tr{height:40px;}
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td>总计</td>
+            <td rowspan="2">总计</td>
+            <td>小写</td>
             <td>{$param['total']}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>大写</td>
+            <td>{$param['total_supper']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>

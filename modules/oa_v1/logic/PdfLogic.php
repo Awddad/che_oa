@@ -96,6 +96,7 @@ class PdfLogic extends Logic
             'bank_name' => $apply->loan->bank_name,
             'bank_card_id' => $apply->loan->bank_card_id,
             'money' => \Yii::$app->formatter->asCurrency($apply->loan->money),
+            'money_supper' => CnyLogic::instance()->cny($apply->loan->money),
             'detail' => $apply->loan->des,
             'tips' => $apply->loan->tips,
             'approval_person' =>$apply->approval_persons,//多个人、分隔
@@ -125,8 +126,9 @@ class PdfLogic extends Logic
         }
         
         $person = Person::findOne($apply->person_id);
-        $getBackList = [];
         $loanIds = explode(',', $apply->payBack->jie_kuan_ids);
+        $data = [];
+        $total = 0;
         foreach ($loanIds as $apply_id) {
             $back = JieKuan::findOne($apply_id);
             $data[] = [
@@ -134,9 +136,10 @@ class PdfLogic extends Logic
                 'money' => \Yii::$app->formatter->asCurrency($back->money),
                 'detail' => $back->des
             ];
+            $total += $back->money;
         }
         $arrInfo =  [
-            'list' => $getBackList,
+            'list' => $data,
             'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
             'org_full_name' => $person->org_full_name,
@@ -146,7 +149,9 @@ class PdfLogic extends Logic
             'des' => $apply->payBack->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? :  '--',//多个人、分隔
-            'caiwu' => $apply->cai_wu_person ? : ''
+            'caiwu' => $apply->cai_wu_person ? : '',
+            'total' => \Yii::$app->formatter->asCurrency($total),
+            'total_supper' => CnyLogic::instance()->cny($total)
         ];
         $pdf->createdPdf($root_path, $arrInfo, 'payBack');
         return [
@@ -231,7 +236,8 @@ class PdfLogic extends Logic
             'bank_card_id' => $apply->applyPay->bank_card_id,
             'bank_name' => $apply->applyPay->bank_name,
             'pay_type' => TagTree::findOne($apply->applyPay->pay_type)->name,
-            'money' => $apply->applyPay->money,
+            'money' => \Yii::$app->formatter->asCurrency($apply->applyPay->money),
+            'money_supper' => CnyLogic::instance()->cny($apply->applyPay->money),
             'des' => $apply->applyPay->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
@@ -291,11 +297,12 @@ class PdfLogic extends Logic
                 'amount' => $v->amount,
                 'total' =>\Yii::$app->formatter->asCurrency($v->price * $v->amount),
             ];
-            $total += $v->price * $v->amount;
+            $price = intval($v->price);
+            $total += $price * $v->amount;
         }
-        $total = \Yii::$app->formatter->asCurrency($total);
         $arrInfo['list'] = $list;
-        $arrInfo['total'] = $total;
+        $arrInfo['total'] =  \Yii::$app->formatter->asCurrency($total);;
+        $arrInfo['total_supper'] = CnyLogic::instance()->cny((int)$total);
         
         
         $pdf->createdPdf($root_path, $arrInfo, 'applyBuy');
