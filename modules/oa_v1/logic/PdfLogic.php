@@ -22,6 +22,7 @@ use app\models\BaoXiaoList;
 use app\models\JieKuan;
 use app\models\Person;
 use app\models\TagTree;
+use app\models\Employee;
 
 class PdfLogic extends Logic
 {
@@ -452,4 +453,141 @@ class PdfLogic extends Logic
         ];
     }
     
+    /**
+     * 转正
+     * @param  $apply
+     */
+    public function applyPositive($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'person' => $person->person_name,
+            'entry_time' => date('Y年m月d日', strtotime($apply->applyPositive->entry_time)),
+            'org' => $apply->applyPositive->org,
+            'profession' => $apply->applyPositive->profession,
+            'prosecution' => $apply->applyPositive->prosecution,
+            'summary' => $apply->applyPositive->summary,
+            'suggest' => $apply->applyPositive->suggest,
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        
+        
+        $pdf->createdPdf($root_path, $arrInfo, 'applyPositive');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
+    /**
+     * 离职
+     * @param  $apply
+     */
+    public function applyLeave($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'person' => $person->person_name,
+            'assect_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
+            'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
+            'leave_time' => date('Y年m月d日',strtotime($apply->applyLeave->leave_time)),
+            'org_name' => $person->org_full_name,
+            'prefession' => $person->profession,
+            'des' => $apply->applyLeave->des,
+            'stock_status' => $apply->applyLeave->stock_status ? '已归还' : '未归还',
+            'finance_status' => $apply->applyLeave->finance_status ? '已结算' : '未结算',
+            'account_status' => $apply->applyLeave->account_status ? '已交接' : '未交接',
+            'work_status' => $apply->applyLeave->work_status ? '已交接' : '未交接',
+            'qq' => isset($employee->account)?$employee->account->qq:'--',
+	        'email' => isset($employee->account)?$employee->account->email:'--',
+	        'phone' => isset($employee->account)?$employee->account->tel:'--',
+            
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'applyLeave');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
+    
+    /**
+     * 调职
+     * @param  $apply
+     */
+    public function applyTransfer($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'person' => $person->person_name,
+            'entry_time' => date('Y年m月d日', strtotime($apply->applyTransfer->entry_time)),
+            'old_org_name' => $apply->applyTransfer->old_org_name,
+            'target_org_name' => $apply->applyTransfer->target_org_name,
+            'old_profession' => $apply->applyTransfer->old_profession,
+            'target_profession' => $apply->applyTransfer->target_profession,
+            'transfer_time' => date('Y年m月d日', strtotime($apply->applyTransfer->transfer_time)),
+            'des' => $apply->applyTransfer->des,
+            
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'applyTransfer');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
+    /**
+     * 开店
+     * @param  $apply
+     */
+    public function applyOpen($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'person' => $person->person_name,
+            'district_name' => $apply->applyOpen->district_name,
+            'address' => $apply->applyOpen->address,
+            'rental' => \Yii::$app->formatter->asCurrency($apply->applyOpen->rental),
+            'summary' => $apply->applyOpen->summary,
+        
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'applyOpen');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
 }
