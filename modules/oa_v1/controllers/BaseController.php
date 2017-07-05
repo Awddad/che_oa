@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\models\Menu;
+use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\filters\auth\CompositeAuth;
@@ -83,7 +84,7 @@ class BaseController extends Controller
         //app下载特殊处理
         if(Yii::$app->request->get('type') == 'crm' && Yii::$app->controller->id == 'default'
             && in_array(Yii::$app->controller->action->id, ['get-pdf', 'down'])) {
-            $time = Yii::$app->request->get('type');
+            $time = Yii::$app->request->get('time');
             $sign = Yii::$app->request->get('sign');
             $applyId= Yii::$app->request->get('apply_id');
             $md5 = md5($applyId.$time.'crm');
@@ -92,17 +93,25 @@ class BaseController extends Controller
             }
         }
         $session = Yii::$app->session;
-        $objPerson = $session->get('USER_INFO');
-        $intRoleId = $session->get('ROLE_ID');
-        if(empty($objPerson) || !$intRoleId) {
-            $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
-            header("Content-type: application/json");
-            echo json_encode($this->_return(['login_url' => $loginUrl], 401));
-            die();
+        $objPerson = Person::findOne(270);
+        if (empty($objPerson)) {
+            die('<h3>您没OA权限，请联系管理员</h3>');
         }
+        $session->set('USER_INFO', $objPerson);
         $this->arrPersonInfo = $objPerson;
-
-        $this->setUserRoleInfo($intRoleId);
+    
+        $intRoleId = intval(Yii::$app->request->get('role_id'));
+        $arrRoleIds = explode(',', $objPerson->role_ids);
+    
+        if ($intRoleId && in_array($intRoleId, $arrRoleIds)) {
+            $session->set('ROLE_ID', $intRoleId);
+        } else {
+            $session->set('ROLE_ID', $arrRoleIds[0]);
+        }
+        
+        $this->roleId = $session->get('ROLE_ID');
+        
+        $this->setUserRoleInfo($this->roleId);
 
         //权限管理
         $roleInfo = Role::findOne($this->roleId);
