@@ -23,6 +23,7 @@ use app\models\Person;
 use yii\data\Pagination;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
+use yii;
 
 /**
  * 基础数据
@@ -216,7 +217,7 @@ class AssetLogic extends Logic
                 'sn' => AssetList::findOne($v->asset_list_id)->sn_number,//库存编号
                 'brand' => $this->getAssetBrand($asset->asset_brand_id),//品牌
                 'name' => $asset->name,//名称
-                'price' => $asset->price,//价格
+                'price' => yii::$app->formatter->asCurrency($asset->price),//价格
                 'status' => $status_arr[$v->status],//状态
             ];
         }

@@ -666,4 +666,291 @@ table tr{height:40px;}
 TABLEHTML;
         return $strHtml;
     }
+
+    /**
+     * 转正
+     * 
+     * @param $param
+     * @return string
+     */
+    public function applyPositive($param)
+    {
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">转正申请表</h2>
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+            <td style="background-color:#f2f2f2"> 入职时间</td>
+            <td colspan="2">{$param['entry_time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 试用期部门</td>
+            <td colspan="2">{$param['org']}</td>
+            <td style="background-color:#f2f2f2"> 试用期职位</td>
+            <td colspan="2">{$param['profession']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 试用期业绩自述</td>
+            <td colspan="5">{$param['prosecution']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 试用期工作总结</td>
+            <td colspan="5">{$param['summary']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 对公司意见和建议
+        </td>
+            <td colspan="5">{$param['suggest']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2"> 抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+
+    
+    
+    /**
+     * 调职
+     *
+     * @param $param
+     * @return string
+     */
+    public function applyTransfer($param)
+    {
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">调职申请表</h2>
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+            <td style="background-color:#f2f2f2"> 入职时间</td>
+            <td colspan="2">{$param['entry_time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 原部门</td>
+            <td colspan="2">{$param['old_org_name']}</td>
+            <td style="background-color:#f2f2f2"> 调职后部门</td>
+            <td colspan="2">{$param['target_org_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 原职位</td>
+            <td colspan="2">{$param['old_profession']}</td>
+            <td style="background-color:#f2f2f2"> 调职后职位</td>
+            <td colspan="2">{$param['target_profession']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 调职日期</td>
+            <td colspan="5">{$param['transfer_time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 调职原因</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2"> 抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 开店
+     *
+     * @param $param
+     * @return string
+     */
+    public function applyOpen($param)
+    {
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">开店申请表</h2>
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+            <td style="background-color:#f2f2f2"> 门店城市</td>
+            <td colspan="2">{$param['district_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 门店选址</td>
+            <td colspan="2">{$param['address']}</td>
+            <td style="background-color:#f2f2f2"> 门店租金</td>
+            <td colspan="2">{$param['rental']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 门店概述</td>
+            <td colspan="5">{$param['summary']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2"> 抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+    
+    /**
+     * 离职
+     *
+     * @param $param
+     * @return string
+     */
+    public function applyLeave($param)
+    {
+        $assect_list = '<tr>
+            <td style="background-color:#f2f2f2">类别</td>
+            <td style="background-color:#f2f2f2">库存编号</td>
+            <td style="background-color:#f2f2f2">品牌</td>
+            <td style="background-color:#f2f2f2">名称</td>
+            <td style="background-color:#f2f2f2">价格</td>
+            <td style="background-color:#f2f2f2">状态</td>
+            </tr>';
+        foreach($param['assect_list'] as $v){
+            $assect_list .= <<<jdf
+        <tr>
+            <td >{$v['type']}</td>
+            <td >{$v['sn']}</td>
+            <td >{$v['brand']}</td>
+            <td >{$v['name']}</td>
+            <td align="right">{$v['price']}</td>
+            <td >{$v['status']}</td>
+        </tr>
+jdf;
+        }
+        $finance_list = '<tr>
+            <td style="background-color:#f2f2f2">序号</td>
+            <td style="background-color:#f2f2f2">借款时间</td>
+            <td style="background-color:#f2f2f2">借款事由</td>
+            <td style="background-color:#f2f2f2">借款金额</td>
+            <td style="background-color:#f2f2f2">状态</td>
+            </tr>';
+        foreach($param['finance_list'] as $v){
+            $finance_list .= <<<jdf
+        <tr>
+            <td >{$v['id']}</td>
+            <td >{$v['time']}</td>
+            <td >{$v['des']}</td>
+            <td colspan="2" align="right">{$v['price']}</td>
+            <td >{$v['status']}</td>
+        </tr>
+jdf;
+        }
+        
+        
+        $strHtml = <<<TABLEHTML
+<style>
+.bg{background:rgba(204, 204, 204, 1)}
+table tr{height:40px;}
+</style>
+<div>
+    <h2 style="text-align: center;">转正申请表</h2>
+    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+            <td style="background-color:#f2f2f2"> 离职日期</td>
+            <td colspan="2">{$param['leave_time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 部门</td>
+            <td colspan="2">{$param['org_name']}</td>
+            <td style="background-color:#f2f2f2"> 职位</td>
+            <td colspan="2">{$param['prefession']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 离职原因</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 物资是否交还</td>
+            <td colspan="5">{$param['stock_status']}</td>
+        </tr>
+        {$assect_list}
+        <tr>
+            <td style="background-color:#f2f2f2"> 财务是否结算</td>
+            <td colspan="5">{$param['finance_status']}</td>
+        </tr>
+        {$finance_list}
+        <tr>
+            <td style="background-color:#f2f2f2"> 账号密码是否交接</td>
+            <td colspan="5">{$param['account_status']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 企业qq</td>
+            <td colspan="1">{$param['qq']}</td>
+            <td style="background-color:#f2f2f2"> 企业邮箱</td>
+            <td colspan="1">{$param['email']}</td>
+            <td style="background-color:#f2f2f2"> 工作手机号</td>
+            <td colspan="1">{$param['phone']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 工作是否交接</td>
+            <td colspan="5">{$param['work_status']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2"> 抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
 }
