@@ -9,7 +9,8 @@ use app\models\Region;
 use app\models\Political;
 use app\models\EmployeeAccount;
 use app\models\PersonBankInfo;
-use app\logic\server\QuanXianServer;
+use yii;
+use app\modules\oa_v1\logic\EmployeeLogic;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -51,7 +52,7 @@ class EmployeeInfoForm extends BaseForm
     {
         return [
             [
-                ['id','org_id','name','empno','sex','phone','birthday','email','age','edu','work_time','location','id_card','entry_time','emp_type'],
+                ['id','org_id','profession','name','empno','sex','phone','birthday','email','age','edu','work_time','location','id_card','entry_time','emp_type'],
                 'required',
                 'on' => [self::SCENARIO_EMP_EDIT],
                 'message' => '{attribute}不能为空'
@@ -99,7 +100,7 @@ class EmployeeInfoForm extends BaseForm
     public function scenarios()
     {
         return [
-            self::SCENARIO_EMP_EDIT => ['id','name','empno','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type'],
+            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name','empno','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type'],
             self::SCENARIO_EMP_ACCOUNT_EDIT => ['id','qq','email','phone'],
             self::SCENARIO_EMP_BANK_EDIT => ['id','bk_id','bank_name','bank_des','card_id','is_salary'],
             self::SCENARIO_EMP_BANK_DEL => ['id','bk_id']
@@ -134,11 +135,20 @@ class EmployeeInfoForm extends BaseForm
         $this->political && $model->political = $this->political;
         $this->nation && $model->nation = $this->nation;
         $this->marriage && $model->marriage = $this->marriage;
-        if(!$model->save()){
-            return ['status'=>false,'msg'=>current($this->getFirstErrors())]; 
-        }else{
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            if(!$model->save()){
+                throw new \Exception(current($this->getFirstErrors())); 
+            }
+            if(!EmployeeLogic::instance()->editQxEmp($model)){
+                throw new \Exception('系统错误');
+            }
             PeopleLogic::instance()->addLog(0,$model->id,'编辑员工个人信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            $transaction->commit();
             return ['status'=>true];
+        }catch(\Exception $e){
+            $transaction->rollBack();
+            return ['status'=>false,'msg'=>$e->getMessage()];
         }
     }
     
@@ -191,7 +201,8 @@ class EmployeeInfoForm extends BaseForm
     public function saveAccount($user)
     {
         $model = EmployeeAccount::findOne(['employee_id'=>$this->id]);
-        if(empty($model) && Employee::findOne($this->id)){
+        $employee = Employee::findOne($this->id);
+        if(empty($model) && $employee){
             $model = new EmployeeAccount();
             $model->employee_id = $this->id;
         }elseif(empty($model)){
@@ -200,11 +211,20 @@ class EmployeeInfoForm extends BaseForm
         $model->qq = $this->qq;
         $model->email = $this->email;
         $model->tel = $this->phone;
-        if($model->save()){
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            if(!$model->save()){
+                throw new \Exception(current($model->getFirstErrors()));
+            }
+            if(!EmployeeLogic::instance()->editQxEmp($employee)){
+                throw new \Exception('系统错误');
+            }
             PeopleLogic::instance()->addLog(0,$model->employee_id,'编辑员工帐号信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            $transaction->commit();
             return ['status'=>true];
-        }else{
-            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }catch(\Exception $e){
+            $transaction->rollBack();
+            return ['status'=>false,'msg'=>$e->getMessage()];
         }
     }
     

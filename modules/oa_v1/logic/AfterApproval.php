@@ -86,20 +86,10 @@ class AfterApproval extends BaseLogic
         $employee->profession = $transfer->target_profession_id;
         if ($employee->save()) {
             // 权限系统接口
-            $objQx = new QuanXianServer();
-            $params = [
-            		'name' => $employee->name,
-            		'email' => $employee->email,
-            		'org_id' => $employee->org_id,
-            		'position_id' => $employee->profession,
-            		'person_id' => $employee->person_id,
-            ];
-            $id = $objQx->curlEditUser($params);
-            if($id){
-            	$employee->person_id = $id;
-            }
+            EmployeeLogic::instance()->editQxEmp($employee);
+            return true;
         }
-        return true;
+        return false;
     }
     
     /**
