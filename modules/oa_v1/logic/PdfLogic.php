@@ -50,17 +50,19 @@ class PdfLogic extends Logic
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
             'list' => [],
             'tips' => '--',
-            'caiwu' => $apply->cai_wu_person ? : '--'
+            'caiwu' => $apply->cai_wu_person ? : ''
         ];
         $baoXiaoList = BaoXiaoList::find()->where(['apply_id' => $apply->apply_id])->all();
+        $total = 0;
         foreach($baoXiaoList as $v){
             $arrInfo['list'][] = [
                 'type_name' => $v['type_name'],
                 'money' => \Yii::$app->formatter->asCurrency($v['money']),
                 'detail' => @$v['des']
             ];
+            $total += $v['money'];
         }
-        
+        $arrInfo['total'] = \Yii::$app->formatter->asCurrency($total);
         $myPdf->createdPdf($root_path, $arrInfo, 'baoxiao');
         
         return [
@@ -96,7 +98,7 @@ class PdfLogic extends Logic
             'tips' => $apply->loan->tips,
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ?: '--',//多个人、分隔
-            'caiwu' => $apply->cai_wu_person ? : '--'
+            'caiwu' => $apply->cai_wu_person ? : ''
         ];
         
         $pdf->createdPdf($root_path, $arrInfo, 'loan');
@@ -142,7 +144,7 @@ class PdfLogic extends Logic
             'des' => $apply->payBack->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? :  '--',//多个人、分隔
-            'caiwu' => $apply->cai_wu_person ? : '--'
+            'caiwu' => $apply->cai_wu_person ? : ''
         ];
         $pdf->createdPdf($root_path, $arrInfo, 'payBack');
         return [
@@ -172,7 +174,7 @@ class PdfLogic extends Logic
                 'chapter_name' => $apply->applyUseChapter->name,
                 'des' => $apply->applyUseChapter->des ?: '--',
                 'approval_person' => $apply->approval_persons,//多个人、分隔
-                'copy_person' => $apply->copy_person ?: '--',//多个人、分隔
+                'copy_person' => $apply->copy_person ?: '',//多个人、分隔
             ];
     
             $pdf->createdPdf($root_path, $arrInfo, 'useChapter');
@@ -231,7 +233,7 @@ class PdfLogic extends Logic
             'des' => $apply->applyPay->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
-            'caiwu' => $apply->cai_wu_person ? : '--'
+            'caiwu' => $apply->cai_wu_person ? : ''
         ];
     
         
@@ -269,7 +271,7 @@ class PdfLogic extends Logic
             'des' => $apply->applyBuy->des ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
-            'caiwu' => $apply->cai_wu_person ? : '--'
+            'caiwu' => $apply->cai_wu_person ? : ''
         ];
         
         $list = [];
