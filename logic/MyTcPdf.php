@@ -90,13 +90,15 @@ table tr{height:40px;}
             </tr>
             {$strListHtml}
             <tr>
-                <td colspan="2" rowspan=2>金额合计</td>
-                <td colspan="2">小写</td>
+                <td rowspan="2" valign="middle">金额合计</td>
+                <td>小写</td>
                 <td colspan="2">{$arrInfo['total']}</td>
+                <td colspan="2"></td>
             </tr>
             <tr>
-                <td colspan="2">大写</td>
+                <td>大写</td>
                 <td colspan="2">{$arrInfo['total_supper']}</td>
+                <td colspan="2"></td>
             </tr>
             <tr>
                 <td style="background-color:#f2f2f2">审批人</td>
