@@ -255,7 +255,7 @@ class DefaultController extends BaseController
     {
         
         $rootPath = Yii::$app->basePath. '/web'.$path;
-        if(file_exists($rootPath)){
+        if(!file_exists($rootPath)){
             echo '未找到该文件';die;
         }
         header('Content-Type: application/octet-stream');
