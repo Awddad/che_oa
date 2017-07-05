@@ -288,21 +288,6 @@ class DefaultController extends BaseController
         return $this->_return(null);
     }
     /**
-     * 获得学历
-     */
-    public function actionGetEdu()
-    {
-        $edu = Educational::find()->all();
-        $data = [];
-        foreach ($edu as $v) {
-            $data[] = [
-                'label' => $v->educational,
-                'value' => $v->id,
-            ];
-        }
-        return $this->_return($data);
-    }
-    /**
      * 获得政治面貌
      */
     public function actionGetPolitical()
@@ -317,21 +302,7 @@ class DefaultController extends BaseController
         }
         return $this->_return($data);
     }
-    /**
-     * 获得人才类型
-     */
-    public function actionGetPersonType()
-    {
-        $personType = PersonType::find()->all();
-        $data = [];
-        foreach ($personType as $v) {
-            $data[] = [
-                'label' => $v->name,
-                'value' => $v->id,
-            ];
-        }
-        return $this->_return($data);
-    }
+    
     /**
      * 获得员工类型
      */
