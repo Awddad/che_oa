@@ -94,7 +94,8 @@ class EmployeeInfoForm extends BaseForm
             ['location','exist','targetClass'=>'\app\models\Region','targetAttribute'=>'id','message'=>'当前所在地不正确！','on'=>[self::SCENARIO_EMP_EDIT]],
             ['org_id','exist','targetClass'=>'\app\models\Org','message'=>'组织不存在'],
             ['qq','string','max'=>20],
-            ['bk_id','exist','targetClass'=>'\app\models\PersonBankInfo','targetAttribute'=>'id','message'=>'银行卡不存在']
+            ['bk_id','exist','targetClass'=>'\app\models\PersonBankInfo','targetAttribute'=>'id','message'=>'银行卡不存在'],
+            ['marriage','in','range'=>[0,1,2,3],'message'=>'婚姻状况不正确'],
         ];
     }
     
