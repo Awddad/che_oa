@@ -540,7 +540,7 @@ class PeopleForm extends BaseForm
     public function getFiles()
     {
         if($this->id){
-            $res = \app\models\PeopleFiles::find()->where(['id'=>$this->id])->asArray()->one();
+            $res = \app\models\PeopleFiles::findOne($this->id);
             $data = [];
             if($res){
                 $data = $this->files($res);
