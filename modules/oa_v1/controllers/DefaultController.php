@@ -321,4 +321,36 @@ class DefaultController extends BaseController
         }
         return $this->_return($data);
     }
+    /**
+     * 获得学历
+     */
+    public function actionGetEdu()
+    {
+        $res = Educational::find()->all();
+        $data = [];
+        foreach($res as $v){
+            $data[] = [
+                'label' => $v['educational'],
+                'value' => $v['id'],
+            ];
+        }
+        return $this->_return($data);
+    }
+    
+    
+    /**
+     * 获得人才类型
+     */
+    public function actionGetPersonType()
+    {
+        $res = PersonType::find()->all();
+        $data = [];
+        foreach($res as $v){
+            $data[] = [
+                'label' => $v['name'],
+                'value' => $v['id'],
+            ];
+        }
+        return $this->_return($data);
+    }
 }
