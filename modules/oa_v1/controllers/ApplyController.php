@@ -106,7 +106,7 @@ class ApplyController extends BaseController
 	 * 获取状态值
 	 */
 	public function actionGetType() {
-		$res = \app\modules\oa_v1\logic\TreeTagLogic::instance()->getTreeTagsByParentId();
+		$res = \app\modules\oa_v1\logic\TreeTagLogic::instance()->getTreeTagsByParentId(2);
 		return $this->_return($res, 200);
 	}
 
