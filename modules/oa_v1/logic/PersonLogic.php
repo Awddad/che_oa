@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\Org;
 use app\models\Person;
+use app\models\RoleOrgPermission;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -40,12 +41,18 @@ class PersonLogic extends BaseLogic
      */
     public function getSelectPerson($person)
     {
+        
+        $companyArr = $this->getCompanyIds($person);
         if ($person->company_id == 1) {
             $persons = Person::find()->where([
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         } else {
-            $persons = Person::find()->where(['company_id' => $person->company_id])->andWhere([
+            $persons = Person::find()->where([
+                'or',
+                ['company_id' => $person->company_id],
+                ['in', 'person_id', $companyArr]
+            ])->andWhere([
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         }
@@ -64,7 +71,41 @@ class PersonLogic extends BaseLogic
                 'name' => $personName
             ];
         }
+        
+        $other = Person::find()->where(['company_id' => 1])->all();
+        foreach ($other as $v) {
+            if($v->org_id <= 0){
+                continue;
+            }
+            $personName = $v->person_name. ' '. $v->org_full_name;
+            $data[] = [
+                'id' => $v->person_id,
+                'name' => $personName
+            ];
+        }
         return $data;
+    }
+    
+    /**
+     * 获取员工所在的公司
+     *
+     * @param Person $person
+     * @return array
+     */
+    public function getCompanyIds($person)
+    {
+        /**
+         * @var RoleOrgPermission $roleOrgPermission
+         */
+        $roleOrgPermission = RoleOrgPermission::find()->where(
+            'FIND_IN_SET('.$person->company_id.',company_ids)'
+        )->asArray()->all();
+        if (!empty($roleOrgPermission))
+        {
+            return ArrayHelper::getColumn($roleOrgPermission, 'person_id');
+        }
+        //$companyArr[] = 1;
+        return [];
     }
     
     /**
