@@ -3,8 +3,6 @@ namespace app\modules\oa_v1\controllers;
 
 use yii;
 use app\modules\oa_v1\models\TalentForm;
-use app\models\Educational;
-use app\models\PersonType;
 use app\modules\oa_v1\models\TalentInfoForm;
 
 /**
@@ -115,38 +113,6 @@ class TalentController extends BaseController
 		return $this->_return($data);
     }
     
-    /**
-     * 获得学历
-     */
-    public function actionGetEdu()
-    {
-        $res = Educational::find()->all();
-        $data = [];
-        foreach($res as $v){
-            $data[] = [
-                'label' => $v['educational'],
-                'value' => $v['id'],
-            ];
-        }
-        return $this->_return($data);
-    }
-    
-    
-    /**
-     * 获得人才类型
-     */
-    public function actionGetPersonType()
-    {
-        $res = PersonType::find()->all();
-        $data = [];
-        foreach($res as $v){
-            $data[] = [
-                'label' => $v['name'],
-                'value' => $v['id'],
-            ];
-        }
-        return $this->_return($data);
-    }
     
     /**
      * 修改人才个人信息
