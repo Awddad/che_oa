@@ -116,6 +116,7 @@ class EmployeeForm extends BaseForm
         if($res['status']){
             //权限系统添加成功 把权限系统的id赋到员工表
             $model->person_id = $res['id'];
+            $model->status = 2;
             if($model->save()){
                 $transaction->commit();
                 return ['status'=>true];
@@ -153,6 +154,13 @@ class EmployeeForm extends BaseForm
      */
     public function getList($params)
     {
+        $arr_status = [
+            0=>'待入职',
+            2=>'已入职',
+            3=>'已离职',
+            4=>'再入职'
+        ];
+        
         $keywords = ArrayHelper::getValue($params,'keywords',null);
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
@@ -193,8 +201,8 @@ class EmployeeForm extends BaseForm
                 'employee_type' => $v->employee_type > 0 ? $v->employeeType->name : '',
                 'entry_time' => $v->entry_time,
                 'leave_time' => $v->leave_time,
-                'entry' => $v->person_id>0 ? '已入职':'未入职',//是否已入职 1：已入职  0：未入职
-                'entry_status' => $v->person_id>0 ? 1 : 0,//是否已入职 1：已入职  0：未入职
+                'entry' => $v->status,
+                'entry_status' => $arr_status[$v->status],
                 'org' => empty($org = Org::findOne($v->org_id))?'': ($org->org_short_name ?:$org->org_name),
             ];
             unset($org);

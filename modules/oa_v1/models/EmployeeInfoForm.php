@@ -12,6 +12,7 @@ use app\models\PersonBankInfo;
 use yii;
 use app\modules\oa_v1\logic\EmployeeLogic;
 use app\models\Educational;
+use app\modules\oa_v1\logic\RegionLogic;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -187,7 +188,8 @@ class EmployeeInfoForm extends BaseForm
             'edu_id' => $model->educational,
             'edu' => ($edu = Educational::findOne($model->educational)) ? $edu->educational : '',
             'location_id' => $model->current_location,
-            'location' => ($region = Region::findOne($model->current_location)) ? $region->name : '',
+            'location' => RegionLogic::instance()->getRegionByChild($model->current_location),
+            'location_info' => RegionLogic::instance()->getRegionIdByChild($model->current_location),
             'native' => $model->native,
             'political_id' => $model->political,
             'political' => ($tmp = Political::findOne($model->political)) ? $tmp->political : '',
