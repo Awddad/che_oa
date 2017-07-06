@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\Org;
 use app\models\Person;
+use app\models\RoleOrgPermission;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -40,12 +41,14 @@ class PersonLogic extends BaseLogic
      */
     public function getSelectPerson($person)
     {
+        
+        $companyArr = $this->getCompanyIds($person);
         if ($person->company_id == 1) {
             $persons = Person::find()->where([
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         } else {
-            $persons = Person::find()->where(['company_id' => $person->company_id])->andWhere([
+            $persons = Person::find()->where(['in', 'company_id', $companyArr])->andWhere([
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         }
@@ -65,6 +68,30 @@ class PersonLogic extends BaseLogic
             ];
         }
         return $data;
+    }
+    
+    /**
+     * 获取员工所在的公司
+     *
+     * @param Person $person
+     * @return array
+     */
+    public function getCompanyIds($person)
+    {
+        /**
+         * @var RoleOrgPermission $roleOrgPermission
+         */
+        $roleOrgPermission = RoleOrgPermission::find()->where([
+            'person_id' => $person->person_id,
+            'role_id' => \Yii::$app->session->get("ROLE_ID")
+        ])->one();
+        $companyArr =  explode(',', $roleOrgPermission->company_ids);
+        if(is_array($companyArr) && !in_array($person->company_id, $companyArr)) {
+            $companyArr[] = $person->company_id;
+            return $companyArr;
+        }
+        $companyArr[] = 1;
+        return $companyArr;
     }
     
     /**

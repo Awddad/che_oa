@@ -10,6 +10,7 @@ use Yii;
  * @property integer $person_id
  * @property integer $role_id
  * @property string $org_ids
+ * @property string $company_ids
  */
 class RoleOrgPermission extends \yii\db\ActiveRecord
 {
@@ -29,7 +30,7 @@ class RoleOrgPermission extends \yii\db\ActiveRecord
         return [
             [['person_id', 'role_id', 'org_ids'], 'required'],
             [['person_id', 'role_id'], 'integer'],
-            [['org_ids'], 'string'],
+            [['org_ids', 'company_ids'], 'string'],
             [['person_id', 'role_id'], 'unique', 'targetAttribute' => ['person_id', 'role_id'], 'message' => 'The combination of 用户id and 角色id has already been taken.'],
         ];
     }
