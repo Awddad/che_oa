@@ -79,7 +79,7 @@ class RegionLogic extends BaseLogic
     	$res = $this->getRegionAll();
     	$tmp = $res[$id];
     	while($tmp['parent_id'] > 0){
-    	    $data[] = $tmp['id'];
+    	    $data[] = (int)$tmp['id'];
     	    $parent_id = $tmp['parent_id'];
     	    $tmp = $res[$parent_id];
     	    unset($parent_id);
