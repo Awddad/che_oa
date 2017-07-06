@@ -48,7 +48,11 @@ class PersonLogic extends BaseLogic
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         } else {
-            $persons = Person::find()->where(['in', 'company_id', $companyArr])->andWhere([
+            $persons = Person::find()->where([
+                'or',
+                ['company_id' => $person->company_id],
+                ['in', 'person_id', $companyArr]
+            ])->andWhere([
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         }
@@ -93,21 +97,15 @@ class PersonLogic extends BaseLogic
         /**
          * @var RoleOrgPermission $roleOrgPermission
          */
-        $roleOrgPermission = RoleOrgPermission::find()->where([
-            'person_id' => $person->person_id,
-            'role_id' => \Yii::$app->session->get("ROLE_ID")
-        ])->one();
-        if($roleOrgPermission->company_ids) {
-            $companyArr = explode(',', $roleOrgPermission->company_ids);
-            if (is_array($companyArr) && !in_array($person->company_id, $companyArr)) {
-                $companyArr[] = $person->company_id;
-                return $companyArr;
-            }
-        } else {
-            $companyArr[] = $person->company_id;
+        $roleOrgPermission = RoleOrgPermission::find()->where(
+            'FIND_IN_SET('.$person->company_id.',company_ids)'
+        )->asArray()->all();
+        if (!empty($roleOrgPermission))
+        {
+            return ArrayHelper::getColumn($roleOrgPermission, 'person_id');
         }
         //$companyArr[] = 1;
-        return $companyArr;
+        return [];
     }
     
     /**
