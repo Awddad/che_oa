@@ -52,7 +52,9 @@ class PersonLogic extends BaseLogic
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         }
-        
+        echo Person::find()->where(['in', 'company_id', $companyArr])->andWhere([
+            '!=', 'person_id', $person->person_id
+        ])->orderBy('person_id desc')->createCommand()->getRawSql();die;
         $data = [];
         /**
          * @var Person $v
@@ -85,12 +87,16 @@ class PersonLogic extends BaseLogic
             'person_id' => $person->person_id,
             'role_id' => \Yii::$app->session->get("ROLE_ID")
         ])->one();
-        $companyArr =  explode(',', $roleOrgPermission->company_ids);
-        if(is_array($companyArr) && !in_array($person->company_id, $companyArr)) {
+        if($roleOrgPermission->company_ids) {
+            $companyArr = explode(',', $roleOrgPermission->company_ids);
+            if (is_array($companyArr) && !in_array($person->company_id, $companyArr)) {
+                $companyArr[] = $person->company_id;
+                return $companyArr;
+            }
+        } else {
             $companyArr[] = $person->company_id;
-            return $companyArr;
         }
-        $companyArr[] = 1;
+        //$companyArr[] = 1;
         return $companyArr;
     }
     
