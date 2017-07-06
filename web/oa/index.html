@@ -122,11 +122,10 @@
     .custom-table .el-table__expanded-cell {
       padding:0 !important;
     }
-    @media (min-width: 769px) {
+    @media (min-width: 768px) {
       .w92,.w97,.w120,.w110,.w150{line-height: 34px;}
       .w92{ width: 92px !important;}
       .w97{ width: 97px !important;}
-      .w106{width: 106px !important;}
       .w110{width: 110px !important;}
       .w120{ width: 120px !important;}
       .w150{ width: 150px !important;}
@@ -137,15 +136,6 @@
       .upload-wrap{ position: relative;}
       .upload-wrap .el-button{ margin-top: 2px;}
       .upload-wrap .modal-download{position: absolute; top:1px; left: 98px;}
-
-
-      /*详情页*/
-      .attachment-wrap {
-        padding: 0 20px 25px 20px;
-        border-radius: 4px;
-        border: 1px solid #E9E9E9;
-        overflow-x: auto;
-      }
     }
     @media (max-width: 768px) {
       .app-wrapper{
@@ -178,8 +168,8 @@
         right: 0;
 
       }
-      .attachment-wrap{position: relative;z-index: 1000; overflow: auto; }
-      .const_wrap{width:900px !important; position: relative; z-index: 1111111;}
+      .attachment-wrap{overflow: auto;}
+      .const_wrap{ min-width:900px !important;}
       .el-message-box{
         width: 90% !important;
       }
@@ -206,12 +196,11 @@
               if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
           return fmt;
       }
-
   </script>
 </head>
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?8bd8ca105c95666a494e"></script><script type="text/javascript" src="vendor.js?af927b090731318955ed"></script><script type="text/javascript" src="index.js?171b3232a5996438a5e3"></script></body>
+<script type="text/javascript" src="manifest.js?af9bb1c76ff5023c50ae"></script><script type="text/javascript" src="vendor.js?3b8ceef59d2e1def1b89"></script><script type="text/javascript" src="index.js?b5810523a71d30790047"></script></body>
 
 </html>
