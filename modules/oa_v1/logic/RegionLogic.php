@@ -51,6 +51,9 @@ class RegionLogic extends BaseLogic
      */
     public function getRegionByChild($id)
     {
+        if($id <=0 ){
+            return '';
+        }
     	$str = '';
     	$res = $this->getRegionAll();
     	$tmp = $res[$id];
@@ -69,6 +72,9 @@ class RegionLogic extends BaseLogic
      */
     public function getRegionIdByChild($id)
     {
+        if($id <= 0){
+            return [];
+        }
         $data = [];
     	$res = $this->getRegionAll();
     	$tmp = $res[$id];
