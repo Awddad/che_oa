@@ -250,7 +250,7 @@ class BaseController extends Controller
      */
     public function _return($data, $code = 200, $message = 'success')
     {
-        $message = (!$message) ? static::$code[$code] : $message;
+        $message = static::$code[$code] ? : $message;
         return compact('data', 'message', 'code');
     }
 

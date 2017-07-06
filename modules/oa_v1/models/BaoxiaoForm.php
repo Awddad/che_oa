@@ -49,6 +49,7 @@ class BaoxiaoForm extends BaseForm
 				
 			['bao_xiao_list','validateList'],
 			[['files','pics'],'safe'],
+            ['apply_id', 'checkOnly']
 		];
 	}
 	public function validatePersons($attribute, $params)
