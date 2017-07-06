@@ -120,7 +120,7 @@ class ApplyOpenForm extends BaseForm
         $status = ArrayHelper::getValue($params, 'status',null);
         $sort = ArrayHelper::getValue($params, 'sort','desc');
         
-        $query = ApplyOpen::find()->joinWith('apply a',true,'RIGHT JOIN');
+        $query = ApplyOpen::find()->joinWith('apply a',true,'RIGHT JOIN')->where(['type'=>13]);
         //关键词
         if($keywords){
             $keywords = mb_convert_encoding($keywords,'UTF-8','auto');
