@@ -358,7 +358,7 @@ class QuanXianServer extends Server
     {
         if(empty($arrOrgListTmp))
         {
-            $arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+            $arrOrgListTmp = $this->getAllOrg();
         }
         foreach($arrOrgListTmp as $val)
         {
@@ -377,6 +377,17 @@ class QuanXianServer extends Server
         return $strOrgFullName;
     }
     
+    public function getAllOrg()
+    {
+        $cache = Yii::$app->cache;
+        $arrOrgListTmp = $cache->get("ALL_ORG_CHE");
+        if(empty($arrOrgListTmp)) {
+            $arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+            $cache->set("ALL_ORG_CHE", $arrOrgListTmp, 600);
+        }
+        return $arrOrgListTmp;
+    }
+    
     /**
      * 得到公司ID
      *
@@ -388,7 +399,7 @@ class QuanXianServer extends Server
     {
         if(empty($arrOrgListTmp))
         {
-            $arrOrgListTmp = Org::find()->select('*')->asArray()->all();
+            $arrOrgListTmp = $this->getAllOrg();
         }
         foreach($arrOrgListTmp as $val)
         {
@@ -484,7 +495,8 @@ class QuanXianServer extends Server
                 $arrRoleData[] = [
                     'person_id' => $val['user_id'],
                     'role_id' => $val['project_role_id'],
-                    'org_ids' => implode(',', $val['organization_ids'])
+                    'org_ids' => implode(',', $val['organization_ids']),
+                    'company_ids' => $this->getCompanyIds($val['organization_ids']),
                 ];
             }
             
@@ -508,6 +520,25 @@ class QuanXianServer extends Server
             }
         }
         return $result;
+    }
+    
+    /**
+     * 公司IDS
+     * @param $orgIds
+     *
+     * @return string
+     */
+    public function getCompanyIds($orgIds)
+    {
+        $data = [];
+        foreach ($orgIds as $v){
+            $companyId = $this->getCompanyId($v);
+            if (in_array($companyId, $data) || $companyId == 0) {
+                continue;
+            }
+            $data[] = $companyId;
+        }
+        return implode(',', $data);
     }
     
     /**

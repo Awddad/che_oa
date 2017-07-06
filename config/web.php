@@ -53,7 +53,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'session'=>array(
-            'timeout'=> 3600 * 12,
+            'timeout'=> 3600 * 2,
         ),
         'user' => [
             'identityClass' => 'app\models\User',

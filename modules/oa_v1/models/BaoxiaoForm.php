@@ -49,6 +49,7 @@ class BaoxiaoForm extends BaseForm
 				
 			['bao_xiao_list','validateList'],
 			[['files','pics'],'safe'],
+            ['apply_id', 'checkOnly']
 		];
 	}
 	public function validatePersons($attribute, $params)
@@ -82,8 +83,6 @@ class BaoxiaoForm extends BaseForm
 			foreach($this->$attribute as $v){
 				if($v['money'] <= 0){
 					$this->addError($attribute, "报销金额不正确");
-				}elseif(!$v['type_name']){
-					$this->addError($attribute, "报销类型不正确");
 				}elseif(!$v['type'] > 0){
 					$this->addError($attribute, "报销类型不正确!");
 				}
@@ -169,9 +168,15 @@ class BaoxiaoForm extends BaseForm
 			//$model -> pics = $this -> pics?implode(',',$this -> pics):'';
 			$model -> pics = $this -> pics ? : '';
 		}elseif('baoxiaolist' == $type){
+            $tag = appmodel\TagTree::findOne($data['type']);
+            if(empty($tag)) {
+                $typeName = '';
+            } else {
+                $typeName = $tag->name;
+            }
 			$model -> apply_id = $this -> apply_id;
 			$model -> money = $data['money'];
-			$model -> type_name = $data['type_name'];
+			$model -> type_name = $typeName;
 			$model -> type = $data['type'];
 			$model -> des = @$data['des'];
 		}elseif('approval_log' == $type){

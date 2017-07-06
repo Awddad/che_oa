@@ -252,6 +252,7 @@ class BaseController extends Controller
     {
         //$message = (!$message) ? static::$code[$code] : $message;
         $message = static::$code[$code] ?  : $message;
+
         return compact('data', 'message', 'code');
     }
 

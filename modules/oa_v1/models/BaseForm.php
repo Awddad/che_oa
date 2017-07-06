@@ -98,6 +98,9 @@ class BaseForm extends Model
      * @param $attribute
      */
     public function checkOnly($attribute) {
+        if(strlen($this->$attribute) != 19) {
+            $this->addError($attribute, '申请单格式错误');
+        }
         if (Apply::findOne($this->$attribute)) {
             $this->addError($attribute, '申请单已存在');
         }
