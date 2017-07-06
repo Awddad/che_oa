@@ -32581,7 +32581,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //附件下载
         attachment_download: function attachment_download(index, row) {
             var time = Date.parse(new Date());
-            window.open('http://' + window.location.host + '/oa_v1/default/down?path=' + row.url + '&name=' + row.name + '.' + row.ext + '&type=crm&time=' + time + '&sign=' + __WEBPACK_IMPORTED_MODULE_19_js_md5___default()(this.apply_id + time + 'crm'));
+            window.open('http://' + window.location.host + '/oa_v1/default/down?apply_id=' + this.apply_id + '&path=' + row.url + '&name=' + row.name + '.' + row.ext + '&type=crm&time=' + time + '&sign=' + __WEBPACK_IMPORTED_MODULE_19_js_md5___default()(this.apply_id + time + 'crm'));
         },
         Pass_approve: function Pass_approve(des) {
             var _this2 = this;
@@ -78889,4 +78889,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[329]);
-//# sourceMappingURL=index.js.map?71a15f6610aa1ad68682
+//# sourceMappingURL=index.js.map?171b3232a5996438a5e3
