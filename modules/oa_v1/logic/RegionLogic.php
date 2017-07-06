@@ -54,7 +54,7 @@ class RegionLogic extends BaseLogic
     	$str = '';
     	$res = $this->getRegionAll();
     	$tmp = $res[$id];
-    	while($tmp['parent_id'] > 100000){
+    	while($tmp['parent_id'] > 0){
     	    $str = $tmp['fullName'].'-'.$str;
     	    $parent_id = $tmp['parent_id'];
     	    $tmp = $res[$parent_id];
@@ -72,7 +72,7 @@ class RegionLogic extends BaseLogic
         $data = [];
     	$res = $this->getRegionAll();
     	$tmp = $res[$id];
-    	while($tmp['parent_id'] > 100000){
+    	while($tmp['parent_id'] > 0){
     	    $data[] = $tmp['id'];
     	    $parent_id = $tmp['parent_id'];
     	    $tmp = $res[$parent_id];
