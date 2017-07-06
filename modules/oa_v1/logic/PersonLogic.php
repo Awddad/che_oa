@@ -52,9 +52,7 @@ class PersonLogic extends BaseLogic
                 '!=', 'person_id', $person->person_id
             ])->orderBy('person_id desc')->all();
         }
-        echo Person::find()->where(['in', 'company_id', $companyArr])->andWhere([
-            '!=', 'person_id', $person->person_id
-        ])->orderBy('person_id desc')->createCommand()->getRawSql();die;
+        
         $data = [];
         /**
          * @var Person $v
@@ -63,6 +61,18 @@ class PersonLogic extends BaseLogic
         	if($v->org_id <= 0){
         		continue;
         	}
+            $personName = $v->person_name. ' '. $v->org_full_name;
+            $data[] = [
+                'id' => $v->person_id,
+                'name' => $personName
+            ];
+        }
+        
+        $other = Person::find()->where(['company_id' => 1])->all();
+        foreach ($other as $v) {
+            if($v->org_id <= 0){
+                continue;
+            }
             $personName = $v->person_name. ' '. $v->org_full_name;
             $data[] = [
                 'id' => $v->person_id,
