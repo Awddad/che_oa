@@ -8376,7 +8376,7 @@ base.Node = __webpack_require__(184);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SpendTime; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return spendTime; });
 //公共域名配置
-var baseurl = 'http://172.4.0.192';
+var baseurl = '';
 
 var DateTime = function DateTime() {
   var date = new Date();
@@ -79819,4 +79819,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[329]);
-//# sourceMappingURL=index.js.map?b5810523a71d30790047
+//# sourceMappingURL=index.js.map?d7c85e41e9a4edfce1ee
