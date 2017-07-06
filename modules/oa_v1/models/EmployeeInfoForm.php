@@ -167,6 +167,12 @@ class EmployeeInfoForm extends BaseForm
         if(empty($model)){
             return ['status'=>false,'msg'=>'员工不存在'];
         }
+        $arr_status = [
+            0=>'待入职',
+            2=>'已入职',
+            3=>'已离职',
+            4=>'再入职'
+        ];
         $data = [
             'id' => $model->id,
             'name' => $model->name,
@@ -194,6 +200,8 @@ class EmployeeInfoForm extends BaseForm
             'political_id' => $model->political,
             'political' => ($tmp = Political::findOne($model->political)) ? $tmp->political : '',
             'nation' => $model->nation,
+            'entry' => $model->status,
+            'entry_status' => $arr_status[$model->status],
             'marriage' => $model->marriage
         ];
         return ['status'=>true,'data'=>$data];
