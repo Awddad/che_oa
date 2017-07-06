@@ -359,6 +359,12 @@ class TalentForm extends BaseForm
 	    $model->educational = $talent->educational;
 	    $model->work_time = $talent->work_time;
 	    $model->current_location = $talent->current_location;
+	    $model->age = $talent->age;
+	    $model->nation = $talent->nation;
+	    $model->native = $talent->native;
+	    $model->political = $talent->political;
+	    $model->marriage = $talent->marriage;
+	    $model->email = $talent->email;
 	    $model->status = 0;
 	    $model->employee_type = EmployeeType::findOne(['slug'=>'shiyong'])->id;
 	    $model->org_id = $this->org_id;
