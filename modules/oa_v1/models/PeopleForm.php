@@ -566,10 +566,10 @@ class PeopleForm extends BaseForm
      */
     protected function files($model)
     {
-        return [
-            'id' => $model->id,
-            'files' => json_decode($model->file, true),//文件
-        ];
+        $res = json_decode($model->file, true);//文件
+        $res = is_array(current($res)) ? current($res) : $res;
+        $res['id'] = $model->id;
+        return $res;
     }
     
     
