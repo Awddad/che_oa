@@ -358,6 +358,7 @@ class PeopleForm extends BaseForm
             'project_name' => $model->project_name,//项目名称
             'profession' => $model->project_profession,//项目职位
             'company' => $model->company_id ? $model->company->company_name : '',//公司名
+            'company_id' => $model->company_id,
             'start_time' => $model->start_time,//开始时间
             'end_time' => $model->end_time,//结束时间
             'project_des' => $model->project_des,//项目简介

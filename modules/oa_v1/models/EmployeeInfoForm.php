@@ -13,6 +13,7 @@ use yii;
 use app\modules\oa_v1\logic\EmployeeLogic;
 use app\models\Educational;
 use app\modules\oa_v1\logic\RegionLogic;
+use app\modules\oa_v1\logic\OrgLogic;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -181,6 +182,7 @@ class EmployeeInfoForm extends BaseForm
             'profession' => empty($model->job)?'':$model->job->name,
             'org_id' => $model->org_id,
             'org' => empty($model->org)?'':$model->org->org_name,
+            'org_info' => OrgLogic::instance()->getOrgIdByChild($model->org_id),
             'id_card' => $model->id_card,
             'entry_time' => $model->entry_time,
             'emp_type_id' => $model->employee_type,
