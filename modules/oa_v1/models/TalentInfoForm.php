@@ -172,7 +172,8 @@ class TalentInfoForm extends BaseForm
             'nation' => $model->nation,
             'job_status' => $model->job_status,
             'marriage' => $model->marriage,
-            'status' => $this->status_arr[$model->status]
+            'status' => $this->status_arr[$model->status],
+            'status_id' => $model->status
         ];
         return ['status'=>true,'data'=>$data];
     }
