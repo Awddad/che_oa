@@ -446,6 +446,7 @@ class PeopleForm extends BaseForm
             'start_time' => $model->start_time,//开始时间
             'end_time' => $model->end_time,//结束时间
             'educational' => $model->edu->educational,//学历
+            'educational_id' => $model->educational,//学历id
         ];
     }
     
