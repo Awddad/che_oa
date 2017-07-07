@@ -76451,6 +76451,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -76492,7 +76493,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl', 'isnav']), {
         ApplyID: function ApplyID() {
             return this.$store.state.applyloan.applyloan_addApplyID;
         },
@@ -76519,6 +76520,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         isVisible: function isVisible() {
             this.$router.push({ path: '/' });
+        },
+        ismobile: function ismobile() {
+            this.$router.push({ path: '/', query: { isnav: 0 } });
         },
         handlefileChange: function handlefileChange(response, file, fileList) {
             this.counter = this.counter + 1;
@@ -77923,6 +77927,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -77960,7 +77965,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl', 'isnav']), {
         ApplyID: function ApplyID() {
             return this.$store.state.chapter.chapter_addApplyID;
         },
@@ -77979,6 +77984,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         isVisible: function isVisible() {
             this.$router.push({ path: '/' });
+        },
+        ismobile: function ismobile() {
+            this.$router.push({ path: '/', query: { isnav: 0 } });
         },
         getSummaries: function getSummaries(param) {
             var columns = param.columns,
@@ -80486,6 +80494,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -80523,7 +80532,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl']), {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['BaseUrl', 'isnav']), {
         ApplyID: function ApplyID() {
             return this.$store.state.reimburse.reimburse_addApplyID;
         },
@@ -80553,6 +80562,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         isVisible: function isVisible() {
             this.$router.push({ path: '/' });
+        },
+        ismobile: function ismobile() {
+            this.$router.push({ path: '/', query: { isnav: 0 } });
         },
         getSummaries: function getSummaries(param) {
             var columns = param.columns,
@@ -80745,16 +80757,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ConstCopyPerson_vue__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_ConstCopyPerson_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstModal_ConstModal_vue__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_ConstModal_ConstModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_CopyModal_CopyModal_vue__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_CopyModal_CopyModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue__ = __webpack_require__(187);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue__ = __webpack_require__(949);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CardModal_CardModal_vue__ = __webpack_require__(187);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_CardModal_CardModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_CardModal_CardModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_repayment_submitModal_vue__ = __webpack_require__(949);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_repayment_submitModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_repayment_submitModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuex__ = __webpack_require__(4);
 //
 //
 //
@@ -80857,6 +80872,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
+
 
 
 
@@ -80868,11 +80886,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'repayment',
     components: {
-        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_0__components_ConstCopyPerson_vue___default.a,
-        ConstModal: __WEBPACK_IMPORTED_MODULE_1__components_ConstModal_ConstModal_vue___default.a,
-        CopyModal: __WEBPACK_IMPORTED_MODULE_2__components_CopyModal_CopyModal_vue___default.a,
-        CardModal: __WEBPACK_IMPORTED_MODULE_3__components_CardModal_CardModal_vue___default.a,
-        SubmitModal: __WEBPACK_IMPORTED_MODULE_4__components_repayment_submitModal_vue___default.a
+        ConstCopyPerson: __WEBPACK_IMPORTED_MODULE_1__components_ConstCopyPerson_vue___default.a,
+        ConstModal: __WEBPACK_IMPORTED_MODULE_2__components_ConstModal_ConstModal_vue___default.a,
+        CopyModal: __WEBPACK_IMPORTED_MODULE_3__components_CopyModal_CopyModal_vue___default.a,
+        CardModal: __WEBPACK_IMPORTED_MODULE_4__components_CardModal_CardModal_vue___default.a,
+        SubmitModal: __WEBPACK_IMPORTED_MODULE_5__components_repayment_submitModal_vue___default.a
     },
     data: function data() {
         return {
@@ -80894,7 +80912,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$store.dispatch('Repayment_Record');
     },
 
-    computed: {
+    computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6_vuex__["b" /* mapGetters */])(['BaseUrl', 'isnav']), {
         ApplyID: function ApplyID() {
             return this.$store.state.repayment.repayment_addApplyID;
         },
@@ -80913,10 +80931,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         repayment_record: function repayment_record() {
             return this.$store.state.repayment.repayment_record;
         }
-    },
+    }),
     methods: {
         isVisible: function isVisible() {
             this.$router.push({ path: '/' });
+        },
+        ismobile: function ismobile() {
+            this.$router.push({ path: '/', query: { isnav: 0 } });
         },
         handleSelectionChange: function handleSelectionChange(val) {
             this.repayment_select_record = val;
@@ -81605,7 +81626,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 	},
 
 	computed: __WEBPACK_IMPORTED_MODULE_0_D_xampp_htdocs_www_cheoa_node_modules_babel_runtime_helpers_extends___default()({}, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['isnav'])),
-	beforeCreate: function beforeCreate() {
+	created: function created() {
+
 		var isnav = this.$route.query.isnav == null ? 1 : this.$route.query.isnav;
 		var pagenation = this.$route.query.pagenation == null ? 1 : this.$route.query.pagenation;
 		localStorage.isnav = isnav;
@@ -112543,7 +112565,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onsubmitCheck('ruleForm')
       }
     }
-  }, [_vm._v("确 定")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("确 定")]), _vm._v(" "), (_vm.isnav == 0) ? _c('el-button', {
+    on: {
+      "click": function($event) {
+        _vm.ismobile('ruleForm')
+      }
+    }
+  }, [_vm._v("取 消")]) : _c('el-button', {
     on: {
       "click": function($event) {
         _vm.isVisible('ruleForm')
@@ -114836,7 +114864,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onsubmitApplyloan('ruleForm')
       }
     }
-  }, [_vm._v("确 定")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("确 定")]), _vm._v(" "), (_vm.isnav == 0) ? _c('el-button', {
+    on: {
+      "click": function($event) {
+        _vm.ismobile('ruleForm')
+      }
+    }
+  }, [_vm._v("取 消")]) : _c('el-button', {
     on: {
       "click": function($event) {
         _vm.isVisible('ruleForm')
@@ -120516,7 +120550,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onsubmitRepayment('ruleForm')
       }
     }
-  }, [_vm._v("确 定")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("确 定")]), _vm._v(" "), (_vm.isnav == 0) ? _c('el-button', {
+    on: {
+      "click": function($event) {
+        _vm.ismobile('ruleForm')
+      }
+    }
+  }, [_vm._v("取 消")]) : _c('el-button', {
     on: {
       "click": function($event) {
         _vm.isVisible('ruleForm')
@@ -121408,7 +121448,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         _vm.onsubmitReimburse('ruleForm')
       }
     }
-  }, [_vm._v("确 定")]), _vm._v(" "), _c('el-button', {
+  }, [_vm._v("确 定")]), _vm._v(" "), (_vm.isnav == 0) ? _c('el-button', {
+    on: {
+      "click": function($event) {
+        _vm.ismobile('ruleForm')
+      }
+    }
+  }, [_vm._v("取 消")]) : _c('el-button', {
     on: {
       "click": function($event) {
         _vm.isVisible('ruleForm')
@@ -132998,4 +133044,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[445]);
-//# sourceMappingURL=index.js.map?2610f3ed61ad41fe7d57
+//# sourceMappingURL=index.js.map?0977e9971f76e1d20642
