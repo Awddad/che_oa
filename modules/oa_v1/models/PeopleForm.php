@@ -103,7 +103,7 @@ class PeopleForm extends BaseForm
             ['company_id','exist','targetClass'=>'\app\models\PeopleWorkExperience','targetAttribute'=>'id','message'=>'公司不存在！'],
             ['edu','exist','targetClass'=>'\app\models\Educational','targetAttribute'=>'id','message'=>'学历不正确！'],
             ['name','string','max'=>20,'message'=>'技能名太长'],
-            ['level','in', 'range' => [1, 2, 3, 4], 'message'=>'技能等级不正确'],
+            ['level','in', 'range' => [1, 2, 3, 4, 5], 'message'=>'技能等级不正确'],
             ['tran_content','string'],
             [
                 'id',
