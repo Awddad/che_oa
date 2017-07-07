@@ -75428,6 +75428,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -117093,8 +117095,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         }, [_vm._v("下载")])]
       }
     }])
-  }, [_c('el-dialog', {
+  })], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('subapprove', {
     attrs: {
+      "approvable": _vm.approvable
+    },
+    on: {
+      "Pass_approve": _vm.Pass_approve
+    }
+  }), _vm._v(" "), _c('el-dialog', {
+    attrs: {
+      "title": "预览",
       "size": "tiny"
     },
     model: {
@@ -117104,20 +117114,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       },
       expression: "dialogVisible"
     }
+  }, [_c('div', {
+    staticClass: "t-c"
   }, [_c('img', {
+    staticStyle: {
+      "max-width": "100%"
+    },
     attrs: {
-      "width": "100%",
       "src": _vm.dialogImageUrl,
       "alt": ""
     }
-  })])], 1)], 1)], 1)], 1)], 1) : _vm._e(), _vm._v(" "), _c('subapprove', {
-    attrs: {
-      "approvable": _vm.approvable
-    },
-    on: {
-      "Pass_approve": _vm.Pass_approve
-    }
-  })], 1)
+  })])])], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -132945,4 +132952,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[445]);
-//# sourceMappingURL=index.js.map?3f88fd010f4faddaf29d
+//# sourceMappingURL=index.js.map?9f754af8b41adc472c67
