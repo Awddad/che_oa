@@ -16782,7 +16782,7 @@ function RepaymentStatistics_list(params) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return spendTime; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return digitUppercase; });
 //api公共域名配置
-var baseurl = '';
+var baseurl = 'http://172.4.0.192';
 
 var DateTime = function DateTime() {
     var date = new Date();
@@ -111560,7 +111560,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "prop": "name",
       "label": "附件名",
-      "width": "400"
+      "width": "210"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
@@ -111571,7 +111571,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
       "label": "操作",
-      "width": "80"
+      "width": "150"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -117096,7 +117096,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "type": "index",
       "label": "序号",
-      "width": "150"
+      "width": "80"
     }
   }), _vm._v(" "), _c('el-table-column', {
     attrs: {
@@ -132998,4 +132998,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[445]);
-//# sourceMappingURL=index.js.map?e03da8eeae4d715f2d60
+//# sourceMappingURL=index.js.map?15e26fd6659956ac962e
