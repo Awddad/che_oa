@@ -22,6 +22,9 @@ class PeopleForm extends BaseForm
     const SCENARIO_FILE_EDIT = 'file_edit';//修改能力评价
     const SCENARIO_FILE_GET = 'file_get';//获得能力评价
     const SCENARIO_FILE_DEL = 'file_del';//删除能力评价
+    const SCENARIO_TRAIN_EXP_EDIT = 'train_exp_edit';//修改培训经验
+    const SCENARIO_TRAIN_EXP_DEL = 'train_exp_del';//删除培训经验
+    const SCENARIO_TRAIN_EXP_GET = 'train_exp_get';//获得培训经验
     
     public $id;
     public $company_name;
@@ -39,6 +42,9 @@ class PeopleForm extends BaseForm
     public $name;
     public $level;
     public $files;
+    
+    public $train_place;
+    public $tran_content;
     
     public $talent;
     public $employee;
@@ -77,11 +83,18 @@ class PeopleForm extends BaseForm
                 'on' => [self::SCENARIO_FILE_EDIT],
                 'message' => '{attribute}不能为空'
             ],
+            [
+                ['train_place','start_time','end_time','tran_content'],
+                'required',
+                'on' => [self::SCENARIO_TRAIN_EXP_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
             ['id','required','on'=>[self::SCENARIO_WORK_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_PROJECT_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_EDU_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_ABILITY_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_FILE_DEL],'message' => '{attribute}不能为空'],
+            ['id','required','on'=>[self::SCENARIO_TRAIN_EXP_DEL],'message' => '{attribute}不能为空'],
             
             ['talent','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
             ['employee','exist','targetClass'=>'\app\models\Employee','targetAttribute'=>'id','message'=>'员工不存在！'],
@@ -91,6 +104,7 @@ class PeopleForm extends BaseForm
             ['edu','exist','targetClass'=>'\app\models\Educational','targetAttribute'=>'id','message'=>'学历不正确！'],
             ['name','string','max'=>20,'message'=>'技能名太长'],
             ['level','in', 'range' => [1, 2, 3, 4], 'message'=>'技能等级不正确'],
+            ['tran_content','string'],
             [
                 'id',
                 'exist',
@@ -146,6 +160,17 @@ class PeopleForm extends BaseForm
                 ],
                 'message' => '文件不存在！'
             ],
+            [
+                'id',
+                'exist',
+                'targetClass' => '\app\models\peopleTrainExperience',
+                'on' => [
+                    self::SCENARIO_TRAIN_EXP_EDIT,
+                    self::SCENARIO_TRAIN_EXP_GET,
+                    self::SCENARIO_TRAIN_EXP_DEL
+                ],
+                'message' => '培训经历不存在！'
+            ],
         ];
     }
     
@@ -167,6 +192,9 @@ class PeopleForm extends BaseForm
             self::SCENARIO_FILE_EDIT => ['id','talent','employee','files'],
             self::SCENARIO_FILE_GET => ['id','talent','employee'],
             self::SCENARIO_FILE_DEL => ['id','talent','employee'],
+            self::SCENARIO_TRAIN_EXP_EDIT => ['id','talent','employee','train_place','start_time','end_time','tran_content'],
+            self::SCENARIO_TRAIN_EXP_DEL => ['id','talent','employee'],
+            self::SCENARIO_TRAIN_EXP_GET => ['id','talent','employee'],
         ];
     }
     /**
@@ -573,6 +601,87 @@ class PeopleForm extends BaseForm
     }
     
     
+    
+    /**
+     * 修改培训经历
+     * @param array $user
+     */
+    public function editTrainExp($user)
+    {
+        $model = $this->getModel('\app\models\PeopleTrainExperience');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        $model->train_place = $this->train_place;
+        $model->start_time = $this->start_time;
+        $model->end_time = $this->end_time;
+        $model->tran_content = $this->tran_content;        
+         
+        if(!$model->save()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'编辑培训经历',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+    /**
+     * 删除培训经历
+     * @param array $user
+     */
+    public function delTrainExp($user)
+    {
+        $model = $this->getModel('\app\models\PeopleTrainExperience');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        if(!$model->delete()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'删除培训经历',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+    
+    /**
+     * 获得培训经历
+     */
+    public function getTrainExp()
+    {
+        if($this->id){
+            $res = \app\models\PeopleTrainExperience::findOne($this->id);
+            $data = [];
+            if($res){
+                $data = $this->trainExp($res);
+            }
+        }else{
+            if($this->talent){
+                $res = \app\models\PeopleTrainExperience::find()->where(['talent_id'=>$this->talent])->orderBy(['id'=>SORT_ASC])->all();
+            }elseif($this->employee){
+                $res = \app\models\PeopleTrainExperience::find()->where(['employee_id'=>$this->employee])->orderBy(['id'=>SORT_ASC])->all();
+            }
+            $data = [];
+            if($res){
+                foreach($res as $v){
+                    $data[] = $this->trainExp($v);
+                }
+            }
+        }
+        return $data;
+    }
+    /**
+     * 格式化培训经历
+     * @param \app\models\PeopleFiles $model
+     */
+    protected function trainExp($model)
+    {
+        return [
+            'id'=>$model->id,
+            'train_place'=>$model->train_place,//培训地点
+            'tran_content'=>$model->tran_content,//培训内容
+            'start_time' => $model->start_time,//开始时间
+            'end_time' => $model->end_time,//结束时间
+        ];
+    }
     
     
     
