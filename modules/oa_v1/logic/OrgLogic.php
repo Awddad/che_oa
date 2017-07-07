@@ -59,7 +59,7 @@ class OrgLogic extends BaseLogic
     public function getOrgIdByChild($org_id)
     {
         $data = [];
-        while(($res = Org::findOne($org_id)) && $res['pid'] > 0){
+        while(($res = Org::findOne($org_id)) && $res['pid'] >= 0){
             $data[] = (int)$res['org_id'];
             $org_id = $res['pid'];
         }
