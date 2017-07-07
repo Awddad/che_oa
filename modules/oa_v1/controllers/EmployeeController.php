@@ -5,6 +5,7 @@ use app\modules\oa_v1\models\EmployeeForm;
 use yii;
 use app\modules\oa_v1\models\EmployeeInfoForm;
 use app\modules\oa_v1\logic\AssetLogic;
+use app\models\Employee;
 
 /**
  * 员工
@@ -205,10 +206,10 @@ class EmployeeController extends BaseController
     public function actionCanBackAsset()
     {
         $id = yii::$app->request->get('id');
-        if($id){
-            $data = AssetLogic::instance()->getCanBackAsset($id);
+        if($id && $emp = Employee::findOne($id)){
+            $data = AssetLogic::instance()->getCanBackAsset($emp->person_id);
             return $this->_return($data);
         }
-        return $this->_returnError(403,'id不能为空');
+        return $this->_returnError(403,'id不正确');
     } 
 }
