@@ -16782,7 +16782,7 @@ function RepaymentStatistics_list(params) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return spendTime; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return digitUppercase; });
 //api公共域名配置
-var baseurl = 'http://172.4.0.192';
+var baseurl = '';
 
 var DateTime = function DateTime() {
     var date = new Date();
@@ -132998,4 +132998,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[445]);
-//# sourceMappingURL=index.js.map?15e26fd6659956ac962e
+//# sourceMappingURL=index.js.map?2610f3ed61ad41fe7d57
