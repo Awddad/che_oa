@@ -42,8 +42,10 @@ class QuanxianController extends Controller
             	$intResult = $objQx->curlUpdatePositions();
             	break;
             case 'users'://用户列表
+                $intResult = $objQx->curlUpdateAllUser();
+                break;
             case 'projects/users'://项目用户
-                $intResult = $objQx->curlUpdateAllUser() + $objQx->curlUpdateUser();
+                $intResult = $objQx->curlUpdateUser();
                 break;
             
             //角色权限目录相关信息变动
