@@ -280,4 +280,60 @@ class PeopleController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    
+    
+    /**
+     * 修改培训经历
+     */
+    public function actionTrainExpEdit()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_TRAIN_EXP_EDIT);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->editTrainExp($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    /**
+     * 获取培训经历
+     */
+    public function actionTrainExpGet()
+    {
+        $get = yii::$app->request->get();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_TRAIN_EXP_GET);
+        $model->load(['PeopleForm'=>$get]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $data = $model->getTrainExp($this->arrPersonInfo);
+    
+        return $this->_return($data);
+    }
+    /**
+     * 删除培训经历
+     */
+    public function actionTrainExpDel()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_TRAIN_EXP_DEL);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->delTrainExp($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }
