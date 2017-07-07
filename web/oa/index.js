@@ -78321,6 +78321,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -78392,7 +78398,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             confirm_type: '',
             isCollectPayment: false,
             confirm_title: '',
-            data_type: ''
+            data_type: '',
+
+            //预览
+            dialogVisible: false,
+            dialogImageUrl: ''
         };
     },
 
@@ -78524,6 +78534,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         ToggleDialog: function ToggleDialog() {
             this.isCollectPayment = false;
+        },
+        perview: function perview(row) {
+            this.dialogVisible = true;
+            this.dialogImageUrl = 'http://' + window.location.host + row.url;
         },
         Onconfirm: function Onconfirm() {
             var _this2 = this;
@@ -111562,7 +111576,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     scopedSlots: _vm._u([{
       key: "default",
       fn: function(scope) {
-        return [_c('el-button', {
+        return [(scope.row.ext == 'gif' || scope.row.ext == 'jpg' || scope.row.ext == 'png') ? _c('el-button', {
+          attrs: {
+            "type": "text",
+            "size": "small"
+          },
+          on: {
+            "click": function($event) {
+              _vm.perview(scope.row)
+            }
+          }
+        }, [_vm._v("预览")]) : _vm._e(), _vm._v(" "), _c('el-button', {
           attrs: {
             "type": "text",
             "size": "small"
@@ -111606,7 +111630,29 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "ToggleDialog": _vm.ToggleDialog,
       "OnSubmitConfirmModal": _vm.OnSubmitConfirmModal
     }
-  })], 1)
+  }), _vm._v(" "), _c('el-dialog', {
+    attrs: {
+      "title": "预览",
+      "size": "tiny"
+    },
+    model: {
+      value: (_vm.dialogVisible),
+      callback: function($$v) {
+        _vm.dialogVisible = $$v
+      },
+      expression: "dialogVisible"
+    }
+  }, [_c('div', {
+    staticClass: "t-c"
+  }, [_c('img', {
+    staticStyle: {
+      "max-width": "100%"
+    },
+    attrs: {
+      "src": _vm.dialogImageUrl,
+      "alt": ""
+    }
+  })])])], 1)
 },staticRenderFns: []}
 
 /***/ }),
@@ -132952,4 +132998,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[445]);
-//# sourceMappingURL=index.js.map?9f754af8b41adc472c67
+//# sourceMappingURL=index.js.map?e03da8eeae4d715f2d60
