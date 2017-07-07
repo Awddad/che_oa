@@ -7,6 +7,7 @@ use app\models\Region;
 class RegionLogic extends BaseLogic
 {
 	protected $key = 'oa_region';
+	protected $key_all = 'oa_region_all';
 	
 	/**
 	 * 地区列表
@@ -50,13 +51,53 @@ class RegionLogic extends BaseLogic
      */
     public function getRegionByChild($id)
     {
+        if($id <=0 ){
+            return '';
+        }
     	$str = '';
-    	$res = Region::findOne($id);
-    	if($res->parent_id > 100000){
-    		$str = $this->getRegionByChild($res->parent_id).'-'.$res->fullName;
-    	}else{
-    		$str = $res->fullName;
+    	$res = $this->getRegionAll();
+    	$tmp = $res[$id];
+    	while($tmp['parent_id'] > 0){
+    	    $str = $tmp['fullName'].'-'.$str;
+    	    $parent_id = $tmp['parent_id'];
+    	    $tmp = $res[$parent_id];
+    	    unset($parent_id);
     	}
-    	return $str;
+    	return mb_substr($str,0,-1);
+    }
+    /**
+     * 通过child获得地区id
+     * @param int $id
+     * @return array
+     */
+    public function getRegionIdByChild($id)
+    {
+        if($id <= 0){
+            return [];
+        }
+        $data = [];
+    	$res = $this->getRegionAll();
+    	$tmp = $res[$id];
+    	while($tmp['parent_id'] > 0){
+    	    $data[] = (int)$tmp['id'];
+    	    $parent_id = $tmp['parent_id'];
+    	    $tmp = $res[$parent_id];
+    	    unset($parent_id);
+    	}
+    	return array_reverse($data);
+    }
+    
+    protected function getRegionAll()
+    {
+        $cache = yii::$app->cache;
+        if(!$region = $cache->get($this->key_all)){
+            $tmp = Region::find()->asArray()->all();
+            $region = [];
+            foreach($tmp as $v){
+                $region[$v['id']] = $v;
+            }
+            $cache->set($this->key_all, $region,86400);
+        }
+        return $region;
     }
 }

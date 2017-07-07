@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Educational;
 use app\models\Political;
 use app\models\Region;
+use app\modules\oa_v1\logic\RegionLogic;
 
 class TalentInfoForm extends BaseForm
 {
@@ -162,7 +163,8 @@ class TalentInfoForm extends BaseForm
             'educational_id' => $model->educational,
             'educational' => ($edu = Educational::findOne($model->educational)) ? $edu->educational : '',
             'location_id' => $model->current_location,
-            'location' => ($region = Region::findOne($model->current_location)) ? $region->name : '',
+            'location' => RegionLogic::instance()->getRegionByChild($model->current_location),
+            'location_info' => RegionLogic::instance()->getRegionIdByChild($model->current_location),
             'daogang' => $model->daogang,
             'native' => $model->native,
             'political_id' => $model->political,
@@ -170,7 +172,8 @@ class TalentInfoForm extends BaseForm
             'nation' => $model->nation,
             'job_status' => $model->job_status,
             'marriage' => $model->marriage,
-            'status' => $this->status_arr[$model->status]
+            'status' => $this->status_arr[$model->status],
+            'status_id' => $model->status
         ];
         return ['status'=>true,'data'=>$data];
     }
