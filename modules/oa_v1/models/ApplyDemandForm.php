@@ -109,9 +109,12 @@ class ApplyDemandForm extends BaseForm
     public function checkApplyBuyId($attribute)
     {
         if ($this->scenario == self::CONFIRM_BUY) {
-            $applyBuy = Apply::findOne($this->$attribute);
-            if (!$applyBuy  || $applyBuy->status != 99 ) {
-                $this->addError($attribute, '请购单不存在或者未审核通过');
+            if ($this->$attribute > 0) {
+                $applyBuy = Apply::findOne($this->$attribute);
+                if (!$applyBuy  || $applyBuy->status != 99 ) {
+                    $this->addError($attribute, '请购单不存在或者未审核通过');
+                }
+    
             }
         }
     }
@@ -191,7 +194,7 @@ class ApplyDemandForm extends BaseForm
         $model->apply_id = $this->apply_id;
         $model->files = $this->files ? json_encode($this->files): '';
         $model->des = $this->des;
-        $model->status = 0;
+        $model->status = 1;
         if (!$model->save()) {
             throw new Exception('需求单保存失败');
         }
@@ -221,11 +224,20 @@ class ApplyDemandForm extends BaseForm
         return true;
     }
     
-    
+    /**
+     * 采购单确认
+     *
+     * @return object $apply
+     */
     public function confirmSave()
     {
         $apply = ApplyDemand::findOne($this->apply_id);
         $apply->buy_type = $this->buy_type;
+        if ($this->buy_type == 2) {
+            $apply->status = 2;
+        } else {
+            $apply->status = 3;
+        }
         $apply->apply_buy_id = $this->apply_buy_id;
         $apply->tips = $this->tips;
         if (!$apply->save()) {

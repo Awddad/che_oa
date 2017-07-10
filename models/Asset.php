@@ -39,7 +39,7 @@ class Asset extends \yii\db\ActiveRecord
         return [
             [['asset_type_id', 'asset_brand_id', 'amount', 'free_amount', 'created_at', 'updated_at'], 'integer'],
             [['price'], 'number'],
-            [['created_at', 'updated_at'], 'required'],
+            [['created_at', 'updated_at'], 'safe'],
             [['asset_type_name', 'asset_brand_name', 'name'], 'string', 'max' => 128],
         ];
     }
