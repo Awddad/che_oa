@@ -221,11 +221,20 @@ class ApplyDemandForm extends BaseForm
         return true;
     }
     
-    
+    /**
+     * 采购单确认
+     *
+     * @return object $apply
+     */
     public function confirmSave()
     {
         $apply = ApplyDemand::findOne($this->apply_id);
         $apply->buy_type = $this->buy_type;
+        if ($this->buy_type == 2) {
+            $apply->status = 2;
+        } else {
+            $apply->status = 3;
+        }
         $apply->apply_buy_id = $this->apply_buy_id;
         $apply->tips = $this->tips;
         if (!$apply->save()) {
