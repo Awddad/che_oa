@@ -77,7 +77,7 @@ class AssetListForm extends Model
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             if (!$asset->save()) {
-                throw new Exception('入库失败');
+                throw new Exception('入库失败', $asset->errors);
             }
             $assetLogic->addAssetList($asset, $this->amount);
             $transaction->commit();
