@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\models\ApplyDemand;
+use app\models\Role;
 use app\modules\oa_v1\logic\BaseLogic;
 use Yii;
 use app\models\Apply;
@@ -60,6 +61,10 @@ class ApplyDemandController extends BaseController
      */
     public function actionList()
     {
+        $role = Role::findOne(Yii::$app->session->get('ROLE_ID'));
+        if($role->slug != 'xingzheng') {
+            $this->_returnError(403);
+        }
         $param = Yii::$app->request->get();
         $query = Apply::find()->where([
             'status' => 99,
