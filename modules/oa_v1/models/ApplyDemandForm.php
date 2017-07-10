@@ -191,7 +191,7 @@ class ApplyDemandForm extends BaseForm
         $model->apply_id = $this->apply_id;
         $model->files = $this->files ? json_encode($this->files): '';
         $model->des = $this->des;
-        $model->status = 0;
+        $model->status = 1;
         if (!$model->save()) {
             throw new Exception('需求单保存失败');
         }
