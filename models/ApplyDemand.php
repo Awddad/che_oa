@@ -18,7 +18,6 @@ use Yii;
 class ApplyDemand extends \yii\db\ActiveRecord
 {
     const STATUS = [
-        0 => '未采购',
         1 => '未采购',
         2 => '部分采购',
         3 => '已采购'
