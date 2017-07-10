@@ -7389,7 +7389,7 @@ assert.equal = function assertEqual(l, r, msg) {
 
 
 //api公共域名配置
-var baseurl = 'http://172.4.0.192';
+var baseurl = '';
 
 var DateTime = function DateTime() {
     var date = new Date();
@@ -87558,4 +87558,4 @@ module.exports = function(module) {
 
 /***/ })
 ],[350]);
-//# sourceMappingURL=index.js.map?360b74d935b93dab0d52
+//# sourceMappingURL=index.js.map?1ce893e9d7a9a6a8e70d
