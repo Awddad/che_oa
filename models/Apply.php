@@ -374,4 +374,24 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AssetBack::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * @var array
+     */
+    public $typeArr = [
+        1 => '报销',
+        2 => '借款',
+        3 => '还款',
+        4 => '付款',
+        5 => '请购',
+        6 => '需求单',
+        7 => '用章',
+        8 => '固定资产领用',
+        9 => '固定资产归还',
+        10 => '转正',
+        11 => '离职',
+        12 => '调职',
+        13 => '开店',
+    ];
+    
 }
