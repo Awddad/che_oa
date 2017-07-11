@@ -375,14 +375,17 @@ class Apply extends \yii\db\ActiveRecord
             $typeName = $this->typeArr[$this->type];
             $ApprovalLog = ApprovalLog::find()->where([
                 'apply_id' => $this->apply_id,
-                'steep' => 1
+                'is_to_me_now' => 1
             ])->one();
-            $data = [
-                'tips_title' => 'OA -' .$typeName. '申请',
-                'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
-                'receivers' => Person::findOne($ApprovalLog->approval_person_id)->bqq_open_id,
-            ];
-            BaseLogic::instance()->sendQqMsg($data);
+            $person = Person::findOne($ApprovalLog->approval_person_id);
+            if($person->bqq_open_id) {
+                $data = [
+                    'tips_title' => 'OA -' .$typeName. '申请',
+                    'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+                    'receivers' => $person->bqq_open_id,
+                ];
+                BaseLogic::instance()->sendQqMsg($data);
+            }
         }
         return parent::afterSave($insert, $changedAttributes);
         
