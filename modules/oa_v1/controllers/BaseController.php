@@ -154,7 +154,10 @@ class BaseController extends Controller
                 //去重
                 $this->arrPersonRoleInfo['roleInfo'] = array_unique($arrMenuTmp);
                 //数据权限
-                $objRoleOrgMod = RoleOrgPermission::findOne(['person_id' => $personId, 'role_id' => $intRoleId]);
+                $objRoleOrgMod = RoleOrgPermission::find()->where([
+                    'person_id' => $personId,
+                    'role_id' => $intRoleId
+                ])->one();
                 if($objRoleOrgMod)//设置过数据权限
                 {
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
@@ -228,7 +231,7 @@ class BaseController extends Controller
         400 => '失败',
         401 => '未登录',
         402 => '用户不存在',
-        403 => '参数错误',
+        403 => '无访问权限',
         404 => '系统错误',
         405 => '没有申请权限',
         1010 => '申请ID不能确认，请求不合法',
