@@ -163,12 +163,12 @@ class PayLogic extends BaseLogic
                 'token' => \Yii::$app->params['cai_wu']['token'],
                 'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
             ])->getAccount($person['org_id']),
-            'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
             'bank_card_id' => $applyDetail->bank_card_id,
             'bank_name' => $applyDetail->bank_name,
             'bank_name_des' => $applyDetail->bank_name_des,
         ];
         if($apply->type == 1) {
+            $data['tags'] = TreeTagLogic::instance()->getTreeTagsByParentId();
             foreach ($applyDetail->list as $v) {
                 $data['list'][] = [
                     'id' => $v->id,
@@ -178,6 +178,8 @@ class PayLogic extends BaseLogic
                     'des' => $v->des
                 ];
             }
+        } else {
+            $data['tags'] = TreeTagLogic::instance()->getTreeTagsByParentId(2);
         }
         return $data;
     }
