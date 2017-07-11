@@ -182,13 +182,16 @@ class Apply extends \yii\db\ActiveRecord
           
         $this->status = self::STATUS_FAIL;
         $this->next_des = '审批不通过，已终止';
-        $typeName = $this->typeArr[$this->type];
-        $data = [
-            'tips_title' => 'OA -' .$typeName. '申请不通过',
-            'tips_content' => '你发起的'. $typeName.'申请不通过，请在OA系统进行查看',
-            'receivers' => Person::findOne($this->person_id)->bqq_open_id,
-        ];
-        BaseLogic::instance()->sendQqMsg($data);
+        $person = Person::findOne($this->person_id);
+        if($person->bqq_open_id) {
+            $typeName = $this->typeArr[$this->type];
+            $data = [
+                'tips_title' => 'OA -' .$typeName. '申请不通过',
+                'tips_content' => '你发起的'. $typeName.'申请不通过，请在OA系统进行查看',
+                'receivers' => $person->bqq_open_id,
+            ];
+            BaseLogic::instance()->sendQqMsg($data);
+        }
         return $this->save();
         
     }
@@ -202,13 +205,16 @@ class Apply extends \yii\db\ActiveRecord
     {
         $this->next_des = '等待'.$person->approval_person.'审批';
         $this->status = self::STATUS_ING;
-        $typeName = $this->typeArr[$this->type];
-        $data = [
-            'tips_title' => 'OA -' .$typeName. '申请',
-            'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
-            'receivers' => Person::findOne($person->approval_person_id)->bqq_open_id,
-        ];
-        BaseLogic::instance()->sendQqMsg($data);
+        $persons = Person::findOne($person->approval_person_id);
+        if ($persons->bqq_open_id) {
+            $typeName = $this->typeArr[$this->type];
+            $data = [
+                'tips_title' => 'OA -' .$typeName. '申请',
+                'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+                'receivers' => $persons->bqq_open_id,
+            ];
+            BaseLogic::instance()->sendQqMsg($data);
+        }
         return $this->save();
     }
 
@@ -232,8 +238,10 @@ class Apply extends \yii\db\ActiveRecord
             'in', 'oa_role.slug', ['caiwu']
         ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids)")->all();
         foreach ($personIds as $v) {
-            $data['receivers'] = Person::findOne($v['person_id'])->bqq_open_id;
-            BaseLogic::instance()->sendQqMsg($data);
+            if ($person = Person::findOne($v['person_id'])) {
+                $data['receivers'] = $person->bqq_open_id;
+                BaseLogic::instance()->sendQqMsg($data);
+            }
         }
         return $this->save();
     }
@@ -255,13 +263,16 @@ class Apply extends \yii\db\ActiveRecord
         }
         $this->next_des = '审批完成';
         $this->status = self::STATUS_OK;
-        $typeName = $this->typeArr[$this->type];
-        $data = [
-            'tips_title' => 'OA - ' .$typeName. '申请完成',
-            'tips_content' => '你发起的'. $typeName.'已完成，请在OA系统进行查看',
-            'receivers' => Person::findOne($this->person_id)->bqq_open_id,
-        ];
-        BaseLogic::instance()->sendQqMsg($data);
+        $person = Person::findOne($this->person_id);
+        if ($person->bqq_open_id) {
+            $typeName = $this->typeArr[$this->type];
+            $data = [
+                'tips_title' => 'OA - ' .$typeName. '申请完成',
+                'tips_content' => '你发起的'. $typeName.'已完成，请在OA系统进行查看',
+                'receivers' => $person->bqq_open_id,
+            ];
+            BaseLogic::instance()->sendQqMsg($data);
+        }
         return $this->save();
     }
 
