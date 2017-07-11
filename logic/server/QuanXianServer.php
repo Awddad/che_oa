@@ -257,7 +257,7 @@ class QuanXianServer extends Server
                     'email' => $val['email'],
                     'phone' => $val['phone'],
                     'bqq_open_id' => $val['bqq_open_id'],
-                    'role_ids' => implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] )),
+                    'role_ids' => isset($val['roles']) ? implode(',', array_map(function($v){return $v['id'];}, (array)$val['roles'] )):'',
                     'company_id' => $this->getCompanyId($val['organization_id'], $arrOrgListTmp)
                 ];
                 //银行卡信息
