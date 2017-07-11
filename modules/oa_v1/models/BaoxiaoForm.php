@@ -119,7 +119,7 @@ class BaoxiaoForm extends BaseForm
                     $typeName = $this->typeArr[$this->type];
                     $data = [
                         'tips_title' => 'OA -' .$typeName. '申请',
-                        'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+                        'tips_content' => '员工'.$model_apply->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
                         'receivers' => $person->bqq_open_id,
                     ];
                     BaseLogic::instance()->sendQqMsg($data);
