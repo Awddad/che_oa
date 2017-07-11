@@ -100,7 +100,7 @@ class PayConfirmForm extends CaiWuFuKuan
         $apply->cai_wu_person_id = $person->person_id;
         $apply->cai_wu_time = time();
         $apply->cai_wu_person = $person->person_name;
-        $list = \Yii::$app->request->get('baoxiao_list');
+        $list = \Yii::$app->request->post('baoxiao_list');
         if($apply->type == 1 && empty($list)) {
             $this->addError('apply_id', '缺少必要参数');
             return false;
