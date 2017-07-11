@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\BaoXiaoList;
 use app\models\CaiWuFuKuan;
 use app\models\JieKuan;
 use app\models\Org;
@@ -92,6 +93,17 @@ class PayConfirmForm extends CaiWuFuKuan
     {
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
+        $apply = Apply::findOne($this->apply_id);
+        $apply->status = 99; //订单完成
+        $apply->next_des = '完成';
+        $apply->cai_wu_person_id = $person->person_id;
+        $apply->cai_wu_time = time();
+        $apply->cai_wu_person = $person->person_name;
+        $list = \Yii::$app->request->get('baoxiao_list');
+        if($apply->type == 1 && empty($list)) {
+            $this->addError('apply_id', '缺少必要参数');
+            return false;
+        }
         try{
             //js 和 PHP 时间戳相差1000
             $this->fu_kuan_time = $this->fu_kuan_time /1000;
@@ -100,13 +112,12 @@ class PayConfirmForm extends CaiWuFuKuan
             if (!$this->save()) {
                 new Exception('确认失败', $this->errors);
             }
-            $apply = Apply::findOne($this->apply_id);
-            $apply->status = 99; //订单完成
-            $apply->next_des = '完成';
-            $apply->cai_wu_person_id = $person->person_id;
-            $apply->cai_wu_time = time();
-            $apply->cai_wu_person = $person->person_name;
             $apply->save();
+            if($apply->type == 1) {
+                foreach ($list as $v){
+                    BaoXiaoList::updateAll(['type' => $v['type']], ['id' => $v['id']]);
+                }
+            }
             
             $transaction->commit();
         } catch (Exception $exception) {

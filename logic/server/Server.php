@@ -25,6 +25,7 @@ class Server extends Logic
     /**
      * GET 请求
      * @param $url
+     * @return  array
      */
     public function httpGet($url)
     {
