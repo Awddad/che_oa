@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\modules\oa_v1\logic\BaseLogic;
 use yii\helpers\ArrayHelper;
 
 use Yii;
@@ -83,8 +84,9 @@ class BaoxiaoForm extends BaseForm
 			foreach($this->$attribute as $v){
 				if($v['money'] <= 0){
 					$this->addError($attribute, "报销金额不正确");
-				}elseif(!$v['type'] > 0){
-					$this->addError($attribute, "报销类型不正确!");
+				}
+				elseif(!$v['des']){
+					$this->addError($attribute, "报销事项不正确!");
 				}
 				if ($this->hasErrors()){
 					return;
@@ -112,15 +114,24 @@ class BaoxiaoForm extends BaseForm
 				$this -> copyPerson($model_apply);
 				
 				$transaction -> commit();
-				return $this -> apply_id;
-			}	
+                $person = appmodel\Person::findOne($this->approval_persons[0]);
+                if($person->bqq_open_id) {
+                    $typeName = $this->typeArr[$this->type];
+                    $data = [
+                        'tips_title' => 'OA -' .$typeName. '申请',
+                        'tips_content' => '员工'.$model_apply->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+                        'receivers' => $person->bqq_open_id,
+                    ];
+                    BaseLogic::instance()->sendQqMsg($data);
+                }
+                return $this -> apply_id;
+			}
 			return false;
 		}catch(\Exception $e){
 			$transaction -> rollBack();
 			$this->addError('',$e->getMessage());
 			return false;
 		}
-		
 	}
 	
 	protected function createId($type)
@@ -168,17 +179,17 @@ class BaoxiaoForm extends BaseForm
 			//$model -> pics = $this -> pics?implode(',',$this -> pics):'';
 			$model -> pics = $this -> pics ? : '';
 		}elseif('baoxiaolist' == $type){
-            $tag = appmodel\TagTree::findOne($data['type']);
+            /*$tag = appmodel\TagTree::findOne($data['type']);
             if(empty($tag)) {
                 $typeName = '';
             } else {
                 $typeName = $tag->name;
-            }
+            }*/
 			$model -> apply_id = $this -> apply_id;
 			$model -> money = $data['money'];
-			$model -> type_name = $typeName;
-			$model -> type = $data['type'];
-			$model -> des = @$data['des'];
+			//$model -> type_name = $typeName;
+			//$model -> type = $data['type'];
+			$model -> des = $data['des'];
 		}elseif('approval_log' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> approval_person = $data['person_name'];
@@ -204,7 +215,7 @@ class BaoxiaoForm extends BaseForm
 			if($_model_biaoxiao_list -> insert()){
 				$v['id'] = $_model_biaoxiao_list -> id;
 			}else{
-				throw new \Exception(current($model_bao_xiao->getErrors())[0]);
+				throw new \Exception(current($_model_biaoxiao_list->getErrors())[0]);
 				//throw new \Exception('明细失败');
 			}
 		}

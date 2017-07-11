@@ -89,8 +89,8 @@ class ApplyView extends BaseForm
 		foreach ($baoxiao->list as $v) {
 			$data['list'][] = [
 					'money' => $v->money,
-					'type_name' => $v->type_name,
-					'type' => $v->type,
+					//'type_name' => $v->type_name,
+					//'type' => $v->type,
 					'des' => $v->des
 			];
             $total += $v['money'];

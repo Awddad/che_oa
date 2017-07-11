@@ -163,11 +163,24 @@ class PayLogic extends BaseLogic
                 'token' => \Yii::$app->params['cai_wu']['token'],
                 'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
             ])->getAccount($person['org_id']),
-            'tags' => TreeTagLogic::instance()->getTreeTagsByParentId(2),
             'bank_card_id' => $applyDetail->bank_card_id,
             'bank_name' => $applyDetail->bank_name,
             'bank_name_des' => $applyDetail->bank_name_des,
         ];
+        if($apply->type == 1) {
+            $data['tags'] = TreeTagLogic::instance()->getTreeTagsByParentId();
+            foreach ($applyDetail->list as $v) {
+                $data['list'][] = [
+                    'id' => $v->id,
+                    'money' => $v->money,
+                    //'type_name' => $v->type_name,
+                    //'type' => $v->type,
+                    'des' => $v->des
+                ];
+            }
+        } else {
+            $data['tags'] = TreeTagLogic::instance()->getTreeTagsByParentId(2);
+        }
         return $data;
     }
 
@@ -228,9 +241,9 @@ class PayLogic extends BaseLogic
         if (\Yii::$app->request->get('asc')) {
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
-//        $query->andWhere([
-//            'in', 'org_id', $orgIds
-//        ]);
+        $query->andWhere([
+            'in', 'org_id', $orgIds
+        ]);
         $models = $query->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {

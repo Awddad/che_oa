@@ -154,7 +154,10 @@ class BaseController extends Controller
                 //去重
                 $this->arrPersonRoleInfo['roleInfo'] = array_unique($arrMenuTmp);
                 //数据权限
-                $objRoleOrgMod = RoleOrgPermission::findOne(['person_id' => $personId, 'role_id' => $intRoleId]);
+                $objRoleOrgMod = RoleOrgPermission::find()->where([
+                    'person_id' => $personId,
+                    'role_id' => $intRoleId
+                ])->one();
                 if($objRoleOrgMod)//设置过数据权限
                 {
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);

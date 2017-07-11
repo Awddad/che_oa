@@ -11,6 +11,8 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\BaoXiao;
+use app\models\BaoXiaoList;
 use app\models\CaiWuFuKuan;
 use app\models\JieKuan;
 use app\models\Org;
@@ -92,6 +94,17 @@ class PayConfirmForm extends CaiWuFuKuan
     {
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
+        $apply = Apply::findOne($this->apply_id);
+        $apply->status = 99; //订单完成
+        $apply->next_des = '完成';
+        $apply->cai_wu_person_id = $person->person_id;
+        $apply->cai_wu_time = time();
+        $apply->cai_wu_person = $person->person_name;
+        $list = \Yii::$app->request->post('baoxiao_list');
+        if($apply->type == 1 && empty($list)) {
+            $this->addError('apply_id', '缺少必要参数');
+            return false;
+        }
         try{
             //js 和 PHP 时间戳相差1000
             $this->fu_kuan_time = $this->fu_kuan_time /1000;
@@ -100,13 +113,12 @@ class PayConfirmForm extends CaiWuFuKuan
             if (!$this->save()) {
                 new Exception('确认失败', $this->errors);
             }
-            $apply = Apply::findOne($this->apply_id);
-            $apply->status = 99; //订单完成
-            $apply->next_des = '完成';
-            $apply->cai_wu_person_id = $person->person_id;
-            $apply->cai_wu_time = time();
-            $apply->cai_wu_person = $person->person_name;
             $apply->save();
+            if($apply->type == 1) {
+                foreach ($list as $v){
+                    BaoXiaoList::updateAll(['type' => $v['type']], ['id' => $v['id']]);
+                }
+            }
             
             $transaction->commit();
         } catch (Exception $exception) {
@@ -151,23 +163,15 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['order_number'] = $this->apply_id;
             //财务系统约定
             $param['order_type'] = 104;
-            if($apply->type == 2) {
-                $rst = ThirdServer::instance([
-                    'token' => \Yii::$app->params['cai_wu']['token'],
-                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-                ])->payment($param);
-                if($rst['success'] == 1) {
-                    $this->is_told_cai_wu_success = 1;
-                    $this->update();
-                } elseif($rst['success'] == 0) {
-                    $this->is_told_cai_wu_success = 2;
-                    $this->update();
-                }
-            } else {
+            if($apply->type == 1) {
                 $flag = true;
+                /**
+                 * @var BaoXiaoList $v
+                 */
                 foreach ($apply->baoXiaoList as $v) {
-                    $param['tag_id'] = $v->type;  //没有 type字段呀
+                    $param['tag_id'] = $v->type;
                     $param['money'] = $v->money;
+                    $param['remark'] = $v->des;
                     $rst = ThirdServer::instance([
                         'token' => \Yii::$app->params['cai_wu']['token'],
                         'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
@@ -179,6 +183,21 @@ class PayConfirmForm extends CaiWuFuKuan
                 }
                 if($flag) {
                     $this->is_told_cai_wu_success = 1;
+                    $this->update();
+                } else {
+                    $this->is_told_cai_wu_success = 2;
+                    $this->update();
+                }
+            } else {
+                $rst = ThirdServer::instance([
+                    'token' => \Yii::$app->params['cai_wu']['token'],
+                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                ])->payment($param);
+                if($rst['success'] == 1) {
+                    $this->is_told_cai_wu_success = 1;
+                    $this->update();
+                } elseif($rst['success'] == 0) {
+                    $this->is_told_cai_wu_success = 2;
                     $this->update();
                 }
             }

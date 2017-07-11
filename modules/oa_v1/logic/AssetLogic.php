@@ -453,7 +453,11 @@ class AssetLogic extends Logic
          * @var AssetList $lastAssetList
          */
         $lastAssetList = AssetList::find()->orderBy(['id' => SORT_DESC])->one();
-        $assetNumber = $lastAssetList->stock_number;
+        if(empty($lastAssetList)) {
+            $assetNumber = 'CCWGZ1701000';
+        } else {
+            $assetNumber = $lastAssetList->stock_number;
+        }
         $begin = substr($assetNumber, 0, 5);
         $endNum = substr($assetNumber, -7);
         
