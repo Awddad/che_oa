@@ -123,7 +123,7 @@ class BaoxiaoForm extends BaseForm
                         'tips_content' => '员工'.$model_apply->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
                         'receivers' => $person->bqq_open_id,
                     ];
-                    Yii::error(print_r($data,true));
+                    //Yii::error(print_r($data,true));
                     BaseLogic::instance()->sendQqMsg($data);
                 }
                 return $this -> apply_id;
