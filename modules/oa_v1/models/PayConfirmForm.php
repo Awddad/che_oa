@@ -184,6 +184,9 @@ class PayConfirmForm extends CaiWuFuKuan
                 if($flag) {
                     $this->is_told_cai_wu_success = 1;
                     $this->update();
+                } else {
+                    $this->is_told_cai_wu_success = 2;
+                    $this->update();
                 }
             } else {
                 $rst = ThirdServer::instance([
