@@ -6,6 +6,7 @@ use app\models\ApprovalLog;
 use app\models\Employee;
 use app\logic\server\QuanXianServer;
 use yii\base\Event;
+use app\models\EmployeeType;
 
 /**
  * 审批后处理
@@ -63,6 +64,7 @@ class AfterApproval extends BaseLogic
         $apply = Apply::findOne($approvalLog->apply_id);
         $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
         $employee->status = $employee->status == 1 ? 2 : $employee->status;
+        $employee->type = EmployeeType::findOne(['slug'=>'zhengshi'])->id;
         if ($employee->save()) {
             return true;
         }
