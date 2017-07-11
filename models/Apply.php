@@ -236,7 +236,7 @@ class Apply extends \yii\db\ActiveRecord
             'oa_role','oa_role.role_id = oa_role_org_permission.role_id'
         )->where([
             'in', 'oa_role.slug', ['caiwu']
-        ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids)")->all();
+        ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids')")->all();
         foreach ($personIds as $v) {
             if ($person = Person::findOne($v['person_id'])) {
                 $data['receivers'] = $person->bqq_open_id;
