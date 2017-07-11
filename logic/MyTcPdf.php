@@ -51,9 +51,8 @@ class MyTcPdf {
         foreach($arrInfo['list'] as $val)
         {
             $strListHtml .= '<tr>
-            <td colspan="2" >'.$val["type_name"].'</td>
-            <td colspan="2">'.$val["money"].'</td>
-            <td colspan="2">'.$val["detail"].'</td>
+            <td colspan="3">'.$val["detail"].'</td>
+            <td colspan="3">'.$val["money"].'</td>
             </tr>';
         }
         $strHtml = <<<TABLEHTML
@@ -84,9 +83,8 @@ table tr{height:40px;}
                 <td colspan="2">{$arrInfo['bank_card_id']}</td>
             </tr>
             <tr>
-                <td style="background-color:#f2f2f2" colspan="2">类别</td>
-                <td style="background-color:#f2f2f2" colspan="2">金额</td>
-                <td style="background-color:#f2f2f2" colspan="2">明细</td>
+                <td style="background-color:#f2f2f2" colspan="3">事项</td>
+                <td style="background-color:#f2f2f2" colspan="3">金额</td>
             </tr>
             {$strListHtml}
             <tr>
