@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\BaoXiao;
 use app\models\BaoXiaoList;
 use app\models\CaiWuFuKuan;
 use app\models\JieKuan;
@@ -176,9 +177,13 @@ class PayConfirmForm extends CaiWuFuKuan
                 }
             } else {
                 $flag = true;
+                /**
+                 * @var BaoXiaoList $v
+                 */
                 foreach ($apply->baoXiaoList as $v) {
-                    $param['tag_id'] = $v->type;  //没有 type字段呀
+                    $param['tag_id'] = $v->type;
                     $param['money'] = $v->money;
+                    $param['remark'] = $v->des;
                     $rst = ThirdServer::instance([
                         'token' => \Yii::$app->params['cai_wu']['token'],
                         'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']

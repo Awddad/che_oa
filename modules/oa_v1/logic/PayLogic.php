@@ -173,8 +173,8 @@ class PayLogic extends BaseLogic
                 $data['list'][] = [
                     'id' => $v->id,
                     'money' => $v->money,
-                    'type_name' => $v->type_name,
-                    'type' => $v->type,
+                    //'type_name' => $v->type_name,
+                    //'type' => $v->type,
                     'des' => $v->des
                 ];
             }
