@@ -45,7 +45,7 @@ class BaseLogic extends Logic
      */
     public function sendQqMsg($data, $toAll = 0)
     {
-        if(isset($data['tips_title']) || isset($data['tips_content']) || isset($data['receivers'])) {
+        if(!isset($data['tips_title']) || !isset($data['tips_content']) || !isset($data['receivers'])) {
             $this->error = '参数错误';
             return false;
         }
