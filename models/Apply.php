@@ -233,7 +233,7 @@ class Apply extends \yii\db\ActiveRecord
             'receivers' => Person::findOne($this->person_id)->bqq_open_id,
         ];
         $personIds = RoleOrgPermission::find()->where(['oa_role_org_permission.person_id'])->innerJoin(
-            'oa_role','oa_role.role_id = oa_role_org_permission.role_id'
+            'oa_role','oa_role.id = oa_role_org_permission.role_id'
         )->where([
             'in', 'oa_role.slug', ['caiwu']
         ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids')")->all();
