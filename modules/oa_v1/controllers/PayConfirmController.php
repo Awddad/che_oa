@@ -53,8 +53,12 @@ class PayConfirmController extends BaseController
      */
     public function actionList()
     {
-        $pay = PayLogic::instance()->canConfirmList($this->arrPersonRoleInfo['permissionOrgIds']);
-        return $this->_return($pay);
+        if(isset($this->arrPersonRoleInfo['permissionOrgIds'])) {
+            $pay = PayLogic::instance()->canConfirmList($this->arrPersonRoleInfo['permissionOrgIds']);
+            return $this->_return($pay);
+        } else {
+            return $this->_returnError(403);
+        }
     }
 
     /**

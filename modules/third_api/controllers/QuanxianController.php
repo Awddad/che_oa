@@ -54,10 +54,10 @@ class QuanxianController extends Controller
                 break;
             case 'projects/permission-tree'://项目菜单权限树形结构
             case 'projects/permissions'://项目菜单权限树形结构
-                $objQx->curlUpdateMenus();//项目菜单
+                $intResult = $objQx->curlUpdateMenus();//项目菜单
                 break;
             case 'projects/role_user':
-                $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
+                $intResult = $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
                 break;
             //菜单信息变动
         }

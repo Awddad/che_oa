@@ -75,7 +75,7 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
-                    'logVars' => []
+                    'logVars' => ['_GET', '_POST', '_FILES',]
                 ],
             ],
         ],

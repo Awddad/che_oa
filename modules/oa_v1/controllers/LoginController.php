@@ -28,6 +28,7 @@ class LoginController extends Controller
      */
     public function actionIndex()
     {
+        Yii::$app->getSession()->destroy();
         $session = Yii::$app->session;
         /**
          * @var Person $objPerson
