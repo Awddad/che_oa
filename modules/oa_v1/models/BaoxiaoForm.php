@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\modules\oa_v1\logic\BaseLogic;
 use yii\helpers\ArrayHelper;
 
 use Yii;
@@ -113,15 +114,24 @@ class BaoxiaoForm extends BaseForm
 				$this -> copyPerson($model_apply);
 				
 				$transaction -> commit();
-				return $this -> apply_id;
-			}	
+                $person = appmodel\Person::findOne($this->approval_persons[0]);
+                if($person->bqq_open_id) {
+                    $typeName = $this->typeArr[$this->type];
+                    $data = [
+                        'tips_title' => 'OA -' .$typeName. '申请',
+                        'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+                        'receivers' => $person->bqq_open_id,
+                    ];
+                    BaseLogic::instance()->sendQqMsg($data);
+                }
+                return $this -> apply_id;
+			}
 			return false;
 		}catch(\Exception $e){
 			$transaction -> rollBack();
 			$this->addError('',$e->getMessage());
 			return false;
 		}
-		
 	}
 	
 	protected function createId($type)
