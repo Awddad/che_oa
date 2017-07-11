@@ -171,6 +171,7 @@ class PayLogic extends BaseLogic
         if($apply->type == 1) {
             foreach ($applyDetail->list as $v) {
                 $data['list'][] = [
+                    'id' => $v->id,
                     'money' => $v->money,
                     'type_name' => $v->type_name,
                     'type' => $v->type,
