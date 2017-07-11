@@ -88,10 +88,9 @@ table tr{height:40px;}
             </tr>
             {$strListHtml}
             <tr>
-                <td rowspan="2" valign="middle">金额合计</td>
+                <td colspan="2" rowspan="2" valign="middle">金额合计</td>
                 <td>小写</td>
-                <td colspan="2">{$arrInfo['total']}</td>
-                <td colspan="2"></td>
+                <td colspan="3">{$arrInfo['total']}</td>
             </tr>
             <tr>
                 <td>大写</td>
