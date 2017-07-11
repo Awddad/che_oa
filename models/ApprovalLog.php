@@ -126,7 +126,7 @@ class ApprovalLog extends \yii\db\ActiveRecord
                     break;
                 case self::SCENARIO_PASS;
                     $nextApproval = $this->nextApprovalLog;
-                    return ($nextApproval->setApprovalPerson() && $this->apply->approvalPass($nextApproval->approval_person));
+                    return ($nextApproval->setApprovalPerson() && $this->apply->approvalPass($nextApproval));
                     break;
                 case self::SCENARIO_CONFIRM;
                     return $this->apply->approvalConfirm();

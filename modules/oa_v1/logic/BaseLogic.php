@@ -45,11 +45,16 @@ class BaseLogic extends Logic
      */
     public function sendQqMsg($data, $toAll = 0)
     {
+        if(isset($data['tips_title']) || isset($data['tips_content']) || isset($data['receivers'])) {
+            $this->error = '参数错误';
+            return false;
+        }
         if($toAll){
             $data['to_all'] = 1;
         }
         $params = \Yii::$app->params['quan_xian'];
         $data['_token'] = $params['auth_token'];
+        $data['window_title'] = 'OA系统信息提醒';
         $rst = Server::instance()->httpPost($params['auth_api_url'].'/bqq/tips', $data);
         return $rst;
         

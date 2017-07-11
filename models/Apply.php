@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\modules\oa_v1\logic\AssetLogic;
+use app\modules\oa_v1\logic\BaseLogic;
 use Yii;
 use yii\db\Exception;
 
@@ -181,19 +182,33 @@ class Apply extends \yii\db\ActiveRecord
           
         $this->status = self::STATUS_FAIL;
         $this->next_des = '审批不通过，已终止';
+        $typeName = $this->typeArr[$this->type];
+        $data = [
+            'tips_title' => 'OA -' .$typeName. '申请不通过',
+            'tips_content' => '你发起的'. $typeName.'申请不通过，请在OA系统进行查看',
+            'receivers' => Person::findOne($this->person_id)->bqq_open_id,
+        ];
+        BaseLogic::instance()->sendQqMsg($data);
         return $this->save();
         
     }
 
     /**
      * 审批通过，继续下一步审批
-     * @param $person
+     * @param ApprovalLog $person
      * @return bool
      */
     public function approvalPass($person)
     {
-        $this->next_des = '等待'.$person.'审批';
+        $this->next_des = '等待'.$person->approval_person.'审批';
         $this->status = self::STATUS_ING;
+        $typeName = $this->typeArr[$this->type];
+        $data = [
+            'tips_title' => 'OA -' .$typeName. '申请',
+            'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+            'receivers' => Person::findOne($person->approval_person_id)->bqq_open_id,
+        ];
+        BaseLogic::instance()->sendQqMsg($data);
         return $this->save();
     }
 
@@ -204,6 +219,22 @@ class Apply extends \yii\db\ActiveRecord
     {
         $this->next_des = '等待财务部门确认';
         $this->status = self::STATUS_CONFIRM;
+        $typeName = $this->typeArr[$this->type];
+        $person = Person::findOne($this->person_id);
+        $data = [
+            'tips_title' => 'OA - 付款确认',
+            'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请已通过，请在OA系统进行付款确认',
+            'receivers' => Person::findOne($this->person_id)->bqq_open_id,
+        ];
+        $personIds = RoleOrgPermission::find()->where(['oa_role_org_permission.person_id'])->innerJoin(
+            'oa_role','oa_role.role_id = oa_role_org_permission.role_id'
+        )->where([
+            'in', 'oa_role.slug', ['caiwu']
+        ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids)")->all();
+        foreach ($personIds as $v) {
+            $data['receivers'] = Person::findOne($v['person_id'])->bqq_open_id;
+            BaseLogic::instance()->sendQqMsg($data);
+        }
         return $this->save();
     }
 
@@ -224,6 +255,13 @@ class Apply extends \yii\db\ActiveRecord
         }
         $this->next_des = '审批完成';
         $this->status = self::STATUS_OK;
+        $typeName = $this->typeArr[$this->type];
+        $data = [
+            'tips_title' => 'OA - ' .$typeName. '申请完成',
+            'tips_content' => '你发起的'. $typeName.'已完成，请在OA系统进行查看',
+            'receivers' => Person::findOne($this->person_id)->bqq_open_id,
+        ];
+        BaseLogic::instance()->sendQqMsg($data);
         return $this->save();
     }
 
@@ -325,5 +363,49 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AssetBack::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * 添加申请单成功后，发送企业QQ提醒
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert) {
+            $typeName = $this->typeArr[$this->type];
+            $ApprovalLog = ApprovalLog::find()->where([
+                'apply_id' => $this->apply_id,
+                'steep' => 1
+            ])->one();
+            $data = [
+                'tips_title' => 'OA -' .$typeName. '申请',
+                'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
+                'receivers' => Person::findOne($ApprovalLog->approval_person_id)->bqq_open_id,
+            ];
+            BaseLogic::instance()->sendQqMsg($data);
+        }
+        return parent::afterSave($insert, $changedAttributes);
+        
+    }
+    
+    
+    /**
+     * @var array
+     */
+    public $typeArr = [
+        1 => '报销',
+        2 => '借款',
+        3 => '还款',
+        4 => '付款',
+        5 => '请购',
+        6 => '需求单',
+        7 => '用章',
+        8 => '固定资产领用',
+        9 => '固定资产归还',
+        10 => '转正',
+        11 => '离职',
+        12 => '调职',
+        13 => '开店',
+    ];
     
 }
