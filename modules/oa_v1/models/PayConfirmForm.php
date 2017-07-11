@@ -163,19 +163,7 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['order_number'] = $this->apply_id;
             //财务系统约定
             $param['order_type'] = 104;
-            if($apply->type == 2) {
-                $rst = ThirdServer::instance([
-                    'token' => \Yii::$app->params['cai_wu']['token'],
-                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-                ])->payment($param);
-                if($rst['success'] == 1) {
-                    $this->is_told_cai_wu_success = 1;
-                    $this->update();
-                } elseif($rst['success'] == 0) {
-                    $this->is_told_cai_wu_success = 2;
-                    $this->update();
-                }
-            } else {
+            if($apply->type == 1) {
                 $flag = true;
                 /**
                  * @var BaoXiaoList $v
@@ -195,6 +183,18 @@ class PayConfirmForm extends CaiWuFuKuan
                 }
                 if($flag) {
                     $this->is_told_cai_wu_success = 1;
+                    $this->update();
+                }
+            } else {
+                $rst = ThirdServer::instance([
+                    'token' => \Yii::$app->params['cai_wu']['token'],
+                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                ])->payment($param);
+                if($rst['success'] == 1) {
+                    $this->is_told_cai_wu_success = 1;
+                    $this->update();
+                } elseif($rst['success'] == 0) {
+                    $this->is_told_cai_wu_success = 2;
                     $this->update();
                 }
             }
