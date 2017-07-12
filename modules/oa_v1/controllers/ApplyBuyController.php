@@ -120,9 +120,20 @@ class ApplyBuyController extends BaseController
      */
     public function actionBuyList($apply_id)
     {
-        $query = ApplyBuyList::find()->where(['apply_id' => $apply_id]);
-        
-        return $this->_return($query->all());
+        $query = ApplyBuyList::find()->where([
+            'apply_id' => $apply_id]
+        )->andWhere('in_amount < amount');
+        $data = $query->all();
+        $returnData = [];
+        if (empty($data)) {
+            foreach ($query->all() as $value) {
+                if ($value->amount == $value->in_amount) {
+                    continue;
+                }
+                $returnData[] = $value;
+            }
+        }
+        return $this->_return($returnData);
     }
     
     /**
