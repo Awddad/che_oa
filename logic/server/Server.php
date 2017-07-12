@@ -29,6 +29,7 @@ class Server extends Logic
      */
     public function httpGet($url)
     {
+        $this->data .= '开始时间：'.date('Y-m-d H:i:s').PHP_EOL;
         $this->data .= '请求链接：'.$url.PHP_EOL;
         return $this->httpSend($url);
     }
@@ -41,6 +42,7 @@ class Server extends Logic
      */
     public function httpPost($url, $data)
     {
+        $this->data .= '开始时间：'.date('Y-m-d H:i:s').PHP_EOL;
         $this->data .= '请求链接：'.$url.PHP_EOL;
         $this->data .= '请求参数：'.json_encode($data).PHP_EOL;
         return $this->httpSend($url, $data, 'POST');
