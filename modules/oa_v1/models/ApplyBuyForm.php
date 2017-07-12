@@ -74,7 +74,7 @@ class ApplyBuyForm extends BaseForm
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'apply_id', 'to_name', 'buy_list'],
+                ['money', 'bank_card_id', 'bank_name', 'approval_persons', 'apply_id', 'to_name', 'buy_list'],
                 'required',
                 'message' => '缺少必填字段'
             ],
