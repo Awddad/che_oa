@@ -111,10 +111,15 @@ class AssetController extends BaseController
                 'like','name', $keyword
             ]);
         }
-        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
-        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        $beforeTime = strtotime(ArrayHelper::getValue($param, 'start_time'));
+        $afterTime = strtotime(ArrayHelper::getValue($param, 'end_time'));
         if ($beforeTime && $afterTime) {
-            $query->andWhere(['between', 'created_at', $beforeTime, $afterTime]);
+            $afterTime = strtotime('+1day', $afterTime);
+            $query->andWhere([
+                'and',
+                ['>', 'create_time', $beforeTime],
+                ['<', 'create_time', $afterTime]
+            ]);
         }
     
         $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
@@ -170,10 +175,15 @@ class AssetController extends BaseController
             ]);
         }
     
-        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
-        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        $beforeTime = strtotime(ArrayHelper::getValue($param, 'start_time'));
+        $afterTime = strtotime(ArrayHelper::getValue($param, 'end_time'));
         if ($beforeTime && $afterTime) {
-            $query->andWhere(['between', 'oa_asset_list.created_at', $beforeTime, $afterTime]);
+            $afterTime = strtotime('+1day', $afterTime);
+            $query->andWhere([
+                'and',
+                ['>', 'create_time', $beforeTime],
+                ['<', 'create_time', $afterTime]
+            ]);
         }
     
         $keyword = ArrayHelper::getValue($param, 'keywords');
