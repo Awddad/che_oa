@@ -22,7 +22,6 @@ use Yii;
  * @property string $native
  * @property integer $marriage
  * @property integer $status
- * @property integer $type
  * @property string $entry_time
  * @property string $leave_time
  * @property integer $educational
@@ -48,7 +47,7 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['org_id', 'profession', 'sex', 'political', 'marriage', 'status', 'type', 'educational', 'current_location', 'age', 'employee_type', 'person_id'], 'integer'],
+            [['org_id', 'profession', 'sex', 'political', 'marriage', 'status', 'educational', 'current_location', 'age', 'employee_type', 'person_id'], 'integer'],
             [['empno', 'name', 'entry_time', 'leave_time'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
             [['email'], 'string', 'max' => 50],
@@ -79,7 +78,6 @@ class Employee extends \yii\db\ActiveRecord
             'native' => 'Native',
             'marriage' => 'Marriage',
             'status' => 'Status',
-            'type' => 'Type',
             'entry_time' => 'Entry Time',
             'leave_time' => 'Leave Time',
             'educational' => 'Educational',
