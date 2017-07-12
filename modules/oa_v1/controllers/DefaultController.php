@@ -353,4 +353,23 @@ class DefaultController extends BaseController
         }
         return $this->_return($data);
     }
+    
+    /**
+     * 获取公司银行卡信息
+     *
+     * @param $organization_id
+     *
+     * @return array
+     */
+    public function actionGetBank($organization_id)
+    {
+        $account =  ThirdServer::instance([
+            'token' => \Yii::$app->params['cai_wu']['token'],
+            'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+        ])->getAccount($organization_id);
+        if($account) {
+            return $this->_return($account);
+        }
+        return $this->_returnError(2045,[], ThirdServer::instance()->error);
+    }
 }

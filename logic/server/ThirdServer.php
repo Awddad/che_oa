@@ -77,6 +77,7 @@ class ThirdServer extends Server
         if($rst['success'] == 1) {
             return $rst['data'];
         }
+        $this->error = $rst['message'];
         return false;
     }
 
