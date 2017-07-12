@@ -61,7 +61,7 @@ class ApplyUseChapterForm extends BaseForm
     {
         return [
             [
-                [ 'approval_persons', 'apply_id', 'chapter_type', 'name'],
+                [ 'approval_persons', 'apply_id', 'chapter_type', 'name', 'files', 'des'],
                 'required',
                 'message' => '缺少必填字段'
             ],
