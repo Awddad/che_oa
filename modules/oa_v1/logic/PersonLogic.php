@@ -237,7 +237,7 @@ class PersonLogic extends BaseLogic
     public function getCompanyOrgIds($person)
     {
         $companies = Person::find()->select('org_id')->where([
-            'person_id' => $person->person_name
+            'person_id' => $person->person_id
         ])->all();
         return ArrayHelper::getColumn($companies, 'org_id');
     }
