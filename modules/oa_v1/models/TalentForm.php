@@ -264,7 +264,8 @@ class TalentForm extends BaseForm
 	    //关键词
 	    if($keywords){
 	        $keywords = mb_convert_encoding($keywords,'UTF-8','auto');
-	        $query->andWhere(['like', 'name', $keywords]);
+	        //$query->andWhere(['like', 'name', $keywords]);
+	        $query->andWhere("instr(CONCAT(name,phone),'{$keywords}') > 0 ");
 	    }
 	    //开始时间
 	    if($start_time){
