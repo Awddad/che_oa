@@ -74,10 +74,16 @@ class ApplyBuyController extends BaseController
                 ['like','title', $keyword]
             ]);
         }
-        $beforeTime = ArrayHelper::getValue($param, 'start_time');;
-        $afterTime = ArrayHelper::getValue($param, 'end_time');;
+        $beforeTime = strtotime(ArrayHelper::getValue($param, 'start_time'));
+        $afterTime = strtotime(ArrayHelper::getValue($param, 'end_time'));
+        
         if ($beforeTime && $afterTime) {
-            $query->andWhere(['between', 'create_time', $beforeTime, $afterTime]);
+            $afterTime = strtotime('+1day', $afterTime);
+            $query->andWhere([
+                'and',
+                ['>', 'create_time', $beforeTime],
+                ['<', 'create_time', $afterTime]
+            ]);
         }
     
         $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
