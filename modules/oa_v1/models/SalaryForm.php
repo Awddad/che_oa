@@ -64,7 +64,6 @@ class SalaryForm extends BaseForm
         if($this->checkTitle($arr[1]) && $arr[2]){
             array_shift($arr);
             $date = date('Ym',strtotime($file_name));
-            $s_key = $this->s_key;
             $sql = "INSERT INTO `oa_salary` (`empno`, `date`, `cost_depart`, `depart`, `position`, `name`, `base_salary`, `jixiao`, `need_workdays`, `static_workdays`, `static_salary`, `holiday_salary`, `away_subsidy`, `other_subsidy`, `forfeit`, `staitic_salary`, `jixiao_money`, `xiao_salary`, `shebao`, `gongjijin`, `before_tax_salary`, `tax`, `illness_money`, `after_tax_salary`, `after_tax_salary_person`, `des`, `id_card`, `bank_card`, `bank_name_des`, `yanglao`, `yiliao`, `shiye`, `entry_time`) VALUES ";
             foreach($arr as $v){ 
                 $sql .= <<<jdf
@@ -75,43 +74,49 @@ class SalaryForm extends BaseForm
                 '{$v['D']}',
                 '{$v['E']}',
                 '{$v['F']}',
-                AES_ENCRYPT('{$v['G']}','{$s_key}'),
-                AES_ENCRYPT('{$v['H']}','{$s_key}'),
+                AES_ENCRYPT('{$v['G']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['H']}','{$this->s_key}'),
                 '{$v['I']}',
                 '{$v['J']}',
-                AES_ENCRYPT('{$v['K']}','{$s_key}'),
-                AES_ENCRYPT('{$v['L']}','{$s_key}'),
-                AES_ENCRYPT('{$v['M']}','{$s_key}'),
-                AES_ENCRYPT('{$v['N']}','{$s_key}'),
-                AES_ENCRYPT('{$v['O']}','{$s_key}'),
-                AES_ENCRYPT('{$v['P']}','{$s_key}'),
-                AES_ENCRYPT('{$v['Q']}','{$s_key}'),
-                AES_ENCRYPT('{$v['R']}','{$s_key}'),
-                AES_ENCRYPT('{$v['S']}','{$s_key}'),
-                AES_ENCRYPT('{$v['T']}','{$s_key}'),
-                AES_ENCRYPT('{$v['U']}','{$s_key}'),
-                AES_ENCRYPT('{$v['V']}','{$s_key}'),
-                AES_ENCRYPT('{$v['W']}','{$s_key}'),
-                AES_ENCRYPT('{$v['X']}','{$s_key}'),
-                AES_ENCRYPT('{$v['Y']}','{$s_key}'),
+                AES_ENCRYPT('{$v['K']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['L']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['M']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['N']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['O']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['P']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['Q']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['R']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['S']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['T']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['U']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['V']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['W']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['X']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['Y']}','{$this->s_key}'),
                 '{$v['Z']}',
-                AES_ENCRYPT('{$v['AA']}','{$s_key}'),
-                AES_ENCRYPT('{$v['AB']}','{$s_key}'),
-                AES_ENCRYPT('{$v['AC']}','{$s_key}'),
-                AES_ENCRYPT('{$v['AD']}','{$s_key}'),
-                AES_ENCRYPT('{$v['AE']}','{$s_key}'),
-                AES_ENCRYPT('{$v['AF']}','{$s_key}'),
-                AES_ENCRYPT('{$v['AG']}','{$s_key}')
+                AES_ENCRYPT('{$v['AA']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['AB']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['AC']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['AD']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['AE']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['AF']}','{$this->s_key}'),
+                AES_ENCRYPT('{$v['AG']}','{$this->s_key}')
                 ),
 jdf;
             }
             $sql = substr($sql, 0, - 1);
             $res = yii::$app->db->createCommand($sql)->execute();
-            $sql = str_replace($s_key, '', $sql);
+            $sql = base64_encode(yii::$app->getSecurity()->encryptByKey($sql,$this->s_key));
             SalaryLogic::instance()->addLog($sql,$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }
         return ['status'=>false,'msg'=>'文件不正确，请重新下载模版后填入数据'];
+    }
+    
+    public function decrypt($data)
+    {
+        $res = yii::$app->getSecurity()->decryptByKey(base64_decode($data),$this->s_key);
+        return $res;
     }
     
     protected function checkTitle($title)
