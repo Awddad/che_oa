@@ -247,6 +247,9 @@ class AssetLogic extends Logic
                 'asset_id' => $v->asset_id,
                 'status' => 1
             ])->orderBy(['id' => SORT_ASC])->one();
+            if(empty($assetList)) {
+                throw new Exception($v->asset->name.'库存不足');
+            }
             //改变库存状态
             $assetList->status = 2;
             $assetList->person_id = $apply->person_id;
