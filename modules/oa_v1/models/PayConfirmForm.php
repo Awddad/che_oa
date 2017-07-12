@@ -49,44 +49,47 @@ class PayConfirmForm extends CaiWuFuKuan
             [['bank_card_id'], 'string', 'max' => 50],
         ];
     }
-
-
+    
+    
     /**
      * 保存文件
      *
      * @param $name
+     *
      * @return array |boolean
      */
     public function saveUploadFile($name)
     {
         $files = UploadedFile::getInstancesByName($name);
-        if(empty($files)) {
+        if (empty($files)) {
             return false;
         }
-        $basePath = \Yii::$app->basePath.'/web';
-        $filePath = '/upload/payconfirm/'.date('Y-m-d').'/';
-        $rootPath = $basePath.$filePath;
+        $basePath = \Yii::$app->basePath . '/web';
+        $filePath = '/upload/payconfirm/' . date('Y-m-d') . '/';
+        $rootPath = $basePath . $filePath;
         $data = [];
-        foreach ($files as  $file) {
+        foreach ($files as $file) {
             $ext = $file->getExtension();
-            if(!in_array($ext, ['jpg', 'gif', 'png'])) {
+            if (!in_array($ext, ['jpg', 'gif', 'png'])) {
                 $this->addError('格式错误');
+                
                 return false;
             }
             $randName = $file->name;
             if (!file_exists($rootPath)) {
                 mkdir($rootPath, 0777, true);
             }
-            $fileName = $rootPath.$randName;
+            $fileName = $rootPath . $randName;
             $file->saveAs($fileName);
-            $data[] = 'http://'.$_SERVER['HTTP_HOST'].$filePath . $randName
-            ;
+            $data[] = 'http://' . $_SERVER['HTTP_HOST'] . $filePath . $randName;
         }
+        
         return implode(",", $data);
     }
     
     /**
      * @param Person $person
+     *
      * @return bool
      * @throws Exception
      */
@@ -101,23 +104,32 @@ class PayConfirmForm extends CaiWuFuKuan
         $apply->cai_wu_time = time();
         $apply->cai_wu_person = $person->person_name;
         $list = \Yii::$app->request->post('baoxiao_list');
-        if($apply->type == 1 && empty($list)) {
+        if ($apply->type == 1 && empty($list)) {
             $this->addError('apply_id', '缺少必要参数');
+            
             return false;
         }
-        try{
+        try {
             //js 和 PHP 时间戳相差1000
-            $this->fu_kuan_time = $this->fu_kuan_time /1000;
+            $this->fu_kuan_time = $this->fu_kuan_time / 1000;
             $this->org_name = Org::findOne($this->org_id)->org_name;
             $this->create_time = time();
             if (!$this->save()) {
-                new Exception('确认失败', $this->errors);
+                throw new Exception('确认失败', $this->errors);
             }
             $apply->save();
-            if($apply->type == 1) {
-                foreach ($list as $v){
+            // 更新报销列表报销类型
+            if ($apply->type == 1) {
+                foreach ($list as $v) {
                     BaoXiaoList::updateAll(['type' => $v['type']], ['id' => $v['id']]);
                 }
+            }
+            //更新借款单状态
+            if ($apply->type == 2) {
+                JieKuan::updateAll([
+                    'get_money_time' => time(),
+                    'status' => 99
+                ], ['apply_id' => $apply->apply_id]);
             }
             
             $transaction->commit();
@@ -126,7 +138,7 @@ class PayConfirmForm extends CaiWuFuKuan
             throw $exception;
         }
         
-        if(\Yii::$app->request->post('create_cai_wu_log') == 1) {
+        if (\Yii::$app->request->post('create_cai_wu_log') == 1) {
             $param = [];
             $param['organization_id'] = $apply->org_id;
             $param['account_id'] = $this->account_id;
@@ -134,22 +146,16 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['money'] = $this->getMoney($apply);
             $param['time'] = date('Y-m-d H:i:s', $this->fu_kuan_time);
             $param['remark'] = $this->tips;
-    
-            if($apply->type == 1) {
+            
+            if ($apply->type == 1) {
                 $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->expense->bank_card_id;
                 $param['other_bank'] = $apply->expense->bank_name;
-            } elseif($apply->type == 2) {
-                //借款单操作
-                $jieKuan = JieKuan::findOne($this->apply_id);
-                //借款成功
-                $jieKuan->status = 99;
-                $jieKuan->get_money_time = time();
-                $jieKuan->save();
+            } elseif ($apply->type == 2) {
                 $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->loan->bank_card_id;
                 $param['other_bank'] = $apply->loan->bank_name;
-            } elseif($apply->type == 4){
+            } elseif ($apply->type == 4) {
                 $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->applyPay->bank_card_id;
                 $param['other_bank'] = $apply->applyPay->bank_name;
@@ -158,12 +164,12 @@ class PayConfirmForm extends CaiWuFuKuan
                 $param['other_card'] = $apply->applyBuy->bank_card_id;
                 $param['other_bank'] = $apply->applyBuy->bank_name;
             }
-    
+            
             $param['trade_number'] = $this->fu_kuan_id;
             $param['order_number'] = $this->apply_id;
             //财务系统约定
             $param['order_type'] = 104;
-            if($apply->type == 1) {
+            if ($apply->type == 1) {
                 $flag = true;
                 /**
                  * @var BaoXiaoList $v
@@ -176,12 +182,12 @@ class PayConfirmForm extends CaiWuFuKuan
                         'token' => \Yii::$app->params['cai_wu']['token'],
                         'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
                     ])->payment($param);
-            
-                    if(!$rst['success'] == 1) {
+                    
+                    if (!$rst['success'] == 1) {
                         $flag = false;
                     }
                 }
-                if($flag) {
+                if ($flag) {
                     $this->is_told_cai_wu_success = 1;
                     $this->update();
                 } else {
@@ -193,20 +199,22 @@ class PayConfirmForm extends CaiWuFuKuan
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
                 ])->payment($param);
-                if($rst['success'] == 1) {
+                if ($rst['success'] == 1) {
                     $this->is_told_cai_wu_success = 1;
                     $this->update();
-                } elseif($rst['success'] == 0) {
+                } elseif ($rst['success'] == 0) {
                     $this->is_told_cai_wu_success = 2;
                     $this->update();
                 }
             }
         }
+        
         return true;
     }
-
+    
     /**
      * @param $apply
+     *
      * @return mixed
      */
     public function getMoney($apply)
@@ -225,6 +233,7 @@ class PayConfirmForm extends CaiWuFuKuan
                 $money = $apply->expense->money;
                 break;
         }
+        
         return $money;
     }
 }
