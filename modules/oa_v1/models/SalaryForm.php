@@ -107,6 +107,7 @@ jdf;
             }
             $sql = substr($sql, 0, - 1);
             $res = yii::$app->db->createCommand($sql)->execute();
+            $sql = str_replace($s_key, '', $sql);
             SalaryLogic::instance()->addLog($sql,$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }
