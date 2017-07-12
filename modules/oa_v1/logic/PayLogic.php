@@ -161,10 +161,7 @@ class PayLogic extends BaseLogic
         if($apply->type == 4 || $apply->type == 5) {
             $data = [
                 'pay_org' => PersonLogic::instance()->getOrg(),
-                'pay_bank' => ThirdServer::instance([
-                    'token' => \Yii::$app->params['cai_wu']['token'],
-                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
-                ])->getAccount($person['org_id']),
+                'pay_bank' => '',
                 'bank_card_id' => $applyDetail->bank_card_id,
                 'bank_name' => $applyDetail->bank_name,
                 'bank_name_des' => $applyDetail->bank_name_des,
