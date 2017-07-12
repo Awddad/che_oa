@@ -182,6 +182,7 @@ class ApplyView extends BaseForm
 				'bank_name' => $apply->applyBuy->bank_name,
 				'des' => $apply->applyBuy->des,
 				'files' => json_decode($apply->applyBuy->files),
+				'status' => $apply->status,
 				'buy_list' => BaseApplyLogic::instance()->getApplyBuyList($apply->apply_id)
 		];
 		return $data;
