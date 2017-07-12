@@ -82,7 +82,7 @@ class BaseApplyLogic extends Logic
                     $data[] = [
                         "title" => "完成",
                         "name" => '',
-                        "date"=> date('Y-m-d H:i', $apply->create_time),
+                        "date"=> date('Y-m-d H:i', $v->approval_time),
                         "org" => '',
                         "status" => 2,
                         'diff_time' => $v->approval_time - $apply->create_time
