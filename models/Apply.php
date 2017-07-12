@@ -234,7 +234,7 @@ class Apply extends \yii\db\ActiveRecord
         $personIds = RoleOrgPermission::find()->select(['oa_role_org_permission.person_id'])->innerJoin(
             'oa_role','oa_role.id = oa_role_org_permission.role_id'
         )->where([
-            'in', 'oa_role.slug', ['caiwu']
+            'oa_role.slug' =>  'caiwu'
         ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids')")->asArray()->all();
         foreach ($personIds as $v) {
             if ($person = Person::findOne($v['person_id'])) {
