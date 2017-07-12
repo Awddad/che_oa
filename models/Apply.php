@@ -230,13 +230,12 @@ class Apply extends \yii\db\ActiveRecord
         $data = [
             'tips_title' => 'OA - 付款确认',
             'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请已通过，请在OA系统进行付款确认',
-            'receivers' => Person::findOne($this->person_id)->bqq_open_id,
         ];
-        $personIds = RoleOrgPermission::find()->where(['oa_role_org_permission.person_id'])->innerJoin(
+        $personIds = RoleOrgPermission::find()->select(['oa_role_org_permission.person_id'])->innerJoin(
             'oa_role','oa_role.id = oa_role_org_permission.role_id'
         )->where([
             'in', 'oa_role.slug', ['caiwu']
-        ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids')")->all();
+        ])->andWhere("FIND_IN_SET({$person->company_id}, 'company_ids')")->asArray()->all();
         foreach ($personIds as $v) {
             if ($person = Person::findOne($v['person_id'])) {
                 $data['receivers'] = $person->bqq_open_id;
