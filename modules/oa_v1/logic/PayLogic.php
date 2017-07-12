@@ -158,7 +158,7 @@ class PayLogic extends BaseLogic
                 $applyDetail = $apply->applyBuy;
                 break;
         }
-        if($apply->type == 5 || $apply->type == 5) {
+        if($apply->type == 4 || $apply->type == 5) {
             $data = [
                 'pay_org' => PersonLogic::instance()->getOrg(),
                 'pay_bank' => ThirdServer::instance([
