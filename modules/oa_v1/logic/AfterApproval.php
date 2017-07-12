@@ -108,6 +108,7 @@ class AfterApproval extends BaseLogic
         $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
         
         $employee->status = 3;
+        $employee->leave_time = date('Y-m-d');
         if ($employee->save()) {
             //权限系统接口
             $objQx = new QuanXianServer();
