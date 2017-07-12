@@ -54,7 +54,7 @@ class ApplyBuyForm extends BaseForm
     
     public $files;
     
-    public $des;
+    public $des = '';
     
     /**
      * 审批人
