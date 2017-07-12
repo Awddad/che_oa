@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>OA系统</title>
@@ -59,41 +59,6 @@
     h3{font-size: 16px;}
     a{ color:#108EE9; text-decoration: none;}
     li{ list-style: none;-webkit-tap-highlight-color:transparent}
-    select::-webkit-input-placeholder {
-      color: #bfcbd9;
-    }
-    select:-ms-input-placeholder {
-      color: #bfcbd9;
-    }
-    select:-moz-placeholder {
-      color: #bfcbd9;
-    }
-    select::-moz-placeholder {
-      color: #bfcbd9;
-    }
-    select{
-      background-color: #fff;
-      background-image: none;
-      border-radius: 4px;
-      border: 1px solid #bfcbd9;
-      box-sizing: border-box;
-      color: #1f2d3d;
-      font-size: inherit;
-      height: 36px;
-      line-height: 1;
-      outline: 0;
-      padding: 3px 10px;
-      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-    }
-    optgroup {
-      font-style: normal;
-      font-weight: normal;
-      color: #adbac5;
-      border-bottom: 1px solid #ddd;
-    }
-    select option{
-      padding: 4px 10px 4px 10px !important;
-    }
     .container{padding:0 20px 20px;}
     .f-l{float: left}
     .f-r{float: right}
@@ -140,18 +105,10 @@
         max-width: 500px !important;
     }
 
-    /*模态框*/
     .el-dialog__header{padding-bottom: 12px !important; border-bottom:1px solid rgba(0,0,0,0.05);}
     .submit-dialog{ width:900px !important; min-width:320px !important; overflow: auto !important;}
     .submit-dialog .el-dialog__body{ padding: 20px !important;}
     .el-pagination{ padding: 2px 0 !important;}
-
-    .lg-dialog .el-dialog{ width: 1200px !important;}
-    .md-dialog  .el-dialog{ width: 900px !important;}
-    .sm-dialog  .el-dialog{ width: 500px !important;}
-    .mini-dialog  .el-dialog{ width: 300px !important;}
-
-    /*表格*/
     .el-table{ border-radius: 4px; border-top:1px solid #E9E9E9 !important;}
     .el-table th{
         background-color: #F7F7F7 !important;
@@ -168,11 +125,10 @@
         border-right: 1px solid #E9E9E9 !important;
         border-bottom: 1px solid #E9E9E9 !important;
     }
-
-    /*步骤条*/
     .el-step__description{
       width: 85% !important;
     }
+
 
     .search-wrap{
       padding: 15px;
@@ -197,14 +153,6 @@
     .el-upload-list{ overflow: hidden; max-width: 680px !important; padding-top: 6px !important;}
     .el-upload-list__item:first-child{ margin-top:4px !important;}
     .el-upload-list li{overflow: hidden; float: left; width: 31%; border:1px solid #E9E9E9; margin:4px 1%; }
-    .demo-img .el-upload-list {
-      width: 0;
-      height: 0;
-      overflow: hidden;
-      display: none !important;
-
-    }
-
 
     .attachment-wrap{ max-width: 960px;}
 
@@ -253,22 +201,16 @@
       }
 
       .t-xs-r {
-        text-align: right !important;
+        text-align: left !important;
       }
-
-      /*模态框*/
-      .lg-dialog .el-dialog,
-      .md-dialog  .el-dialog,
-      .sm-dialog  .el-dialog,
-      .mini-dialog  .el-dialog{
-          width: 96% !important;
+      .el-dialog{
+          /*width: auto !important;*/
+          min-width: 96% !important;
           left: 0 !important;
           margin: 0 2%;
           -webkit-transform: translateX(0) !important;
           transform: translateX(0) !important;
       }
-
-
       .submit-dialog .el-dialog__body{
           padding: 10px;
       }
@@ -306,11 +248,12 @@
               if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
           return fmt;
       }
+
   </script>
 </head>
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?7b5b67c00bb67fa4280a"></script><script type="text/javascript" src="vendor.js?db85e7ab7070e8a795a1"></script><script type="text/javascript" src="index.js?0cb6819e4cdf4e4b1b6e"></script></body>
+<script type="text/javascript" src="manifest.js?a8ffd9c019339c8a3511"></script><script type="text/javascript" src="index.js?e7b198a0717a63ea8137"></script></body>
 
 </html>
