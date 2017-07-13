@@ -13,6 +13,7 @@ use app\models\Apply;
 use app\models\AssetGet;
 use app\models\Person;
 use app\models\User;
+use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 
@@ -94,6 +95,7 @@ class AssetGetForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $this->saveAssetGetList($user);
+            AssetLogic::instance()->assetGet($apply);
             $transaction->commit();
             return $apply;
         } catch (Exception $e) {
