@@ -216,7 +216,7 @@ class AssetController extends BaseController
                 $org = $person->org_full_name;
                 $use = AssetGetList::find()->where(['status' => 1, 'person_id' =>$v->person_id])->one();
                 if ($use) {
-                    $useDay = round((time()-$use->update_time)/3600/24);
+                    $useDay = round((time()-$use->created_at)/3600/24);
                 } else {
                     $useDay = '--';
                 }
