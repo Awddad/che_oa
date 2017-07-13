@@ -6,7 +6,19 @@ use yii;
 
 class TalentLogic extends BaseLogic
 {
-	
+    /**
+     * 是否是招聘经理
+     * @param array $arrPersonRole 登入用户的权限数据
+     * @return boolean
+     */
+	public function isManager($arrPersonRole)
+	{
+	    if(in_array('zhaopinjingli',$arrPersonRole['roleInfo'])){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
 	
 	
 	

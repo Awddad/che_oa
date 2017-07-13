@@ -123,6 +123,7 @@ class TalentForm extends BaseForm
 	    $model->work_time = $this->work_time;
 	    $model->current_location = $this->current_location;
 	    $model->created_at = time();
+	    $model->owner = $user['person_id'];
 	    if($model->save()){
 	        TalentLogic::instance()->addLog($model->id,'新增招聘',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
 	        return ['status'=>true];
@@ -250,7 +251,7 @@ class TalentForm extends BaseForm
 	 * @param array $params
 	 * @return array
 	 */
-	public function getList($params)
+	public function getList($params,$user,$roles)
 	{
 	    $keywords = ArrayHelper::getValue($params,'keywords',null);
 	    $start_time = ArrayHelper::getValue($params,'start_time',null);
@@ -308,6 +309,10 @@ class TalentForm extends BaseForm
 	            }
 	        }
 	        $query->andWhere($orwhere);
+	    }
+	    //除招聘经理外 只能看自己添加的~
+	    if(!TalentLogic::instance()->isManager($roles)){
+	        $query->andWhere(['owner'=>$user['person_id']]);
 	    }
 	    
 	    //分页
