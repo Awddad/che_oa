@@ -56,7 +56,6 @@ class BaseLogic extends Logic
         $data['_token'] = $params['auth_token'];
         $data['window_title'] = 'OA系统信息提醒';
         $rst = Server::instance()->httpPost($params['auth_api_url'].'/bqq/tips', $data);
-        \Yii::error(print_r($rst,true));
         return $rst;
         
     }
