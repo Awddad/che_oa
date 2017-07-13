@@ -301,7 +301,7 @@ class AssetLogic extends Logic
              */
             $assetList = AssetList::find()->where([
                 'asset_id' => $v->asset_id,
-                'status' => 1
+                'status' => 5
             ])->orderBy(['id' => SORT_ASC])->one();
             if (empty($assetList)) {
                 throw new Exception($v->asset->name . '库存不足');
