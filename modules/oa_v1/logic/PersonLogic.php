@@ -83,6 +83,32 @@ class PersonLogic extends BaseLogic
                 'name' => $personName
             ];
         }
+        $caiwu = $this->getCaiwu();
+    
+        foreach ($caiwu as $v) {
+            $personName = $v['person_name']. ' '. $v['org_full_name'];
+            $data[] = [
+                'id' => $v['person_id'],
+                'name' => $personName
+            ];
+        }
+        $data = ArrayHelper::index($data,'id');
+        sort($data);
+        return $data;
+    }
+    
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function getCaiwu()
+    {
+        $data = Person::find()->select([
+            'oa_person.person_id',
+            'oa_person.person_name',
+            'oa_person.org_full_name'
+        ])->innerJoin('oa_role', 'oa_role.id = oa_person.role_ids')->where([
+            'in', 'oa_role.slug', ['caiwu', 'caiwujingli']
+        ])->asArray()->all();
         return $data;
     }
     
