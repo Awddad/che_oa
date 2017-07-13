@@ -54,7 +54,7 @@ class ApplyPayForm extends BaseForm
     
     public $des;
     
-    public $pay_type;
+    public $pay_type = 0;
     
     /**
      * 审批人
@@ -73,7 +73,7 @@ class ApplyPayForm extends BaseForm
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'apply_id', 'to_name', 'pay_type'],
+                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'apply_id', 'to_name'],
                 'required',
                 'message' => '缺少必填字段'
             ],
@@ -86,6 +86,7 @@ class ApplyPayForm extends BaseForm
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
             ['files', 'safe'],
+            ['pay_type', 'integer'],
             ['des', 'string'],
             ['apply_id', 'checkOnly']
         ];
