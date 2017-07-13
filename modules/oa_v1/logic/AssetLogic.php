@@ -453,6 +453,7 @@ class AssetLogic extends Logic
                     'asset_type_id' => $buyList->asset_type_id,
                     'asset_brand_id' => $buyList->asset_brand_id,
                     'name' => $buyList->name,
+                    'price' => $buyList->price
                 ])->one();
                 if (empty($asset)) {
                     $asset = new Asset();
