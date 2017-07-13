@@ -107,7 +107,7 @@ class ApplyDemandController extends BaseController
         foreach ($model as $k => $v) {
             $org = $v->personInfo->org_full_name;
             
-            $detail = implode(',', ArrayHelper::getColumn($v->applyDemand, 'name'));
+            $detail = implode(',', ArrayHelper::getColumn($v->applyDemand->demandList, 'name'));
             
             $data[] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,

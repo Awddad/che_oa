@@ -60,4 +60,13 @@ class ApplyDemand extends \yii\db\ActiveRecord
             'tips' => '确认请购备注',
         ];
     }
+    
+    /**
+     * 需求列表
+     */
+    public function getDemandList()
+    {
+        return $this->hasMany(ApplyDemandList::className(), ['apply_id' => 'apply_id']);
+    }
+    
 }
