@@ -254,6 +254,7 @@ class BaseApplyLogic extends Logic
                 'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
                 'name' => $v->asset->name,
                 'price' => $v->asset->price,
+                'stock_number' => $v->assetList->asset_number,
             ];
         }
         return $data;
