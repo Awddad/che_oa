@@ -147,7 +147,8 @@ class ApplyBuyController extends BaseController
     public function actionAddStock()
     {
         $param = Yii::$app->request->post();
-        if(empty($param) || !isset($param['list']) || !isset($param['apply_id'])) {
+        if(empty($param) || !isset($param['list']) || !isset($param['apply_id']) || empty($param['list'])
+            || $param['apply_id']) {
             return $this->_returnError(400);
         }
         $data = AssetLogic::instance()->addAsset($param, $this->arrPersonInfo);
