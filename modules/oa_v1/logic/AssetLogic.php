@@ -313,7 +313,7 @@ class AssetLogic extends Logic
                 AssetList::updateAll(['status' => 1], ['id' => $v->asset_list_id]);
                 //增加剩余库存
                 Asset::updateAllCounters(['free_amount' => 1], ['id' => $v->asset_id]);
-                $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id);
+                $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id, 3);
             } else {
                 throw new Exception('资产归还失败！');
             }
@@ -377,11 +377,12 @@ class AssetLogic extends Logic
      * 新增入库
      *
      * @param $data
+     * @param Person $person
      *
      * @return bool
      * @throws Exception
      */
-    public function addAsset($data)
+    public function addAsset($data, $person)
     {
         $transaction = \Yii::$app->db->beginTransaction();
         try {
@@ -425,7 +426,7 @@ class AssetLogic extends Logic
                 if (!$asset->save()) {
                     throw new Exception('入库失败');
                 }
-                $this->addAssetList($asset, $v['amount'], $data['apply_id']);
+                $this->addAssetList($asset, $v['amount'],$person ,$data['apply_id']);
             }
             ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
             $transaction->commit();
@@ -442,28 +443,30 @@ class AssetLogic extends Logic
      *
      * @param Asset $asset
      * @param string $applyBuyId
+     * @param Person $person
      * @param int $amount
+     *
+     * @return boolean
      */
-    public function addAssetList($asset, $amount, $applyBuyId = '')
+    public function addAssetList($asset, $amount, $person, $applyBuyId = '')
     {
-        $data = [];
         $last = $this->getLastAssetNum();
         $endNum = $last['endNum'];
         for ($i = 0; $i < $amount; $i++) {
             $endNum++;
-            $data[] = [
-                $asset->id,
-                $asset->price,
-                1,
-                time(),
-                $last['begin'] . $endNum,
-                $last['begin'] . $endNum,
-                $applyBuyId
-            ];
+            $assetList = new AssetList();
+            $assetList->asset_id = $asset->id;
+            $assetList->price = $asset->price;
+            $assetList->status = 1;
+            $assetList->created_at = time();
+            $assetList->asset_number = $last['begin'] . $endNum;
+            $assetList->stock_number = $last['begin'] . $endNum;
+            $assetList->apply_buy_id = $applyBuyId;
+            if ($assetList->save()) {
+                $this->addAssetListLog($person->person_id, $assetList->id, null, 1);
+            }
         }
-        \Yii::$app->db->createCommand()->batchInsert('oa_asset_list', [
-            'asset_id', 'price', 'status', 'created_at', 'asset_number', 'stock_number', 'apply_buy_id'
-        ], $data)->execute();
+        return true;
     }
     
     /**
