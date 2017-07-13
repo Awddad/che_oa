@@ -33,6 +33,7 @@ class AssetList extends \yii\db\ActiveRecord
         2 => '使用中',
         3 => '已报废',
         4 => '已丢失',
+        5 => '申请中',
     ];
 
     /**
