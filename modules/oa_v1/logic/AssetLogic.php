@@ -309,7 +309,7 @@ class AssetLogic extends Logic
             $v->status = AssetGetList::STATUS_BACK_SUCCESS;
             if ($v->save()) {
                 AssetList::updateAll(['status' => 1], ['id' => $v->asset_list_id]);
-                $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id);
+                $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id, 3);
             } else {
                 throw new Exception('资产归还失败！');
             }
@@ -459,13 +459,7 @@ class AssetLogic extends Logic
             $assetList->stock_number = $last['begin'] . $endNum;
             $assetList->apply_buy_id = $applyBuyId;
             if ($assetList->save()) {
-                $assetListLog = new AssetListLog();
-                $assetListLog->asset_list_id = $assetList->id;
-                $assetListLog->person_id = $person->person_id;
-                $assetListLog->type = 1;
-                $assetListLog->des = '首次入库';
-                $assetListLog->created_at = time();
-                $assetListLog->save();
+                $this->addAssetListLog($person->person_id, $assetList->id, null, 1);
             }
         }
         

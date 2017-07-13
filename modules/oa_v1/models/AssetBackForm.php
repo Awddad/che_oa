@@ -97,7 +97,7 @@ class AssetBackForm extends BaseForm
             if (!$apply->save()) {
                 throw new Exception('付款申请单创建失败');
             }
-            $this->saveAssetGet();
+            $this->saveAssetBack();
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $this->saveAssetGetList();
@@ -115,7 +115,7 @@ class AssetBackForm extends BaseForm
      * @return AssetBack
      * @throws Exception
      */
-    public function saveAssetGet()
+    public function saveAssetBack()
     {
         $model = new AssetBack();
         $model->apply_id = $this->apply_id;
@@ -137,7 +137,9 @@ class AssetBackForm extends BaseForm
      */
     public function saveAssetGetList()
     {
-        $result = AssetGetList::updateAll(['status' => AssetGetList::STATUS_BACK_IN], ['in', 'id', $this->asset_back_ids]);
+        $result = AssetGetList::updateAll(['status' => AssetGetList::STATUS_BACK_IN], [
+            'in', 'id', $this->asset_back_ids
+        ]);
         if(!$result) {
             throw new Exception('固定资产归还单创建失败');
         }
