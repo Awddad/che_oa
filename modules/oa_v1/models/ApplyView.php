@@ -164,7 +164,7 @@ class ApplyView extends BaseForm
 			'pay_type' => $apply->applyPay->pay_type,
 			'des' => $apply->applyPay->des,
             'money' => $apply->applyPay->money,
-            'pay_type_name' => $tagTree->name,
+            //'pay_type_name' => $tagTree->name,
 			'files' => json_decode($apply->applyPay->files)
 		];
 		return $data;
