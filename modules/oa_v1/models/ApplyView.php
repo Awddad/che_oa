@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\models;
 
 
 use app\logic\CnyLogic;
+use app\models\ApplyDemand;
 use app\models\ApplyUseChapter;
 use app\models\AssetBack;
 use app\models\AssetGet;
@@ -196,10 +197,12 @@ class ApplyView extends BaseForm
 	protected function getDemand($apply)
 	{
 		$data = [
-				'des' => $apply->applyDemand->des,
-				'status' => $apply->applyDemand->status,
-				'files' => json_decode($apply->applyDemand->files),
-				'demand_list' => BaseApplyLogic::instance()->getApplyDemandList($apply->apply_id),
+            'des' => $apply->applyDemand->des,
+            'status' => $apply->applyDemand->status,
+            'status_name' => ApplyDemand::STATUS[$apply->applyDemand->status],
+            'apply_buy_id' => $apply->applyDemand->apply_buy_id,
+            'files' => json_decode($apply->applyDemand->files),
+            'demand_list' => BaseApplyLogic::instance()->getApplyDemandList($apply->apply_id),
 		];
 		return $data;
 	}

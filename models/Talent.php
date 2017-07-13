@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "oa_talent".
  *
  * @property integer $id
+ * @property integer $owner
  * @property string $name
  * @property string $phone
  * @property string $email
@@ -53,7 +54,7 @@ class Talent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['job', 'age', 'sex', 'educational', 'political', 'marriage', 'job_status', 'person_type', 'current_location', 'status_communion', 'status_test', 'status_face', 'status', 'talent', 'created_at', 'updated_at', 'employee_id'], 'integer'],
+            [['job', 'owner', 'age', 'sex', 'educational', 'political', 'marriage', 'job_status', 'person_type', 'current_location', 'status_communion', 'status_test', 'status_face', 'status', 'talent', 'created_at', 'updated_at', 'employee_id'], 'integer'],
             [['name', 'daogang'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
             [['email', 'yingpin_location'], 'string', 'max' => 100],
@@ -70,6 +71,7 @@ class Talent extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'owner' => 'Owner',
             'name' => 'Name',
             'phone' => 'Phone',
             'email' => 'Email',
