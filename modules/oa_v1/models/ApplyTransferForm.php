@@ -8,6 +8,7 @@ use yii\db\Exception;
 use app\models\ApplyTransfer;
 use app\models\Job;
 use app\models\Employee;
+use app\models\Org;
 
 class ApplyTransferForm extends BaseForm
 {
@@ -111,12 +112,12 @@ class ApplyTransferForm extends BaseForm
 		$model->old_profession = Job::findOne($this->old_profession_id)->name;
 		*/
 		$model->old_org_id = $emp->org_id;
-		$model->old_org_name = PersonLogic::instance()->getOrgById($emp->org_id);
+		$model->old_org_name = ($o_org = Org::findOne($emp->org_id)) ?$o_org->org_name:'';
 		$model->old_profession_id = $emp->profession;
 		$model->old_profession = Job::findOne($emp->profession)->name;
 		
 		$model->target_org_id = $this->target_org_id;
-		$model->target_org_name = PersonLogic::instance()->getOrgById($this->target_org_id);
+		$model->target_org_name = ($t_org = Org::findOne($this->target_org_id)) ?$t_org->org_name:'';
 		$model->target_profession_id = $this->target_profession_id;
 		$model->target_profession = Job::findOne($this->target_profession_id)->name;
 		$model->entry_time = $this->entry_time;
