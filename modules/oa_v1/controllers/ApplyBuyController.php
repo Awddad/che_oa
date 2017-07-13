@@ -126,14 +126,13 @@ class ApplyBuyController extends BaseController
      */
     public function actionBuyList($apply_id)
     {
-        $query = ApplyBuyList::find()->where([
-            'apply_id' => $apply_id]
-        )->andWhere('in_amount < amount');
-        $data = $query->all();
+        $data = ApplyBuyList::find()->where([
+            'apply_id' => $apply_id
+        ])->all();
         $returnData = [];
-        if (empty($data)) {
-            foreach ($query->all() as $value) {
-                if ($value->amount == $value->in_amount) {
+        if (!empty($data)) {
+            foreach ($data as $value) {
+                if ($value->amount <= $value->in_amount) {
                     continue;
                 }
                 $returnData[] = $value;
@@ -151,7 +150,7 @@ class ApplyBuyController extends BaseController
         if(empty($param) || !isset($param['list']) || !isset($param['apply_id'])) {
             return $this->_returnError(400);
         }
-        $data = AssetLogic::instance()->addAsset($param);
+        $data = AssetLogic::instance()->addAsset($param, $this->arrPersonInfo);
         return $this->_return($data);
     }
     
