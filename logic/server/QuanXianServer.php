@@ -776,7 +776,38 @@ class QuanXianServer extends Server
     	}
     	return false;
     }
-    
+    /**
+     * 与权限系统交互 修改用户（拉取权限）
+     * @param array $params [name,email,org_id,position_id,bank_cards]
+     * @return boolean
+     */
+    public function curlEditUser2($params)
+    {
+        $userDetail = $this->curlGetUserDetail($params['person_id'], ['show_project_roles'=>1]);
+        $roles = [];
+        foreach($userDetail['project_roles'] as $v){
+            $roles[] = $v['role_id'];
+        }
+        $arrPost = [
+            '_token' => $this->_token,
+            'name' => $params['name'],
+            'email' => $params['email'],
+            'roles' => $roles,
+        ];
+        isset($params['org_id']) && $arrPost['organization_id'] = $params['org_id'];
+        isset($params['position_id']) && $arrPost['position_id'] = $params['position_id'];
+        isset($params['bank_cards']) && $arrPost['bank_cards'] = $params['bank_cards'];
+        isset($params['phone']) && $arrPost['phone'] = $params['phone'];
+        //isset($params['qq']) && $arrPost['bqq_open_id'] = $params['qq'];
+         
+        $url = sprintf($this->arrApiUrl['update_user'],$params['person_id']);
+        $arrRtn = $this->thisHttpPost($url, $arrPost);
+        if( $arrRtn['success'] == 1)//接口处理数据成功
+        {
+            return true;
+        }
+        return false;
+    }
     
     /**
      * 与权限系统交互 删除银行卡
@@ -848,6 +879,7 @@ class QuanXianServer extends Server
         }
         return false;
     }
+    
     
     /**
      * 与权限系统交互 获取用户详情
