@@ -7,6 +7,7 @@ use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use app\models\ApplyTransfer;
 use app\models\Job;
+use app\models\Employee;
 
 class ApplyTransferForm extends BaseForm
 {
@@ -30,7 +31,7 @@ class ApplyTransferForm extends BaseForm
 	{
 		return [
 				[
-					['apply_id','old_org_id','old_profession_id','target_org_id','target_profession_id','entry_time','transfer_time','des'],
+					['apply_id',/*'old_org_id','old_profession_id',*/'target_org_id','target_profession_id','entry_time','transfer_time','des'],
 					'required',
 					'message' => '{attribute}不能为空'
 				],
@@ -80,7 +81,7 @@ class ApplyTransferForm extends BaseForm
 			if(!$apply->save()){
 				throw new Exception(current($apply->getFirstErrors()));
 			}
-			$this->saveTransfer();
+			$this->saveTransfer($user);
 			$this->approvalPerson($apply);
 			$this->copyPerson($apply);
 			$transaction->commit();
@@ -95,14 +96,25 @@ class ApplyTransferForm extends BaseForm
 	/**
 	 * 保存调职表
 	 */
-	public function saveTransfer()
+	public function saveTransfer($user)
 	{
+	    $emp = Employee::findOne(['person_id'=>$user['person_id']]);
+	    if(empty($emp)){
+	        throw new Exception('员工不存在');
+	    }
 		$model = new ApplyTransfer();
 		$model->apply_id = $this->apply_id;
+		/* 员工原部门原职位自己带出 
 		$model->old_org_id = $this->old_org_id;
 		$model->old_org_name = PersonLogic::instance()->getOrgById($this->old_org_id);
 		$model->old_profession_id = $this->old_profession_id;
 		$model->old_profession = Job::findOne($this->old_profession_id)->name;
+		*/
+		$model->old_org_id = $emp->org_id;
+		$model->old_org_name = PersonLogic::instance()->getOrgById($emp->org_id);
+		$model->old_profession_id = $emp->profession;
+		$model->old_profession = Job::findOne($emp->profession)->name;
+		
 		$model->target_org_id = $this->target_org_id;
 		$model->target_org_name = PersonLogic::instance()->getOrgById($this->target_org_id);
 		$model->target_profession_id = $this->target_profession_id;
