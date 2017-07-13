@@ -27,7 +27,7 @@ class EmployeeLogic extends BaseLogic
         ];
         //权限系统添加用户
         $objQx = new QuanXianServer();
-        $res = $objQx->curlEditUser($params);
+        $res = $objQx->curlEditUser2($params);
         return $res;
     }
     /**
