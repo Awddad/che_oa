@@ -271,12 +271,12 @@ class TalentForm extends BaseForm
 	    //开始时间
 	    if($start_time){
 	        $start_time = strtotime($start_time);
-	        $query->andWhere(['>=', 'updated_at', $start_time]);
+	        $query->andWhere(['>=', 'created_at', $start_time]);
 	    }
 	    //结束时间
 	    if($end_time){
 	        $end_time = strtotime($end_time.' 23:59:59');
-	        $query->andWhere(['<=', 'updated_at', $end_time]);
+	        $query->andWhere(['<=', 'created_at', $end_time]);
 	    }
 	    //人才库
 	    if($talent){
@@ -324,10 +324,10 @@ class TalentForm extends BaseForm
 	    $res = $query->orderBy("created_at desc")
 	    ->offset($pagination->offset)
 	    ->limit($pagination->limit)
-	    ->all();
-	    
-	    $data = [];
-	    foreach($res as $k => $v){
+            ->all();
+        
+        $data = [];
+        foreach ($res as $k => $v){
 	    	$data[] = [
 	    	    'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
 	    	    'talent_id' => $v->id,
@@ -336,12 +336,13 @@ class TalentForm extends BaseForm
 	    	    'profession' => empty($v->profession) ? '' : $v->profession->name,
 	    	    'sex' => $v->sex == 1 ? '女' : '男',
 	    	    'age' => $v->age,
-	    	    'educational' => empty($v->edu)?'':$v->edu->educational,
+	    	    'educational' => empty($v->edu) ? '':$v->edu->educational,
 	    	    'work_time' => $v->work_time.'年',
 	    	    'status' => $this->status_arr[$v->status],
 	    	    'status_value' => $v->status,
 	    	    'person_type' => $v->person_type > 0 ? $v->personType->name : '',
 	    	    'location' => Region::findOne($v->current_location)->name,
+	    	    'create_time' => date('Y-m-d', $v->created_at),
 	    	];
 	    }
 	    
