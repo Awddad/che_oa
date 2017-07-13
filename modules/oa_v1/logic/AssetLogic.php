@@ -272,6 +272,8 @@ class AssetLogic extends Logic
             if (!$v->save()) {
                 throw new Exception('资产分配失败');
             }
+            //扣除库存
+            Asset::updateAllCounters(['free_amount' => -1], ['id' => $v->asset_id]);
             $this->addAssetListLog($v->person_id, $assetList->id, $apply->apply_id);
         }
         
@@ -309,6 +311,8 @@ class AssetLogic extends Logic
             $v->status = AssetGetList::STATUS_BACK_SUCCESS;
             if ($v->save()) {
                 AssetList::updateAll(['status' => 1], ['id' => $v->asset_list_id]);
+                //增加剩余库存
+                Asset::updateAllCounters(['free_amount' => 1], ['id' => $v->asset_id]);
                 $this->addAssetListLog($v->person_id, $v->asset_list_id, $apply->apply_id, 3);
             } else {
                 throw new Exception('资产归还失败！');
@@ -353,7 +357,7 @@ class AssetLogic extends Logic
                 $des = '归还, 审批单号：' . $applyId;
                 break;
             case 1:
-                $des = '首次领用';
+                $des = '首次入库';
                 break;
         }
         $log = new AssetListLog();
@@ -422,7 +426,7 @@ class AssetLogic extends Logic
                 if (!$asset->save()) {
                     throw new Exception('入库失败');
                 }
-                $this->addAssetList($asset, $v['amount'], $person, $data['apply_id']);
+                $this->addAssetList($asset, $v['amount'],$person ,$data['apply_id']);
             }
             ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
             $transaction->commit();
@@ -439,8 +443,8 @@ class AssetLogic extends Logic
      *
      * @param Asset $asset
      * @param string $applyBuyId
-     * @param int $amount
      * @param Person $person
+     * @param int $amount
      *
      * @return boolean
      */
@@ -462,7 +466,6 @@ class AssetLogic extends Logic
                 $this->addAssetListLog($person->person_id, $assetList->id, null, 1);
             }
         }
-        
         return true;
     }
     

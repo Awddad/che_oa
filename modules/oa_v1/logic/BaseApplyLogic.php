@@ -92,7 +92,7 @@ class BaseApplyLogic extends Logic
         }
         if($apply->cai_wu_need == 2 && $apply->status == 4) {
             $data[] = [
-                "title" => "财务确认",
+                "title" => "付款确认",
                 "name" => '',
                 "date"=> '',
                 "org" => '',
@@ -103,7 +103,7 @@ class BaseApplyLogic extends Logic
     
         if($apply->cai_wu_need == 2 && in_array($apply->status, [1, 2, 3, 11]) ) {
             $data[] = [
-                "title" => "财务确认",
+                "title" => "付款确认",
                 "name" => '',
                 "date"=> '',
                 "org" => '',
@@ -116,7 +116,7 @@ class BaseApplyLogic extends Logic
                 if ($apply->type == 3) {
                     $caiWuShouKuan = CaiWuShouKuan::findOne($apply->apply_id);
                     $data[] = [
-                        "title" => "财务确认",
+                        "title" => "付款确认",
                         "name" => $apply->cai_wu_person,
                         "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
                         "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
@@ -134,7 +134,7 @@ class BaseApplyLogic extends Logic
                 } else {
                     $caiWuFuKuan = CaiWuFuKuan::findOne($apply->apply_id);
                     $data[] = [
-                        "title" => "财务确认",
+                        "title" => "付款确认",
                         "name" => $apply->cai_wu_person,
                         "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
                         "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
