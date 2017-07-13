@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\models;
 
 
 use app\models\Asset;
+use app\models\Person;
 use app\modules\oa_v1\logic\AssetLogic;
 use yii\base\Model;
 use yii\db\Exception;
@@ -46,10 +47,12 @@ class AssetListForm extends Model
     /**
      * 新增库存
      *
+     * @param Person $person
+     *
      * @return Asset
      * @throws Exception
      */
-    public function save()
+    public function save($person)
     {
         /**
          * @var Asset $asset
@@ -79,7 +82,7 @@ class AssetListForm extends Model
             if (!$asset->save()) {
                 throw new Exception('入库失败', $asset->errors);
             }
-            $assetLogic->addAssetList($asset, $this->amount);
+            $assetLogic->addAssetList($asset, $this->amount, $person);
             $transaction->commit();
             return $asset;
         } catch (Exception $e) {

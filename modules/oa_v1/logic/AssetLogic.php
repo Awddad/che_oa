@@ -37,6 +37,7 @@ class AssetLogic extends Logic
      * 获取类别
      *
      * @param int $assetTypeId
+     *
      * @return string
      */
     public function getAssetType($assetTypeId = 1)
@@ -54,6 +55,7 @@ class AssetLogic extends Logic
      *
      * @param int $parent_id
      * @param array $data
+     *
      * @return array
      */
     public function getAssetTypeByParentId($parent_id = 0, $data = [])
@@ -76,6 +78,7 @@ class AssetLogic extends Logic
                 ];
             }
         }
+        
         return $data;
     }
     
@@ -83,11 +86,13 @@ class AssetLogic extends Logic
      * 获取品牌
      *
      * @param int $assetBrand
+     *
      * @return string
      */
     public function getAssetBrand($assetBrand)
     {
         $res = AssetBrand::find()->where(['id' => $assetBrand])->one();
+        
         return $res->name;
     }
     
@@ -107,6 +112,7 @@ class AssetLogic extends Logic
                 'value' => $v->id,
             ];
         }
+        
         return $data;
     }
     
@@ -114,6 +120,7 @@ class AssetLogic extends Logic
      * 可领用资产列表
      *
      * @param array $param
+     *
      * @return array
      */
     public function getCanGetAsset($param)
@@ -164,6 +171,7 @@ class AssetLogic extends Logic
      * 可归还资产列表
      *
      * @param $personId
+     *
      * @return array
      */
     public function getCanBackAsset($personId)
@@ -191,6 +199,7 @@ class AssetLogic extends Logic
                 ];
             }
         }
+        
         return $data;
     }
     
@@ -221,6 +230,7 @@ class AssetLogic extends Logic
                 'status' => $status_arr[$v->status],//状态
             ];
         }
+        
         return $data;
     }
     
@@ -247,8 +257,8 @@ class AssetLogic extends Logic
                 'asset_id' => $v->asset_id,
                 'status' => 1
             ])->orderBy(['id' => SORT_ASC])->one();
-            if(empty($assetList)) {
-                throw new Exception($v->asset->name.'库存不足');
+            if (empty($assetList)) {
+                throw new Exception($v->asset->name . '库存不足');
             }
             //改变库存状态
             $assetList->status = 2;
@@ -264,6 +274,7 @@ class AssetLogic extends Logic
             }
             $this->addAssetListLog($v->person_id, $assetList->id, $apply->apply_id);
         }
+        
         return false;
     }
     
@@ -283,6 +294,7 @@ class AssetLogic extends Logic
      * 资产归还
      *
      * @param Apply $apply
+     *
      * @return boolean
      * @throws Exception
      */
@@ -302,12 +314,15 @@ class AssetLogic extends Logic
                 throw new Exception('资产归还失败！');
             }
         }
+        
         return true;
     }
     
     /**
      * 资产归还，取消或者撤销
+     *
      * @param $apply
+     *
      * @return int
      */
     public function assetBackCancel($apply)
@@ -358,26 +373,28 @@ class AssetLogic extends Logic
      * 新增入库
      *
      * @param $data
+     * @param Person $person
+     *
      * @return bool
      * @throws Exception
      */
-    public function addAsset($data)
+    public function addAsset($data, $person)
     {
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             $status = 2;
             foreach ($data['list'] as $v) {
                 $buyList = ApplyBuyList::findOne($v['apply_buy_id']);
-                if(empty($buyList)){
+                if (empty($buyList)) {
                     throw new Exception('入库失败');
                 }
                 $buyList->in_amount += $v['amount'];
-                if($buyList->amount < $buyList->in_amount) {
+                if ($buyList->amount < $buyList->in_amount) {
                     throw new Exception('库存错误');
                 }
                 $buyList->save();
                 //采购数 不等于入库数
-                if($buyList->in_amount != $buyList->amount) {
+                if ($buyList->in_amount != $buyList->amount) {
                     $status = 1;
                 }
                 /**
@@ -388,7 +405,7 @@ class AssetLogic extends Logic
                     'asset_brand_id' => $buyList->asset_brand_id,
                     'name' => $buyList->name,
                 ])->one();
-                if(empty($asset)) {
+                if (empty($asset)) {
                     $asset = new Asset();
                     $asset->asset_type_id = $buyList->asset_type_id;
                     $asset->asset_type_name = $buyList->asset_type_name;
@@ -405,10 +422,11 @@ class AssetLogic extends Logic
                 if (!$asset->save()) {
                     throw new Exception('入库失败');
                 }
-                $this->addAssetList($asset, $v['amount'], $data['apply_id']);
+                $this->addAssetList($asset, $v['amount'], $person, $data['apply_id']);
             }
             ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
             $transaction->commit();
+            
             return true;
         } catch (Exception $e) {
             $transaction->rollBack();
@@ -422,27 +440,36 @@ class AssetLogic extends Logic
      * @param Asset $asset
      * @param string $applyBuyId
      * @param int $amount
+     * @param Person $person
+     *
+     * @return boolean
      */
-    public function addAssetList($asset, $amount, $applyBuyId = '')
+    public function addAssetList($asset, $amount, $person, $applyBuyId = '')
     {
-        $data = [];
         $last = $this->getLastAssetNum();
         $endNum = $last['endNum'];
         for ($i = 0; $i < $amount; $i++) {
             $endNum++;
-            $data[] = [
-                $asset->id,
-                $asset->price,
-                1,
-                time(),
-                $last['begin'] . $endNum,
-                $last['begin'] . $endNum,
-                $applyBuyId
-            ];
+            $assetList = new AssetList();
+            $assetList->asset_id = $asset->id;
+            $assetList->price = $asset->price;
+            $assetList->status = 1;
+            $assetList->created_at = time();
+            $assetList->asset_number = $last['begin'] . $endNum;
+            $assetList->stock_number = $last['begin'] . $endNum;
+            $assetList->apply_buy_id = $applyBuyId;
+            if ($assetList->save()) {
+                $assetListLog = new AssetListLog();
+                $assetListLog->asset_list_id = $assetList->id;
+                $assetListLog->person_id = $person->person_id;
+                $assetListLog->type = 1;
+                $assetListLog->des = '首次入库';
+                $assetListLog->created_at = time();
+                $assetListLog->save();
+            }
         }
-        \Yii::$app->db->createCommand()->batchInsert('oa_asset_list',[
-            'asset_id', 'price', 'status', 'created_at', 'asset_number', 'stock_number', 'apply_buy_id'
-        ], $data) ->execute();
+        
+        return true;
     }
     
     /**
@@ -456,7 +483,7 @@ class AssetLogic extends Logic
          * @var AssetList $lastAssetList
          */
         $lastAssetList = AssetList::find()->orderBy(['id' => SORT_DESC])->one();
-        if(empty($lastAssetList)) {
+        if (empty($lastAssetList)) {
             $assetNumber = 'CCWGZ1701000';
         } else {
             $assetNumber = $lastAssetList->stock_number;
@@ -472,6 +499,7 @@ class AssetLogic extends Logic
      *
      * @param $param
      * @param Person $person
+     *
      * @return bool
      * @throws Exception
      */
@@ -486,6 +514,7 @@ class AssetLogic extends Logic
                 AssetLogic::instance()->addAssetListLog($person->person_id, $param['asset_list_id'], null, $type, $param['des']);
             }
             $transaction->commit();
+            
             return true;
         } catch (Exception $e) {
             $transaction->rollBack();

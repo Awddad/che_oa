@@ -383,7 +383,7 @@ class AssetController extends BaseController
     
         $param = \Yii::$app->request->post();
         $data['AssetListForm'] = $param;
-        if ($model->load($data) && $model->validate() &&  $model->save()) {
+        if ($model->load($data) && $model->validate() &&  $model->save($this->arrPersonInfo)) {
             return $this->_return([]);
         } else {
             return $this->_return($model->errors, 400);
