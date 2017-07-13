@@ -336,6 +336,10 @@ class AssetLogic extends Logic
     public function assetGetCancel($apply)
     {
         $applyGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
+        foreach ($applyGetList as $v) {
+            //撤销恢复库存
+            Asset::updateAllCounters(['free_amount' => 1], ['id' => $v->asset_id]);
+        }
         AssetList::updateAll([
             'status' => 1,
             'person_id' => 0
