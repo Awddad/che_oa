@@ -215,7 +215,7 @@ class AssetController extends BaseController
                 $org = $person->org_full_name;
                 $use = AssetListLog::find()->where([
                     'asset_list_id' => $v->id,
-                    'person_id' => $this->arrPersonInfo->person_id,
+                    'person_id' => $v->person_id,
                     'type' => 2,
                 ])->one();
                 if ($use) {
