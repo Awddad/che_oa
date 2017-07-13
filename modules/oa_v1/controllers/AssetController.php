@@ -229,11 +229,9 @@ class AssetController extends BaseController
                 $org = '--';
                 $useDay = '--';
             }
-            if($v->status == 5) {
-                $status = $v::STATUS[1];
-            } else {
-                $status = $v::STATUS[$v->status];
-            }
+          
+            $status = $v::STATUS[$v->status];
+            
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
