@@ -140,8 +140,7 @@ class ApplyDemandController extends BaseController
         if ($model->load($data) && $model->validate() && $model->confirmSave()) {
             return $this->_return($model->apply_id);
         } else {
-            $error = current($model->errors);
-            return $this->_returnError(4030, $model->errors, $error['0']);
+            return $this->_returnError(4030, $model->errors, '确认失败');
         }
     }
     
