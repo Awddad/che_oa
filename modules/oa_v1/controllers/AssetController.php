@@ -286,6 +286,17 @@ class AssetController extends BaseController
             $person = Person::findOne($assetList->person_id);
             $data['use_person'] = $person->person_name;
             $data['org'] = $person->org_full_name;
+            $use = AssetListLog::find()->where([
+                'asset_list_id' => $assetList->id,
+                'person_id' => $assetList->person_id,
+                'type' => 2,
+            ])->one();
+            if ($use) {
+                $useDay = round((time() - $use->created_at) / 3600 / 24);
+            } else {
+                $useDay = 0;
+            }
+            $data['use_day'] = '已使用'.$useDay.'天';
         }
         
         return $this->_return($data);
