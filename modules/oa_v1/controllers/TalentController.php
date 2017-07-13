@@ -108,7 +108,7 @@ class TalentController extends BaseController
         $get = yii::$app->request->get();
         $model = new TalentForm();
         
-        $data = $model->getList($get);
+        $data = $model->getList($get,$this->arrPersonInfo,$this->arrPersonRoleInfo);
         
 		return $this->_return($data);
     }
