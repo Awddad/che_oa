@@ -14,6 +14,7 @@ use app\models\ApplyBuy;
 use app\models\ApplyBuyList;
 use app\models\Asset;
 use app\models\AssetBack;
+use app\models\AssetGet;
 use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetListLog;
@@ -334,7 +335,9 @@ class AssetLogic extends Logic
      */
     public function assetGetCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET_FAIL], ['in', 'id', $apply->apply_id]);
+        $applyGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
+        AssetList::updateAll(['status' => 1], ['in', 'id', ArrayHelper::getColumn($applyGetList, 'asset_list_id')]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET_FAIL], ['apply_id' => $apply->apply_id]);
     }
     
     /**
@@ -376,7 +379,7 @@ class AssetLogic extends Logic
      */
     public function assetBackCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET], ['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET], ['apply_id' => $apply->apply_id]);
     }
     
     
