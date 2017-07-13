@@ -357,7 +357,7 @@ class AssetLogic extends Logic
                 $des = '归还, 审批单号：' . $applyId;
                 break;
             case 1:
-                $des = '首次领用';
+                $des = '首次入库';
                 break;
         }
         $log = new AssetListLog();
