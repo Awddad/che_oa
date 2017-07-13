@@ -243,6 +243,51 @@ class AssetLogic extends Logic
      * @return boolean
      * @throws Exception
      */
+    public function assetGet($apply)
+    {
+        $assetGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
+        /**
+         * @var AssetGetList $v
+         */
+        foreach ($assetGetList as $v) {
+            /**
+             * @var AssetList $assetList
+             */
+            $assetList = AssetList::find()->where([
+                'asset_id' => $v->asset_id,
+                'status' => 1
+            ])->orderBy(['id' => SORT_ASC])->one();
+            if (empty($assetList)) {
+                throw new Exception($v->asset->name . '库存不足');
+            }
+            //改变库存状态
+            $assetList->status = 1;
+            $assetList->person_id = $apply->person_id;
+            if (!$assetList->save()) {
+                throw new Exception('资产分配失败');
+            }
+            $v->asset_list_id = $assetList->id;
+            $v->status = AssetGetList::STATUS_APPLY;
+            //更新借款记录
+            if (!$v->save()) {
+                throw new Exception('资产分配失败');
+            }
+            //扣除库存
+            Asset::updateAllCounters(['free_amount' => -1], ['id' => $v->asset_id]);
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 固定资产领取审批通过操作
+     * 在库存中取一条数据给申请人
+     *
+     * @param Apply $apply
+     *
+     * @return boolean
+     * @throws Exception
+     */
     public function assetGetComplete($apply)
     {
         $assetGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
@@ -262,7 +307,7 @@ class AssetLogic extends Logic
             }
             //改变库存状态
             $assetList->status = 2;
-            $assetList->person_id = $apply->person_id;
+            //$assetList->person_id = $apply->person_id;
             if (!$assetList->save()) {
                 throw new Exception('资产分配失败');
             }
@@ -273,7 +318,7 @@ class AssetLogic extends Logic
                 throw new Exception('资产分配失败');
             }
             //扣除库存
-            Asset::updateAllCounters(['free_amount' => -1], ['id' => $v->asset_id]);
+            //Asset::updateAllCounters(['free_amount' => -1], ['id' => $v->asset_id]);
             $this->addAssetListLog($v->person_id, $assetList->id, $apply->apply_id);
         }
         
