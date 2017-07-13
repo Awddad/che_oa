@@ -147,7 +147,7 @@ class BaseApplyLogic extends Logic
                         "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
                         "org" => '',
                         "status" => 2,
-                        'diff_time' => $caiWuFuKuan->create_time - $apply->create_time
+                        'diff_time' => $apply->cai_wu_time - $apply->create_time
                     ];
     
                 }
