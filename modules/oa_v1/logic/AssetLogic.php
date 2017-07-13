@@ -406,8 +406,12 @@ class AssetLogic extends Logic
                 'person_id' => $personId,
                 'type' => 2,
             ])->orderBy('id desc')->one();
-            $day = round((time() - $AssetListLog->created_at) / (3600 *24));
-            $des = '使用'.$day .'天, 审批单号：' . $applyId;
+            if(empty($AssetListLog)) {
+                $day = round((time() - $AssetListLog->created_at) / (3600 *24));
+            } else {
+                $day = 0;
+            }
+            $des = '归还，使用'.$day .'天, 审批单号：' . $applyId;
         }
         $log = new AssetListLog();
         $log->person_id = $personId;
