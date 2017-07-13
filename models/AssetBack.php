@@ -30,9 +30,9 @@ class AssetBack extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'get_person'], 'required'],
-            [['get_person'], 'integer'],
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
+            [['get_person'], 'string', 'max' => 128],
             [['des','asset_list_ids'], 'string', 'max' => 255],
         ];
     }
