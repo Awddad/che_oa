@@ -336,7 +336,10 @@ class AssetLogic extends Logic
     public function assetGetCancel($apply)
     {
         $applyGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
-        AssetList::updateAll(['status' => 1], ['in', 'id', ArrayHelper::getColumn($applyGetList, 'asset_list_id')]);
+        AssetList::updateAll([
+            'status' => 1,
+            'person_id' => 0
+        ], ['in', 'id', ArrayHelper::getColumn($applyGetList, 'asset_list_id')]);
         return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET_FAIL], ['apply_id' => $apply->apply_id]);
     }
     
