@@ -104,7 +104,7 @@ class EmployeeInfoForm extends BaseForm
     public function scenarios()
     {
         return [
-            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name','empno','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type'],
+            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type'],
             self::SCENARIO_EMP_ACCOUNT_EDIT => ['id','qq','email','phone'],
             self::SCENARIO_EMP_BANK_EDIT => ['id','bk_id','bank_name','bank_des','card_id','is_salary'],
             self::SCENARIO_EMP_BANK_DEL => ['id','bk_id']
@@ -122,7 +122,7 @@ class EmployeeInfoForm extends BaseForm
         }
         $model->org_id = $this->org_id;
         $model->name = $this->name;
-        $model->empno = $this->empno;
+        //$model->empno = $this->empno;
         $model->profession = $this->profession;
         $model->id_card = $this->id_card;
         $model->entry_time = $this->entry_time;
