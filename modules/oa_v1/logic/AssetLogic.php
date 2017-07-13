@@ -261,7 +261,7 @@ class AssetLogic extends Logic
                 throw new Exception($v->asset->name . '库存不足');
             }
             //改变库存状态
-            $assetList->status = 1;
+            $assetList->status = 2;
             $assetList->person_id = $apply->person_id;
             if (!$assetList->save()) {
                 throw new Exception('资产分配失败');
