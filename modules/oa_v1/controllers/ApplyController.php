@@ -216,6 +216,12 @@ class ApplyController extends BaseController
                 return $this->_returnError(404, $e);
             }
         } else {
+		    if($apply->type == 8) {
+		        AssetLogic::instance()->assetGetCancel($apply);
+            }
+            if($apply->type == 9) {
+                AssetLogic::instance()->assetBackCancel($apply);
+            }
             if ($apply->save()) {
                 return $this->_return('', 200);
             } else {

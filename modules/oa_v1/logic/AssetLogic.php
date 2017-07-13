@@ -14,6 +14,7 @@ use app\models\ApplyBuy;
 use app\models\ApplyBuyList;
 use app\models\Asset;
 use app\models\AssetBack;
+use app\models\AssetGet;
 use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetListLog;
@@ -260,8 +261,8 @@ class AssetLogic extends Logic
             if (empty($assetList)) {
                 throw new Exception($v->asset->name . '库存不足');
             }
-            //改变库存状态
-            $assetList->status = 1;
+            //改变库存状态， 申请中
+            $assetList->status = 5;
             $assetList->person_id = $apply->person_id;
             if (!$assetList->save()) {
                 throw new Exception('资产分配失败');
@@ -334,7 +335,16 @@ class AssetLogic extends Logic
      */
     public function assetGetCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_BACK_SUCCESS], ['in', 'id', $apply->apply_id]);
+        $applyGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
+        foreach ($applyGetList as $v) {
+            //撤销恢复库存
+            Asset::updateAllCounters(['free_amount' => 1], ['id' => $v->asset_id]);
+        }
+        AssetList::updateAll([
+            'status' => 1,
+            'person_id' => 0
+        ], ['in', 'id', ArrayHelper::getColumn($applyGetList, 'asset_list_id')]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET_FAIL], ['apply_id' => $apply->apply_id]);
     }
     
     /**
@@ -376,7 +386,7 @@ class AssetLogic extends Logic
      */
     public function assetBackCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET], ['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET], ['apply_id' => $apply->apply_id]);
     }
     
     
@@ -406,8 +416,12 @@ class AssetLogic extends Logic
                 'person_id' => $personId,
                 'type' => 2,
             ])->orderBy('id desc')->one();
-            $day = round((time() - $AssetListLog->created_at) / (3600 *24));
-            $des = '使用'.$day .'天, 审批单号：' . $applyId;
+            if(empty($AssetListLog)) {
+                $day = round((time() - $AssetListLog->created_at) / (3600 *24));
+            } else {
+                $day = 0;
+            }
+            $des = '归还，使用'.$day .'天, 审批单号：' . $applyId;
         }
         $log = new AssetListLog();
         $log->person_id = $personId;
