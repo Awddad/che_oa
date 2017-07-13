@@ -141,7 +141,7 @@ class ApplyDemandController extends BaseController
             return $this->_return($model->apply_id);
         } else {
             $error = current($model->errors);
-            return $this->_returnError(400, $error[0]);
+            return $this->_returnError(4030, $model->errors, $error['0']);
         }
     }
     
