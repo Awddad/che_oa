@@ -260,8 +260,8 @@ class AssetLogic extends Logic
             if (empty($assetList)) {
                 throw new Exception($v->asset->name . '库存不足');
             }
-            //改变库存状态
-            $assetList->status = 2;
+            //改变库存状态， 申请中
+            $assetList->status = 5;
             $assetList->person_id = $apply->person_id;
             if (!$assetList->save()) {
                 throw new Exception('资产分配失败');
@@ -334,7 +334,7 @@ class AssetLogic extends Logic
      */
     public function assetGetCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_BACK_SUCCESS], ['in', 'id', $apply->apply_id]);
+        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET_FAIL], ['in', 'id', $apply->apply_id]);
     }
     
     /**
