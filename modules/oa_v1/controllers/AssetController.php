@@ -229,13 +229,18 @@ class AssetController extends BaseController
                 $org = '--';
                 $useDay = '--';
             }
+            if($v->status == 5) {
+                $status = $v::STATUS[1];
+            } else {
+                $status = $v::STATUS[$v->status];
+            }
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'stock_number' => $v->stock_number,
                 'asset_number' => $v->asset_number,
-                'status' => $v::STATUS[$v->status],
+                'status' => $status,
                 'price' => Yii::$app->formatter->asCurrency($v->price),
                 'use_person' => $usePerson,
                 'org' => $org,
