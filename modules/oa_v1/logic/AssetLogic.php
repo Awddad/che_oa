@@ -394,16 +394,20 @@ class AssetLogic extends Logic
      */
     public function addAssetListLog($personId, $assetListId, $applyId = null, $type = 2, $des = null)
     {
-        switch ($type) {
-            case 2:
-                $des = '领用,审批单号：' . $applyId;
-                break;
-            case 3:
-                $des = '归还, 审批单号：' . $applyId;
-                break;
-            case 1:
-                $des = '首次入库';
-                break;
+        if($type == 1) {
+            $des = '首次入库';
+        }
+        if($type == 2) {
+            $des = '领用,审批单号：' . $applyId;
+        }
+        if($type == 3) {
+            $AssetListLog = AssetListLog::find()->where([
+                'asset_list_id' => $assetListId,
+                'person_id' => $personId,
+                'type' => 2,
+            ])->orderBy('id desc')->one();
+            $day = round((time() - $AssetListLog->created_at) / (3600 *24));
+            $des = '使用'.$day .'天, 审批单号：' . $applyId;
         }
         $log = new AssetListLog();
         $log->person_id = $personId;
@@ -453,6 +457,7 @@ class AssetLogic extends Logic
                     'asset_type_id' => $buyList->asset_type_id,
                     'asset_brand_id' => $buyList->asset_brand_id,
                     'name' => $buyList->name,
+                    'price' => $buyList->price
                 ])->one();
                 if (empty($asset)) {
                     $asset = new Asset();
