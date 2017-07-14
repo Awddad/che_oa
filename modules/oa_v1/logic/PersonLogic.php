@@ -46,7 +46,7 @@ class PersonLogic extends BaseLogic
         if ($person->company_id == 1) {
             $persons = Person::find()->where([
                 '!=', 'person_id', $person->person_id
-            ])->orderBy('person_id desc')->all();
+            ])->andWhere(['is_delete'=>0])->orderBy('person_id desc')->all();
         } else {
             $persons = Person::find()->where([
                 'or',
@@ -54,7 +54,7 @@ class PersonLogic extends BaseLogic
                 ['in', 'person_id', $companyArr]
             ])->andWhere([
                 '!=', 'person_id', $person->person_id
-            ])->orderBy('person_id desc')->all();
+            ])->andWhere(['is_delete'=>0])->orderBy('person_id desc')->all();
         }
         
         $data = [];
