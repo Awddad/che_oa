@@ -72,7 +72,10 @@ class PersonLogic extends BaseLogic
             ];
         }
         
-        $other = Person::find()->where(['company_id' => 1])->all();
+        $other = Person::find()->where([
+            'company_id' => 1,
+            'is_delete'=>0
+        ])->all();
         foreach ($other as $v) {
             if($v->org_id <= 0){
                 continue;

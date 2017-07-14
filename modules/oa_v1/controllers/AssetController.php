@@ -180,18 +180,30 @@ class AssetController extends BaseController
             $afterTime = strtotime('+1day', $afterTime);
             $query->andWhere([
                 'and',
-                ['>', 'created_at', $beforeTime],
-                ['<', 'created_at', $afterTime]
+                ['>', 'oa_asset_list.created_at', $beforeTime],
+                ['<', 'oa_asset_list.created_at', $afterTime]
             ]);
         }
     
         $keyword = ArrayHelper::getValue($param, 'keywords');
         if($keyword) {
-            $query->andWhere([
-                'or',
-                ['like','oa_asset.name', $keyword],
-                ['like','oa_asset_list.asset_number', $keyword],
-            ]);
+            $person = Person::find()->filterWhere(['like', 'person_name',$keyword ])->all();
+            if(!empty($person)){
+                $personIds = ArrayHelper::getColumn($person, 'person_id');
+                $query->andWhere([
+                    'or',
+                    ['like','oa_asset.name', $keyword],
+                    ['like','oa_asset_list.asset_number', $keyword],
+                    ['in','oa_asset_list.person_id', $personIds],
+                ]);
+            } else {
+                $query->andWhere([
+                    'or',
+                    ['like','oa_asset.name', $keyword],
+                    ['like','oa_asset_list.asset_number', $keyword],
+                ]);
+            }
+    
         }
     
         $pageSize = ArrayHelper::getValue($param, 'page_size', 20);
