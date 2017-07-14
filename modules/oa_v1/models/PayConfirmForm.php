@@ -198,7 +198,6 @@ class PayConfirmForm extends CaiWuFuKuan
                     $this->update();
                 }
             } else {
-                $param['remark'] = $v->des;
                 $rst = ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
