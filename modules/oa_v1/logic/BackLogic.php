@@ -81,11 +81,11 @@ class BackLogic extends BaseLogic
      */
     public function canConfirmList($orgIds)
     {
-        $query = Apply::find()->where([
-            'in', 'status',  [4, 99]
+        $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
+            'in', 'a.status',  [4, 99]
         ]);
         $query->andWhere([
-            'type' => 3
+            'a.type' => 3
         ]);
 
         $keyword = \Yii::$app->request->post('keyword');
@@ -93,8 +93,8 @@ class BackLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['like', 'apply_id', $keyword],
-                ['like', 'title', $keyword]
+                ['like', 'a.apply_id', $keyword],
+                ['like', 'a.title', $keyword]
             ]);
         }
 
@@ -103,18 +103,18 @@ class BackLogic extends BaseLogic
         if ($beginTime && $endTime) {
             $query->andWhere([
                 'and',
-                ['>=', 'create_time', strtotime($beginTime)],
-                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
+                ['>=', 'a.create_time', strtotime($beginTime)],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
 
-        $order = 'create_time desc';
+        $order = 'a.create_time desc';
         if (\Yii::$app->request->post('sort')) {
-            $order = 'create_time ' . \Yii::$app->request->post('sort');
+            $order = 'a.create_time ' . \Yii::$app->request->post('sort');
         }
 
         $query->andWhere([
-            'in', 'org_id', $orgIds
+            'in', 'oa_person.org_id', $orgIds
         ]);
 
         $countQuery = clone $query;
@@ -170,9 +170,9 @@ class BackLogic extends BaseLogic
      */
     public function export($orgIds)
     {
-        $query = Apply::find()->where([
-            'status' => 4,
-            'type' => 3
+        $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
+            'a.status' => 4,
+            'a.type' => 3
         ]);
 
         $keyword = \Yii::$app->request->get('keyword');
@@ -180,8 +180,8 @@ class BackLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['apply_id' => $keyword],
-                ['title' => $keyword]
+                ['a.apply_id' => $keyword],
+                ['a.title' => $keyword]
             ]);
         }
 
@@ -190,12 +190,12 @@ class BackLogic extends BaseLogic
         if ($beginTime && $endTime) {
             $query->andWhere([
                 'and',
-                ['>=', 'create_time', strtotime($beginTime)],
-                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
+                ['>=', 'a.create_time', strtotime($beginTime)],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
 
-        $order = 'create_time desc';
+        $order = 'a.create_time desc';
         if (\Yii::$app->request->get('desc')) {
             $order = \Yii::$app->request->get('desc') . ' desc';
         }
@@ -205,7 +205,7 @@ class BackLogic extends BaseLogic
         }
 
         $query->andWhere([
-            'in', 'org_id', $orgIds
+            'in', 'oa_person.org_id', $orgIds
         ]);
 
         $models = $query->orderBy($order)->all();
