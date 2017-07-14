@@ -36,6 +36,8 @@ class ApplyPayController extends BaseController
         $model = new ApplyPayForm();
         
         $param = \Yii::$app->request->post();
+        //解决pay_type调整问题
+        unset($param['pay_type']);
         $data['ApplyPayForm'] = $param;
         if ($model->load($data) && $model->validate() &&  $model->save($this->arrPersonInfo)) {
             return $this->_return($model->apply_id);

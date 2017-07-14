@@ -633,9 +633,10 @@ class QuanXianServer extends Server
     			'page' => 1,
     			'per_page' => 1000000,//一次拉取所有员工
     			'show_deleted' => 1,
-    			'show_bank_cards' => 1,
+    			//'show_bank_cards' => 1,
     	];
-    	$arrRtn = $this->thisHttpPost($this->arrApiUrl['all_user'], $arrPost);
+    	$url = $this->arrApiUrl['all_user'].'?'.http_build_query($arrPost);
+    	$arrRtn = $this->httpGet($url);
     	if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) &&!empty($arrRtn['data']['data']))//接口处理数据成功
     	{
     		//获取组织架构信息
@@ -645,7 +646,7 @@ class QuanXianServer extends Server
     			$arrOrgList[$val['org_id']] = $val['org_name'];
             }
             // 构造入库数据
-            // $arrPerson = [];//oa_person表的入库数据
+            $arrPerson = [];//oa_person表的入库数据
             $arrEmployee = []; // oa_employee表的入库数据
             $arrBankList = []; // oa_person_bank_info表的入库数据
             foreach ($arrRtn['data']['data'] as $val) {
@@ -658,8 +659,11 @@ class QuanXianServer extends Server
                     'email' => $val['email'],
                     'status' => 2,
                     'employee_type' => EmployeeType::find()->where(['slug' => 'shiyong'])->one()->id,
-                    'leave_time' => $val['deleted_at'] ? date('Y-m-d', $val['deleted_at']) : '',
+                    'leave_time' => $val['deleted_at'] ? date('Y-m-d', strtotime($val['deleted_at'])) : '',
                 ];
+                if($val['deleted_at']){
+                    $arrPerson[] = $val['id'];
+                }
     			//银行卡信息
     			if(isset($val['bank_cards']) && !empty($val['bank_cards']) && is_array($val['bank_cards']))
     			{
@@ -690,7 +694,12 @@ class QuanXianServer extends Server
     		$arrKeys = array_keys($arrEmployee[0]);
     		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrEmployee, 'id',['status','employee_type','phone','email']);
     		$result= Yii::$app->db->createCommand($strSql)->execute();
-                
+
+    		//更新 - oa_person
+    		if ($arrPerson) {
+                $result += Person::updateAll(['is_delete' => 1], ['in','person_id',$arrPerson]);
+            }
+    		
             // 更新入库 - oa_person_bank_info表
             /* 银行卡信息OA自己维护 2017-07-04 
             $strTable = PersonBankInfo::tableName();

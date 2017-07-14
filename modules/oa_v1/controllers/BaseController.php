@@ -158,11 +158,14 @@ class BaseController extends Controller
                     'person_id' => $personId,
                     'role_id' => $intRoleId
                 ])->one();
-                if($objRoleOrgMod)//设置过数据权限
+                if($objRoleOrgMod && $objRoleOrgMod->org_ids)//设置过数据权限
                 {
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
+                } else {
+                    $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
+                    $this->arrPersonRoleInfo['permissionOrgIds'] = $org;
                 }
                 $result = true;//取库获取到数据了
                 \Yii::$app->cache->set($strCacheKey, $this->arrPersonRoleInfo);

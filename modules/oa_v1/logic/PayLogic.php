@@ -29,26 +29,26 @@ class PayLogic extends BaseLogic
     {
         $type = \Yii::$app->request->post('type');
 
-        $query = Apply::find()->where([
-            'cai_wu_need' => 2
+        $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
+            'a.cai_wu_need' => 2
         ])->andWhere([
-            'in', 'status', [4, 99]
+            'in', 'a.status', [4, 99]
         ]);
         //筛选
         if ($type) {
             if (is_array($type)) {
                 $query->andWhere([
-                    'in', 'type', $type
+                    'in', 'a.type', $type
                 ]);
             } else {
                 $query->andWhere([
-                    'type' => $type
+                    'a.type' => $type
                 ]);
             }
 
         } else {
             $query->andWhere([
-                'in', 'type', [1, 2, 4, 5]
+                'in', 'a.type', [1, 2, 4, 5]
             ]);
         }
         $keyword = trim(\Yii::$app->request->post('keyword'));
@@ -56,8 +56,8 @@ class PayLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['like', 'apply_id', $keyword],
-                ['like', 'title', $keyword]
+                ['like', 'a.apply_id', $keyword],
+                ['like', 'a.title', $keyword]
             ]);
         }
 
@@ -66,19 +66,19 @@ class PayLogic extends BaseLogic
         if ($beginTime && $endTime) {
             $query->andWhere([
                 'and',
-                ['>=', 'create_time', strtotime($beginTime)],
-                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
+                ['>=', 'a.create_time', strtotime($beginTime)],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
         $query->andWhere([
-            'in', 'org_id', $orgIds
+            'in', 'oa_person.org_id', $orgIds
         ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
         $pagination = new Pagination(['totalCount' => $totalCount]);
-        $order = 'create_time desc';
+        $order = 'a.create_time desc';
         if (\Yii::$app->request->post('sort')) {
-            $order = 'create_time ' . \Yii::$app->request->post('sort');
+            $order = 'a.create_time ' . \Yii::$app->request->post('sort');
         }
 
         //当前页
@@ -207,23 +207,23 @@ class PayLogic extends BaseLogic
     {
         $type = \Yii::$app->request->get('type');
 
-        $query = Apply::find()->where([
-            'status' => 4,
+        $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
+            'a.status' => 4,
         ]);
         //筛选
         if ($type && in_array($type, [1, 2])) {
             if (is_array($type)) {
                 $query->andWhere([
-                    'in', 'type', $type
+                    'in', 'a.type', $type
                 ]);
             } else {
                 $query->andWhere([
-                    'type' => $type
+                    'a.type' => $type
                 ]);
             }
         } else {
             $query->andWhere([
-                'in', 'type', [1, 2]
+                'in', 'a.type', [1, 2]
             ]);
         }
         $keyword = \Yii::$app->request->get('keyword');
@@ -231,8 +231,8 @@ class PayLogic extends BaseLogic
         if ($keyword) {
             $query->andFilterWhere([
                 'or',
-                ['apply_id' => $keyword],
-                ['title' => $keyword]
+                ['a.apply_id' => $keyword],
+                ['a.title' => $keyword]
             ]);
         }
 
@@ -241,12 +241,12 @@ class PayLogic extends BaseLogic
         if ($beginTime && $endTime) {
             $query->andWhere([
                 'and',
-                ['>=', 'create_time', strtotime($beginTime)],
-                ['<', 'create_time', strtotime('+1day', strtotime($beginTime))],
+                ['>=', 'a.create_time', strtotime($beginTime)],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
             ]);
         }
 
-        $order = 'create_time desc';
+        $order = 'a.create_time desc';
         if (\Yii::$app->request->get('desc')) {
             $order = \Yii::$app->request->get('desc') . ' desc';
         }
@@ -255,7 +255,7 @@ class PayLogic extends BaseLogic
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
         $query->andWhere([
-            'in', 'org_id', $orgIds
+            'in', 'oa_person.org_id', $orgIds
         ]);
         $models = $query->orderBy($order)->all();
         $data = [];
