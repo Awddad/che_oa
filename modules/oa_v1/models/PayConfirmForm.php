@@ -145,7 +145,7 @@ class PayConfirmForm extends CaiWuFuKuan
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
             $param['time'] = date('Y-m-d H:i:s', $this->fu_kuan_time);
-            $param['remark'] = $this->tips;
+            //$param['remark'] = $this->tips;
             
             if ($apply->type == 1) {
                 $param['other_name'] = $apply->person;
@@ -155,14 +155,17 @@ class PayConfirmForm extends CaiWuFuKuan
                 $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->loan->bank_card_id;
                 $param['other_bank'] = $apply->loan->bank_name;
+                $param['remark'] = $apply->loan->des;
             } elseif ($apply->type == 4) {
                 $param['other_name'] = $apply->applyPay->to_name;
                 $param['other_card'] = $apply->applyPay->bank_card_id;
                 $param['other_bank'] = $apply->applyPay->bank_name;
+                $param['remark'] = $apply->applyPay->des;
             } else {
                 $param['other_name'] = $apply->applyBuy->to_name;
                 $param['other_card'] = $apply->applyBuy->bank_card_id;
                 $param['other_bank'] = $apply->applyBuy->bank_name;
+                $param['remark'] = $apply->applyBuy->des;
             }
             
             $param['trade_number'] = $this->fu_kuan_id;
@@ -195,6 +198,7 @@ class PayConfirmForm extends CaiWuFuKuan
                     $this->update();
                 }
             } else {
+                $param['remark'] = $v->des;
                 $rst = ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
