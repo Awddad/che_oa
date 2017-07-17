@@ -29,9 +29,16 @@ class MyTcPdf {
         }
         $pdf = new TCPDF();
         $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         $pdf->AddPage();
         $pdf->writeHTML($strHtml, true, true, true, true, '');
         $pdf->lastPage();
+        
         $pdf->Output($pdfName, 'F');//只保存 F    保存与输出 FI 只输出I
         return is_file($pdfName);
     }
