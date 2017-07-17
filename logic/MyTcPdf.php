@@ -866,9 +866,10 @@ jdf;
             <td style="background-color:#f2f2f2">状态</td>
             </tr>';
         foreach($param['finance_list'] as $v){
+            $id = $v['id'] + 1;
             $finance_list .= <<<jdf
         <tr>
-            <td >{$v['id']}</td>
+            <td >{$id}</td>
             <td >{$v['time']}</td>
             <td >{$v['des']}</td>
             <td colspan="2" align="right">{$v['price']}</td>
