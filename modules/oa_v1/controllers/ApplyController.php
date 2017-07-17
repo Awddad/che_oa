@@ -121,6 +121,7 @@ class ApplyController extends BaseController
 		foreach ($cards as $v) {
 			$data [] = [
 				'card_id' => $v ['bank_card_id'],
+				'id' => intval($v ['id']),
 				'bank_name' => $v ['bank_name'],
 				'bank_des' => $v ['bank_name_des']
 			];
@@ -277,4 +278,24 @@ class ApplyController extends BaseController
 	    $res = RegionLogic::instance()->getRegion();
 	    return $this->_return($res);
 	}
+    
+    /**
+     * 删除银行卡
+     */
+    public function actionDeleteBankcard() {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $post = $request->post();
+            if ($post ['id']) {
+                $model = appmodel\PersonBankInfo::findOne($post['id']);
+                if($model && $model->delete()){
+                    return $this->_return('成功');
+                }else{
+                    return $this->_return(null,404);
+                }
+            }
+            return $this->_return(null, 403);
+        }
+        return $this->_return(null, 403);
+    }
 }

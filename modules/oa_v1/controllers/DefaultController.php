@@ -2,13 +2,9 @@
 
 namespace app\modules\oa_v1\controllers;
 
-use app\logic\MyTcPdf;
 use app\logic\server\Server;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
-use app\models\BaoXiaoList;
-use app\models\JieKuan;
-use app\models\Person;
 use app\models\Role;
 use app\modules\oa_v1\logic\PdfLogic;
 use Yii;
@@ -193,7 +189,7 @@ class DefaultController extends BaseController
     public function actionGetPdf($apply_id)
     {
         $apply = Apply::findOne($apply_id);
-        if($apply != 99){
+        if($apply->status != 99){
             echo '审批未通过，部门下载';die;
         }
         $pdf = [];
