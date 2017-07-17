@@ -114,7 +114,7 @@ class ApplyDemandForm extends BaseForm
             }
             if ($this->$attribute > 0) {
                 $applyBuy = Apply::findOne($this->$attribute);
-                if (!$applyBuy  || $applyBuy->status != 99 || $applyBuy->type == 5 ) {
+                if (!$applyBuy  || $applyBuy->status != 99 || $applyBuy->type != 5 ) {
                     $this->addError($attribute, '请购单不存在或者未审核通过');
                 }
     
