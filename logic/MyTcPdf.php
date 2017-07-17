@@ -274,7 +274,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">用章申请</h2>  
+    <h2 style="text-align: center;">用章申请单</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -324,7 +324,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">付款申请</h2>  
+    <h2 style="text-align: center;">付款单</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -401,7 +401,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">请购申请</h2>  
+    <h2 style="text-align: center;">请购单</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -547,7 +547,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">固定资产领取表</h2>  
+    <h2 style="text-align: center;">固定资产领取单</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -614,7 +614,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">固定资产领取表</h2>  
+    <h2 style="text-align: center;">固定资产归还单</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -673,7 +673,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">转正申请表</h2>
+    <h2 style="text-align: center;">转正申请单</h2>
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -734,7 +734,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">调职申请表</h2>
+    <h2 style="text-align: center;">调职申请单</h2>
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -794,7 +794,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">开店申请表</h2>
+    <h2 style="text-align: center;">开店申请单</h2>
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -884,7 +884,7 @@ jdf;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">转正申请表</h2>
+    <h2 style="text-align: center;">离职单</h2>
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
