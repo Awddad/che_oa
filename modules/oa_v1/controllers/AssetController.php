@@ -10,7 +10,6 @@ namespace app\modules\oa_v1\controllers;
 
 use app\models\ApplyDemand;
 use app\models\Asset;
-use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\Person;
