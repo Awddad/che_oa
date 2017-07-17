@@ -574,6 +574,8 @@ class AssetLogic extends Logic
                 $type = $param['status'] == 3 ? 4 : 5;
                 AssetLogic::instance()->addAssetListLog($person->person_id, $param['asset_list_id'], null, $type, $param['des']);
             }
+            //报废，丢失减掉库存
+            Asset::updateAllCounters(['free_amount' => -1],['id' => $assetList->asset_id]);
             $transaction->commit();
             
             return true;

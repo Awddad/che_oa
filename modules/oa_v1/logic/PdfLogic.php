@@ -236,7 +236,7 @@ class PdfLogic extends Logic
             'to_name' => $apply->applyPay->to_name,
             'bank_card_id' => $apply->applyPay->bank_card_id,
             'bank_name' => $apply->applyPay->bank_name,
-            'pay_type' => TagTree::findOne($apply->applyPay->pay_type)->name,
+            //'pay_type' => TagTree::findOne($apply->applyPay->pay_type)->name, //申请已去掉
             'money' => \Yii::$app->formatter->asCurrency($apply->applyPay->money),
             'money_supper' => CnyLogic::instance()->cny($apply->applyPay->money),
             'des' => $apply->applyPay->des ? : '--',

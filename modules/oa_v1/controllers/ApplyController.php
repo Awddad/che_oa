@@ -298,4 +298,26 @@ class ApplyController extends BaseController
         }
         return $this->_return(null, 403);
     }
+    
+    /**
+     * 财务驳回
+     *
+     */
+    public function actionCaiwuRefuse()
+    {
+        $applyId = Yii::$app->request->post('apply_id');
+        $reason = Yii::$app->request->post('reason');
+        if(!$applyId || !$reason) {
+            return $this->_returnError(403);
+        }
+        $apply = Apply::findOne($applyId);
+        if($apply->cai_wu_need != 2){
+            return $this->_returnError(2406);
+        }
+        $apply->caiwu_refuse_reason = $reason;
+        if (!$apply->save()) {
+            return $this->_returnError(2047);
+        }
+        return $this->_return([], 200);
+    }
 }
