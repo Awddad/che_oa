@@ -37,7 +37,7 @@ class ApplyOpen extends \yii\db\ActiveRecord
             [['rental'], 'number'],
             [['files'], 'string'],
             [['district_name', 'address'], 'string', 'max' => 50],
-            [['summary'], 'string', 'max' => 255],
+            [['summary'], 'string', 'max' => 1024],
         ];
     }
 

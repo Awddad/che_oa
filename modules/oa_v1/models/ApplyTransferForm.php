@@ -44,7 +44,7 @@ class ApplyTransferForm extends BaseForm
 				[
 					['approval_persons', 'copy_person'], 'checkTotal'
 				],
-				['des','string','max' => 255,'message' => '调职原因不正确！'],
+				['des','string','max' => 1024,'message' => '调职原因不正确！'],
 				['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
 				['transfer_time','date','format' => 'yyyy-mm-dd','message' => '调职时间不正确'],
 				['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],

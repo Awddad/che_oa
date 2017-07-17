@@ -45,7 +45,7 @@ class ApplyTransfer extends \yii\db\ActiveRecord
             [['apply_id', 'old_profession', 'target_profession'], 'string', 'max' => 20],
             [['old_org_name', 'target_org_name'], 'string', 'max' => 50],
             [['entry_time', 'transfer_time'], 'string', 'max' => 25],
-            [['des'], 'string', 'max' => 255],
+            [['des'], 'string', 'max' => 1024],
         ];
     }
 
