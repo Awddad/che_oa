@@ -76,7 +76,7 @@ class OrgLogic extends BaseLogic
         $str = '';
         $org = Org::findOne($org_id);
         if($org){
-            $str = $org['org_short_name']?:$org['org_name'];
+            $str = $org['org_name'];
             if($org->pid > 0){
                 $str = $this->getOrgName($org['pid']).'-'.$str;
             }
