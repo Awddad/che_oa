@@ -189,8 +189,14 @@ class DefaultController extends BaseController
     public function actionGetPdf($apply_id)
     {
         $apply = Apply::findOne($apply_id);
-        if($apply->status != 99){
-            echo '审批未通过，部门下载';die;
+        if($apply->cai_wu_need == 2){
+            if(!in_array($apply->status, [4, 99])) {
+                echo '审批未通过，不能下载';die;
+            }
+        }  else {
+            if(!in_array($apply->status, [99])) {
+                echo '审批未通过，不能下载';die;
+            }
         }
         $pdf = [];
         switch ($apply->type){

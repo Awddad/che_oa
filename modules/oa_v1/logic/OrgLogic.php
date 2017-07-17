@@ -65,4 +65,22 @@ class OrgLogic extends BaseLogic
         }
         return array_reverse($data);
     }
+    
+    /**
+     * 获得组织完整名字
+     * @param int $org_id
+     * @return string
+     */
+    public function getOrgName($org_id)
+    {
+        $str = '';
+        $org = Org::findOne($org_id);
+        if($org){
+            $str = $org['org_short_name']?:$org['org_name'];
+            if($org->pid > 0){
+                $str = $this->getOrgName($org['pid']).'-'.$str;
+            }
+        }
+        return $str;
+    }
 }

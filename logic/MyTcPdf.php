@@ -27,11 +27,18 @@ class MyTcPdf {
         if(\Yii::$app->request->get('debug')) {
             echo $strHtml;die;
         }
-        $pdf = new TCPDF();
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION);
         $pdf->SetFont('STSongStdLight');//设置宋体，避免中文乱码
+    
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
         $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, false, true, false, '');
+        $pdf->writeHTML($strHtml, true, true, true, true, '');
         $pdf->lastPage();
+        
         $pdf->Output($pdfName, 'F');//只保存 F    保存与输出 FI 只输出I
         return is_file($pdfName);
     }
@@ -56,14 +63,10 @@ class MyTcPdf {
             </tr>';
         }
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
     <div>
-        <h2 style="text-align: center;">费用报销单</h2> 
-        <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
+        <h2 style="text-align: center;padding-top:0;margin-top:0" >费用报销单</h2> 
+        <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
             <tr>
                 <td style="background-color:#f2f2f2">日期</td>
                 <td colspan="2">{$arrInfo['apply_date']}</td>
@@ -122,13 +125,9 @@ TABLEHTML;
     public function loan($arrInfo)
     {
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
     <h2 style="text-align: center;">借款单</h2>    
-    <table style="text-align: center; line-height:40px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
+    <table style="text-align: center; line-height:24px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
         <tr>
             <td style="background-color:#f2f2f2" colspan="2">日期</td>
             <td colspan="4">{$arrInfo['apply_date']}</td>
@@ -200,13 +199,9 @@ TABLEHTML;
             </tr>';
         }
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
     <h2 style="text-align: center;">还款单</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$arrInfo['apply_date']}</td>
@@ -269,13 +264,9 @@ TABLEHTML;
     public function useChapter($param)
     {
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">用章申请</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">用章申请单</h2>  
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -319,13 +310,9 @@ TABLEHTML;
     public function applyPay($param)
     {
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">付款申请</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">付款单</h2>  
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -396,13 +383,9 @@ TABLEHTML;
             </tr>';
         }
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">请购申请</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">请购单</h2>  
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -435,17 +418,12 @@ table tr{height:40px;}
         </tr>
         {$strListHtml}
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="3" rowspan="2"></td>
             <td rowspan="2">总计</td>
             <td>小写</td>
             <td>{$param['total']}</td>
         </tr>
         <tr>
-            <td></td>
-            <td></td>
-            <td></td>
             <td>大写</td>
             <td>{$param['total_supper']}</td>
         </tr>
@@ -484,13 +462,9 @@ TABLEHTML;
             </tr>';
         }
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
     <h2 style="text-align: center;">需求单</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -542,13 +516,9 @@ TABLEHTML;
             </tr>';
         }
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">固定资产领取表</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">固定资产领取单</h2>  
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -609,13 +579,9 @@ TABLEHTML;
             </tr>';
         }
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">固定资产领取表</h2>  
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;padding:0;margin:0">固定资产归还单</h2>  
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -668,13 +634,9 @@ TABLEHTML;
     public function applyPositive($param)
     {
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">转正申请表</h2>
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">转正申请单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -729,13 +691,9 @@ TABLEHTML;
     public function applyTransfer($param)
     {
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">调职申请表</h2>
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">调职申请单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -789,13 +747,9 @@ TABLEHTML;
     public function applyOpen($param)
     {
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">开店申请表</h2>
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">开店申请单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>
@@ -866,9 +820,10 @@ jdf;
             <td style="background-color:#f2f2f2">状态</td>
             </tr>';
         foreach($param['finance_list'] as $v){
+            $id = $v['id'] + 1;
             $finance_list .= <<<jdf
         <tr>
-            <td >{$v['id']}</td>
+            <td >{$id}</td>
             <td >{$v['time']}</td>
             <td >{$v['des']}</td>
             <td colspan="2" align="right">{$v['price']}</td>
@@ -879,13 +834,9 @@ jdf;
         
         
         $strHtml = <<<TABLEHTML
-<style>
-.bg{background:rgba(204, 204, 204, 1)}
-table tr{height:40px;}
-</style>
 <div>
-    <h2 style="text-align: center;">转正申请表</h2>
-    <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
+    <h2 style="text-align: center;">离职单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
             <td colspan="2">{$param['apply_date']}</td>

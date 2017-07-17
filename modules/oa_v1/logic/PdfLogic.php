@@ -435,7 +435,7 @@ class PdfLogic extends Logic
                 'asset_type_name' => $v->asset->asset_type_name,
                 'asset_brand_name' => $v->asset->asset_brand_name,
                 'name' => $v->asset->name,
-                'asset_number' => $v->asset_number,
+                'asset_number' => $v->stock_number,
                 'price' => \Yii::$app->formatter->asCurrency($v->asset->price)
             ];
             $total += $v->asset->price;
@@ -544,8 +544,8 @@ class PdfLogic extends Logic
             'apply_id' => $apply->apply_id,
             'person' => $person->person_name,
             'entry_time' => date('Y年m月d日', strtotime($apply->applyTransfer->entry_time)),
-            'old_org_name' => $apply->applyTransfer->old_org_name,
-            'target_org_name' => $apply->applyTransfer->target_org_name,
+            'old_org_name' => OrgLogic::instance()->getOrgName($apply->applyTransfer->old_org_id),
+            'target_org_name' => OrgLogic::instance()->getOrgName($apply->applyTransfer->target_org_id),
             'old_profession' => $apply->applyTransfer->old_profession,
             'target_profession' => $apply->applyTransfer->target_profession,
             'transfer_time' => date('Y年m月d日', strtotime($apply->applyTransfer->transfer_time)),
