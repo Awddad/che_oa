@@ -324,7 +324,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">用章申请</h2>  
+    <h2 style="text-align: center;">付款申请</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -349,17 +349,13 @@ table tr{height:40px;}
             <td colspan="5">{$param['bank_name']}</td>
         </tr>
         <tr>
-            <td style="background-color:#f2f2f2">付款类型</td>
-            <td colspan="2">{$param['pay_type']}</td>
-            <td style="background-color:#f2f2f2" rowspan="2">金额</td>
-            <td>小写</td>
-            <td>{$param['money']}</td>
+            <td colspan="2" style="background-color:#f2f2f2" rowspan="2">金额</td>
+            <td colspan="2">小写</td>
+            <td colspan="2">{$param['money']}</td>
         </tr>
         <tr>
-            <td></td>
-            <td colspan="2"></td>
-            <td>大写</td>
-            <td>{$param['money_supper']}</td>
+            <td colspan="2">大写</td>
+            <td colspan="2">{$param['money_supper']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>
@@ -405,7 +401,7 @@ TABLEHTML;
 table tr{height:40px;}
 </style>
 <div>
-    <h2 style="text-align: center;">用章申请</h2>  
+    <h2 style="text-align: center;">请购申请</h2>  
     <table style="text-align: center;line-height:40px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>

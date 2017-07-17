@@ -59,4 +59,20 @@ class BaseLogic extends Logic
         return $rst;
         
     }
+    
+    /**
+     *
+     * @param $error
+     *
+     * @return mixed
+     */
+    public function getFirstError($error)
+    {
+        if(empty($error)){
+            return false;
+        }
+        $firstErr = current($error);
+        
+        return current($firstErr);
+    }
 }
