@@ -39,7 +39,7 @@ class ApplyPositive extends \yii\db\ActiveRecord
             [['org_id', 'profession_id', 'created_at'], 'integer'],
             [['files'], 'string'],
             [['apply_id', 'profession'], 'string', 'max' => 20],
-            [['prosecution', 'summary', 'suggest'], 'string', 'max' => 255],
+            [['prosecution', 'summary', 'suggest'], 'string', 'max' => 1024],
             [['entry_time'], 'string', 'max' => 25],
             [['org'], 'string', 'max' => 50],
         ];
