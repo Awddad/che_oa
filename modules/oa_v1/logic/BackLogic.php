@@ -79,11 +79,11 @@ class BackLogic extends BaseLogic
     /**
      * 待确认收款列表
      *
-     * @param array $orgIds
+     * @param array $companyIds
      * @return array
      *
      */
-    public function canConfirmList($orgIds)
+    public function canConfirmList($companyIds)
     {
         $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
             'in', 'a.status',  [4, 99]
@@ -118,7 +118,7 @@ class BackLogic extends BaseLogic
         }
 
         $query->andWhere([
-            'in', 'oa_person.org_id', $orgIds
+            'in', 'oa_person.company_id', $companyIds
         ]);
 
         $countQuery = clone $query;
@@ -169,10 +169,9 @@ class BackLogic extends BaseLogic
     /**
      * 导出收款确认列表
      *
-     * @param array $user
-     * @param array $orgIds
+     * @param array $companyIds
      */
-    public function export($orgIds)
+    public function export($companyIds)
     {
         $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
             'a.status' => 4,
@@ -209,7 +208,7 @@ class BackLogic extends BaseLogic
         }
 
         $query->andWhere([
-            'in', 'oa_person.org_id', $orgIds
+            'in', 'oa_person.company_id', $companyIds
         ]);
 
         $models = $query->orderBy($order)->all();

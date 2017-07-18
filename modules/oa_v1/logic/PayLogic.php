@@ -23,10 +23,10 @@ use yii\data\Pagination;
 class PayLogic extends BaseLogic
 {
     /**
-     * @param array $orgIds
+     * @param array $companyIds
      * @return array
      */
-    public function canConfirmList($orgIds)
+    public function canConfirmList($companyIds)
     {
         $type = \Yii::$app->request->post('type');
 
@@ -72,7 +72,7 @@ class PayLogic extends BaseLogic
             ]);
         }
         $query->andWhere([
-            'in', 'oa_person.org_id', $orgIds
+            'in', 'oa_person.company_id', $companyIds
         ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
@@ -205,10 +205,9 @@ class PayLogic extends BaseLogic
     /**
      * 导出付款确认列表
      *
-     * @param array $user
-     * @param array $orgIds
+     * @param array $companyIds
      */
-    public function export($orgIds)
+    public function export($companyIds)
     {
         $type = \Yii::$app->request->get('type');
 
@@ -260,7 +259,7 @@ class PayLogic extends BaseLogic
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
         $query->andWhere([
-            'in', 'oa_person.org_id', $orgIds
+            'in', 'oa_person.company_id', $companyIds
         ]);
         $models = $query->orderBy($order)->all();
         $data = [];
