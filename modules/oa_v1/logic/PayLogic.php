@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\Person;
 use yii\data\Pagination;
 
 /**
@@ -133,7 +134,7 @@ class PayLogic extends BaseLogic
      * 获取确认表单
      *
      * @param $applyId
-     * @param array $person
+     * @param Person $person
      * @return array|bool
      */
     public function getForm($applyId, $person)
@@ -160,7 +161,7 @@ class PayLogic extends BaseLogic
         }
         if($apply->type == 4 || $apply->type == 5) {
             $data = [
-                'pay_org' => PersonLogic::instance()->getOrg(),
+                'pay_org' => PersonLogic::instance()->getSelectOrg($person->company_id),
                 'pay_bank' => '',
                 'bank_card_id' => $applyDetail->bank_card_id,
                 'bank_name' => $applyDetail->bank_name,
@@ -169,7 +170,7 @@ class PayLogic extends BaseLogic
             ];
         } else {
             $data = [
-                'pay_org' => PersonLogic::instance()->getOrg(),
+                'pay_org' => PersonLogic::instance()->getSelectOrg($person->company_id),
                 'pay_bank' => ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
