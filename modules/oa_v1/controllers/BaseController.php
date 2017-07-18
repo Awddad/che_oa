@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\models\Menu;
+use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\filters\auth\CompositeAuth;
@@ -33,7 +34,7 @@ use app\models\RoleOrgPermission;
 class BaseController extends Controller
 {
     /**
-     * @var  array |User $arrPersonInfo
+     * @var  Person $arrPersonInfo
      */
     public $arrPersonInfo = [];//用户登录信息保存
     

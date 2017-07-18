@@ -42,7 +42,7 @@ class DefaultController extends BaseController
      */
     public function actionGetPerson()
     {
-        $person = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo);
+        $person = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo, $this->companyIds);
         return $this->_return($person);
     }
 
@@ -52,10 +52,9 @@ class DefaultController extends BaseController
      */
     public function actionGetUserInfo()
     {
-        $roleId = Yii::$app->session->get("ROLE_ID");
         $arrData = [
             'userinfo' => $this->arrPersonInfo,
-            'roleName' => Role::findOne($roleId)->slug,
+            'roleName' => $this->roleName,
             'roleInfo' => (isset($this->arrPersonRoleInfo['roleInfo']) ? $this->arrPersonRoleInfo['roleInfo'] : []),
         ];
         return $this->_return($arrData);

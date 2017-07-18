@@ -36,26 +36,19 @@ class PersonLogic extends BaseLogic
      * 获取筛选
      *
      * @param Person $person
+     * @param array $companyIds
      *
      * @return array
      */
-    public function getSelectPerson($person)
+    public function getSelectPerson($person, $companyIds)
     {
-        
-        $companyArr = $this->getCompanyIds($person);
-        if ($person->company_id == 1) {
-            $persons = Person::find()->where([
-                '!=', 'person_id', $person->person_id
-            ])->andWhere(['is_delete'=>0])->orderBy('person_id desc')->all();
-        } else {
-            $persons = Person::find()->where([
-                'or',
-                ['company_id' => $person->company_id],
-                ['in', 'person_id', $companyArr]
-            ])->andWhere([
-                '!=', 'person_id', $person->person_id
-            ])->andWhere(['is_delete'=>0])->orderBy('person_id desc')->all();
-        }
+        $companyIds[] = 1;
+        $persons = Person::find()->where([
+            'and',
+            ['is_delete' => 0],
+            ['in', 'company_id', $companyIds],
+            ['!=', 'person_id', $person->person_id]
+        ])->all();
         
         $data = [];
         /**
@@ -71,33 +64,6 @@ class PersonLogic extends BaseLogic
                 'name' => $personName
             ];
         }
-        
-        $other = Person::find()->where([
-            'company_id' => 1,
-            'is_delete'=>0
-        ])->all();
-        foreach ($other as $v) {
-            if($v->org_id <= 0){
-                continue;
-            }
-            $personName = $v->person_name. ' '. $v->org_full_name;
-            $data[] = [
-                'id' => $v->person_id,
-                'name' => $personName
-            ];
-        }
-        $caiwu = $this->getCaiwu();
-    
-        foreach ($caiwu as $v) {
-            $personName = $v['person_name']. ' '. $v['org_full_name'];
-            $data[] = [
-                'id' => $v['person_id'],
-                'name' => $personName
-            ];
-        }
-        unset($data[$person->person_id]);
-        $data = ArrayHelper::index($data,'id');
-        sort($data);
         return $data;
     }
     

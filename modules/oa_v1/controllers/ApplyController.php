@@ -165,7 +165,7 @@ class ApplyController extends BaseController
 	 * 获取员工列表
 	 */
 	public function actionGetUserList() {
-		$data = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo);
+		$data = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo,$this->companyIds);
 		return $this->_return($data, 200);
 	}
 
