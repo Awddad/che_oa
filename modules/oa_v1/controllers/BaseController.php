@@ -41,6 +41,8 @@ class BaseController extends Controller
     
     public $roleId ;//用户的角色 数据权限
     
+    public $roleName ;//用户的角色别名
+    
     /**
      * 用户对应的公司
      * @var array
@@ -112,6 +114,8 @@ class BaseController extends Controller
 
         //权限管理
         $roleInfo = Role::findOne($this->roleId);
+        // 设置角色别名
+        $this->roleName = $roleInfo->slug;
         $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
         $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
         $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
