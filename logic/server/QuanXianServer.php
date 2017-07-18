@@ -755,9 +755,9 @@ class QuanXianServer extends Server
     	$arrRtn = $this->thisHttpPost($url, $arrPost);
     	if( $arrRtn['success'] == 1)//接口处理数据成功
     	{
-    		return true;
+    		return ['status'=>true];
     	}
-    	return false;
+    	return ['status'=>false,'msg'=>$arrRtn['message']];
     }
     
     /**
@@ -781,9 +781,9 @@ class QuanXianServer extends Server
     	$arrRtn = $this->thisHttpPost($url, $arrPost);
     	if( $arrRtn['success'] == 1)//接口处理数据成功
     	{
-    		return true;
+    		return ['status'=>true];
     	}
-    	return false;
+    	return ['status'=>false,'msg'=>$arrRtn['message']];
     }
     /**
      * 与权限系统交互 修改用户（拉取权限）
@@ -813,9 +813,9 @@ class QuanXianServer extends Server
         $arrRtn = $this->thisHttpPost($url, $arrPost);
         if( $arrRtn['success'] == 1)//接口处理数据成功
         {
-            return true;
-        }
-        return false;
+            return ['status'=>true];
+    	}
+    	return ['status'=>false,'msg'=>$arrRtn['message']];
     }
     
     /**
