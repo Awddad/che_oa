@@ -8,12 +8,12 @@ class TalentLogic extends BaseLogic
 {
     /**
      * 是否是招聘经理
-     * @param array $arrPersonRole 登入用户的权限数据
+     * @param string $role_name 登入用户的角色别名
      * @return boolean
      */
-	public function isManager($arrPersonRole)
+	public function isManager($role_name)
 	{
-	    if(in_array('zhaopinjingli',$arrPersonRole['roleInfo'])){
+	    if('zhaopinjingli'==$role_name){
 	        return true;
 	    }else{
 	        return false;

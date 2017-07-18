@@ -251,7 +251,7 @@ class TalentForm extends BaseForm
 	 * @param array $params
 	 * @return array
 	 */
-	public function getList($params,$user,$roles)
+	public function getList($params,$user,$role_name)
 	{
 	    $keywords = ArrayHelper::getValue($params,'keywords',null);
 	    $start_time = ArrayHelper::getValue($params,'start_time',null);
@@ -311,7 +311,8 @@ class TalentForm extends BaseForm
 	        $query->andWhere($orwhere);
 	    }
 	    //除招聘经理外 只能看自己添加的~
-	    if(!TalentLogic::instance()->isManager($roles)){
+	    if(!TalentLogic::instance()->isManager($role_name)){
+	        var_dump(123);die();
 	        $query->andWhere(['owner'=>$user['person_id']]);
 	    }
 	    
