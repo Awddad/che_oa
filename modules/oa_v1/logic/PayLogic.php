@@ -135,9 +135,10 @@ class PayLogic extends BaseLogic
      *
      * @param $applyId
      * @param Person $person
+     * @param array $companyIds
      * @return array|bool
      */
-    public function getForm($applyId, $person)
+    public function getForm($applyId, $person, $companyIds)
     {
         $apply = Apply::findOne($applyId);
         if ($apply->status != 4 || !in_array($apply->type, [1, 2, 4, 5])) {
@@ -161,8 +162,11 @@ class PayLogic extends BaseLogic
         }
         if($apply->type == 4 || $apply->type == 5) {
             $data = [
-                'pay_org' => PersonLogic::instance()->getSelectOrg($person->company_id),
-                'pay_bank' => '',
+                'pay_org' => PersonLogic::instance()->getSelectOrg($companyIds),
+                'pay_bank' => ThirdServer::instance([
+                    'token' => \Yii::$app->params['cai_wu']['token'],
+                    'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
+                ])->getAccount($person['org_id']),
                 'bank_card_id' => $applyDetail->bank_card_id,
                 'bank_name' => $applyDetail->bank_name,
                 'bank_name_des' => $applyDetail->bank_name_des,
@@ -170,7 +174,7 @@ class PayLogic extends BaseLogic
             ];
         } else {
             $data = [
-                'pay_org' => PersonLogic::instance()->getSelectOrg($person->company_id),
+                'pay_org' => PersonLogic::instance()->getSelectOrg($roleInfo['companyIds']),
                 'pay_bank' => ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']

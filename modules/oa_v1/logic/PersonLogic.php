@@ -273,30 +273,22 @@ class PersonLogic extends BaseLogic
     }
     
     /**
-     * @param int $companyId
-     * @param $data
+     * 财务确认对应公司
+     *
+     * @param array $companyIds
      * @return array
      */
-    public function getSelectOrg($companyId = 1, $data = [])
+    public function getSelectOrg($companyIds)
     {
-        $orgSelf = Org::findOne($companyId);
-        $data[] = [
-            'label' => $orgSelf->org_name,
-            'value' => $orgSelf->org_id,
-        ];
-        $org = Org::find()->where(['pid' => $companyId])->all();
-        if(empty($org)) {
-            return $data;
-        }
-        foreach ($org as $value) {
-            $data[] = [
-                'label' => $value->org_name,
-                'value' => $value->org_id,
-            ];
-            $this->getSelectOrg($value->org_id, $data);
-//            if($rst){
-//                break;
-//            }
+        $org = Org::find()->where(['in', 'org_id', $companyIds])->all();
+        $data = [];
+        if(!empty($org)) {
+            foreach ($org as $value) {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                ];
+            }
         }
         return $data;
     }
