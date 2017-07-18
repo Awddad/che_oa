@@ -116,7 +116,9 @@ class BaseController extends Controller
         //权限管理
         $roleInfo = Role::findOne($this->roleId);
         // 设置角色别名
-        $this->roleName = $roleInfo->slug;
+        if(!empty($roleInfo)) {
+            $this->roleName = $roleInfo->slug;
+        }
         $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
         $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
         $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
