@@ -312,7 +312,6 @@ class TalentForm extends BaseForm
 	    }
 	    //除招聘经理外 只能看自己添加的~
 	    if(!TalentLogic::instance()->isManager($role_name)){
-	        var_dump(123);die();
 	        $query->andWhere(['owner'=>$user['person_id']]);
 	    }
 	    
