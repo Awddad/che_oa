@@ -286,8 +286,8 @@ class ApplyController extends BaseController
         $request = Yii::$app->request;
         if ($request->isPost) {
             $post = $request->post();
-            if ($post ['id']) {
-                $model = appmodel\PersonBankInfo::findOne($post['id']);
+            if ($post ['bankcard_id']) {
+                $model = appmodel\PersonBankInfo::findOne($post['bankcard_id']);
                 if($model && $model->delete()){
                     return $this->_return('成功');
                 }else{
