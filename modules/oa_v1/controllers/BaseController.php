@@ -41,6 +41,14 @@ class BaseController extends Controller
     
     public $roleId ;//用户的角色 数据权限
     
+    public $roleName ;//用户的角色别名
+    
+    /**
+     * 用户对应的公司
+     * @var array
+     */
+    public $companyIds = [];
+    
     /**
      *不做登录校验的请求的白名单 controller/action格式
      * @var array
@@ -106,6 +114,8 @@ class BaseController extends Controller
 
         //权限管理
         $roleInfo = Role::findOne($this->roleId);
+        // 设置角色别名
+        $this->roleName = $roleInfo->slug;
         $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
         $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
         $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
@@ -163,9 +173,11 @@ class BaseController extends Controller
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
+                    $this->companyIds = explode(',', $objRoleOrgMod->org_ids);
                 } else {
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $org;
+                    $this->companyIds = [$this->arrPersonInfo->company_id];
                 }
                 $result = true;//取库获取到数据了
                 \Yii::$app->cache->set($strCacheKey, $this->arrPersonRoleInfo);

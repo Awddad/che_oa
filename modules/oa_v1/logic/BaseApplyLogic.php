@@ -134,7 +134,7 @@ class BaseApplyLogic extends Logic
                 "name" => $apply->cai_wu_person,
                 "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
                 "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
-                "status" => 2,
+                "status" => 3,
                 'diff_time' => $apply->cai_wu_time - $perTime
             ];
             $data[] = [
@@ -142,7 +142,7 @@ class BaseApplyLogic extends Logic
                 "name" => '',
                 "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
                 "org" => '',
-                "status" => 2,
+                "status" => 3,
                 'diff_time' => $apply->cai_wu_time - $apply->create_time
             ];
         } else {

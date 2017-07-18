@@ -271,4 +271,25 @@ class PersonLogic extends BaseLogic
         ])->all();
         return ArrayHelper::getColumn($companies, 'org_id');
     }
+    
+    /**
+     * 财务确认对应公司
+     *
+     * @param array $companyIds
+     * @return array
+     */
+    public function getSelectOrg($companyIds)
+    {
+        $org = Org::find()->where(['in', 'org_id', $companyIds])->all();
+        $data = [];
+        if(!empty($org)) {
+            foreach ($org as $value) {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                ];
+            }
+        }
+        return $data;
+    }
 }

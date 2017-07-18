@@ -12,6 +12,7 @@ namespace app\modules\oa_v1\logic;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\JieKuan;
+use app\models\Person;
 use yii\data\Pagination;
 
 
@@ -24,9 +25,12 @@ class BackLogic extends BaseLogic
 {
     /**
      * @param $applyId
+     * @param Person $person
+     * @param array $companyIds
+     *
      * @return array|bool
      */
-    public function backForm($applyId, $person)
+    public function backForm($applyId, $person, $companyIds)
     {
         $apply = Apply::findOne($applyId);
         if ($apply->status != 4 || $apply->type != 3) {
@@ -35,7 +39,7 @@ class BackLogic extends BaseLogic
             return false;
         }
         return [
-            'pay_org' => PersonLogic::instance()->getOrg(),
+            'pay_org' => PersonLogic::instance()->getSelectOrg($companyIds),
             'pay_bank' => ThirdServer::instance([
                 'token' => \Yii::$app->params['cai_wu']['token'],
                 'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']

@@ -22,6 +22,14 @@ class EmployeeInfoForm extends BaseForm
     const SCENARIO_EMP_BANK_EDIT = 'emp_bank_edit';//员工银行卡修改
     const SCENARIO_EMP_BANK_DEL = 'emp_bank_del';//员工银行卡删除
     
+    public $arr_status = [
+        '0' => '待入职',
+        '1' => '取消入职',
+        '2' => '已入职',
+        '3' => '已离职',
+        //'4' => '再入职'
+    ];
+    
     public $empno;
      
     public $id;    
@@ -55,7 +63,7 @@ class EmployeeInfoForm extends BaseForm
     {
         return [
             [
-                ['id','org_id','profession','name','empno','sex','phone','birthday','email','age','edu','work_time','location','id_card','entry_time','emp_type'],
+                ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','edu','work_time','location','id_card','entry_time','emp_type'],
                 'required',
                 'on' => [self::SCENARIO_EMP_EDIT],
                 'message' => '{attribute}不能为空'
@@ -104,7 +112,7 @@ class EmployeeInfoForm extends BaseForm
     public function scenarios()
     {
         return [
-            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type'],
+            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type',/*'status'*/],
             self::SCENARIO_EMP_ACCOUNT_EDIT => ['id','qq','email','phone'],
             self::SCENARIO_EMP_BANK_EDIT => ['id','bk_id','bank_name','bank_des','card_id','is_salary'],
             self::SCENARIO_EMP_BANK_DEL => ['id','bk_id']
@@ -144,8 +152,12 @@ class EmployeeInfoForm extends BaseForm
             if(!$model->save()){
                 throw new \Exception(current($this->getFirstErrors())); 
             }
-            if(!EmployeeLogic::instance()->editQxEmp($model)){
-                throw new \Exception('系统错误');
+            if($model->status != 0){//未入职状态 不同步权限系统
+                $fun = $model->status == 3 ? 'delQxEmp' : 'editQxEmp';
+                $res = EmployeeLogic::instance()->$fun($model);
+                if(!$res['status']){
+                    throw new \Exception($res['msg']);
+                }
             }
             PeopleLogic::instance()->addLog(0,$model->id,'编辑员工个人信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             $transaction->commit();
@@ -168,12 +180,6 @@ class EmployeeInfoForm extends BaseForm
         if(empty($model)){
             return ['status'=>false,'msg'=>'员工不存在'];
         }
-        $arr_status = [
-            0=>'待入职',
-            2=>'已入职',
-            3=>'已离职',
-            4=>'再入职'
-        ];
         $data = [
             'id' => $model->id,
             'name' => $model->name,
@@ -203,7 +209,7 @@ class EmployeeInfoForm extends BaseForm
             'political' => ($tmp = Political::findOne($model->political)) ? $tmp->political : '',
             'nation' => $model->nation,
             'entry' => $model->status,
-            'entry_status' => $arr_status[$model->status],
+            'entry_status' => $this->arr_status[$model->status],
             'marriage' => $model->marriage
         ];
         return ['status'=>true,'data'=>$data];
@@ -231,8 +237,11 @@ class EmployeeInfoForm extends BaseForm
             if(!$model->save()){
                 throw new \Exception(current($model->getFirstErrors()));
             }
-            if(!EmployeeLogic::instance()->editQxEmp($employee)){
-                throw new \Exception('系统错误');
+            if($employee->status != 0){//待入职状态 不同步权限系统
+                $res = EmployeeLogic::instance()->editQxEmp($employee);
+                if(!$res['status']){
+                    throw new \Exception($res['msg']);
+                }
             }
             PeopleLogic::instance()->addLog(0,$model->employee_id,'编辑员工帐号信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             $transaction->commit();
@@ -334,5 +343,4 @@ class EmployeeInfoForm extends BaseForm
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
         }
     }
-       
 }
