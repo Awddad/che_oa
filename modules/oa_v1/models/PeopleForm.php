@@ -163,7 +163,7 @@ class PeopleForm extends BaseForm
             [
                 'id',
                 'exist',
-                'targetClass' => '\app\models\peopleTrainExperience',
+                'targetClass' => '\app\models\PeopleTrainExperience',
                 'on' => [
                     self::SCENARIO_TRAIN_EXP_EDIT,
                     self::SCENARIO_TRAIN_EXP_GET,
