@@ -21,7 +21,8 @@
         "tecnickcom/tcpdf": "^6.2",
         "jasny/sso": "^0.3.0",
         "moonlandsoft/yii2-phpexcel": "*",
-        "overtrue/pinyin": "~3.0"
+        "overtrue/pinyin": "~3.0",
+        "guzzlehttp/guzzle": "^6.3"
         
     },
     "require-dev": {

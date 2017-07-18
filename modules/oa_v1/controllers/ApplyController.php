@@ -311,9 +311,19 @@ class ApplyController extends BaseController
             return $this->_returnError(403);
         }
         $apply = Apply::findOne($applyId);
+        if(empty($apply)){
+            return $this->_returnError(2408);
+        }
         if($apply->cai_wu_need != 2){
             return $this->_returnError(2406);
         }
+        if($apply->status != 4){
+            return $this->_returnError(2406);
+        }
+        $apply->status = 5;
+        $apply->cai_wu_person = $this->arrPersonInfo->person_name;
+        $apply->cai_wu_time = time();
+        $apply->cai_wu_person_id = $this->arrPersonInfo->person_id;
         $apply->caiwu_refuse_reason = $reason;
         if (!$apply->save()) {
             return $this->_returnError(2047);

@@ -100,47 +100,6 @@ class BaseApplyLogic extends Logic
                 "status" => 1
             ];
         }
-        // 财务驳回
-        if($apply->cai_wu_need == 2 && $apply->status == 5) {
-            if ($apply->type == 3) {
-                $caiWuShouKuan = CaiWuShouKuan::findOne($apply->apply_id);
-                $data[] = [
-                    "title" => "付款确认",
-                    "name" => $apply->cai_wu_person,
-                    "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
-                    "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
-                    "status" => 2,
-                    'diff_time' => $caiWuShouKuan->shou_kuan_time - $perTime
-                ];
-                $data[] = [
-                    "title" => "完成",
-                    "name" => '',
-                    "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
-                    "org" => '',
-                    "status" => 2,
-                    'diff_time' => $caiWuShouKuan->shou_kuan_time - $apply->create_time
-                ];
-            } else {
-                $caiWuFuKuan = CaiWuFuKuan::findOne($apply->apply_id);
-                $data[] = [
-                    "title" => "付款确认",
-                    "name" => $apply->cai_wu_person,
-                    "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
-                    "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
-                    "status" => 2,
-                    'diff_time' => $caiWuFuKuan->create_time - $perTime
-                ];
-                $data[] = [
-                    "title" => "完成",
-                    "name" => '',
-                    "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
-                    "org" => '',
-                    "status" => 2,
-                    'diff_time' => $apply->cai_wu_time - $apply->create_time
-                ];
-        
-            }
-        }
     
         if($apply->cai_wu_need == 2 && in_array($apply->status, [1, 2, 3, 11]) ) {
             $data[] = [
@@ -152,49 +111,41 @@ class BaseApplyLogic extends Logic
             ];
         }
     
-        if($apply->status == 99) {
-            if ($apply->cai_wu_need == 2) {
-                if ($apply->type == 3) {
-                    $caiWuShouKuan = CaiWuShouKuan::findOne($apply->apply_id);
-                    $data[] = [
-                        "title" => "付款确认",
-                        "name" => $apply->cai_wu_person,
-                        "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
-                        "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
-                        "status" => 2,
-                        'diff_time' => $caiWuShouKuan->shou_kuan_time - $perTime
-                    ];
-                    $data[] = [
-                        "title" => "完成",
-                        "name" => '',
-                        "date"=> date('Y-m-d H:i', $caiWuShouKuan->shou_kuan_time),
-                        "org" => '',
-                        "status" => 2,
-                        'diff_time' => $caiWuShouKuan->shou_kuan_time - $apply->create_time
-                    ];
-                } else {
-                    $caiWuFuKuan = CaiWuFuKuan::findOne($apply->apply_id);
-                    $data[] = [
-                        "title" => "付款确认",
-                        "name" => $apply->cai_wu_person,
-                        "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
-                        "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
-                        "status" => 2,
-                        'diff_time' => $caiWuFuKuan->create_time - $perTime
-                    ];
-                    $data[] = [
-                        "title" => "完成",
-                        "name" => '',
-                        "date"=> date('Y-m-d H:i', $caiWuFuKuan->create_time),
-                        "org" => '',
-                        "status" => 2,
-                        'diff_time' => $apply->cai_wu_time - $apply->create_time
-                    ];
-    
-                }
-            }
-            
-        }  else {
+        if($apply->status == 99 && $apply->cai_wu_need == 2) {
+            $data[] = [
+                "title" => "付款确认",
+                "name" => $apply->cai_wu_person,
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
+                "status" => 2,
+                'diff_time' => $apply->cai_wu_time - $perTime
+            ];
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => '',
+                "status" => 2,
+                'diff_time' => $apply->cai_wu_time - $apply->create_time
+            ];
+        } elseif($apply->cai_wu_need == 2 && $apply->status == 5) {
+            $data[] = [
+                "title" => "付款确认驳回",
+                "name" => $apply->cai_wu_person,
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
+                "status" => 2,
+                'diff_time' => $apply->cai_wu_time - $perTime
+            ];
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => '',
+                "status" => 2,
+                'diff_time' => $apply->cai_wu_time - $apply->create_time
+            ];
+        } else {
             $data[] = [
                 "title" => "完成",
                 "name" => '',
