@@ -28,7 +28,7 @@ class BackConfirmController extends BaseController
     public function actionForm()
     {
         $applyId = \Yii::$app->request->get('apply_id');
-        $data = BackLogic::instance()->backForm($applyId, $this->arrPersonInfo);
+        $data = BackLogic::instance()->backForm($applyId, $this->arrPersonInfo, $this->companyIds);
         if(!$data) {
             return $this->_return($data, BackLogic::instance()->errorCode);
         }

@@ -42,6 +42,12 @@ class BaseController extends Controller
     public $roleId ;//用户的角色 数据权限
     
     /**
+     * 用户对应的公司
+     * @var array
+     */
+    public $companyIds = [];
+    
+    /**
      *不做登录校验的请求的白名单 controller/action格式
      * @var array
      * Yii::$app->controller->module->id    模块名称
@@ -163,9 +169,11 @@ class BaseController extends Controller
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
+                    $this->companyIds = explode(',', $objRoleOrgMod->org_ids);
                 } else {
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $org;
+                    $this->companyIds = [$this->arrPersonInfo->company_id];
                 }
                 $result = true;//取库获取到数据了
                 \Yii::$app->cache->set($strCacheKey, $this->arrPersonRoleInfo);

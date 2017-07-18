@@ -27,7 +27,7 @@ class PayConfirmController extends BaseController
     public function actionForm()
     {
         $applyId = \Yii::$app->request->get('apply_id');
-        $data = PayLogic::instance()->getForm($applyId, $this->arrPersonInfo);
+        $data = PayLogic::instance()->getForm($applyId, $this->arrPersonInfo, $this->companyIds);
         if(!$data) {
             return $this->_returnError(PayLogic::instance()->errorCode, $data);
         }
