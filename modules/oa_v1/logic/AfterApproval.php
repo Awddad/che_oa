@@ -111,8 +111,7 @@ class AfterApproval extends BaseLogic
         $employee->leave_time = date('Y-m-d');
         if ($employee->save()) {
             //权限系统接口
-            $objQx = new QuanXianServer();
-            $objQx->curlDeleteUser($employee->person_id);
+            EmployeeLogic::instance()->delQxEmp($employee);
             return true;
         }
         return false;

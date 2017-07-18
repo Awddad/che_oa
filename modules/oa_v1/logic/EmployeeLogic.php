@@ -53,4 +53,15 @@ class EmployeeLogic extends BaseLogic
         $res = $objQx->curlAddUser($params);
         return $res;
     }
+    /**
+     * 删除权限系统用户
+     * @param app\models\Employee $employee
+     * @return array
+     */
+    public function delQxEmp($employee)
+    {
+        //权限系统接口 删除用户
+        $objQx = new QuanXianServer();
+        return $objQx->curlDeleteUser($employee->person_id);
+    }
 }
