@@ -271,4 +271,33 @@ class PersonLogic extends BaseLogic
         ])->all();
         return ArrayHelper::getColumn($companies, 'org_id');
     }
+    
+    /**
+     * @param int $companyId
+     * @param $data
+     * @return array
+     */
+    public function getSelectOrg($companyId = 1, $data = [])
+    {
+        $orgSelf = Org::findOne($companyId);
+        $data[] = [
+            'label' => $orgSelf->org_name,
+            'value' => $orgSelf->org_id,
+        ];
+        $org = Org::find()->where(['pid' => $companyId])->all();
+        if(empty($org)) {
+            return $data;
+        }
+        foreach ($org as $value) {
+            $data[] = [
+                'label' => $value->org_name,
+                'value' => $value->org_id,
+            ];
+            $this->getSelectOrg($value->org_id, $data);
+//            if($rst){
+//                break;
+//            }
+        }
+        return $data;
+    }
 }
