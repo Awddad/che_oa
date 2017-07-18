@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\models\LoanForm;
 
 /**
@@ -28,7 +29,7 @@ class LoanController extends BaseController
         if ($model->load($data) && $model->validate() && $applyId = $model->save($user)) {
             return $this->_return($applyId);
         } else {
-            return $this->_return($model->errors, 400);
+            return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($model->errors));
         }
     }
 }

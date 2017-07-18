@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\models\ApplyUseChapterForm;
 
 
@@ -43,7 +44,7 @@ class ApplyUseChapterController extends BaseController
         if ($model->load($data) && $model->validate() &&  $model->save($this->arrPersonInfo)) {
             return $this->_return($model->apply_id);
         } else {
-            return $this->_return($model->errors, 400);
+            return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($model->errors));
         }
     }
     

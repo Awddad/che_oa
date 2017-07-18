@@ -32,7 +32,7 @@ class PayLogic extends BaseLogic
         $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
             'a.cai_wu_need' => 2
         ])->andWhere([
-            'in', 'a.status', [4, 99]
+            'in', 'a.status', [4, 5, 99]
         ]);
         //筛选
         if ($type) {

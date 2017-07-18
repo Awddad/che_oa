@@ -247,6 +247,7 @@ class BaseController extends Controller
         2405 => '未找到阎行卡信息',
         2406 => '非法操作',
         2407 => '驳回失败',
+        2408 => '未找到申请单',
     ];
 
     /**
