@@ -108,6 +108,13 @@ class BaseApplyLogic extends Logic
                 'diff_time' => time() - $perTime,
                 "status" => 1
             ];
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> '',
+                "org" => '',
+                "status" => 0
+            ];
         }
     
         if($apply->cai_wu_need == 2 && in_array($apply->status, [1, 2, 3, 11]) ) {

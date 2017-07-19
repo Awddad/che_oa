@@ -548,7 +548,7 @@ class AssetLogic extends Logic
          */
         $lastAssetList = AssetList::find()->orderBy(['id' => SORT_DESC])->one();
         if (empty($lastAssetList)) {
-            $assetNumber = 'CCWGZ1701000';
+            $assetNumber = 'CCWGZ1702001';
         } else {
             $assetNumber = $lastAssetList->stock_number;
         }
