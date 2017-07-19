@@ -174,7 +174,7 @@ class PayLogic extends BaseLogic
             ];
         } else {
             $data = [
-                'pay_org' => PersonLogic::instance()->getSelectOrg($roleInfo['companyIds']),
+                'pay_org' => PersonLogic::instance()->getSelectOrg($companyIds),
                 'pay_bank' => ThirdServer::instance([
                     'token' => \Yii::$app->params['cai_wu']['token'],
                     'baseUrl' => \Yii::$app->params['cai_wu']['baseUrl']
