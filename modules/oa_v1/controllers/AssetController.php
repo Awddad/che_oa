@@ -280,10 +280,10 @@ class AssetController extends BaseController
             if ($demand) {
                 $demandId = $demand->apply_id;
             } else {
-                $demandId = null;
+                $demandId = '--';
             }
         } else {
-            $demandId = null;
+            $demandId = '--';
         }
         $data = [
             'asset_type_name' => $assetList->asset->asset_type_name,
