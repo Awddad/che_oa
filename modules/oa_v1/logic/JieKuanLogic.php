@@ -44,7 +44,7 @@ class JieKuanLogic extends Logic
                 continue;
             }
             $data[] = [
-                'id' => $k,
+                'id' => $k+1,
                 'time' => date('Y-m-d H:i',$v->create_time),
                 'des' => $v->loan->des,
                 'price' => yii::$app->formatter->asCurrency($v->loan->money),
