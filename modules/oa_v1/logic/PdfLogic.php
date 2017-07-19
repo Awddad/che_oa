@@ -387,7 +387,8 @@ class PdfLogic extends Logic
                 'asset_type_name' => $v->asset->asset_type_name,
                 'asset_brand_name' => $v->asset->asset_brand_name,
                 'name' => $v->asset->name,
-                'price' => \Yii::$app->formatter->asCurrency($v->asset->price)
+                'price' => \Yii::$app->formatter->asCurrency($v->asset->price),
+                'stock_number' => $v->assetList->asset_number,
             ];
             $total += $v->asset->price;
         }
