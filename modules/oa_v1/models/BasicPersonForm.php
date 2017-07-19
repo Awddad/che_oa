@@ -84,7 +84,7 @@ class BasicPersonForm extends BaseForm
 		
 		return [
 				'data' => $data,
-				'pages' => BackLogic::instance()->pageFix($pagination)
+				'page' => BackLogic::instance()->pageFix($pagination)
 		];
 	}
 }

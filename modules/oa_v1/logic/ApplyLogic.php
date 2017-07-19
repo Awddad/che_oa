@@ -160,7 +160,7 @@ class ApplyLogic extends BaseLogic
 		
 		return [
 			'data' => $res,
-			'pages' => $this->pageFix($pagination)
+			'page' => $this->pageFix($pagination)
 		];
 		
 	}

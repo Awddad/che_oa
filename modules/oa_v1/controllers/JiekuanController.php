@@ -99,7 +99,7 @@ class JiekuanController extends BaseController
 
         return $this->_return([
             'info' => $data,
-            'pages' => BackLogic::instance()->pageFix($pagination)
+            'page' => BackLogic::instance()->pageFix($pagination)
         ]);
     }
 

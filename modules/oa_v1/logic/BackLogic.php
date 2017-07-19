@@ -159,7 +159,7 @@ class BackLogic extends BaseLogic
             }
             return [
                 'data' => $data,
-                'pages' => $this->pageFix($pagination)
+                'page' => $this->pageFix($pagination)
             ];
         }
         return $data;
