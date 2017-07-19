@@ -224,7 +224,7 @@ class AssetLogic extends Logic
             $asset = Asset::findOne($v->asset_id);
             $data[] = [
                 'type' => $this->getAssetType($asset->asset_type_id),//类别
-                'sn' => AssetList::findOne($v->asset_list_id)->sn_number,//库存编号
+                'sn' => AssetList::findOne($v->asset_list_id)->stock_number,//库存编号
                 'brand' => $this->getAssetBrand($asset->asset_brand_id),//品牌
                 'name' => $asset->name,//名称
                 'price' => yii::$app->formatter->asCurrency($asset->price),//价格
