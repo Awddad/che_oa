@@ -272,12 +272,16 @@ class AssetController extends BaseController
     public function actionAssetDetail($asset_list_id)
     {
         $assetList = AssetList::findOne($asset_list_id);
-        /**
-         * @var ApplyDemand $demand
-         */
-        $demand = ApplyDemand::find()->where(['apply_buy_id' => $assetList->apply_buy_id])->one();
-        if ($demand) {
-            $demandId = $demand->apply_id;
+        if ($assetList->apply_buy_id) {
+            /**
+             * @var ApplyDemand $demand
+             */
+            $demand = ApplyDemand::find()->where(['apply_buy_id' => $assetList->apply_buy_id])->one();
+            if ($demand) {
+                $demandId = $demand->apply_id;
+            } else {
+                $demandId = null;
+            }
         } else {
             $demandId = null;
         }

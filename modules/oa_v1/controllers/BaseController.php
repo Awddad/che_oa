@@ -176,7 +176,7 @@ class BaseController extends Controller
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
-                    $this->companyIds = explode(',', $objRoleOrgMod->org_ids);
+                    $this->companyIds = explode(',', $objRoleOrgMod->company_ids);
                 } else {
                     $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
                     $this->arrPersonRoleInfo['permissionOrgIds'] = $org;

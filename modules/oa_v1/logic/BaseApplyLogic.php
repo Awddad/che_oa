@@ -54,7 +54,7 @@ class BaseApplyLogic extends Logic
                 $title = $v->approval_person.'审批';
                 if($v->is_to_me_now == 1 && $v->result == 0) {
                     $status = 1;
-                    $diff_time = time() - $apply->create_time;
+                    $diff_time = time() - $perTime;
                     $title .= '中';
                 }
                 if($v->result == 1) {
