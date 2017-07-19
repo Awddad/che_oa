@@ -16,6 +16,7 @@ use app\models\PeopleTrainExperience;
 use app\models\PeopleEduExperience;
 use app\models\PeopleFiles;
 use app\models\PeopleAbility;
+use app\modules\oa_v1\logic\RegionLogic;
 
 /**
  * 人才表单
@@ -341,7 +342,7 @@ class TalentForm extends BaseForm
 	    	    'status' => $this->status_arr[$v->status],
 	    	    'status_value' => $v->status,
 	    	    'person_type' => $v->person_type > 0 ? $v->personType->name : '',
-	    	    'location' => Region::findOne($v->current_location)->name,
+	    	    'location' => RegionLogic::instance()->getRegionByChild($v->current_location),
 	    	    'create_time' => date('Y-m-d', $v->created_at),
 	    	];
 	    }
