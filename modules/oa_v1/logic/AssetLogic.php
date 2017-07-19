@@ -386,7 +386,10 @@ class AssetLogic extends Logic
      */
     public function assetBackCancel($apply)
     {
-        return AssetGetList::updateAll(['status' => AssetGetList::STATUS_GET], ['apply_id' => $apply->apply_id]);
+        $assetBack = AssetBack::findOne($apply->apply_id);
+        return AssetGetList::updateAll([
+            'status' => AssetGetList::STATUS_GET
+        ], ['in', 'id', explode(',', $assetBack->asset_list_ids)]);
     }
     
     
