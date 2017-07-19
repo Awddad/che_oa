@@ -86,7 +86,7 @@ class BackLogic extends BaseLogic
     public function canConfirmList($companyIds)
     {
         $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
-            'in', 'a.status',  [4, 99]
+            'in', 'a.status',  [4, 5, 99]
         ]);
         $query->andWhere([
             'a.type' => 3
