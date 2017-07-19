@@ -323,7 +323,7 @@ class DefaultController extends BaseController
             echo '无附件';die;
         }
         foreach (json_decode($info, true) as $file) {
-            if (file_exists($basePath.$file['path'])) {
+            if (file_exists($basePath.$file['url'])) {
                 $zip->addFile($basePath.$file['url'], $file['name'].'.'.$file['ext']);
             }
         }
