@@ -269,6 +269,31 @@ class DefaultController extends BaseController
     }
     
     /**
+     * 批量下载
+     */
+    public function actionBatchDownload()
+    {
+        $files = Yii::$app->request->get('files');
+        $zipName = Yii::$app->request->get('apply_id').'.zip';
+        $zip = new \ZipArchive();
+        $zip->open($zipName, \ZipArchive::CREATE);
+        $basePath = Yii::$app->basePath.'/web';
+        foreach ($files as $file) {
+            if (file_exists($basePath.$file['path'])) {
+                $zip->addFile($basePath.$file['path'], $file['name']);
+            }
+        }
+        $zip->close();
+    
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename='.$zipName);
+        header('Content-Length: ' . filesize($zipName));
+        readfile($zipName);
+        //下载后删除文件
+        unlink($zipName);
+    }
+    
+    /**
      * 获取用户拥有的项目
      *
      * @return array
