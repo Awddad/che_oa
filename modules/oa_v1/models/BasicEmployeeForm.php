@@ -90,7 +90,7 @@ class BasicEmployeeForm extends BaseForm
 	
 		return [
 				'data' => $data,
-				'page' => BackLogic::instance()->pageFix($pagination)
+				'pages' => BackLogic::instance()->pageFix($pagination)
 		];
 	}
 }
