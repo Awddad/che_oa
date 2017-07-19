@@ -187,7 +187,7 @@ class EmployeeInfoForm extends BaseForm
             'profession_id' => $model->profession,
             'profession' => empty($model->job)?'':$model->job->name,
             'org_id' => $model->org_id,
-            'org' => empty($model->org)?'':$model->org->org_name,
+            'org' => OrgLogic::instance()->getRegionByChild($model->org_id),
             'org_info' => OrgLogic::instance()->getOrgIdByChild($model->org_id),
             'id_card' => $model->id_card,
             'entry_time' => $model->entry_time,
