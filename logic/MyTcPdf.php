@@ -512,7 +512,8 @@ TABLEHTML;
                 <td>'.$val['asset_type_name'].'</td>
                 <td colspan="2">'.$val['asset_brand_name'].'</td>
                 <td>'.$val['name'].'</td>
-                <td colspan="2">'.$val['price'].'</td>
+                <td>'.$val['price'].'</td>
+                <td>'.$val['stock_number'].'</td>
             </tr>';
         }
         $strHtml = <<<TABLEHTML
@@ -535,14 +536,16 @@ TABLEHTML;
             <td style="background-color:#f2f2f2">类别</td>
             <td colspan="2" style="background-color:#f2f2f2">品牌</td>
             <td style="background-color:#f2f2f2">名称</td>
-            <td colspan="2" style="background-color:#f2f2f2">价格</td>
+            <td colspan="1" style="background-color:#f2f2f2">价格</td>
+            <td colspan="1" style="background-color:#f2f2f2">库存编号</td>
         </tr>
         {$strListHtml}
         <tr>
             <td></td>
             <td colspan="2"></td>
             <td>总计</td>
-            <td colspan="2">{$param['total']}</td>
+            <td colspan="1">{$param['total']}</td>
+            <td></td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>
