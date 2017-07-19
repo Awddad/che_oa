@@ -114,7 +114,7 @@ class ApplyBuyController extends BaseController
         }
         return $this->_return([
             'list' => $data,
-            'pages' => BaseLogic::instance()->pageFix($pagination)
+            'page' => BaseLogic::instance()->pageFix($pagination)
         ]);
     }
     
