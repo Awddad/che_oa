@@ -250,8 +250,9 @@ class PersonLogic extends BaseLogic
         $data = [];
         if(!empty($org)) {
             foreach ($org as $value) {
-                $data = [
-                    $value->org_id => $value->org_name,
+                $data[] = [
+                    'org_id' => $value->org_id,
+                    'name' => $value->org_name,
                 ];
             }
         }

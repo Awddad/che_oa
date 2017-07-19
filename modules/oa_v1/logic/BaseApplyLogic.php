@@ -90,6 +90,15 @@ class BaseApplyLogic extends Logic
                 }
             }
         }
+        if($apply->cai_wu_need == 1 && in_array($apply->status, [1, 2, 3, 11]) ) {
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> '',
+                "org" => '',
+                "status" => 0
+            ];
+        }
         if($apply->cai_wu_need == 2 && $apply->status == 4) {
             $data[] = [
                 "title" => "付款确认",
@@ -98,13 +107,6 @@ class BaseApplyLogic extends Logic
                 "org" => '',
                 'diff_time' => time() - $perTime,
                 "status" => 1
-            ];
-            $data[] = [
-                "title" => "完成",
-                "name" => '',
-                "date"=> '',
-                "org" => '',
-                "status" => 0
             ];
         }
     
