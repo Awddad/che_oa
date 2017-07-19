@@ -426,7 +426,9 @@ class PdfLogic extends Logic
         $list = [];
         $total = 0;
         $assetListIds = explode(',', $apply->assetBack->asset_list_ids);
+print_r($assetListIds);
         $assetGetList = AssetList::find()->where(['in', 'id', $assetListIds])->all();
+        print_r($assetGetList);
         /**
          * @var AssetList $v
          */
@@ -442,6 +444,7 @@ class PdfLogic extends Logic
         }
     
         $arrInfo['list'] = $list;
+print_r($list);
         $arrInfo['total'] = \Yii::$app->formatter->asCurrency($total);
     
         $pdf = new MyTcPdf();
