@@ -274,7 +274,7 @@ class DefaultController extends BaseController
      */
     public function actionBatchDownload()
     {
-        $applyId = Yii::$app->request->post('apply_id');
+        $applyId = Yii::$app->request->get('apply_id');
         $apply = Apply::findOne($applyId);
         switch ($apply->type) {
             case 2:
