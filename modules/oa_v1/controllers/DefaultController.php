@@ -274,14 +274,57 @@ class DefaultController extends BaseController
      */
     public function actionBatchDownload()
     {
-        $files = Yii::$app->request->get('files');
-        $zipName = Yii::$app->request->get('apply_id').'.zip';
+        $applyId = Yii::$app->request->post('apply_id');
+        $apply = Apply::findOne($applyId);
+        switch ($apply->type) {
+            case 2:
+                $info = $apply->loan->pics;
+                break;
+            case 4:
+                $info = $apply->applyPay->files;
+                break;
+            case 5:
+                $info = $apply->applyBuy->files;
+                break;
+            case 6:
+                $info = $apply->applyDemand->files;
+                break;
+            case 7:
+                $info = $apply->applyUseChapter->files;
+                break;
+            case 8:
+                $info = $apply->assetGet->files;
+                break;
+            case 9:
+                $info = $apply->assetBack->files;
+                break;
+            case 10:
+                $info = $apply->applyPositive->files;
+                break;
+            case 11:
+                $info = $apply->applyLeave->files;
+                break;
+            case 12:
+                $info = $apply->applyTransfer->files;
+                break;
+            case 13:
+                $info = $apply->applyOpen->files;
+                break;
+            default:
+                $info = $apply->expense->files;
+                break;
+        }
+        $zipName = Yii::$app->request->post('apply_id').'.zip';
         $zip = new \ZipArchive();
         $zip->open($zipName, \ZipArchive::CREATE);
         $basePath = Yii::$app->basePath.'/web';
-        foreach ($files as $file) {
+        $path = json_decode($info);
+        if(empty($path)){
+            echo '无附件';die;
+        }
+        foreach (json_decode($info, true) as $file) {
             if (file_exists($basePath.$file['path'])) {
-                $zip->addFile($basePath.$file['path'], $file['name']);
+                $zip->addFile($basePath.$file['url'], $file['name'].'.'.$file['ext']);
             }
         }
         $zip->close();
