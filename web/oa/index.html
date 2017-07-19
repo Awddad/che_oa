@@ -224,14 +224,15 @@
     .el-message{ top: 50% !important; margin-top: -20px !important;}
     @media (min-width: 769px) {
       .w-100{ width: 100% !important;}
-      .w92,.w97,.w120,.w110,.w150{line-height: 34px;}
-      .w92{ width: 92px !important;}
-      .w97{ width: 97px !important;}
+      .w50,.w92,.w97,.w120,.w110,.w150{line-height: 34px;}
+      .w50{width: 50px !important;}
+      .w92{width: 92px !important;}
+      .w97{width: 97px !important;}
       .w106{width: 106px !important;}
       .w110{width: 110px !important;}
-      .w120{ width: 120px !important;}
-      .w150{ width: 150px !important;}
-      .mt-10{ margin-top: 10px !important;}
+      .w120{width: 120px !important;}
+      .w150{width: 150px !important;}
+      .mt-10{margin-top: 10px !important;}
       .ml-92{margin-left: 92px !important;}
       .ml-97{margin-left: 97px !important;}
       .ml-120{margin-left: 120px !important;}
@@ -296,6 +297,7 @@
 
       .el-select-dropdown{ min-width: auto !important; max-width: 96%;}
     }
+
   </style>
   <script>
       //localStorage.clear();
@@ -314,11 +316,13 @@
               if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
           return fmt;
       }
+
+
   </script>
 </head>
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?8938c7e5efb3249aca27"></script><script type="text/javascript" src="vendor.js?b61cb45e647ae72f1bfa"></script><script type="text/javascript" src="index.js?5af93ed7a142a9ec8676"></script></body>
+<script type="text/javascript" src="manifest.js?bd6705939ba43d027d97"></script><script type="text/javascript" src="vendor.js?c824b0cbb683089e0228"></script><script type="text/javascript" src="index.js?42430191e70c0577c793"></script></body>
 
 </html>
