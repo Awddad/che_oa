@@ -76,7 +76,7 @@ class BaseApplyLogic extends Logic
                     "org" => PersonLogic::instance()->getOrgNameByPersonId($v->approval_person_id),
                     "status" => $status,
                     'diff_time' => $diff_time,
-                     'des' => $v->des,
+                    'des' => $v->des,
                 ];
                 if ($count == $k + 1 && $apply->status == 99 && $apply->cai_wu_need == 1) {
                     $data[] = [
@@ -99,11 +99,25 @@ class BaseApplyLogic extends Logic
                 'diff_time' => time() - $perTime,
                 "status" => 1
             ];
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> '',
+                "org" => '',
+                "status" => 0
+            ];
         }
     
         if($apply->cai_wu_need == 2 && in_array($apply->status, [1, 2, 3, 11]) ) {
             $data[] = [
                 "title" => "付款确认",
+                "name" => '',
+                "date"=> '',
+                "org" => '',
+                "status" => 0
+            ];
+            $data[] = [
+                "title" => "完成",
                 "name" => '',
                 "date"=> '',
                 "org" => '',
@@ -118,7 +132,7 @@ class BaseApplyLogic extends Logic
                 "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
                 "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
                 "status" => 2,
-                'diff_time' => $apply->cai_wu_time - $perTime
+                'diff_time' => $apply->cai_wu_time - $perTime,
             ];
             $data[] = [
                 "title" => "完成",
@@ -135,7 +149,8 @@ class BaseApplyLogic extends Logic
                 "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
                 "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
                 "status" => 3,
-                'diff_time' => $apply->cai_wu_time - $perTime
+                'diff_time' => $apply->cai_wu_time - $perTime,
+                'des' => $apply->caiwu_refuse_reason,
             ];
             $data[] = [
                 "title" => "完成",
@@ -144,14 +159,6 @@ class BaseApplyLogic extends Logic
                 "org" => '',
                 "status" => 3,
                 'diff_time' => $apply->cai_wu_time - $apply->create_time
-            ];
-        } else {
-            $data[] = [
-                "title" => "完成",
-                "name" => '',
-                "date"=> '',
-                "org" => '',
-                "status" => 0
             ];
         }
         
