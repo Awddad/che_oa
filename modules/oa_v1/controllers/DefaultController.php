@@ -314,7 +314,7 @@ class DefaultController extends BaseController
                 $info = $apply->expense->files;
                 break;
         }
-        $zipName = Yii::$app->request->post('apply_id').'.zip';
+        $zipName = $applyId.'.zip';
         $zip = new \ZipArchive();
         $zip->open($zipName, \ZipArchive::CREATE);
         $basePath = Yii::$app->basePath.'/web';
