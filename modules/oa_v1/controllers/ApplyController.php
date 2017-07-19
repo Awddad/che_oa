@@ -325,8 +325,29 @@ class ApplyController extends BaseController
         $apply->cai_wu_time = time();
         $apply->cai_wu_person_id = $this->arrPersonInfo->person_id;
         $apply->caiwu_refuse_reason = $reason;
-        if (!$apply->save()) {
-            return $this->_returnError(2047);
+        if($apply->type == 3) {
+            $db = Yii::$app->db;
+            $transaction = $db->beginTransaction();
+            try {
+                if (!$apply->save()) {
+                    throw new Exception('驳回失败');
+                }
+                $payBack = appmodel\PayBack::findOne($applyId);
+                $applyIds = explode(',', $payBack->jie_kuan_ids);
+                //改变借款单状态
+                foreach ($applyIds as $apply_id) {
+                    appmodel\JieKuan::updateAll(['status' => 99], ['apply_id' => $apply_id]);
+                }
+                $transaction->commit();
+                return $this->_return('', 200);
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                return $this->_returnError(404, $e);
+            }
+        } else {
+            if (!$apply->save()) {
+                return $this->_returnError(2047);
+            }
         }
         return $this->_return([], 200);
     }
