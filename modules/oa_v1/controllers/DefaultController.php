@@ -350,7 +350,13 @@ class DefaultController extends BaseController
         $url = $param['auth_api_url'].'/users/'.$personId.'/projects?_token='.$param['auth_token'];
         $data = Server::instance()->httpGet($url);
         if(!empty($data) && $data['success'] == true && !empty($data['data'])) {
-            return $this->_return($data['data']);
+            $return = $data['data'];
+            foreach ($return as $k => $v) {
+                $project = $v['roles'];
+                sort($project);
+                $return[$k]['roles'] = $project;
+            }
+            return $this->_return($return);
         }
         return $this->_returnError(500, '', '未找到相关项目');
     }
