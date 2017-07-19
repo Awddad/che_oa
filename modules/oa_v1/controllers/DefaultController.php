@@ -266,6 +266,7 @@ class DefaultController extends BaseController
         header('Content-Disposition: attachment; filename="'.$name.'"');
         header('Content-Transfer-Encoding: binary');
         readfile($rootPath);
+        exit;
     }
     
     /**
@@ -291,6 +292,7 @@ class DefaultController extends BaseController
         readfile($zipName);
         //下载后删除文件
         unlink($zipName);
+        exit();
     }
     
     /**
