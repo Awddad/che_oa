@@ -257,7 +257,7 @@ class BasicAssetForm extends BaseForm
 		
 		return [
 				'data' => $data,
-				'page' => BackLogic::instance()->pageFix($pagination)
+				'pages' => BackLogic::instance()->pageFix($pagination)
 		];
 	}
 	
@@ -332,7 +332,7 @@ class BasicAssetForm extends BaseForm
 		
 		return [
 				'data' => $data,
-				'page' => BackLogic::instance()->pageFix($pagination)
+				'pages' => BackLogic::instance()->pageFix($pagination)
 		];
 	}
 }
