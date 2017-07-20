@@ -8,7 +8,8 @@
 
 namespace app\modules\oa_v1\logic;
 
-
+use Jasny\SSO\Broker;
+use Yii;
 use app\logic\Logic;
 use app\logic\server\Server;
 use yii\data\Pagination;
@@ -74,5 +75,18 @@ class BaseLogic extends Logic
         $firstErr = current($error);
         
         return current($firstErr);
+    }
+    
+    
+    /**
+     * @return Broker
+     */
+    public function ssoClient()
+    {
+        $serverUrl = Yii::$app->params['quan_xian']['auth_sso_url'];//单点登录地址
+        $brokerId = Yii::$app->params['quan_xian']['auth_broker_id'];//项目appID
+        $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
+        $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
+        return $broker;
     }
 }
