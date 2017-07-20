@@ -277,4 +277,64 @@ class ApplyLogic extends BaseLogic
 		$copy_person = $model::find() -> where(['apply_id' => $apply_id]) -> asArray() -> all();
 		return $copy_person;
 	}
+    
+    /**
+     * 待我审批
+     *
+     * @param $personId
+     *
+     * @return int|string
+     */
+	public function getToMe($personId)
+    {
+        return appmodel\ApprovalLog::find()->where([
+            'approval_person_id' => $personId,
+            'is_to_me_now' => 1
+        ])->count() ? : 0;
+    }
+    
+    /**
+     * 我已审核
+     *
+     * @param $personId
+     *
+     * @return int|string
+     */
+    public function getApprovalLogCount($personId)
+    {
+        return appmodel\ApprovalLog::find()->where([
+            'approval_person_id' => $personId,
+        ])->andWhere([
+            '>', 'result', 0
+        ])->count()  ? : 0;
+    }
+    
+    /**
+     * 我发起的
+     *
+     * @param $personId
+     *
+     * @return int|string
+     */
+    public function getApplyCount($personId)
+    {
+        return appmodel\Apply::find()->where([
+            'person_id' => $personId,
+        ])->count()  ? : 0;
+    }
+    
+    /**
+     * 抄送给我的
+     *
+     * @param $personId
+     *
+     * @return int|string
+     */
+    public function getCopyCount($personId)
+    {
+        return appmodel\ApplyCopyPerson::find()->alias('a')->innerJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
+            'b.copy_person_id' => $personId,
+            'a.status' => 99
+        ])->count() ? : 0;
+    }
 }
