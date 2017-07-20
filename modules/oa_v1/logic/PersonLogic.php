@@ -36,34 +36,53 @@ class PersonLogic extends BaseLogic
      * 获取筛选
      *
      * @param Person $person
-     * @param array $companyIds
      *
      * @return array
      */
-    public function getSelectPerson($person, $companyIds)
+    public function getSelectPerson($person)
     {
-        $companyIds[] = 1;
-        $persons = Person::find()->where([
-            'and',
-            ['is_delete' => 0],
-            ['in', 'company_id', $companyIds],
-            ['!=', 'person_id', $person->person_id]
-        ])->all();
-        
+        $companyArr = $this->getCompanyIds($person);
+        if ($person->company_id == 1) {
+            $persons = Person::find()->where([
+                '!=', 'person_id', $person->person_id
+            ])->andWhere(['is_delete'=>0])->orderBy('person_id desc')->all();
+        } else {
+            $persons = Person::find()->where(['is_delete' => 0])->andWhere([
+                'or',
+                ['in', 'company_id', [1, $person->company_id]],
+                ['in', 'person_id', $companyArr]
+            ])->andWhere([
+                '!=', 'person_id', $person->person_id
+            ])->orderBy('person_id desc')->all();
+        }
+    
         $data = [];
         /**
          * @var Person $v
          */
         foreach ($persons as $v) {
-        	if($v->org_id <= 0){
-        		continue;
-        	}
+            if($v->org_id <= 0){
+                continue;
+            }
             $personName = $v->person_name. ' '. $v->org_full_name;
             $data[] = [
                 'id' => $v->person_id,
                 'name' => $personName
             ];
         }
+        
+        $caiwu = $this->getCaiwu();
+    
+        foreach ($caiwu as $v) {
+            $personName = $v['person_name']. ' '. $v['org_full_name'];
+            $data[] = [
+                'id' => $v['person_id'],
+                'name' => $personName
+            ];
+        }
+        unset($data[$person->person_id]);
+        $data = ArrayHelper::index($data,'id');
+        sort($data);
         return $data;
     }
     
