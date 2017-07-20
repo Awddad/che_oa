@@ -226,6 +226,7 @@ class Apply extends \yii\db\ActiveRecord
     {
         $this->next_des = '等待财务部门确认';
         $this->status = self::STATUS_CONFIRM;
+        /* 发送企业QQ消息 */
         $typeName = $this->typeArr[$this->type];
         $person = Person::findOne($this->person_id);
         $data = [
@@ -263,9 +264,10 @@ class Apply extends \yii\db\ActiveRecord
         }
         $this->next_des = '审批完成';
         $this->status = self::STATUS_OK;
+        /* 发送企业QQ消息 */
         $person = Person::findOne($this->person_id);
+        $typeName = $this->typeArr[$this->type];
         if ($person->bqq_open_id) {
-            $typeName = $this->typeArr[$this->type];
             $data = [
                 'tips_title' => 'OA - ' .$typeName. '申请完成',
                 'tips_content' => '你发起的'. $typeName.'已完成，请在OA系统进行查看',
@@ -273,6 +275,24 @@ class Apply extends \yii\db\ActiveRecord
             ];
             BaseLogic::instance()->sendQqMsg($data);
         }
+        // 发送给抄送人
+        if($this->copy_person){
+            $copyPersons = ApplyCopyPerson::find()->where(['apply_id' => $this->apply_id])->all();
+            if(!empty($copyPersons)) {
+                foreach ($copyPersons as $v) {
+                    $copyPerson = Person::findOne($v->copy_person_id);
+                    if ($copyPerson->bqq_open_id) {
+                        $data = [
+                            'tips_title' => 'OA - ' . $typeName . '申请完成',
+                            'tips_content' => '员工' .$person . '发起的' . $typeName . '已完成，请在OA系统进行查看',
+                            'receivers' => $copyPerson->bqq_open_id,
+                        ];
+                        BaseLogic::instance()->sendQqMsg($data);
+                    }
+                }
+            }
+        }
+        /* end */
         return $this->save();
     }
 
@@ -380,7 +400,7 @@ class Apply extends \yii\db\ActiveRecord
      */
     public $typeArr = [
         1 => '报销',
-        2 => '借款',
+        2 => '备用金',
         3 => '还款',
         4 => '付款',
         5 => '请购',

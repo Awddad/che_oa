@@ -6,6 +6,7 @@ use app\logic\server\Server;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\Role;
+use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PdfLogic;
 use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
@@ -42,7 +43,7 @@ class DefaultController extends BaseController
      */
     public function actionGetPerson()
     {
-        $person = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo, $this->companyIds);
+        $person = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo);
         return $this->_return($person);
     }
 
@@ -166,6 +167,7 @@ class DefaultController extends BaseController
     {
         //跳转到登出页面
         Yii::$app->getSession()->destroy();
+        //清除单点登陆信息
         return $this->_return(['login_url' => Yii::$app->params['quan_xian']['auth_sso_login_url']]);
     }
 

@@ -165,7 +165,7 @@ class ApplyController extends BaseController
 	 * 获取员工列表
 	 */
 	public function actionGetUserList() {
-		$data = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo,$this->companyIds);
+		$data = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo);
 		return $this->_return($data, 200);
 	}
 
@@ -351,5 +351,21 @@ class ApplyController extends BaseController
             }
         }
         return $this->_return([], 200);
+    }
+    
+    /**
+     * 我的审批统计
+     * 
+     * @return array
+     */
+    public function actionDetail()
+    {
+        $applyLogic = ApplyLogic::instance();
+        return $this->_return([
+            'to_approval_count' => $applyLogic->getToMe($this->arrPersonInfo->person_id),
+            'approval_log_count' => $applyLogic->getApprovalLogCount($this->arrPersonInfo->person_id),
+            'apply_count' => $applyLogic->getApplyCount($this->arrPersonInfo->person_id),
+            'copy_count' => $applyLogic->getCopyCount($this->arrPersonInfo->person_id)
+        ]);
     }
 }
