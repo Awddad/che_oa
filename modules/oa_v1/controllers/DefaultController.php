@@ -168,7 +168,6 @@ class DefaultController extends BaseController
         //跳转到登出页面
         Yii::$app->getSession()->destroy();
         //清除单点登陆信息
-        BaseLogic::instance()->ssoClient()->logout();
         return $this->_return(['login_url' => Yii::$app->params['quan_xian']['auth_sso_login_url']]);
     }
 
