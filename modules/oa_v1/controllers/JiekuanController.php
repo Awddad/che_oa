@@ -169,13 +169,13 @@ class JiekuanController extends BaseController
                 'get_money_time', 'person', 'org', 'money', 'des'
             ],
             'headers' => [
-                'get_money_time' => '借款时间',
+                'get_money_time' => '时间',
                 'person' => '借款人',
                 'org' => '部门',
-                'money' => '借款金额',
+                'money' => '金额',
                 'des' => '是由',
             ],
-            'fileName' => '借款明细_'.date('YmdHi').'.xlsx'
+            'fileName' => '备用金明细_'.date('YmdHi').'.xlsx'
         ]);
     }
 }
