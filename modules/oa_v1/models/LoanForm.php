@@ -199,7 +199,7 @@ class LoanForm extends BaseForm
         $model->is_pay_back = 0;
         $model->status = 1;
         if (!$model->save()) {
-            throw new Exception('借款保存失败', $model->errors);
+            throw new Exception('备用金保存失败', $model->errors);
         }
         return $model;
     }

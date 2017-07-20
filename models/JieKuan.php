@@ -57,7 +57,7 @@ class JieKuan extends \yii\db\ActiveRecord
             'apply_id' => '申请id - 审核单流水号',
             'person' => '借款人姓名',
             'person_id' => '借款人id',
-            'money' => '借款金额',
+            'money' => '备用金金额',
             'des' => '借款事由',
             'tips' => '备注',
             'bank_card_id' => '借款转入到的银行卡号',
