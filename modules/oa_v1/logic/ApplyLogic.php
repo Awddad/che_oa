@@ -56,10 +56,11 @@ class ApplyLogic extends BaseLogic
 			-> orderBy('create_time');
 		}elseif(4 == $type){//抄送给我的
 			$copy_model = new appmodel\ApplyCopyPerson();
-			$query = $copy_model::find()
-			-> joinWith('apply a',true,'RIGHT JOIN')
-			-> where(['copy_person_id'=>$user['person_id']])
-			-> orderBy('create_time');
+			$query = $copy_model::find()-> joinWith('apply a',true,'RIGHT JOIN')-> where([
+			    'copy_person_id'=>$user['person_id']
+            ])->andWhere([
+                'a.status' => 99
+            ])-> orderBy('create_time');
 		}else{
 			return false;
 		}
