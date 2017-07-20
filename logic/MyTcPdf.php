@@ -829,7 +829,7 @@ jdf;
             <td >{$id}</td>
             <td >{$v['time']}</td>
             <td >{$v['des']}</td>
-            <td colspan="2" align="right">{$v['price']}</td>
+            <td align="right">{$v['price']}</td>
             <td >{$v['status']}</td>
         </tr>
 jdf;
