@@ -325,6 +325,7 @@ class ApplyController extends BaseController
         $apply->cai_wu_time = time();
         $apply->cai_wu_person_id = $this->arrPersonInfo->person_id;
         $apply->caiwu_refuse_reason = $reason;
+        $apply->next_des = '付款确认驳回';
         if($apply->type == 3) {
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
