@@ -380,7 +380,7 @@ class Apply extends \yii\db\ActiveRecord
      */
     public $typeArr = [
         1 => '报销',
-        2 => '借款',
+        2 => '备用金',
         3 => '还款',
         4 => '付款',
         5 => '请购',

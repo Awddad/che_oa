@@ -126,7 +126,7 @@ TABLEHTML;
     {
         $strHtml = <<<TABLEHTML
 <div>
-    <h2 style="text-align: center;">借款单</h2>    
+    <h2 style="text-align: center;">备用金申请单</h2>    
     <table style="text-align: center; line-height:24px;" border="1" width='98%' cellspacing="0" bordercolor="rgba(204, 204, 204, 1)">
         <tr>
             <td style="background-color:#f2f2f2" colspan="2">日期</td>
@@ -147,7 +147,7 @@ TABLEHTML;
             <td colspan="4">{$arrInfo['bank_card_id']}</td>
         </tr>
         <tr>
-            <td colspan="3" style="background-color:#f2f2f2">借款金额</td>
+            <td colspan="3" style="background-color:#f2f2f2">金额</td>
             <td colspan="9" style="background-color:#f2f2f2">事由</td>
         </tr>
         <tr>
@@ -221,7 +221,7 @@ TABLEHTML;
             <td colspan="2">{$arrInfo['bank_card_id']}</td>
         </tr>
         <tr>
-            <td style="background-color:#f2f2f2" colspan="2">借款时间</td>
+            <td style="background-color:#f2f2f2" colspan="2">时间</td>
             <td style="background-color:#f2f2f2" colspan="2">金额</td>
             <td style="background-color:#f2f2f2" colspan="2">明细</td>
         </tr>
@@ -817,9 +817,9 @@ jdf;
         }
         $finance_list = '<tr>
             <td style="background-color:#f2f2f2">序号</td>
-            <td style="background-color:#f2f2f2">借款时间</td>
-            <td style="background-color:#f2f2f2">借款事由</td>
-            <td style="background-color:#f2f2f2">借款金额</td>
+            <td style="background-color:#f2f2f2">时间</td>
+            <td style="background-color:#f2f2f2">事由</td>
+            <td style="background-color:#f2f2f2">金额</td>
             <td style="background-color:#f2f2f2">状态</td>
             </tr>';
         foreach($param['finance_list'] as $v){
