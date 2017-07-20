@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\models\Person;
+use app\modules\oa_v1\logic\BaseLogic;
 use Jasny\SSO\Broker;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -43,7 +44,7 @@ class LoginController extends Controller
         if (empty($objPerson)) {
             if($osType == 'web') {
                 $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
-                $broker = $this->ssoClient();
+                $broker = BaseLogic::instance()->ssoClient();
                 $broker->attach(true);
                 $user = $broker->getUserInfo();//获取用户信息，这里会curl单点登录获取用户信息,但是不全
                 if (!$user) {
@@ -106,19 +107,7 @@ class LoginController extends Controller
      */
     public function clearSsoToken()
     {
-        $broker = $this->ssoClient();
+        $broker = BaseLogic::instance()->ssoClient();
         $broker->clearToken();
-    }
-    
-    /**
-     * @return Broker
-     */
-    private function ssoClient()
-    {
-        $serverUrl = Yii::$app->params['quan_xian']['auth_sso_url'];//单点登录地址
-        $brokerId = Yii::$app->params['quan_xian']['auth_broker_id'];//项目appID
-        $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
-        $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
-        return $broker;
     }
 }
