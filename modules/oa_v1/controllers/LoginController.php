@@ -28,8 +28,10 @@ class LoginController extends Controller
      */
     public function actionIndex()
     {
-        Yii::$app->getSession()->destroy();
         $session = Yii::$app->session;
+        //清除cookie 
+        $this->clearSsoToken();
+        $session->removeAll();
         /**
          * @var Person $objPerson
          */
@@ -40,11 +42,8 @@ class LoginController extends Controller
        
         if (empty($objPerson)) {
             if($osType == 'web') {
-                $serverUrl = Yii::$app->params['quan_xian']['auth_sso_url'];//单点登录地址
-                $brokerId = Yii::$app->params['quan_xian']['auth_broker_id'];//项目appID
-                $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
                 $loginUrl = Yii::$app->params['quan_xian']['auth_sso_login_url'];
-                $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
+                $broker = $this->ssoClient();
                 $broker->attach(true);
                 $user = $broker->getUserInfo();//获取用户信息，这里会curl单点登录获取用户信息,但是不全
                 if (!$user) {
@@ -100,5 +99,26 @@ class LoginController extends Controller
             header('Location: /oa/index.html#/adminhome');
         }
         exit();
+    }
+    
+    /**
+     * clear sso token
+     */
+    public function clearSsoToken()
+    {
+        $broker = $this->ssoClient();
+        $broker->clearToken();
+    }
+    
+    /**
+     * @return Broker
+     */
+    private function ssoClient()
+    {
+        $serverUrl = Yii::$app->params['quan_xian']['auth_sso_url'];//单点登录地址
+        $brokerId = Yii::$app->params['quan_xian']['auth_broker_id'];//项目appID
+        $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
+        $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
+        return $broker;
     }
 }
