@@ -287,9 +287,11 @@ class ApplyLogic extends BaseLogic
      */
 	public function getToMe($personId)
     {
-        return appmodel\ApprovalLog::find()->where([
+        return appmodel\ApprovalLog::find()->alias('a')->leftJoin('oa_apply b', 'b.apply_id = a.apply_id')->where([
             'approval_person_id' => $personId,
             'is_to_me_now' => 1
+        ])->andWhere([
+            'in', 'b.status', [1, 11]
         ])->count() ? : 0;
     }
     
@@ -333,8 +335,8 @@ class ApplyLogic extends BaseLogic
     public function getCopyCount($personId)
     {
         return appmodel\ApplyCopyPerson::find()->alias('a')->innerJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
-            'b.copy_person_id' => $personId,
-            'a.status' => 99
+            'a.copy_person_id' => $personId,
+            'b.status' => 99
         ])->count() ? : 0;
     }
 }
