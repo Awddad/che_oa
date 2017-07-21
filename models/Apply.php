@@ -284,7 +284,7 @@ class Apply extends \yii\db\ActiveRecord
                     if ($copyPerson->bqq_open_id) {
                         $data = [
                             'tips_title' => 'OA - ' . $typeName . '申请完成',
-                            'tips_content' => '员工' .$person . '发起的' . $typeName . '已完成，请在OA系统进行查看',
+                            'tips_content' => '员工' .$person->person_name . '发起的' . $typeName . '已完成，请在OA系统进行查看',
                             'receivers' => $copyPerson->bqq_open_id,
                         ];
                         BaseLogic::instance()->sendQqMsg($data);
