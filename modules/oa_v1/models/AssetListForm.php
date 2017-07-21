@@ -61,7 +61,7 @@ class AssetListForm extends Model
             'asset_type_id' => $this->asset_type_id,
             'asset_brand_id' => $this->asset_brand_id,
             'name' => $this->name,
-            'price' => $this->price,
+            //'price' => $this->price,
         ])->one();
         $assetLogic = AssetLogic::instance();
         if(empty($asset)) {
@@ -77,13 +77,14 @@ class AssetListForm extends Model
         } else {
             $asset->amount += $this->amount;;
             $asset->free_amount += $this->amount;
+            $asset->price += $this->amount * $this->price;
         }
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             if (!$asset->save()) {
                 throw new Exception('入库失败', $asset->errors);
             }
-            $assetLogic->addAssetList($asset, $this->amount, $person);
+            $assetLogic->addAssetList($asset, $this->amount, $person, $this->price);
             $transaction->commit();
             return $asset;
         } catch (Exception $e) {

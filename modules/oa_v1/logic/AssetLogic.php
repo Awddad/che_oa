@@ -474,7 +474,7 @@ class AssetLogic extends Logic
                     'asset_type_id' => $buyList->asset_type_id,
                     'asset_brand_id' => $buyList->asset_brand_id,
                     'name' => $buyList->name,
-                    'price' => $buyList->price
+                    //'price' => $buyList->price
                 ])->one();
                 if (empty($asset)) {
                     $asset = new Asset();
@@ -493,7 +493,7 @@ class AssetLogic extends Logic
                 if (!$asset->save()) {
                     throw new Exception('入库失败');
                 }
-                $this->addAssetList($asset, $v['amount'],$person ,$data['apply_id']);
+                $this->addAssetList($asset, $v['amount'], $person, $buyList->price,$data['apply_id']);
             }
             ApplyBuy::updateAll(['status' => $status], ['apply_id' => $data['apply_id']]);
             $transaction->commit();
@@ -512,10 +512,11 @@ class AssetLogic extends Logic
      * @param string $applyBuyId
      * @param Person $person
      * @param int $amount
+     * @param string $price
      *
      * @return boolean
      */
-    public function addAssetList($asset, $amount, $person, $applyBuyId = '')
+    public function addAssetList($asset, $amount, $person, $price, $applyBuyId = '')
     {
         $last = $this->getLastAssetNum();
         $endNum = $last['endNum'];
@@ -523,7 +524,7 @@ class AssetLogic extends Logic
             $endNum++;
             $assetList = new AssetList();
             $assetList->asset_id = $asset->id;
-            $assetList->price = $asset->price;
+            $assetList->price = $price;
             $assetList->status = 1;
             $assetList->created_at = time();
             $assetList->asset_number = $last['begin'] . $endNum;
