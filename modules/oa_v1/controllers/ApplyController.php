@@ -137,6 +137,12 @@ class ApplyController extends BaseController
 		if ($request->isPost) {
 			$post = $request->post();
 			if ($post ['card_id'] && $post ['bank_name']) {
+                $bankInfo = PersonBankInfo::find()->where([
+                    'bank_card_id' => $post ['card_id']
+                ])->one();
+                if (!empty($bankInfo)) {
+                    return $this->_returnError(2409);
+                }
 				/* $obj = new \app\logic\server\QuanXianServer ();
 				$intPersonId = $this->arrPersonInfo ['person_id'];
 				$strBankName = $post ['bank_name'];
@@ -355,17 +361,17 @@ class ApplyController extends BaseController
     
     /**
      * 我的审批统计
-     * 
+     *
      * @return array
      */
     public function actionDetail()
     {
         $applyLogic = ApplyLogic::instance();
         return $this->_return([
-            'to_approval_count' => intval($applyLogic->getToMe($this->arrPersonInfo->person_id)),
-            'approval_log_count' => intval($applyLogic->getApprovalLogCount($this->arrPersonInfo->person_id)),
-            'apply_count' => intval($applyLogic->getApplyCount($this->arrPersonInfo->person_id)),
-            'copy_count' => intval($applyLogic->getCopyCount($this->arrPersonInfo->person_id))
+            'to_approval_count' => $applyLogic->getToMe($this->arrPersonInfo->person_id),
+            'approval_log_count' => $applyLogic->getApprovalLogCount($this->arrPersonInfo->person_id),
+            'apply_count' => $applyLogic->getApplyCount($this->arrPersonInfo->person_id),
+            'copy_count' => $applyLogic->getCopyCount($this->arrPersonInfo->person_id)
         ]);
     }
 }

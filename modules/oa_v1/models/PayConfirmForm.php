@@ -140,11 +140,11 @@ class PayConfirmForm extends CaiWuFuKuan
         
         if (\Yii::$app->request->post('create_cai_wu_log') == 1) {
             $param = [];
-            $param['organization_id'] = $apply->org_id;
+            $param['organization_id'] = $this->org_id;
             $param['account_id'] = $this->account_id;
             $param['tag_id'] = $this->type;
             $param['money'] = $this->getMoney($apply);
-            $param['time'] = date('Y-m-d H:i:s', $this->fu_kuan_time);
+            $param['time'] = date('Y-m-d', $this->fu_kuan_time);
             //$param['remark'] = $this->tips;
             
             if ($apply->type == 1) {
