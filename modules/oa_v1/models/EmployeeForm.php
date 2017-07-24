@@ -18,6 +18,7 @@ class EmployeeForm extends BaseForm
 {
     const SCENARIO_ADD_EMPLOYEE = 'add_employee';
     const SCENARIO_ENTRY = 'entry';
+    const SCENARIO_CANCEL = 'cancel';
     
     public $employee_id;
     public $email;
@@ -41,6 +42,12 @@ class EmployeeForm extends BaseForm
                 ['employee_id','email'],
                 'required',
                 'on' => [self::SCENARIO_ENTRY],
+                'message' => '{attribute}不能为空'
+            ],
+            [
+                ['employee_id'],
+                'required',
+                'on' => [self::SCENARIO_CANCEL],
                 'message' => '{attribute}不能为空'
             ],
             //['employee_id','exist','targetClass'=>'\app\models\Employee','targetAttribute'=>'id','message'=>'员工不存在'],
@@ -73,6 +80,7 @@ class EmployeeForm extends BaseForm
         return [
             self::SCENARIO_ADD_EMPLOYEE => ['org_id','name','phone','profession','entry_time'],
             self::SCENARIO_ENTRY => ['employee_id','email','qq','phone'],
+            self::SCENARIO_CANCEL => ['employee_id'],
         ];
     }
     
@@ -148,6 +156,25 @@ class EmployeeForm extends BaseForm
     }
     
     /**
+     * 取消入职
+     * @return array
+     */
+    public function cancel()
+    {
+        //获取员工数据
+        $model = Employee::findOne($this->employee_id);
+        if($model->status != 0){
+            return ['status'=>false, 'msg'=>'当前状态不能取消入职'];
+        }
+        //修改状态
+        $model->status = 1;
+        if($model->save()){
+            return ['status'=>true];
+        }
+        return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+    }
+    
+    /**
      * 获得列表
      * @param array $params
      * @return array
@@ -156,6 +183,7 @@ class EmployeeForm extends BaseForm
     {
         $arr_status = [
             0=>'待入职',
+            1=>'需求入职',
             2=>'已入职',
             3=>'已离职',
             4=>'再入职'

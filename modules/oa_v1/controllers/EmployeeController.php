@@ -64,6 +64,25 @@ class EmployeeController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    /**
+     * 取消入职
+     */
+    public function actionCancel()
+    {
+        $post = yii::$app->request->post();
+        $model = new EmployeeForm();
+        $model->setScenario($model::SCENARIO_CANCEL);
+        $model->load(['EmployeeForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->cancel();
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
     
     /**
      * 获得员工基本信息
