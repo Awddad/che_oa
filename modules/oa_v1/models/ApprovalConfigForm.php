@@ -161,6 +161,8 @@ class ApprovalConfigForm extends BaseForm
         $end_time = ArrayHelper::getValue($params,'end_time',null);
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
+        $sort = ArrayHelper::getValue($params,'sort','');
+        
          
         $query = ApprovalConfig::find();
         //关键词
@@ -178,6 +180,18 @@ class ApprovalConfigForm extends BaseForm
             $end_time = strtotime($end_time.' 23:59:59');
             $query->andWhere(['<=', 'updated_at', $end_time]);
         }
+        //排序
+        switch($sort){
+            case 'asc':
+                $order_by = 'created_at asc';
+                break;
+            case 'desc':
+                $order_by = 'created_at desc';
+                break;
+            default:
+                $order_by = 'created_at desc';
+                break;
+        }
         
         //分页
         $pagination = new Pagination([
@@ -185,7 +199,7 @@ class ApprovalConfigForm extends BaseForm
             'totalCount' => $query->count(),
         ]);
          
-        $res = $query->orderBy("created_at desc")
+        $res = $query->orderBy($order_by)
         ->offset($pagination->offset)
         ->limit($pagination->limit)
         ->all();
@@ -194,6 +208,7 @@ class ApprovalConfigForm extends BaseForm
         foreach ($res as $k => $v){
             $data[] = [
                 'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                'config_id' => $v->id,
                 'apply_type' => $v->apply_type,
                 'apply_name' => $v->apply_name,
                 'org_id' => $v->org_id,
