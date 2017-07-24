@@ -183,13 +183,13 @@ class ApprovalConfigForm extends BaseForm
         //排序
         switch($sort){
             case 'asc':
-                $order_by = 'created_at asc';
+                $order_by = 'updated_at asc';
                 break;
             case 'desc':
-                $order_by = 'created_at desc';
+                $order_by = 'updated_at desc';
                 break;
             default:
-                $order_by = 'created_at desc';
+                $order_by = 'updated_at desc';
                 break;
         }
         
