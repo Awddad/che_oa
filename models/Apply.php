@@ -244,6 +244,22 @@ class Apply extends \yii\db\ActiveRecord
                 BaseLogic::instance()->sendQqMsg($data);
             }
         }
+        if($this->copy_person){
+            $copyPersons = ApplyCopyPerson::find()->where(['apply_id' => $this->apply_id])->all();
+            if(!empty($copyPersons)) {
+                foreach ($copyPersons as $v) {
+                    $copyPerson = Person::findOne($v->copy_person_id);
+                    if ($copyPerson->bqq_open_id) {
+                        $data = [
+                            'tips_title' => 'OA - ' . $typeName . '申请完成',
+                            'tips_content' => '员工' .$person->person_name . '发起的' . $typeName . '已完成，请在OA系统进行查看',
+                            'receivers' => $copyPerson->bqq_open_id,
+                        ];
+                        BaseLogic::instance()->sendQqMsg($data);
+                    }
+                }
+            }
+        }
         return $this->save();
     }
 
@@ -276,18 +292,20 @@ class Apply extends \yii\db\ActiveRecord
             BaseLogic::instance()->sendQqMsg($data);
         }
         // 发送给抄送人
-        if($this->copy_person){
-            $copyPersons = ApplyCopyPerson::find()->where(['apply_id' => $this->apply_id])->all();
-            if(!empty($copyPersons)) {
-                foreach ($copyPersons as $v) {
-                    $copyPerson = Person::findOne($v->copy_person_id);
-                    if ($copyPerson->bqq_open_id) {
-                        $data = [
-                            'tips_title' => 'OA - ' . $typeName . '申请完成',
-                            'tips_content' => '员工' .$person->person_name . '发起的' . $typeName . '已完成，请在OA系统进行查看',
-                            'receivers' => $copyPerson->bqq_open_id,
-                        ];
-                        BaseLogic::instance()->sendQqMsg($data);
+        if($this->cai_wu_need == 1) {
+            if ($this->copy_person) {
+                $copyPersons = ApplyCopyPerson::find()->where(['apply_id' => $this->apply_id])->all();
+                if (!empty($copyPersons)) {
+                    foreach ($copyPersons as $v) {
+                        $copyPerson = Person::findOne($v->copy_person_id);
+                        if ($copyPerson->bqq_open_id) {
+                            $data = [
+                                'tips_title' => 'OA - ' . $typeName . '申请完成',
+                                'tips_content' => '员工' . $person->person_name . '发起的' . $typeName . '已完成，请在OA系统进行查看',
+                                'receivers' => $copyPerson->bqq_open_id,
+                            ];
+                            BaseLogic::instance()->sendQqMsg($data);
+                        }
                     }
                 }
             }
