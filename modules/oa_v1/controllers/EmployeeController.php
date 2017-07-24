@@ -231,4 +231,37 @@ class EmployeeController extends BaseController
         }
         return $this->_returnError(403,'id不正确');
     } 
+    
+    /**
+     * 修改劳动合同
+     */
+    public function actionEditService()
+    {
+        $post = yii::$app->request->post();
+        $model = new EmployeeInfoForm();
+        $model->setScenario($model::SCENARIO_EMP_SERVICE_EDIT);
+        $model->load(['EmployeeInfoForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->editService($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    /**
+     * 获得劳动合同
+     */
+    public function actionGetService()
+    {
+        $id = yii::$app->request->get('id');
+        $model = new EmployeeInfoForm();
+        $res = $model->getService($id);
+        if($res['status']){
+            return $this->_return($res['data']);
+        }
+        return $this->_returnError(403,$res['msg']);
+    }
 }

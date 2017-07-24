@@ -14,6 +14,7 @@ use app\modules\oa_v1\logic\EmployeeLogic;
 use app\models\Educational;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\modules\oa_v1\logic\OrgLogic;
+use app\models\Org;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -21,6 +22,7 @@ class EmployeeInfoForm extends BaseForm
     const SCENARIO_EMP_ACCOUNT_EDIT = 'emp_account_edit';//员工帐号信息修改
     const SCENARIO_EMP_BANK_EDIT = 'emp_bank_edit';//员工银行卡修改
     const SCENARIO_EMP_BANK_DEL = 'emp_bank_del';//员工银行卡删除
+    const SCENARIO_EMP_SERVICE_EDIT = 'emp_service_edit';//员工劳动关系编辑
     
     public $arr_status = [
         '0' => '待入职',
@@ -59,6 +61,8 @@ class EmployeeInfoForm extends BaseForm
     public $is_salary;
     public $bk_id;
     
+    public $org_pid = 1;//公司pid
+    
     public function rules()
     {
         return [
@@ -86,6 +90,12 @@ class EmployeeInfoForm extends BaseForm
                 'on' => [self::SCENARIO_EMP_BANK_DEL],
                 'message' => '{attribute}不能为空'
             ],
+            [
+                ['id','org_id'],
+                'required',
+                'on' => [self::SCENARIO_EMP_SERVICE_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
             ['id','exist','targetClass'=>'\app\models\Employee','message'=>'员工不存在'],
             ['profession','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在'],
             ['sex','in', 'range' => [1, 2], 'message'=>'性别不正确'],
@@ -102,7 +112,8 @@ class EmployeeInfoForm extends BaseForm
             ['marriage','in','range'=>[0,1,2],'message'=>'婚姻状况不正确'],
             ['emp_type','exist','targetClass'=>'\app\models\EmployeeType','targetAttribute'=>'id','message'=>'员工类型不存在'],
             ['location','exist','targetClass'=>'\app\models\Region','targetAttribute'=>'id','message'=>'当前所在地不正确！','on'=>[self::SCENARIO_EMP_EDIT]],
-            ['org_id','exist','targetClass'=>'\app\models\Org','message'=>'组织不存在'],
+            ['org_id','exist','targetClass'=>'\app\models\Org','message'=>'组织不存在','on'=>[self::SCENARIO_EMP_EDIT]],
+            ['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>['org_id'=>'org_id','org_pid'=>'pid'], 'message'=>'公司不正确','on'=>[self::SCENARIO_EMP_SERVICE_EDIT]],
             ['qq','string','max'=>20],
             ['bk_id','exist','targetClass'=>'\app\models\PersonBankInfo','targetAttribute'=>'id','message'=>'银行卡不存在'],
             ['marriage','in','range'=>[0,1,2,3],'message'=>'婚姻状况不正确'],
@@ -115,7 +126,8 @@ class EmployeeInfoForm extends BaseForm
             self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type',/*'status'*/],
             self::SCENARIO_EMP_ACCOUNT_EDIT => ['id','qq','email','phone'],
             self::SCENARIO_EMP_BANK_EDIT => ['id','bk_id','bank_name','bank_des','card_id','is_salary'],
-            self::SCENARIO_EMP_BANK_DEL => ['id','bk_id']
+            self::SCENARIO_EMP_BANK_DEL => ['id','bk_id'],
+            self::SCENARIO_EMP_SERVICE_EDIT => ['id','org_id']
         ];
     }
     /**
@@ -342,5 +354,37 @@ class EmployeeInfoForm extends BaseForm
         }else{
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
         }
+    }
+    /**
+     * 修改劳动合同
+     * @param array $user
+     */
+    public function editService($user)
+    {
+        $model = Employee::findOne($this->id);
+        $model->service_id = $this->org_id;
+        $model->service = Org::findOne($this->org_id)->org_name;
+        if($model->save()){
+            PeopleLogic::instance()->addLog(0,$this->id,'修改劳动合同',ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+        return ['status'=>false, 'msg'=>current($model->getFirstErrors())];
+    }
+    /**
+     * 获得劳动合同
+     * @param unknown $id
+     */
+    public function getService($id)
+    {
+        $model = Employee::findOne($id);
+        if(empty($model)){
+            return ['status'=>false, 'msg'=>'员工不存在'];
+        }
+        $data = [
+            'emp_id' => $id,
+            'org_id' => $model->service_id,
+            'org' => $model->service,
+        ];
+        return ['status'=>true,'data'=>$data];
     }
 }
