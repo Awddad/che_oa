@@ -310,13 +310,18 @@ class TalentDemandForm extends BaseForm
                 'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'demand_id' => $v->id,
                 'org' => $v->org_name,
+                'org_id' => $v->org_id,
                 'profession' => $v->profession,
+                'profession_id' => $v->profession_id,
                 'number' => $v->number,
                 'sex_name' => $this->sex_arr[$v->sex],
+                'sex' => $v->sex,
                 'edu' => $v->edu,
+                'edu_id' => $v->edu_id,
                 'work_time' => $v->work_time,
                 'status' => $this->status_arr[$v->status],
-                'status_value' => $v->status
+                'status_value' => $v->status,
+                'des' => unserialize($model->des),
             ];
         }
          
