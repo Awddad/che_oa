@@ -61,6 +61,8 @@ class EmployeeInfoForm extends BaseForm
     public $is_salary;
     public $bk_id;
     
+    public $status;
+    
     public $org_pid = 1;//公司pid
     
     public function rules()
@@ -117,13 +119,27 @@ class EmployeeInfoForm extends BaseForm
             ['qq','string','max'=>20],
             ['bk_id','exist','targetClass'=>'\app\models\PersonBankInfo','targetAttribute'=>'id','message'=>'银行卡不存在'],
             ['marriage','in','range'=>[0,1,2,3],'message'=>'婚姻状况不正确'],
+            ['status','checkStatus'],
         ];
+    }
+    
+    public function checkStatus($attribute)
+    {
+        if(!$this->hasErrors()){
+            $emp = Employee::findOne($this->id);
+            if($emp->status == $this->$attribute || ($emp->status == 2 && in_array($this->$attribute,[2,3]))){
+                return true;
+            }else{
+                $this->addError($attribute,'状态不正确');
+                return false;
+            }
+        }
     }
     
     public function scenarios()
     {
         return [
-            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type',/*'status'*/],
+            self::SCENARIO_EMP_EDIT => ['id','org_id','profession','name',/*'empno',*/'sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','location','id_card','entry_time','emp_type','status'],
             self::SCENARIO_EMP_ACCOUNT_EDIT => ['id','qq','email','phone'],
             self::SCENARIO_EMP_BANK_EDIT => ['id','bk_id','bank_name','bank_des','card_id','is_salary'],
             self::SCENARIO_EMP_BANK_DEL => ['id','bk_id'],
@@ -155,6 +171,7 @@ class EmployeeInfoForm extends BaseForm
         $model->work_time = $this->work_time;
         $model->educational = $this->edu;
         $model->current_location = $this->location;
+        $this->status && $model->status = $this->status;
         $this->native && $model->native = $this->native;
         $this->political && $model->political = $this->political;
         $this->nation && $model->nation = $this->nation;
