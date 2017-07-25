@@ -80,9 +80,6 @@ class PersonLogic extends BaseLogic
                 'name' => $personName
             ];
         }
-        unset($data[$person->person_id]);
-        $data = ArrayHelper::index($data,'id');
-        sort($data);
         return $data;
     }
     

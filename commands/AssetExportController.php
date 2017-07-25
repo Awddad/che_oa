@@ -86,7 +86,7 @@ class AssetExportController extends Controller
             }
             $assetList = new AssetList();
             $assetList->asset_id = $asset->id;
-            $assetList->asset_number = $v['E'] ? : '';
+            $assetList->asset_number = $v['E'] ? : $v['F'];
             $assetList->stock_number = $v['F'];
             $assetList->sn_number = $v['K'] ? : '';
             $assetList->price = $v['M'] ? : 0;

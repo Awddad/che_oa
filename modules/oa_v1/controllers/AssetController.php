@@ -193,6 +193,7 @@ class AssetController extends BaseController
                     'or',
                     ['like','oa_asset.name', $keyword],
                     ['like','oa_asset_list.asset_number', $keyword],
+                    ['like','oa_asset_list.stock_number', $keyword],
                     ['in','oa_asset_list.person_id', $personIds],
                 ]);
             } else {
