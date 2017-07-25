@@ -12,6 +12,7 @@ use app\models\Org;
 use app\models\Person;
 use app\models\RoleOrgPermission;
 use yii\helpers\ArrayHelper;
+use yii;
 
 /**
  * 人员相关逻辑
@@ -277,4 +278,50 @@ class PersonLogic extends BaseLogic
         }
         return $data;
     }
+    /**
+     * 获得组织架构用户
+     */
+    public function getOrgPerson()
+    {
+        $key = 'org_person';
+        $cache = yii::$app->cache;
+        if(!$data = $cache->get($key)){
+            $data = $this->_getOrgPerson(1);
+            $cache->set($key, $data,3600);
+        }
+        return $data;
+    }
+    
+    protected function _getOrgPerson($pid)
+    {
+        $data = [];
+        $org = Org::findAll(['pid'=>$pid]);
+        if($org){
+            $tmp = [];
+            foreach($org as $v){
+                $tmp =[
+                    'id' => $v->org_id,
+                    'name' => $v->org_name,
+                    'is_user' => false,
+                ];
+                $tmp_child = $this->_getOrgPerson($v->org_id);
+                $tmp_child && $tmp['children'] = $tmp_child;
+                
+                $person = Person::findAll(['org_id'=>$v->org_id,'is_delete'=>0]);
+                if($person){
+                    foreach($person as $vv){
+                        $tmp['children'][] = [
+                            'id' => $vv->person_id,
+                            'name' => $vv->person_name,
+                            'is_user' => true,
+                        ];
+                    }
+                }
+                $tmp && $data[] = $tmp;
+            }
+        }
+        return $data;
+    }
+    
+    
 }
