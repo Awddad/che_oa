@@ -321,7 +321,7 @@ class TalentDemandForm extends BaseForm
                 'work_time' => $v->work_time,
                 'status' => $this->status_arr[$v->status],
                 'status_value' => $v->status,
-                'des' => unserialize($model->des),
+                'des' => unserialize($v->des),
             ];
         }
          
