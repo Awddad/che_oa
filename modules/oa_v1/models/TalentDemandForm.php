@@ -311,6 +311,7 @@ class TalentDemandForm extends BaseForm
                 'demand_id' => $v->id,
                 'org' => $v->org_name,
                 'org_id' => $v->org_id,
+                'org_ids' => OrgLogic::instance()->getOrgIdByChild($v->org_id),
                 'profession' => $v->profession,
                 'profession_id' => $v->profession_id,
                 'number' => $v->number,
