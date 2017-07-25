@@ -14,18 +14,23 @@ use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\AssetType;
 use app\models\Person;
-use app\modules\oa_v1\logic\AssetLogic;
-use SebastianBergmann\CodeCoverage\Report\PHP;
 use Yii;
 use moonland\phpexcel\Excel;
 use yii\console\Controller;
 
+/**
+ * Class AssetExportController
+ * @package app\commands
+ */
 class AssetExportController extends Controller
 {
     public $status = [
         '未使用' => 1,
+        '空闲中' => 1,
+        '使用' => 2,
         '使用中' => 2,
         '已报废' => 3,
+        '报废' => 3,
         '已丢失' => 4,
     ];
     public function actionIndex()
@@ -36,6 +41,9 @@ class AssetExportController extends Controller
         ]);
         array_shift($data);
         foreach ($data as $k => $v) {
+            if(!$v["A"] || !$v["B"] || !$v["C"] || !$v["D"]) {
+                continue;
+            }
             $assetTypeA = $this->getAssetType($v["A"]);
             $assetTypeB = $this->getAssetType($v["B"], $assetTypeA->id);
             $assetBrand = $this->getAssetBrand($v["C"]);
@@ -47,32 +55,46 @@ class AssetExportController extends Controller
                 $asset->asset_type_id = $assetTypeB->id;
                 $asset->asset_type_name = $v["A"] . '-'.$v["B"];
                 $asset->name = $v["D"];
-                $asset->price = $v['K'] ? : 0;
+                $asset->price = 0;
                 $asset->save();
             }
-            /**
-             * @var Person $person
-             */
-            $person = Person::find()->where(['person_name' => $v['H']])->one();
-    
-            $personId = 0;
+            if($this->status[trim($v['G'])] == 2) {
+                /**
+                 * @var Person $person
+                 */
+                $person = Person::find()->where([
+                    'person_name' => $v['H'],
+                    'phone' => $v['L'],
+                ])->one();
+                if($person) {
+                    $personId = $person->person_id;
+                    $des = $person->person_name.'使用中';
+                } else {
+                    $person = Person::find()->where([
+                        'person_name' => $v['H'],
+                    ])->one();
+                    if($person) {
+                        $personId = $person->person_id;
+                        $des = $person->person_name.'使用中';
+                    } else {
+                        $personId = 0;
+                        $des = '未知-使用中';
+                    }
+                }
+            } else {
+                $personId = 0;
+            }
             $assetList = new AssetList();
             $assetList->asset_id = $asset->id;
             $assetList->asset_number = $v['E'] ? : '';
             $assetList->stock_number = $v['F'];
-            $assetList->price = $v['K'] ? : 0;
+            $assetList->sn_number = $v['K'] ? : '';
+            $assetList->price = $v['M'] ? : 0;
             $assetList->status = $this->status[trim($v['G'])];
             $assetList->created_at = time();
-            if($this->status[trim($v['G'])] == 2) {
-                if($person) {
-                    $personId = $person->person_id;
-                    $assetList->person_id = $personId;
-                    $des = $person->person_name.'使用中';
-                } else {
-                    $des = '未知-使用中';
-                }
-            }
+            $assetList->person_id = $personId;
             $assetList->save();
+            $asset->price += trim($v['M']);
             $asset->amount += 1;
             if($v['G'] == '未使用') {
                 $asset->free_amount += 1;
@@ -86,7 +108,8 @@ class AssetExportController extends Controller
             if($this->status[trim($v['G'])] == 4){
                 $des = '丢失';
             }
-            $desc = isset($v['L']) ?  trim($v['L']) : $des;
+            $desc = isset($v['N']) ?  trim($v['N']) : $des;
+            $asset->save();
             $this->addAssetListLog($assetList->id, $desc, $personId);
             echo '第'.$k . '条' .PHP_EOL;
         }
