@@ -117,7 +117,8 @@ class BaseForm extends Model
         $data = [];
         $i = 1;
         $count = count($this->approval_persons);
-        foreach ($this->approval_persons as $v) {
+        $approval_persons = array_unique($this->approval_persons);
+        foreach ($approval_persons as $v) {
             $personName = PersonLogic::instance()->getPersonName($v);
             $end = $i == $count ? 1 : 0;
             $begin = $i == 1 ? : 0;
@@ -161,7 +162,8 @@ class BaseForm extends Model
     {
         $data = [];
         if(is_array($this->copy_person)){
-	        foreach ($this->copy_person as $v) {
+            $copy_person = array_unique($this->copy_person);
+	        foreach ($copy_person as $v) {
 	            $personName = PersonLogic::instance()->getPersonName($v);
 	            $data[] = [
 	                $apply->apply_id,
