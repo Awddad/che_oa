@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\logic\server\JobServer;
 use app\modules\oa_v1\logic\BaseLogic;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -96,11 +97,17 @@ class JobController extends BaseController
         if (!$id) {
             return $this->_returnError(403);
         }
-        $model = Job::findOne($id);
-        $model->deleted_at = time();
-        $model->is_delete = 1;
-        if ($model->save()) {
-            return $this->_return(true);
+        $rst = JobServer::instance([
+            'token' => \Yii::$app->params['quan_xian']['auth_token'],
+            'baseUrl' => \Yii::$app->params['quan_xian']['auth_api_url']
+        ])->delete($id);
+        if(true === $rst) {
+            $model = Job::findOne($id);
+            $model->deleted_at = time();
+            $model->is_delete = 1;
+            if ($model->save()) {
+                return $this->_return(true);
+            }
         }
         
         return $this->_returnError(400);
@@ -114,13 +121,28 @@ class JobController extends BaseController
     public function actionCreate()
     {
         $param = Yii::$app->request->post();
-        $post['Job'] = $param;
-        $job = new Job();
-        if ($job->load($post) && $job->save()) {
-            return $this->_return($job);
-        } else {
-            return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($job->errors));
+        
+        if(!isset($param['name'])) {
+            return $this->_returnError(403);
         }
+        $rst = JobServer::instance([
+            'token' => \Yii::$app->params['quan_xian']['auth_token'],
+            'baseUrl' => \Yii::$app->params['quan_xian']['auth_api_url']
+        ])->create( [
+            'name' => $param['name'],
+            'slug' => $param['short_name'] ? : '',
+        ]);
+        if($rst) {
+            $param['id'] = $rst['id'];
+            $post['Job'] = $param;
+            $job = new Job();
+            if ($job->load($post) && $job->save()) {
+                return $this->_return($job);
+            } else {
+                return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($job->errors));
+            }
+        }
+        return $this->_returnError(4400, null, '更新失败');
     }
     
     /**
@@ -131,17 +153,28 @@ class JobController extends BaseController
     public function actionUpdate()
     {
         $id = Yii::$app->request->post('id');
+        $param = Yii::$app->request->post();
         if (!$id) {
             return $this->_returnError(403);
         }
-        $param = Yii::$app->request->post();
-        unset($param['id']);
         $job = Job::findOne($id);
-        $post['Job'] = $param;
-        if ($job->load($post) && $job->save()) {
-            return $this->_return($job);
-        } else {
-            return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($job->errors));
+        $rst = JobServer::instance([
+            'token' => \Yii::$app->params['quan_xian']['auth_token'],
+            'baseUrl' => \Yii::$app->params['quan_xian']['auth_api_url']
+        ])->update($id, [
+            'name' => isset($param['name']) ? $param['name'] : $job->name,
+            'slug' => $param['short_name'] ? : '',
+        ]);
+        if(true === $rst) {
+            $param = Yii::$app->request->post();
+            unset($param['id']);
+            $post['Job'] = $param;
+            if ($job->load($post) && $job->save()) {
+                return $this->_return($job);
+            } else {
+                return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($job->errors));
+            }
         }
+        return $this->_returnError(4400, null, '更新失败');
     }
 }
