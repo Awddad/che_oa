@@ -301,7 +301,7 @@ class PersonLogic extends BaseLogic
             foreach($org as $v){
                 $tmp =[
                     'id' => $v->org_id,
-                    'name' => $v->org_name,
+                    'label' => $v->org_name,
                     'is_user' => false,
                 ];
                 $tmp_child = $this->_getOrgPerson($v->org_id);
@@ -312,7 +312,7 @@ class PersonLogic extends BaseLogic
                     foreach($person as $vv){
                         $tmp['children'][] = [
                             'id' => $vv->person_id,
-                            'name' => $vv->person_name,
+                            'label' => $vv->person_name,
                             'is_user' => true,
                         ];
                     }
