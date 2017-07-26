@@ -10,6 +10,7 @@ namespace app\commands;
 
 use app\models\Asset;
 use app\models\AssetBrand;
+use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\AssetType;
@@ -111,6 +112,9 @@ class AssetExportController extends Controller
             $desc = isset($v['N']) ?  trim($v['N']) : $des;
             $asset->save();
             $this->addAssetListLog($assetList->id, $desc, $personId);
+            if($personId){
+                $this->addAssetGetList($assetList->id, $asset->id, $personId);
+            }
             echo '第'.$k . '条' .PHP_EOL;
         }
     }
@@ -149,6 +153,20 @@ class AssetExportController extends Controller
         
         $log->created_at = time();
         if ($log->save()) {
+            return true;
+        }
+        throw new \yii\base\Exception('日志保存失败');
+    }
+    
+    public function addAssetGetList($assetListId, $assetId, $personId)
+    {
+        $assetGetList = new AssetGetList();
+        $assetGetList->person_id = $personId;
+        $assetGetList->asset_id = $assetId;
+        $assetGetList->asset_list_id = $assetListId;
+        $assetGetList->status = 2;
+        $assetGetList->created_at = time();
+        if ($assetGetList->save()) {
             return true;
         }
         throw new \yii\base\Exception('日志保存失败');
