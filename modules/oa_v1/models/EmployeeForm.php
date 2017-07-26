@@ -33,7 +33,7 @@ class EmployeeForm extends BaseForm
     {
         return [
             [
-                ['org_id','name','phone','profession','entry_time'],
+                ['org_id','name','phone','profession','entry_time','qq'],
                 'required',
                 'on' => [self::SCENARIO_ADD_EMPLOYEE],
                 'message' => '{attribute}不能为空'
@@ -78,7 +78,7 @@ class EmployeeForm extends BaseForm
     public function scenarios()
     {
         return [
-            self::SCENARIO_ADD_EMPLOYEE => ['org_id','name','phone','profession','entry_time'],
+            self::SCENARIO_ADD_EMPLOYEE => ['org_id','name','phone','profession','entry_time','qq'],
             self::SCENARIO_ENTRY => ['employee_id','email','qq','phone'],
             self::SCENARIO_CANCEL => ['employee_id'],
         ];
@@ -97,10 +97,25 @@ class EmployeeForm extends BaseForm
         $model->entry_time = $this->entry_time;
         $model->status = 0;
         $model->employee_type = EmployeeType::find()->where(['slug'=>'shiyong'])->one()->id;
-        if($model->save()){
-            return ['status'=>true];
-        }else{
-            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        $tran = yii::$app->db->beginTransaction();
+        try{
+            if($model->save()){
+                $this->employee_id = $model->id;
+                $this->email = '';
+                $this->phone = '';
+                $res = $this->saveAccount();
+                if($res['status']){
+                    $tran->commit();
+                    return ['status'=>true];
+                }else{
+                    throw new \Exception($res['msg']);
+                }
+            }else{
+                throw new \Exception(current($model->getFirstErrors()));
+            }
+        }catch (\Exception $e){
+            $tran->rollBack();
+            return ['status'=>false,'msg'=>$e->getMessage()];
         }
     }
     

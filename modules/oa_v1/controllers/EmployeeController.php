@@ -6,6 +6,7 @@ use yii;
 use app\modules\oa_v1\models\EmployeeInfoForm;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\models\Employee;
+use app\modules\oa_v1\logic\EmployeeLogic;
 
 /**
  * 员工
@@ -263,5 +264,16 @@ class EmployeeController extends BaseController
             return $this->_return($res['data']);
         }
         return $this->_returnError(403,$res['msg']);
+    }
+    
+    public function actionGetQqUser()
+    {
+        $name = yii::$app->request->get('name');
+        $data = EmployeeLogic::instance()->getQQUser($name);
+        if($data['status']){
+            return $this->_return($data['data']);
+        }else{
+            return $this->_returnError(400,$data['msg']);
+        }
     }
 }
