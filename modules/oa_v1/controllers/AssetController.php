@@ -143,7 +143,7 @@ class AssetController extends BaseController
                 'asset_brand_name' => $v->asset_brand_name,
                 'name' => $v->name,
                 'amount' => $v->amount,
-                'price' => Yii::$app->formatter->asCurrency($v->price * $v->amount),
+                'price' => Yii::$app->formatter->asCurrency($v->price),
             ];
         }
   
@@ -193,6 +193,7 @@ class AssetController extends BaseController
                     'or',
                     ['like','oa_asset.name', $keyword],
                     ['like','oa_asset_list.asset_number', $keyword],
+                    ['like','oa_asset_list.stock_number', $keyword],
                     ['in','oa_asset_list.person_id', $personIds],
                 ]);
             } else {
@@ -348,16 +349,29 @@ class AssetController extends BaseController
          */
         foreach ($model as $k => $v) {
             $person = Person::findOne($v->person_id);
-            $org = $person->org_full_name;
-            $data[$k] = [
-                'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
-                'id' => $v->id,
-                'created_at' => date("Y-m-d H:i", $v->created_at),
-                'person_name' => $person->person_name,
-                'org' => $org,
-                'type' => $v::TYPE[$v->type],
-                'des' => $v->des
-            ];
+            if(!empty($person)) {
+                $org = $person->org_full_name;
+                $data[$k] = [
+                    'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                    'id' => $v->id,
+                    'created_at' => date("Y-m-d H:i", $v->created_at),
+                    'person_name' => $person->person_name,
+                    'org' => $org,
+                    'type' => $v::TYPE[$v->type],
+                    'des' => $v->des
+                ];
+            } else {
+                $org = $person->org_full_name;
+                $data[$k] = [
+                    'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                    'id' => $v->id,
+                    'created_at' => date("Y-m-d H:i", $v->created_at),
+                    'person_name' => '--',
+                    'org' => $org,
+                    'type' => $v::TYPE[$v->type],
+                    'des' => $v->des
+                ];
+            }
         }
         return $this->_return([
             'list' => $data,

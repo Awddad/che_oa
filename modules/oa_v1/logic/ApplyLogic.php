@@ -59,7 +59,7 @@ class ApplyLogic extends BaseLogic
 			$query = $copy_model::find()-> joinWith('apply a',true,'RIGHT JOIN')-> where([
 			    'copy_person_id'=>$user['person_id']
             ])->andWhere([
-                'a.status' => 99
+                'in', 'a.status', [4 , 5, 99]
             ])-> orderBy('create_time');
 		}else{
 			return false;

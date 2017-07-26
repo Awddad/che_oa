@@ -81,9 +81,6 @@ class PersonLogic extends BaseLogic
                 'name' => $personName
             ];
         }
-        unset($data[$person->person_id]);
-        $data = ArrayHelper::index($data,'id');
-        sort($data);
         return $data;
     }
     
@@ -270,9 +267,48 @@ class PersonLogic extends BaseLogic
         $data = [];
         if(!empty($org)) {
             foreach ($org as $value) {
+                if ($children = $this->getChildrenOrg($value->org_id)) {
+                    $data[] = [
+                        'label' => $value->org_name,
+                        'value' => $value->org_id,
+                        'children' => $children
+                    ];
+                } else {
+                    $data[] = [
+                        'label' => $value->org_name,
+                        'value' => $value->org_id,
+                    ];
+                }
+            }
+        }
+        return $data;
+    }
+    
+    /**
+     * 公司下的组织
+     *
+     * @param $orgId
+     *
+     * @return array
+     */
+    public function getChildrenOrg($orgId)
+    {
+        $data = [];
+        $org = Org::find()->where(['pid' => $orgId])->all();
+        if(empty($org)) {
+            return [];
+        }
+        foreach ($org as $value) {
+            if ($children = $this->getChildrenOrg($value->org_id)) {
                 $data[] = [
-                    'org_id' => $value->org_id,
-                    'name' => $value->org_name,
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                    'children' => $children
+                ];
+            } else {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
                 ];
             }
         }

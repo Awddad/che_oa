@@ -8,6 +8,7 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\models\Apply;
 use app\modules\oa_v1\logic\PayLogic;
 use Yii;
 use app\modules\oa_v1\models\PayConfirmForm;
@@ -46,6 +47,37 @@ class PayConfirmController extends BaseController
         } else {
             return $this->_return($model->errors, 400);
         }
+    }
+    
+    /**
+     * 付款失败
+     */
+    public function actionFailed()
+    {
+        $applyId = Yii::$app->request->post('apply_id');
+        $reason = Yii::$app->request->post('reason');
+        if(!$applyId || !$reason) {
+            return $this->_returnError(403);
+        }
+        $apply = Apply::findOne($applyId);
+        if(empty($apply)){
+            return $this->_returnError(2408);
+        }
+        if($apply->cai_wu_need != 2){
+            return $this->_returnError(2406);
+        }
+        if($apply->status != 4){
+            return $this->_returnError(2406);
+        }
+        $apply->status = 6;
+        $apply->caiwu_refuse_reason = $reason;
+        $apply->next_des = '付款失败';
+        
+        if (!$apply->save()) {
+            return $this->_returnError(2047);
+        }
+        
+        return $this->_return([], 200);
     }
 
     /**
