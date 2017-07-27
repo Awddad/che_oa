@@ -336,4 +336,60 @@ class PeopleController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    
+    
+    /**
+     * 修改头像
+     */
+    public function actionPicEdit()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_PIC_EDIT);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->editPic($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+    /**
+     * 获取头像
+     */
+    public function actionPicGet()
+    {
+        $get = yii::$app->request->get();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_PIC_GET);
+        $model->load(['PeopleForm'=>$get]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $data = $model->getPic($this->arrPersonInfo);
+    
+        return $this->_return($data);
+    }
+    /**
+     * 删除头像
+     */
+    public function actionPicDel()
+    {
+        $post = yii::$app->request->post();
+        $model = new PeopleForm();
+        $model->setScenario($model::SCENARIO_PIC_DEL);
+        $model->load(['PeopleForm'=>$post]);
+        if(!$model->checkPeople() || !$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->delPic($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }
