@@ -361,13 +361,12 @@ class AssetController extends BaseController
                     'des' => $v->des
                 ];
             } else {
-                $org = $person->org_full_name;
                 $data[$k] = [
                     'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                     'id' => $v->id,
                     'created_at' => date("Y-m-d H:i", $v->created_at),
                     'person_name' => '--',
-                    'org' => $org,
+                    'org' => '--',
                     'type' => $v::TYPE[$v->type],
                     'des' => $v->des
                 ];
