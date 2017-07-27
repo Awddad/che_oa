@@ -182,4 +182,41 @@ class JobController extends BaseController
         }
         return $this->_returnError(4400, null, '更新失败');
     }
+    
+    /**
+     *
+     */
+    public function actionAllJob()
+    {
+        return $this->_return($this->getJob());
+        
+    }
+    
+    public function getJob($pid = 0)
+    {
+        $job = Job::find()->select(['id', 'name'])->where([
+            'pid' => $pid,
+            'is_delete' => 0,
+        ])->asArray()->all();
+        $data = [];
+        if(empty($job)) {
+            return false;
+        }
+        foreach ($job as $v) {
+            $child = $this->getJob($v['id']);
+            if ($child) {
+                $data[] = [
+                    'value' => $v['id'],
+                    'label' => $v['name'],
+                    'children' => $child
+                ];
+            } else {
+                $data[] = [
+                    'value' => $v['id'],
+                    'label' => $v['name'],
+                ];
+            }
+        }
+        return $data;
+    }
 }
