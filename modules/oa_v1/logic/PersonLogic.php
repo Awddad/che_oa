@@ -81,6 +81,8 @@ class PersonLogic extends BaseLogic
                 'name' => $personName
             ];
         }
+        $data = ArrayHelper::index($data,'id');
+        sort($data);
         return $data;
     }
     
