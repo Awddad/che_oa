@@ -612,6 +612,7 @@ class QuanXianServer extends Server
     				'id' => $v['id'],
     				'name' => $v['name'],
     				'is_delete' => $v['deleted_at']==null ? 0 : 1,
+    				'short_name' => $v['slug'],
     			];
     		}
     		//更新入库 - oa_person 表

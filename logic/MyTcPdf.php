@@ -36,7 +36,7 @@ class MyTcPdf {
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
         $pdf->AddPage();
-        $pdf->writeHTML($strHtml, true, true, true, true, '');
+        @$pdf->writeHTML($strHtml, true, true, true, true, '');
         $pdf->lastPage();
         
         $pdf->Output($pdfName, 'F');//只保存 F    保存与输出 FI 只输出I
