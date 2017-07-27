@@ -420,6 +420,7 @@ class TalentForm extends BaseForm
 	    $model = Talent::findOne($this->id);
 	    if(empty($model)){
 	        $this->addError('','error');
+	        return false;
 	    }
 	    switch($this->getScenario()){
 	        case self::SCENARIO_COMMUNION://沟通

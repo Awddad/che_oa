@@ -30,11 +30,20 @@ class PayLogic extends BaseLogic
     {
         $type = \Yii::$app->request->post('type');
 
-        $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
+        $query = Apply::find()->alias('a')->leftJoin('oa_person b', 'a.person_id = b.person_id')->where([
             'a.cai_wu_need' => 2
-        ])->andWhere([
-            'in', 'a.status', [4, 5, 99]
         ]);
+        
+        $status = \Yii::$app->request->post('status');
+        if($status && in_array($status, [4, 5, 99])) {
+            $query->andWhere([
+                'a.status' => $status
+            ]);
+        } else {
+            $query->andWhere([
+                'in', 'a.status', [4, 5, 99]
+            ]);
+        }
         //筛选
         if ($type) {
             if (is_array($type)) {
@@ -72,7 +81,7 @@ class PayLogic extends BaseLogic
             ]);
         }
         $query->andWhere([
-            'in', 'oa_person.company_id', $companyIds
+            'in', 'b.company_id', $companyIds
         ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();

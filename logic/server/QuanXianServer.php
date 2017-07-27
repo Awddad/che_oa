@@ -17,6 +17,7 @@ use app\models\EmployeeType;
 use app\models\Employee;
 use Overtrue\Pinyin\Pinyin;
 use yii\helpers\ArrayHelper;
+use app\models\EmployeeAccount;
 
 class QuanXianServer extends Server
 {
@@ -62,6 +63,7 @@ class QuanXianServer extends Server
             'delete_user' => $this->preUrl . '/users/%d/delete',//删除用户
             'user_detail' => $this->preUrl . '/users/detail',//用户详情
             'user_del_bankcards' => $this->preUrl .'/users/bankcards',//删除银行卡
+            'qq_user' => $this->preUrl .'/bqq/users/%s',//通过姓名或QQ帐号获取qq用户信息
         ];
     }
     
@@ -649,6 +651,7 @@ class QuanXianServer extends Server
             $arrPerson = [];//oa_person表的入库数据
             $arrEmployee = []; // oa_employee表的入库数据
             $arrBankList = []; // oa_person_bank_info表的入库数据
+            $arrAccount = []; // oa_employee_account表的入库数据
             foreach ($arrRtn['data']['data'] as $val) {
                 $arrEmployee[] = [
                     'person_id' => $val['id'],
@@ -660,6 +663,9 @@ class QuanXianServer extends Server
                     'status' => 2,
                     'employee_type' => EmployeeType::find()->where(['slug' => 'shiyong'])->one()->id,
                     'leave_time' => $val['deleted_at'] ? date('Y-m-d', strtotime($val['deleted_at'])) : '',
+                ];
+                $val['bqq_account'] && $arrAccount[$val['id']] = [
+                    'qq' => $val['bqq_account']
                 ];
                 if($val['deleted_at']){
                     $arrPerson[] = $val['id'];
@@ -699,7 +705,18 @@ class QuanXianServer extends Server
     		if ($arrPerson) {
                 $result += Person::updateAll(['is_delete' => 1], ['in','person_id',$arrPerson]);
             }
-    		
+            //为arrAcount附上employee_id
+            if($arrAccount){
+                $tmp_employee  = Employee::find()->select('id,person_id')->where(['>','person_id',0])->all();
+        		foreach($tmp_employee as $v){
+        		    isset($arrAccount[$v['person_id']]) && $arrAccount[$v['person_id']]['employee_id'] = $v['id'];
+        		}
+    		    $strTable = EmployeeAccount::tableName();
+    		    $arrKeys = array_keys(current($arrAccount));
+        		$strSql = $this->createReplaceSql($strTable, $arrKeys, $arrAccount, 'id');
+        		$result += Yii::$app->db->createCommand($strSql)->execute();
+            }
+            
             // 更新入库 - oa_person_bank_info表
             /* 银行卡信息OA自己维护 2017-07-04 
             $strTable = PersonBankInfo::tableName();
@@ -732,6 +749,7 @@ class QuanXianServer extends Server
     			'organization_id' => $params['org_id'],
     			'phone' => $params['phone'],
     			'position_id' => $params['position_id'],
+    	        'bqq_account' => $params['qq'],
     	];
     	$arrRtn = $this->thisHttpPost($this->arrApiUrl['add_user'], $arrPost);
     	if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && $arrRtn['data']['id'] > 0)//接口处理数据成功
@@ -801,6 +819,7 @@ class QuanXianServer extends Server
             '_token' => $this->_token,
             'name' => $params['name'],
             'email' => $params['email'],
+            'bqq_account' => $params['qq'],
             'roles' => $roles,
         ];
         isset($params['org_id']) && $arrPost['organization_id'] = $params['org_id'];
@@ -841,6 +860,22 @@ class QuanXianServer extends Server
             return true;
         }
         return false;
+    }
+    
+    
+    
+    public function curlGetQQUserInfo($name)
+    {
+        $arrGet = [
+            '_token' => $this->_token,
+        ];
+        $url = sprintf($this->arrApiUrl['qq_user'],$name).'?'.http_build_query($arrGet);
+        $arrRtn = $this->httpGet($url);
+        
+        if($arrRtn['success'] == 1 && is_array($arrRtn['data'])){
+            return ['status'=>true,'data'=>$arrRtn['data']];
+        }
+        return ['status'=>false,'msg'=>$arrRtn['message']];
     }
     
     /**

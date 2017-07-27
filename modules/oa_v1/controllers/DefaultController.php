@@ -454,4 +454,12 @@ class DefaultController extends BaseController
         }
         return $this->_returnError(2045,[], ThirdServer::instance()->error);
     }
+    /**
+     * 获得组织架构和用户
+     */
+    public function actionOrgPerson()
+    {
+        $data = PersonLogic::instance()->getOrgPerson();
+        return $this->_return($data);
+    }
 }

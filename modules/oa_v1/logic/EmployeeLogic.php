@@ -24,6 +24,7 @@ class EmployeeLogic extends BaseLogic
             'org_id'=> $employee->org_id, // 组织
             'position_id' => $employee->profession, // 职位
             'phone' => $account ? $account->tel : $employee->phone,// 电话
+            'qq' => $account ? $account->qq :'',//qq帐号
         ];
         //权限系统添加用户
         $objQx = new QuanXianServer();
@@ -47,6 +48,7 @@ class EmployeeLogic extends BaseLogic
             'org_id'=> $employee->org_id,//组织
             'position_id' => $employee->profession,//职位
             'phone' => $employee->account->tel ?: $employee->phone,//手机
+            'qq' => $employee->account->qq ? :'',//qq
         ];
         //权限系统添加用户
         $objQx = new QuanXianServer();
@@ -63,5 +65,16 @@ class EmployeeLogic extends BaseLogic
         //权限系统接口 删除用户
         $objQx = new QuanXianServer();
         return $objQx->curlDeleteUser($employee->person_id);
+    }
+    
+    /**
+     * 通过qq帐号 或者姓名 获取QQ用户信息
+     * @param string $name
+     */
+    public function getQQUser($name)
+    {
+        //权限系统接口 获取qq用户
+        $quanxian = new QuanXianServer();
+	    return $quanxian->curlGetQQUserInfo($name);
     }
 }

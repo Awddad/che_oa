@@ -25,6 +25,9 @@ class PeopleForm extends BaseForm
     const SCENARIO_TRAIN_EXP_EDIT = 'train_exp_edit';//修改培训经验
     const SCENARIO_TRAIN_EXP_DEL = 'train_exp_del';//删除培训经验
     const SCENARIO_TRAIN_EXP_GET = 'train_exp_get';//获得培训经验
+    const SCENARIO_PIC_EDIT = 'pic_edit';//修改头像
+    const SCENARIO_PIC_DEL = 'pic_del';//删除头像
+    const SCENARIO_PIC_GET = 'pic_get';//获得头像
     
     public $id;
     public $company_name;
@@ -49,6 +52,7 @@ class PeopleForm extends BaseForm
     public $talent;
     public $employee;
     
+    public $pic;
     
     public function rules()
     {
@@ -89,12 +93,19 @@ class PeopleForm extends BaseForm
                 'on' => [self::SCENARIO_TRAIN_EXP_EDIT],
                 'message' => '{attribute}不能为空'
             ],
+            [
+                ['pic'],
+                'required',
+                'on' => [self::SCENARIO_PIC_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
             ['id','required','on'=>[self::SCENARIO_WORK_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_PROJECT_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_EDU_EXP_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_ABILITY_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_FILE_DEL],'message' => '{attribute}不能为空'],
             ['id','required','on'=>[self::SCENARIO_TRAIN_EXP_DEL],'message' => '{attribute}不能为空'],
+            ['id','required','on'=>[self::SCENARIO_PIC_DEL],'message' => '{attribute}不能为空'],
             
             ['talent','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
             ['employee','exist','targetClass'=>'\app\models\Employee','targetAttribute'=>'id','message'=>'员工不存在！'],
@@ -171,6 +182,17 @@ class PeopleForm extends BaseForm
                 ],
                 'message' => '培训经历不存在！'
             ],
+            [
+                'id',
+                'exist',
+                'targetClass' => '\app\models\PeoplePic',
+                'on' => [
+                    self::SCENARIO_PIC_EDIT,
+                    self::SCENARIO_PIC_GET,
+                    self::SCENARIO_PIC_DEL
+                ],
+                'message' => '头像不存在！'
+            ],
         ];
     }
     
@@ -195,6 +217,9 @@ class PeopleForm extends BaseForm
             self::SCENARIO_TRAIN_EXP_EDIT => ['id','talent','employee','train_place','start_time','end_time','tran_content'],
             self::SCENARIO_TRAIN_EXP_DEL => ['id','talent','employee'],
             self::SCENARIO_TRAIN_EXP_GET => ['id','talent','employee'],
+            self::SCENARIO_PIC_EDIT => ['id','talent','employee','pic'],
+            self::SCENARIO_PIC_DEL => ['id','talent','employee'],
+            self::SCENARIO_PIC_GET => ['id','talent','employee'],
         ];
     }
     /**
@@ -682,6 +707,82 @@ class PeopleForm extends BaseForm
             'tran_content'=>$model->tran_content,//培训内容
             'start_time' => $model->start_time,//开始时间
             'end_time' => $model->end_time,//结束时间
+        ];
+    }
+    
+    
+    /**
+     * 修改头像
+     * @param array $user
+     */
+    public function editPic($user)
+    {
+        $model = $this->getModel('\app\models\PeoplePic');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        $model->pic = $this->pic;     
+         
+        if(!$model->save()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'编辑头像',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+    /**
+     * 删除头像
+     * @param array $user
+     */
+    public function delPic($user)
+    {
+        $model = $this->getModel('\app\models\PeoplePic');
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'error'];
+        }
+        if(!$model->delete()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'删除头像',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+    
+    /**
+     * 获得头像
+     */
+    public function getPic()
+    {
+        if($this->id){
+            $res = \app\models\PeoplePic::findOne($this->id);
+            $data = [];
+            if($res){
+                $data = $this->pic($res);
+            }
+        }else{
+            if($this->talent){
+                $res = \app\models\PeoplePic::find()->where(['talent_id'=>$this->talent])->orderBy(['id'=>SORT_ASC])->all();
+            }elseif($this->employee){
+                $res = \app\models\PeoplePic::find()->where(['employee_id'=>$this->employee])->orderBy(['id'=>SORT_ASC])->all();
+            }
+            $data = [];
+            if($res){
+                foreach($res as $v){
+                    $data[] = $this->pic($v);
+                }
+            }
+        }
+        return $data;
+    }
+    /**
+     * 格式化头像
+     * @param \app\models\PeoplePic $model
+     */
+    protected function pic($model)
+    {
+        return [
+            'id'=>$model->id,
+            'pic'=>$model->pic,
         ];
     }
     

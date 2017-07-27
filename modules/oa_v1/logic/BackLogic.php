@@ -85,9 +85,21 @@ class BackLogic extends BaseLogic
      */
     public function canConfirmList($companyIds)
     {
-        $query = Apply::find()->alias('a')->leftJoin('oa_person', 'a.person_id = oa_person.person_id')->where([
-            'in', 'a.status',  [4, 5, 99]
-        ]);
+        $query = Apply::find()->alias('a')->leftJoin('oa_person b', 'a.person_id = b.person_id')->where('1=1');
+    
+        $status = \Yii::$app->request->post('status');
+        
+        if($status && in_array($status, [4, 5, 99])) {
+            $query->andWhere([
+                'a.status' => $status
+            ]);
+        } else {
+            $query->andWhere([
+                'in', 'a.status', [4, 5, 99]
+            ]);
+        }
+        
+        
         $query->andWhere([
             'a.type' => 3
         ]);
@@ -118,7 +130,7 @@ class BackLogic extends BaseLogic
         }
 
         $query->andWhere([
-            'in', 'oa_person.company_id', $companyIds
+            'in', 'b.company_id', $companyIds
         ]);
 
         $countQuery = clone $query;

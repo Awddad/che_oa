@@ -29,6 +29,8 @@ use Yii;
  * @property integer $age
  * @property string $birthday
  * @property integer $employee_type
+ * @property string $service
+ * @property integer $service_id
  * @property integer $person_id
  */
 class Employee extends \yii\db\ActiveRecord
@@ -47,10 +49,10 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['org_id', 'profession', 'sex', 'political', 'marriage', 'status', 'educational', 'current_location', 'age', 'employee_type', 'person_id'], 'integer'],
+            [['org_id', 'profession', 'sex', 'political', 'marriage', 'status', 'educational', 'current_location', 'age', 'employee_type', 'service_id', 'person_id'], 'integer'],
             [['empno', 'name', 'entry_time', 'leave_time'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
-            [['email'], 'string', 'max' => 50],
+            [['email', 'service'], 'string', 'max' => 50],
             [['id_card', 'birthday'], 'string', 'max' => 25],
             [['nation', 'native'], 'string', 'max' => 15],
             [['work_time'], 'string', 'max' => 10],
@@ -85,6 +87,8 @@ class Employee extends \yii\db\ActiveRecord
             'age' => 'Age',
             'birthday' => 'Birthday',
             'employee_type' => 'Employee Type',
+            'service' => 'Service',
+            'service_id' => 'Service ID',
             'person_id' => 'Person ID',
         ];
     }

@@ -137,6 +137,12 @@ class ApplyController extends BaseController
 		if ($request->isPost) {
 			$post = $request->post();
 			if ($post ['card_id'] && $post ['bank_name']) {
+                $bankInfo = PersonBankInfo::find()->where([
+                    'bank_card_id' => $post ['card_id']
+                ])->one();
+                if (!empty($bankInfo)) {
+                    return $this->_returnError(2409);
+                }
 				/* $obj = new \app\logic\server\QuanXianServer ();
 				$intPersonId = $this->arrPersonInfo ['person_id'];
 				$strBankName = $post ['bank_name'];
@@ -355,7 +361,7 @@ class ApplyController extends BaseController
     
     /**
      * 我的审批统计
-     * 
+     *
      * @return array
      */
     public function actionDetail()
