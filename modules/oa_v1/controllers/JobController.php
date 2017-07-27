@@ -147,7 +147,7 @@ class JobController extends BaseController
                 return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($job->errors));
             }
         }
-        return $this->_returnError(4400, null, '更新失败');
+        return $this->_returnError(4400, null, JobServer::instance()->error);
     }
     
     /**
@@ -184,11 +184,16 @@ class JobController extends BaseController
     }
     
     /**
-     *
+     *  树形结构
      */
     public function actionAllJob()
     {
-        return $this->_return($this->getJob());
+        $data =  [
+            'value' => 0,
+            'label' => '无',
+            'children' => $this->getJob()
+        ];
+        return $this->_return($data);
         
     }
     
@@ -198,10 +203,10 @@ class JobController extends BaseController
             'pid' => $pid,
             'is_delete' => 0,
         ])->asArray()->all();
-        $data = [];
         if(empty($job)) {
             return false;
         }
+        $data = [];
         foreach ($job as $v) {
             $child = $this->getJob($v['id']);
             if ($child) {

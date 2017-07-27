@@ -35,6 +35,7 @@ class JobServer extends ThirdServer
         if (!empty($rst) && $rst['code'] == 1 && $rst['data']) {
             return $rst['data'];
         }
+        $this->error = $rst['message'];
         return false;
     }
     
