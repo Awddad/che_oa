@@ -71,9 +71,9 @@
     .none{display: none !important;}
     .clear{ clear: both}
 
-    .mt-lg{ margin-top: 24px;}
-    .mt-md{ margin-top: 16px;}
-    .mt-sm{ margin-top: 8px;}
+    .mt-lg{ margin-top: 24px !important;}
+    .mt-md{ margin-top: 16px !important;}
+    .mt-sm{ margin-top: 8px !important;}
     .mt-0{margin-top: 0 !important;}
 
     .mb-lg{ margin-bottom: 24px !important;}
@@ -81,14 +81,14 @@
     .mb-sm{ margin-bottom: 8px !important;}
     .mb-0{margin-bottom: 0 !important;}
 
-    .ml-lg{ margin-left: 24px;}
-    .ml-md{ margin-left: 16px;}
-    .ml-sm{ margin-left: 8px;}
+    .ml-lg{ margin-left: 24px !important;}
+    .ml-md{ margin-left: 16px !important;}
+    .ml-sm{ margin-left: 8px !important;}
 
-    .mr-lg{ margin-right: 24px;}
-    .mr-md{ margin-right: 16px;}
-    .mr-sm{ margin-right: 8px;}
-    .mr4{ margin-right: 4px;}
+    .mr-lg{ margin-right: 24px !important;}
+    .mr-md{ margin-right: 16px !important;}
+    .mr-sm{ margin-right: 8px !important;}
+    .mr4{ margin-right: 4px !important;}
     .line{ position: relative; left: 0; max-width: 1000px; height: 1px; background-color: #E6E6E6; border:0; }
 
     .red{ color: #f30 !important;}
@@ -125,6 +125,13 @@
     .sm-dialog  .el-dialog{ width: 500px !important;}
     .mini-dialog  .el-dialog{ width: 300px !important;}
 
+    .person-dialog .el-dialog__header{
+      display: none !important;
+    }
+    .person-dialog .el-dialog__body {
+       padding: 0;
+    }
+
     /*表格*/
     .el-table{ border-radius: 4px; border-top:1px solid #E9E9E9 !important;}
     .el-table th{
@@ -141,6 +148,16 @@
     .el-table--border td,.el-table--border th,.el-table td,.el-table th.is-leaf{
         border-right: 1px solid #E9E9E9 !important;
         border-bottom: 1px solid #E9E9E9 !important;
+    }
+
+    /*左侧菜单*/
+    .el-menu-item{
+      height: 42px !important;
+      line-height: 42px !important;
+    }
+    .el-submenu .el-submenu__title{
+      height: 42px !important;
+      line-height: 42px !important;
     }
 
     /*步骤条*/
@@ -188,6 +205,56 @@
     }
 
     .el-message{ top: 50% !important; margin-top: -20px !important;}
+
+
+    /*条件设置*/
+    .setting-wrapper *{box-sizing: border-box; -webkit-box-sizing: border-box;}
+    .setting-wrapper input{ width: 160px; height: 32px; line-height: 32px; padding: 5px; padding-right: 20px; border: 1px solid #bfcbd9; border-radius: 4px;}
+    .setting-wrapper .plusbox{ float: left;}
+    .setting-wrapper .plusbox span {
+      display: block;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      text-align: center;
+      line-height: 32px;
+      border-radius: 50%;
+      border: 1px solid #bfcbd9;
+    }
+    .setting-wrapper .plusbox a{
+      margin-left: 25px;
+      line-height: 32px;
+    }
+    .setting-wrapper .moreinputbox .moreinput-item{
+      position: relative;
+      float: left;
+      overflow: hidden;
+      margin-right: 15px;
+      margin-bottom: 16px;
+    }
+    .setting-wrapper .moreinputbox .moreinput-item:first-child{margin-left: 10px; width: 175px;}
+    .setting-wrapper .moreinputbox .moreinput-item:first-child span{ text-indent:-9999em; }
+    .setting-wrapper .moreinputbox .moreinput-item span {
+      float: left;
+      padding: 0 15px 0 0 ;
+      line-height: 32px;
+    }
+    .setting-wrapper .moreinputbox .moreinput-item input[type=text]:focus + div.close{ display: block}
+
+    .setting-wrapper .moreinputbox .moreinput-item .close{
+        position: absolute;
+        right: 5px;
+        top:6px;
+        width: 20px;
+        height: 20px;
+        line-height: 24px;
+        text-align: center;
+        cursor: pointer;
+    }
+    .setting-wrapper .moreinputbox .moreinput-item .close i{overflow: hidden; font-size: 12px; border:1px solid rgba(0,0,0,0.25); color:rgba(0,0,0,0.25); border-radius: 50%;}
+    .constom-dialog .el-dialog{ width:642px !important;}
+
+
     @media (min-width: 769px) {
       .w-100{ width: 100% !important;}
       .w50,.w92,.w97,.w120,.w110,.w150{line-height: 34px;}
@@ -296,6 +363,6 @@
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?6c553771173b6a18516d"></script><script type="text/javascript" src="vendor.js?5dd3c19833b113ed3328"></script><script type="text/javascript" src="index.js?d1460ff59f0122a9a10d"></script></body>
+<script type="text/javascript" src="manifest.js?23c2904198eba0a1a58f"></script><script type="text/javascript" src="vendor.js?db79576af39f1e921244"></script><script type="text/javascript" src="index.js?78b9043269b2ab90d147"></script></body>
 
 </html>
