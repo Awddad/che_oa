@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\logic\server\JobServer;
+use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -97,12 +98,16 @@ class JobController extends BaseController
         if (!$id) {
             return $this->_returnError(403);
         }
+        $model = Job::findOne($id);
+        $count = Person::find()->where(['profession' => $model->name])->count();
+        if ($count > 0) {
+            return $this->_returnError(4400, null, '该职位有员工，不能删除！');
+        }
         $rst = JobServer::instance([
             'token' => \Yii::$app->params['quan_xian']['auth_token'],
             'baseUrl' => \Yii::$app->params['quan_xian']['auth_api_url']
         ])->delete($id);
         if(true === $rst) {
-            $model = Job::findOne($id);
             $model->deleted_at = time();
             $model->is_delete = 1;
             if ($model->save()) {
