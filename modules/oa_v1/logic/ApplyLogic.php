@@ -336,7 +336,8 @@ class ApplyLogic extends BaseLogic
     {
         return appmodel\ApplyCopyPerson::find()->alias('a')->innerJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
             'a.copy_person_id' => $personId,
-            'b.status' => 99
+        ])->andWhere([
+            'in', 'b.status', [4 , 5, 99]
         ])->count() ? : 0;
     }
 }
