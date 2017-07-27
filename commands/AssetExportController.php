@@ -15,6 +15,7 @@ use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\AssetType;
 use app\models\Person;
+use app\modules\oa_v1\logic\BaseLogic;
 use Yii;
 use moonland\phpexcel\Excel;
 use yii\console\Controller;
@@ -161,6 +162,7 @@ class AssetExportController extends Controller
     public function addAssetGetList($assetListId, $assetId, $personId)
     {
         $assetGetList = new AssetGetList();
+        $assetGetList->apply_id = '0';
         $assetGetList->person_id = $personId;
         $assetGetList->asset_id = $assetId;
         $assetGetList->asset_list_id = $assetListId;
@@ -169,6 +171,6 @@ class AssetExportController extends Controller
         if ($assetGetList->save()) {
             return true;
         }
-        throw new \yii\base\Exception('日志保存失败');
+        throw new \yii\base\Exception(BaseLogic::instance()->getFirstError($assetGetList->errors));
     }
 }
