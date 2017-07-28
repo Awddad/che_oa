@@ -87,7 +87,7 @@ class PersonLogic extends BaseLogic
     }
     
     /**
-     * @param int $personId
+     * @param int $personIdgit
      *
      * @return array|\yii\db\ActiveRecord[]
      */
