@@ -242,6 +242,7 @@ class ApprovalConfigForm extends BaseForm
             'apply_name' => $model->apply_name,
             'org_id' => $model->org_id,
             'org_name' => $model->org_name,
+            'type' => $model->type,
             'approval' => $this->getConfig($model->approval),
             //'copy_person' => $this->getCopyConfig($model->copy_person),
             'copy_person_count' => $model->copy_person_count,
