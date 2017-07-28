@@ -72,7 +72,7 @@ class PersonLogic extends BaseLogic
             ];
         }
         
-        $caiwu = $this->getCaiwu();
+        $caiwu = $this->getCaiwu($person->person_id);
     
         foreach ($caiwu as $v) {
             $personName = $v['person_name']. ' '. $v['org_full_name'];
@@ -87,16 +87,20 @@ class PersonLogic extends BaseLogic
     }
     
     /**
+     * @param int $personIdgit
+     *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getCaiwu()
+    public function getCaiwu($personId)
     {
         $data = Person::find()->select([
             'oa_person.person_id',
             'oa_person.person_name',
             'oa_person.org_full_name'
         ])->innerJoin('oa_role', 'oa_role.id = oa_person.role_ids')->where([
-            'in', 'oa_role.slug', ['caiwu', 'caiwujingli']
+            'and',
+            ['in', 'oa_role.slug', ['caiwu', 'caiwujingli']],
+            ['!=', 'oa_person.person_id', $personId]
         ])->asArray()->all();
         return $data;
     }

@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\logic\server\JobServer;
+use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
@@ -97,12 +98,16 @@ class JobController extends BaseController
         if (!$id) {
             return $this->_returnError(403);
         }
+        $model = Job::findOne($id);
+        $count = Person::find()->where(['profession' => $model->name])->count();
+        if ($count > 0) {
+            return $this->_returnError(4400, null, '该职位有员工，不能删除！');
+        }
         $rst = JobServer::instance([
             'token' => \Yii::$app->params['quan_xian']['auth_token'],
             'baseUrl' => \Yii::$app->params['quan_xian']['auth_api_url']
         ])->delete($id);
         if(true === $rst) {
-            $model = Job::findOne($id);
             $model->deleted_at = time();
             $model->is_delete = 1;
             if ($model->save()) {
@@ -142,7 +147,7 @@ class JobController extends BaseController
                 return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($job->errors));
             }
         }
-        return $this->_returnError(4400, null, '更新失败');
+        return $this->_returnError(4400, null, JobServer::instance()->error);
     }
     
     /**
@@ -176,5 +181,47 @@ class JobController extends BaseController
             }
         }
         return $this->_returnError(4400, null, '更新失败');
+    }
+    
+    /**
+     *  树形结构
+     */
+    public function actionAllJob()
+    {
+        $data =  [
+            'value' => 0,
+            'label' => '无',
+            'children' => $this->getJob()
+        ];
+        return $this->_return($data);
+        
+    }
+    
+    public function getJob($pid = 0)
+    {
+        $job = Job::find()->select(['id', 'name'])->where([
+            'pid' => $pid,
+            'is_delete' => 0,
+        ])->asArray()->all();
+        if(empty($job)) {
+            return false;
+        }
+        $data = [];
+        foreach ($job as $v) {
+            $child = $this->getJob($v['id']);
+            if ($child) {
+                $data[] = [
+                    'value' => $v['id'],
+                    'label' => $v['name'],
+                    'children' => $child
+                ];
+            } else {
+                $data[] = [
+                    'value' => $v['id'],
+                    'label' => $v['name'],
+                ];
+            }
+        }
+        return $data;
     }
 }

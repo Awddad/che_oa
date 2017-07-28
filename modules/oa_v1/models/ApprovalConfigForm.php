@@ -8,6 +8,7 @@ use app\modules\oa_v1\logic\BackLogic;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use app\models\Person;
+use app\models\Org;
 
 class ApprovalConfigForm extends BaseForm
 {
@@ -46,7 +47,8 @@ class ApprovalConfigForm extends BaseForm
                 'message' => '{attribute}不能为空'
             ],
             ['id','exist','targetClass'=>'\app\models\ApprovalConfig','message'=>'配置不存在！'],
-            ['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>['org_id'=>'org_id','org_pid'=>'pid'],'message'=>'适用组织不正确！'],
+            //['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>['org_id'=>'org_id','org_pid'=>'pid'],'message'=>'适用组织不正确！'],
+            ['org_id','exist','targetClass'=>'\app\models\Org', 'message'=>'适用组织不正确！'],
             ['apply_type','in','range'=>array_keys($this->typeArr),'message'=>'审批类型不正确！'],
             ['type','in','range'=>[0,1],'message'=>'条件不正确！'],
             ['config','checkConfigApproval','on'=>[self::SCENARIO_APPROVAL_EDIT]],
@@ -240,8 +242,9 @@ class ApprovalConfigForm extends BaseForm
             'apply_name' => $model->apply_name,
             'org_id' => $model->org_id,
             'org_name' => $model->org_name,
+            'type' => $model->type,
             'approval' => $this->getConfig($model->approval),
-            //'copy_person' => $this->getCopyConfig($model->copy_person),
+            'copy_person' => $this->getCopyConfig($model->copy_person),
             'copy_person_count' => $model->copy_person_count,
             'time' => date('Y-m-d H:i:s',$model->updated_at),
         ];
@@ -252,9 +255,19 @@ class ApprovalConfigForm extends BaseForm
      * @param int $org_id
      * @param int $apply_type
      */
-    public function getApprovalConfig($org_id,$apply_type)
+    public function getApprovalConfig($user,$apply_type)
     {
-        $model = ApprovalConfig::find()->where(['org_id'=>$org_id,'apply_type'=>$apply_type])->orderBy('updated_at desc')->one();
+    	$org_id = $user->org_id;
+        $model = null;
+        while(!$model){
+        	$model = ApprovalConfig::find()->where(['org_id'=>$org_id,'apply_type'=>$apply_type])->orderBy('updated_at desc')->one();
+        	if(!$model && $org_id >= 1){
+        		$org = Org::findOne($org_id);
+        		$org_id = $org->pid;
+        		continue;
+        	}
+        	break;
+        }
         $data = [];
         if($model){
             $data = [

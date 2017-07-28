@@ -78,13 +78,13 @@ class ApprovalConfigController extends BaseController
      */
     public function actionGetConfig()
     {
-        $org_id = yii::$app->request->get('org_id');
+        //$org_id = yii::$app->request->get('org_id');
         $apply_type = yii::$app->request->get('apply_type');
-        if(!$org_id || !$apply_type){
+        if(!$apply_type){
             return $this->_returnError(403);
         }
         $model = new ApprovalConfigForm();
-        $res = $model->getApprovalConfig($org_id, $apply_type);
+        $res = $model->getApprovalConfig($this->arrPersonInfo, $apply_type);
         return $this->_return($res);
     }
     /**
