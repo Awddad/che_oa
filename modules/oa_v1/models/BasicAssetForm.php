@@ -270,7 +270,10 @@ class BasicAssetForm extends BaseForm
 	            'label' => $v->name,
                 'value' => $v->id,
 	        ];
-	        $v->has_child && $tmp['children'] = $this->getAssetType($v->id);
+            $children = $this->getAssetType($v->id);
+            if ($children) {
+                $tmp['children'] = $children;
+            }
 	        $data[] = $tmp;
 	    }
 	    return $data;

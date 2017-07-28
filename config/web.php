@@ -52,9 +52,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'session'=>array(
-            'timeout'=> 3600 * 2,
-        ),
+        'session' => [
+            'name' => 'project-oa',
+            'cookieParams' => ['httponly' => true, 'lifetime' => 3600 * 4],
+            'timeout'=> 3600 * 4,
+        ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,

@@ -41,7 +41,7 @@ class Person extends \yii\db\ActiveRecord
             [['person_id', 'org_id'], 'required'],
             [['person_id', 'org_id', 'is_delete', 'last_login_time', 'company_id'], 'integer'],
             [['person_name', 'org_name', 'org_full_name', 'email', 'bqq_open_id', 'role_ids'], 'string', 'max' => 255],
-            [['profession'], 'string', 'max' => 4],
+            [['profession'], 'string', 'max' => 32],
             [['phone'], 'string', 'max' => 11],
             [['access_token'], 'string', 'max' => 1000],
         ];
