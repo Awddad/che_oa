@@ -98,21 +98,23 @@ class AssetExportController extends Controller
             $assetList->save();
             $asset->price += trim($v['M']);
             $asset->amount += 1;
-            if($v['G'] == '未使用') {
+            $type = 2;
+            if($this->status[trim($v['G'])] == 1) {
                 $asset->free_amount += 1;
-            }
-            if($this->status[trim($v['G'])] == 1){
                 $des = '首次入库';
+                $type = 1;
             }
             if($this->status[trim($v['G'])] == 3){
                 $des = '报废';
+                $type = 3;
             }
             if($this->status[trim($v['G'])] == 4){
                 $des = '丢失';
+                $type = 4;
             }
             $desc = isset($v['N']) ?  trim($v['N']) : $des;
             $asset->save();
-            $this->addAssetListLog($assetList->id, $desc, $personId);
+            $this->addAssetListLog($assetList->id, $type, $desc, $personId);
             if($personId){
                 $this->addAssetGetList($assetList->id, $asset->id, $personId);
             }
@@ -144,12 +146,12 @@ class AssetExportController extends Controller
         return $assetBrand;
     }
     
-    public function addAssetListLog($assetListId, $des = null, $personId = 0)
+    public function addAssetListLog($assetListId, $type, $des = null, $personId = 0)
     {
         $log = new AssetListLog();
         $log->person_id = $personId;
         $log->asset_list_id = $assetListId;
-        $log->type = 2;
+        $log->type = $type;
         $log->des = $des;
         
         $log->created_at = time();
