@@ -284,7 +284,7 @@ class ApprovalConfigForm extends BaseForm
     protected function setConfig()
     {
         $data = json_decode($this->config,1);
-        krsort($data);
+        ksort($data);
         return json_encode($data);
     }
     /**
