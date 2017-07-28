@@ -153,12 +153,13 @@ class AssetLogic extends Logic
          * @var Asset $v
          */
         foreach ($model as $v) {
+            $assetList = AssetList::find()->where(['asset_id' => $v->id])->one();
             $data[] = [
                 'id' => $v->id,
                 'asset_type' => $v->asset_type_name,
                 'asset_brand' => $v->asset_brand_name,
                 'name' => $v->name,
-                'price' => $v->price
+                'price' => $assetList->price
             ];
         }
         
@@ -195,7 +196,7 @@ class AssetLogic extends Logic
                     'asset_type' => $assetLogic->getAssetType($asset->asset_type_id),
                     'asset_brand' => $assetLogic->getAssetBrand($asset->asset_brand_id),
                     'name' => $asset->name,
-                    'price' => $asset->price,
+                    'price' => $v->assetList->price,
                     'socket_number' => AssetList::findOne($v->asset_list_id)->stock_number
                 ];
             }
