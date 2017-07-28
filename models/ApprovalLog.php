@@ -118,7 +118,7 @@ class ApprovalLog extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            Yii::error(print_r($this->scenario,true));
+            //Yii::error(print_r($this->scenario,true));
 
             switch ($this->scenario) {
                 case self::SCENARIO_FAIL;
