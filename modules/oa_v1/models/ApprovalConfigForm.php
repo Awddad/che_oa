@@ -49,6 +49,7 @@ class ApprovalConfigForm extends BaseForm
             ['id','exist','targetClass'=>'\app\models\ApprovalConfig','message'=>'配置不存在！'],
             //['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>['org_id'=>'org_id','org_pid'=>'pid'],'message'=>'适用组织不正确！'],
             ['org_id','exist','targetClass'=>'\app\models\Org', 'message'=>'适用组织不正确！'],
+            ['org_id','checkOrg'],
             ['apply_type','in','range'=>array_keys($this->typeArr),'message'=>'审批类型不正确！'],
             ['type','in','range'=>[0,1],'message'=>'条件不正确！'],
             ['config','checkConfigApproval','on'=>[self::SCENARIO_APPROVAL_EDIT]],
@@ -78,7 +79,17 @@ class ApprovalConfigForm extends BaseForm
             }
         }
     }
-    
+        
+    public function checkOrg($attribute)
+    {
+        if(!$this->hasErrors()){
+            if(!$this->id){
+                $config = ApprovalConfig::findOne(['apply_type'=>$this->apply_type,'org_id'=>$this->org_id]);
+                $config && $this->addError($this->$attribute,'配置已存在！');
+            }
+        }
+    }
+
     public function scenarios()
     {
         return [
@@ -302,8 +313,8 @@ class ApprovalConfigForm extends BaseForm
                 foreach($v as $vv){
                     $person = Person::findOne($vv);
                     $tmp[] = [
-                        'person_id' => $person['person_id'],
-                        'name' => $person['person_name'],
+                        'id' => $person['person_id'],
+                        'label' => $person['person_name'],
                         'org' => $person['org_full_name'],
                     ];
                 }
@@ -331,12 +342,13 @@ class ApprovalConfigForm extends BaseForm
             foreach($data as $v){
                 $person = Person::findOne($v);
                 $res[] = [
-                    'person_id' => $person['person_id'],
-                    'name' => $person['person_name'],
+                    'id' => $person['person_id'],
+                    'label' => $person['person_name'],
                     'org' => $person['org_full_name'],
                 ];
             }
         }
         return $res;
     }
+
 }
