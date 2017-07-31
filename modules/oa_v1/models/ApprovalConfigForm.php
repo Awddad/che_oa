@@ -226,6 +226,7 @@ class ApprovalConfigForm extends BaseForm
                 'apply_name' => $v->apply_name,
                 'org_id' => $v->org_id,
                 'org_name' => $v->org_name,
+                'org_ids' => OrgLogic::instance()->getOrgIdByChild($v->org_id),
                 'set_approval' => $v->approval? 1 : 0,//审批人是否设置
                 //'copy_person' => $this->getCopyConfig($v->copy_person),
                 'copy_person_count' => $v->copy_person_count,
