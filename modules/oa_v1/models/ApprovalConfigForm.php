@@ -295,7 +295,7 @@ class ApprovalConfigForm extends BaseForm
     protected function setConfig()
     {
         $data = json_decode($this->config,1);
-        ksort($data);
+        $data && ksort($data);
         return json_encode($data);
     }
     /**
@@ -305,7 +305,7 @@ class ApprovalConfigForm extends BaseForm
     protected function getConfig($config)
     {
         $data = json_decode($config,true);
-        ksort($data);
+        $data && sksort($data);
         $res = [];
         if($data){
             foreach($data as $k => $v){
