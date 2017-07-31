@@ -316,6 +316,7 @@ class ApprovalConfigForm extends BaseForm
                         'id' => $person['person_id'],
                         'label' => $person['person_name'],
                         'org' => $person['org_full_name'],
+                        'default' => 1,//默认，前端不能删除
                     ];
                 }
                 $res[] = [
@@ -345,6 +346,7 @@ class ApprovalConfigForm extends BaseForm
                     'id' => $person['person_id'],
                     'label' => $person['person_name'],
                     'org' => $person['org_full_name'],
+                    'default' => 1,//默认，前端不能删除
                 ];
             }
         }
