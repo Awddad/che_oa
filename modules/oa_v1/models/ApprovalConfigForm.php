@@ -332,6 +332,11 @@ class ApprovalConfigForm extends BaseForm
      */
     protected function setCopyConfig()
     {
+        foreach($this->config as $k => $v){
+            if($v <= 0){
+                unset($this->config[$k]);
+            }
+        }
         $data = implode(',', $this->config);
         return $data;
     }
@@ -341,6 +346,9 @@ class ApprovalConfigForm extends BaseForm
         $res = [];
         if($data){
             foreach($data as $v){
+                if($v <= 0){
+                    continue;
+                }
                 $person = Person::findOne($v);
                 $res[] = [
                     'id' => $person['person_id'],
