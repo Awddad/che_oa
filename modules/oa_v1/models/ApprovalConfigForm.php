@@ -305,7 +305,7 @@ class ApprovalConfigForm extends BaseForm
     protected function getConfig($config)
     {
         $data = json_decode($config,true);
-        $data && sksort($data);
+        $data && ksort($data);
         $res = [];
         if($data){
             foreach($data as $k => $v){
