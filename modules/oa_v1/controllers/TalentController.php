@@ -83,6 +83,7 @@ class TalentController extends BaseController
     /**
      * 录用
      */
+    /*
     public function actionEmploy()
     {
         $post = yii::$app->request->post();
@@ -99,6 +100,7 @@ class TalentController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+    */
     
     /**
      * 列表
