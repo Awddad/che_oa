@@ -287,7 +287,7 @@ class ApplyLogic extends BaseLogic
      */
 	public function getToMe($personId)
     {
-        return appmodel\ApprovalLog::find()->alias('a')->leftJoin('oa_apply b', 'b.apply_id = a.apply_id')->where([
+        return appmodel\ApprovalLog::find()->alias('a')->rightJoin('oa_apply b', 'b.apply_id = a.apply_id')->where([
             'approval_person_id' => $personId,
             'is_to_me_now' => 1
         ])->andWhere([
@@ -304,10 +304,10 @@ class ApplyLogic extends BaseLogic
      */
     public function getApprovalLogCount($personId)
     {
-        return appmodel\ApprovalLog::find()->where([
-            'approval_person_id' => $personId,
+        return appmodel\ApprovalLog::find()->alias('a')->rightJoin('oa_apply b', 'b.apply_id = a.apply_id')->where([
+            'a.approval_person_id' => $personId,
         ])->andWhere([
-            '>', 'result', 0
+            '>', 'a.result', 0
         ])->count()  ? : 0;
     }
     
@@ -334,7 +334,7 @@ class ApplyLogic extends BaseLogic
      */
     public function getCopyCount($personId)
     {
-        return appmodel\ApplyCopyPerson::find()->alias('a')->innerJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
+        return appmodel\ApplyCopyPerson::find()->alias('a')->rightJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
             'a.copy_person_id' => $personId,
         ])->andWhere([
             'in', 'b.status', [4 , 5, 99]

@@ -270,10 +270,10 @@
     }
     .personlist-item .approval_left span,.personlist-item .approval_left span a {
       display: block;
-      color: #333;
+      color: rgba(0,0,0,0.43);
       line-height: 20px;
       text-align: center;
-      font-size: 14px;
+      font-size: 12px;
     }
     .personlist-item .approval_left span {
       line-height: 30px;
@@ -281,10 +281,11 @@
     }
     .personlist-item .approval_left a{
       display: block;
-      color: dodgerblue;
+      color: #27A8FD;
       line-height: 26px;
       text-decoration: none;
       text-align: center;
+      font-size: 12px;
     }
     .personlist-item .approval_left a:hover{
       text-decoration: underline;
@@ -296,12 +297,36 @@
       margin: 5px 16px 0 17px;
     }
     .approval_right .el-icon-caret-right:before{
-      font-size: 14px;
+      font-size: 12px;
       color: #ccc;
     }
+
     .approval-content li:last-child .personlist-item .approval_right{ display: none;}
 
     .approval-container .el-radio .el-radio__label{ font-size: 0;}
+
+    /*自定义滚动条*/
+    .constom-scroll::-webkit-scrollbar-track
+    {
+      -webkit-box-shadow: 0 0 0 rgba(0,0,0,0);
+      border-radius: 10px;
+      background-color: rgba(0,0,0,0);
+    }
+
+    .constom-scroll::-webkit-scrollbar
+    {
+      width: 6px;
+      height: 6px;
+      background-color: rgba(0,0,0,0);
+    }
+
+    .constom-scroll::-webkit-scrollbar-thumb
+    {
+      border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+      background-color: rgba(0,0,0,0.05);
+    }
+
 
     @media (min-width: 769px) {
       .w-100{ width: 100% !important;}
@@ -411,6 +436,6 @@
 
 <body>
   <div id="app"></div>
-<script type="text/javascript" src="manifest.js?806005db40a0bad9f815"></script><script type="text/javascript" src="vendor.js?a60d3c37d130ebb68820"></script><script type="text/javascript" src="index.js?8955d44ed288f4a70558"></script></body>
+<script type="text/javascript" src="manifest.js?c00375a98493599c38a9"></script><script type="text/javascript" src="vendor.js?a60d3c37d130ebb68820"></script><script type="text/javascript" src="index.js?f2914c017019e94434af"></script></body>
 
 </html>
