@@ -112,7 +112,7 @@ class ApplyOpenForm extends BaseForm
      */
     public function getOpenList($params)
     {
-        $keywords = ArrayHelper::getValue($params,'keywords',null);
+        $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $start_time = ArrayHelper::getValue($params,'start_time',null);
         $end_time = ArrayHelper::getValue($params,'end_time',null);
         $page = ArrayHelper::getValue($params,'page',1);
@@ -123,7 +123,7 @@ class ApplyOpenForm extends BaseForm
         $query = ApplyOpen::find()->joinWith('apply a',true,'RIGHT JOIN')->where(['type'=>13]);
         //关键词
         if($keywords){
-            $keywords = mb_convert_encoding($keywords,'UTF-8','auto');
+            $keywords = trim(mb_convert_encoding($keywords,'UTF-8','auto'));
             $query -> andWhere("instr(CONCAT(district_name,address,person),'{$keywords}') > 0 ");
         }
         //开始时间

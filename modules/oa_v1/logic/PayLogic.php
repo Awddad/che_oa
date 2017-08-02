@@ -239,7 +239,7 @@ class PayLogic extends BaseLogic
                 'in', 'a.type', [1, 2]
             ]);
         }
-        $keyword = \Yii::$app->request->get('keyword');
+        $keyword = trim(\Yii::$app->request->get('keyword'));
 
         if ($keyword) {
             $query->andFilterWhere([

@@ -164,7 +164,7 @@ jdf;
     
     public function getList($params,$user,$arrPersonRole)
     {
-        $keywords = ArrayHelper::getValue($params,'keywords',null);
+        $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $date = ArrayHelper::getValue($params,'date',null);

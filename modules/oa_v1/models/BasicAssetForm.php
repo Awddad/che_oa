@@ -220,7 +220,7 @@ class BasicAssetForm extends BaseForm
 	 */
 	public function getAssetTypeList($params)
 	{
-		$keywords = ArrayHelper::getValue($params,'keywords',null);
+		$keywords = trim(ArrayHelper::getValue($params,'keywords',null));
 		$start_time = ArrayHelper::getValue($params,'start_time',null);
 		$end_time = ArrayHelper::getValue($params,'end_time',null);
 		$page = ArrayHelper::getValue($params,'page',1);
@@ -299,7 +299,7 @@ class BasicAssetForm extends BaseForm
 	 */
 	public function getAssetBrandList($params)
 	{
-		$keywords = ArrayHelper::getValue($params,'keywords',null);
+		$keywords = trim(ArrayHelper::getValue($params,'keywords',null));
 		$start_time = ArrayHelper::getValue($params,'start_time',null);
 		$end_time = ArrayHelper::getValue($params,'end_time',null);
 		$page = ArrayHelper::getValue($params,'page',1);

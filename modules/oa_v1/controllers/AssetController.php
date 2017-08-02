@@ -104,7 +104,7 @@ class AssetController extends BaseController
         $param = Yii::$app->request->get();
         $query = Asset::find()->where([]);
     
-        $keyword = ArrayHelper::getValue($param, 'keywords');
+        $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if($keyword) {
             $query->andWhere([
                 'like','name', $keyword
@@ -184,7 +184,7 @@ class AssetController extends BaseController
             ]);
         }
     
-        $keyword = ArrayHelper::getValue($param, 'keywords');
+        $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if($keyword) {
             $person = Person::find()->filterWhere(['like', 'person_name',$keyword ])->all();
             if(!empty($person)){

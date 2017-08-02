@@ -206,7 +206,7 @@ class EmployeeForm extends BaseForm
             4=>'再入职'
         ];
         
-        $keywords = ArrayHelper::getValue($params,'keywords',null);
+        $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $org_id = ArrayHelper::getValue($params, 'org_id',0);
