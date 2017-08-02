@@ -49,6 +49,7 @@ class ApprovalConfigForm extends BaseForm
             ['id','exist','targetClass'=>'\app\models\ApprovalConfig','message'=>'配置不存在！'],
             //['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>['org_id'=>'org_id','org_pid'=>'pid'],'message'=>'适用组织不正确！'],
             ['org_id','exist','targetClass'=>'\app\models\Org', 'message'=>'适用组织不正确！'],
+            ['org_id','checkOrg'],
             ['apply_type','in','range'=>array_keys($this->typeArr),'message'=>'审批类型不正确！'],
             ['type','in','range'=>[0,1],'message'=>'条件不正确！'],
             ['config','checkConfigApproval','on'=>[self::SCENARIO_APPROVAL_EDIT]],
@@ -78,7 +79,17 @@ class ApprovalConfigForm extends BaseForm
             }
         }
     }
-    
+        
+    public function checkOrg($attribute)
+    {
+        if(!$this->hasErrors()){
+            if(!$this->id){
+                $config = ApprovalConfig::findOne(['apply_type'=>$this->apply_type,'org_id'=>$this->org_id]);
+                $config && $this->addError($this->$attribute,'配置已存在！');
+            }
+        }
+    }
+
     public function scenarios()
     {
         return [
@@ -158,7 +169,7 @@ class ApprovalConfigForm extends BaseForm
      */   
     public function getList($params)
     {
-        $keywords = ArrayHelper::getValue($params,'keywords',null);
+        $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $start_time = ArrayHelper::getValue($params,'start_time',null);
         $end_time = ArrayHelper::getValue($params,'end_time',null);
         $page = ArrayHelper::getValue($params,'page',1);
@@ -215,6 +226,7 @@ class ApprovalConfigForm extends BaseForm
                 'apply_name' => $v->apply_name,
                 'org_id' => $v->org_id,
                 'org_name' => $v->org_name,
+                'org_ids' => OrgLogic::instance()->getOrgIdByChild($v->org_id),
                 'set_approval' => $v->approval? 1 : 0,//审批人是否设置
                 //'copy_person' => $this->getCopyConfig($v->copy_person),
                 'copy_person_count' => $v->copy_person_count,
@@ -284,7 +296,7 @@ class ApprovalConfigForm extends BaseForm
     protected function setConfig()
     {
         $data = json_decode($this->config,1);
-        krsort($data);
+        $data && ksort($data);
         return json_encode($data);
     }
     /**
@@ -294,6 +306,7 @@ class ApprovalConfigForm extends BaseForm
     protected function getConfig($config)
     {
         $data = json_decode($config,true);
+        $data && ksort($data);
         $res = [];
         if($data){
             foreach($data as $k => $v){
@@ -301,9 +314,10 @@ class ApprovalConfigForm extends BaseForm
                 foreach($v as $vv){
                     $person = Person::findOne($vv);
                     $tmp[] = [
-                        'person_id' => $person['person_id'],
-                        'name' => $person['person_name'],
+                        'id' => $person['person_id'],
+                        'label' => $person['person_name'],
                         'org' => $person['org_full_name'],
+                        'default' => 1,//默认，前端不能删除
                     ];
                 }
                 $res[] = [
@@ -319,6 +333,11 @@ class ApprovalConfigForm extends BaseForm
      */
     protected function setCopyConfig()
     {
+        foreach($this->config as $k => $v){
+            if($v <= 0){
+                unset($this->config[$k]);
+            }
+        }
         $data = implode(',', $this->config);
         return $data;
     }
@@ -328,14 +347,19 @@ class ApprovalConfigForm extends BaseForm
         $res = [];
         if($data){
             foreach($data as $v){
+                if($v <= 0){
+                    continue;
+                }
                 $person = Person::findOne($v);
                 $res[] = [
-                    'person_id' => $person['person_id'],
-                    'name' => $person['person_name'],
+                    'id' => $person['person_id'],
+                    'label' => $person['person_name'],
                     'org' => $person['org_full_name'],
+                    'default' => 1,//默认，前端不能删除
                 ];
             }
         }
         return $res;
     }
+
 }

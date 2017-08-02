@@ -104,7 +104,7 @@ class BackLogic extends BaseLogic
             'a.type' => 3
         ]);
 
-        $keyword = \Yii::$app->request->post('keyword');
+        $keyword = trim(\Yii::$app->request->post('keyword'));
 
         if ($keyword) {
             $query->andFilterWhere([
@@ -190,7 +190,7 @@ class BackLogic extends BaseLogic
             'a.type' => 3
         ]);
 
-        $keyword = \Yii::$app->request->get('keyword');
+        $keyword = trim(\Yii::$app->request->get('keyword'));
 
         if ($keyword) {
             $query->andFilterWhere([

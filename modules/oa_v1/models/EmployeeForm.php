@@ -55,6 +55,8 @@ class EmployeeForm extends BaseForm
             ['qq','string','message'=>'qq不正确'],
             ['employee_id','checkEmployeeID'],
             ['phone','match','pattern'=>'/^1\d{10}$/','message'=>'手机号不正确!'],
+            ['phone','unique','targetClass'=>'\app\models\Talent','targetAttribute'=>['phone'],'message'=>'招聘管理存在此人，请走招聘流程!'],
+            ['phone','unique','targetClass'=>'\app\models\Employee','targetAttribute'=>['phone'],'message'=>'此人已入职!'],
             ['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
             ['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>'org_id','message'=>'组织不存在'],
             ['profession','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在']
@@ -204,7 +206,7 @@ class EmployeeForm extends BaseForm
             4=>'再入职'
         ];
         
-        $keywords = ArrayHelper::getValue($params,'keywords',null);
+        $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $org_id = ArrayHelper::getValue($params, 'org_id',0);

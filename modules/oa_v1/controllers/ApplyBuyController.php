@@ -66,7 +66,7 @@ class ApplyBuyController extends BaseController
             'type' => 5
         ]);
     
-        $keyword = ArrayHelper::getValue($param, 'keywords');
+        $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if($keyword) {
             $query->andWhere([
                 'or',

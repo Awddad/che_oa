@@ -352,7 +352,7 @@ class PeopleController extends BaseController
         }
         $res = $model->editPic($this->arrPersonInfo);
         if($res['status']){
-            return $this->_return('成功');
+            return $this->_return($res['id']);
         }else{
             return $this->_returnError(400,$res['msg']);
         }

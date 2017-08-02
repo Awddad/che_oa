@@ -42,6 +42,7 @@ class AssetExportController extends Controller
             'setIndexSheetByName' => true,
         ]);
         array_shift($data);
+        $i = 1;
         foreach ($data as $k => $v) {
             if(!$v["A"] || !$v["B"] || !$v["C"] || !$v["D"]) {
                 continue;
@@ -87,6 +88,7 @@ class AssetExportController extends Controller
                 $personId = 0;
             }
             $assetList = new AssetList();
+            $assetList->id = $i;
             $assetList->asset_id = $asset->id;
             $assetList->asset_number = $v['E'] ? : $v['F'];
             $assetList->stock_number = $v['F'];
@@ -115,10 +117,11 @@ class AssetExportController extends Controller
             $desc = isset($v['N']) ?  trim($v['N']) : $des;
             $asset->save();
             $this->addAssetListLog($assetList->id, $type, $desc, $personId);
-            if($personId){
+            if($personId && $assetList){
                 $this->addAssetGetList($assetList->id, $asset->id, $personId);
             }
             echo '第'.$k . '条' .PHP_EOL;
+            $i++;
         }
     }
     

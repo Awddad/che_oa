@@ -17,6 +17,7 @@ use app\models\PeopleEduExperience;
 use app\models\PeopleFiles;
 use app\models\PeopleAbility;
 use app\modules\oa_v1\logic\RegionLogic;
+use yii\validators\RequiredValidator;
 
 /**
  * 人才表单
@@ -30,7 +31,6 @@ class TalentForm extends BaseForm
 	const SCENARIO_TEST = 'test';//考试
 	const SCENARIO_FACE = 'face';//面试
 	const SCENARIO_JOIN = 'join';//加入人才库
-	const SCENARIO_EMPLOY = 'employ';//录用
 	
 	public $name;
 	public $phone;
@@ -60,12 +60,13 @@ class TalentForm extends BaseForm
 		    [
 		        ['name','phone','job','sex','age','educational','work_time','current_location'],
 		        'required',
+		        'on'=>[self::SCENARIO_ADD_ZHAOPIN],
 		        'message'=>'{attribute}不能为空',
 		    ],
 		    [
 		        ['id','status'],
 		        'required',
-		        'on'=>[self::SCENARIO_ADD_ZHAOPIN ,self::SCENARIO_COMMUNION ,self::SCENARIO_TEST,self::SCENARIO_FACE ],
+		        'on'=>[self::SCENARIO_COMMUNION ,self::SCENARIO_TEST,self::SCENARIO_FACE ],
 		        'message'=>'{attribute}不能为空',
 		    ],
 		    [
@@ -74,17 +75,14 @@ class TalentForm extends BaseForm
 		        'on'=>[self::SCENARIO_JOIN],
 		        'message'=>'{attribute}不能为空',
 		    ],
-		    [
-		        ['id','org_id','entry_time'],
-		        'required',
-		        'on'=>[self::SCENARIO_EMPLOY],
-		        'message'=>'{attribute}不能为空',
-		    ],
 		    ['id','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
 		    ['talent_type','exist','targetClass'=>'\app\models\PersonType','targetAttribute'=>'id','message'=>'类型不存在！'],
 		    ['status','in', 'range' => [0, 1],'message'=>'操作错误！'],//0：不通过 1：通过
+		    ['status','checkStatus','on'=>[self::SCENARIO_FACE]],
 		    ['name','string','max'=>20,'message'=>'姓名错误！'],
 		    ['phone','match','pattern'=>'/^1\d{10}$/','message'=>'手机号不正确!'],
+		    ['phone','unique','targetClass'=>'\app\models\Talent','targetAttribute'=>['phone'],'message'=>'此人已存在,不可重复添加!'],
+		    ['phone','unique','targetClass'=>'\app\models\Employee','targetAttribute'=>'phone','message'=>'此人已入职!'],
 		    ['job','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在！'],
 		    ['sex','in', 'range' => [1, 2],'message'=>'性别错误！'],//1：女  2：男
 		    ['age','compare', 'compareValue' => 80, 'operator' => '<=','message'=>'年龄不得高于80岁！'],
@@ -96,15 +94,29 @@ class TalentForm extends BaseForm
 		];
 	}
 	
+	public function checkStatus($attribute)
+	{
+	    if($this->$attribute == 1){
+	        $validator = new RequiredValidator();
+	        if(!$validator->validate($this->org_id)){
+	            $this->addError('org_id','部门不能为空');
+	            return false;
+	        }elseif(!$validator->validate($this->entry_time)){
+	            $this->addError('entry_time','入职时间不能为空');
+	            return false;
+	        }
+	    }
+	    return true;
+	}
+	
 	public function scenarios()
 	{
 	    return [
 	        self::SCENARIO_ADD_ZHAOPIN => ['name','phone','job','sex','age','educational','work_time','current_location'],
 	        self::SCENARIO_COMMUNION =>['id','status'],
 	        self::SCENARIO_TEST =>['id','status'],
-	        self::SCENARIO_FACE => ['id','status'],
+	        self::SCENARIO_FACE => ['id','status','org_id','entry_time'],
 	        self::SCENARIO_JOIN => ['id','talent_type'],
-	        self::SCENARIO_EMPLOY => ['id','org_id','entry_time'],
 	    ];
 	}
 	/**
@@ -171,13 +183,7 @@ class TalentForm extends BaseForm
 	            $model->status = 3;
 	            break;
 	        case self::SCENARIO_FACE://面试
-	            return ['status'=>false,'msg'=>'请录用'];
-	            /*
-	            $content = '面试通过';
-	            $model->status_face = $model->status_face ?: 1;
-	            $model->status = 5;
-	            break;
-	            */
+	            return $this->employ($user);
 	        default:
 	            return ['status'=>false,'msg'=>'场景错误'];
 	    }
@@ -254,7 +260,7 @@ class TalentForm extends BaseForm
 	 */
 	public function getList($params,$user,$role_name)
 	{
-	    $keywords = ArrayHelper::getValue($params,'keywords',null);
+	    $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
 	    $start_time = ArrayHelper::getValue($params,'start_time',null);
 	    $end_time = ArrayHelper::getValue($params,'end_time',null);
 	    $page = ArrayHelper::getValue($params,'page',1);
@@ -359,27 +365,31 @@ class TalentForm extends BaseForm
 	public function employ($user)
 	{
 	    $talent = Talent::findOne($this->id);
-	    $model = new Employee();
-	    $model->name = $talent->name;
-	    $model->phone = $talent->phone;
-	    $model->profession = $talent->job;
-	    $model->birthday = $talent->birthday;
-	    $model->educational = $talent->educational;
-	    $model->work_time = $talent->work_time;
-	    $model->current_location = $talent->current_location;
-	    $model->age = $talent->age;
-	    $model->nation = $talent->nation;
-	    $model->native = $talent->native;
-	    $model->political = $talent->political;
-	    $model->marriage = $talent->marriage;
-	    $model->email = $talent->email;
-	    $model->status = 0;
-	    $model->employee_type = EmployeeType::findOne(['slug'=>'shiyong'])->id;
+	    $model = Employee::findOne(['phone'=>$talent->phone,'name'=>$talent->name]);
+	    if(empty($model)){
+	        $model = new Employee();
+	        $model->name = $talent->name;
+    	    $model->phone = $talent->phone;
+    	    $model->profession = $talent->job;
+    	    $model->birthday = $talent->birthday;
+    	    $model->educational = $talent->educational;
+    	    $model->work_time = $talent->work_time;
+    	    $model->current_location = $talent->current_location;
+    	    $model->age = $talent->age;
+    	    $model->nation = $talent->nation;
+    	    $model->native = $talent->native;
+    	    $model->political = $talent->political;
+    	    $model->marriage = $talent->marriage;
+    	    $model->email = $talent->email;
+    	    $model->status = 0;
+    	    $model->employee_type = EmployeeType::findOne(['slug'=>'shiyong'])->id;
+	    }
 	    $model->org_id = $this->org_id;
 	    $model->entry_time = $this->entry_time;
+	    
 	    $tran = yii::$app->db->beginTransaction();
         try {
-            if (! $model->save()) { // 添加人事表
+            if (!$model->save()) { // 添加人事表
                 throw new \Exception(current($model->getFirstErrors()));
             }
             $talent->status_face = $talent->status_face ?: 1;

@@ -727,7 +727,7 @@ class PeopleForm extends BaseForm
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
         }else{
             PeopleLogic::instance()->addLog($model->talent_id,$model->employee_id,'编辑头像',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
-            return ['status'=>true];
+            return ['status'=>true,'id'=>$model->id];
         }
     }
     /**

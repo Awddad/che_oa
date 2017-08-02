@@ -34,7 +34,7 @@ class JobController extends BaseController
     {
         $param = Yii::$app->request->get();
         $query = Job::find()->where(['is_delete' => 0]);
-        $keyword = ArrayHelper::getValue($param, 'keywords');
+        $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if ($keyword) {
             $query->andWhere([
                 'or',

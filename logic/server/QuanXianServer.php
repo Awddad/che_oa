@@ -661,7 +661,7 @@ class QuanXianServer extends Server
                     'profession' => $val['position_id'],
                     'phone' => $val['phone'],
                     'email' => $val['email'],
-                    'status' => 2,
+                    'status' => $val['deleted_at'] ? 3 :2,
                     'employee_type' => EmployeeType::find()->where(['slug' => 'shiyong'])->one()->id,
                     'leave_time' => $val['deleted_at'] ? date('Y-m-d', strtotime($val['deleted_at'])) : '',
                 ];
