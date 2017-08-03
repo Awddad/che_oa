@@ -32,18 +32,13 @@ class EmailController extends Controller
         ])->groupBy('a.approval_person_id')->asArray()->all();
         foreach ($data as $v) {
             $person = Person::findOne($v['approval_person_id']);
-            $rst =\Yii::$app->mailer->compose()
-                ->setFrom(['xj@youmeng.com' => 'OA系统通知'])
-                ->setTo('309264534@qq.com')
-                ->setSubject('审批单提醒！')
-                ->setHtmlBody('您有'.$v['total'] . '条审批单需要处理审批，请及时登陆OA系统处理！');
-            if (!$rst->send()) {
-                echo '发送失败';die;
+            if($person->email) {
+                \Yii::$app->mailer->compose()->setFrom([
+                    'xj@youmeng.com' => 'OA系统通知'
+                ])->setTo($person->email)->setSubject('审批单提醒！')->setHtmlBody(
+                    '今天你还有' . $v['total'] . '个审批未处理，快去处理吧。点击处理。'
+                );
             }
-            echo '发送成功';
-            die;
-            
         }
-        print_r($data);
     }
 }
