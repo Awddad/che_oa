@@ -444,13 +444,13 @@ class ApplyLogic extends BaseLogic
         if($apply->type == 1) {
             return $this->reExpense($apply, $person);
         } elseif($apply->type == 2) {
-            return $this->reLoan($apply, $person);
+            return $this->reLoan($apply);
         } elseif($apply->type == 3) {
-            return $this->rePayBack($apply, $person);
+            return $this->rePayBack($apply);
         } elseif($apply->type == 4) {
-            return $this->reApplyPay($apply, $person);
+            return $this->reApplyPay($apply);
         } else {
-            return $this->reApplyBuy($apply, $person);
+            return $this->reApplyBuy($apply);
         }
     }
     
@@ -480,32 +480,72 @@ class ApplyLogic extends BaseLogic
     /**
      * 付款失败，备用金重新申请
      *
-     * @param $apply
-     * @param appmodel\Person $person
+     * @param appmodel\Apply $reApply
      *
      * @return boolean
+     * @throws Exception
      */
-    public function reLoan($apply, $person)
+    public function reLoan($reApply)
     {
-        $model = new LoanForm();
-        $data['BaoxiaoForm'] = [
-            ''
-        ];
-        if ( $model -> load($data) && $model->validate() && $apply_id = $model->save($person)) {
-            return $apply_id;
+        $applyId = '9999';
+        $apply = new appmodel\Apply();
+        $apply->apply_id = $applyId;
+        $apply->title = $reApply->title;
+        $apply->create_time = $_SERVER['REQUEST_TIME'];
+        $apply->type = $reApply->type;
+        $apply->person_id = $reApply->person_id;
+        $apply->person = $reApply->person;
+        $apply->status = 4;
+        $apply->next_des = '财务付款';
+        $apply->approval_persons = $reApply->approval_persons;
+        $apply->copy_person = $reApply->copy_person;
+        $apply->apply_list_pdf = $reApply->apply_list_pdf;
+        $apply->cai_wu_need = $reApply->cai_wu_need;
+        $apply->org_id = $reApply->org_id;
+        $db = \Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try{
+            if (!$apply->save()) {
+                throw new Exception('申请失败',$apply->errors);
+            }
+            $this->approvalPerson($apply, $reApply->apply_id);
+            $this->copyPerson($apply, $reApply->apply_id);
+            /**
+             * @var appmodel\JieKuan $loan
+             */
+            $loan = $reApply->loan;
+            $model = new appmodel\JieKuan();
+            $model->apply_id = $apply->apply_id;
+            $model->bank_name = $loan->bank_name;
+            $model->bank_card_id = $loan->bank_card_id;
+            $model->bank_name_des = $loan->bank_name_des ? : '';
+            $model->pics = $loan->files;
+            $model->money = $loan->money;
+            $model->des = $loan->des;
+            $model->tips = $loan->tips;
+            $model->get_money_time = 0;
+            $model->pay_back_time = 0;
+            $model->is_pay_back = 0;
+            $model->status = 1;
+            if (!$model->save()) {
+                throw new Exception('备用金保存失败', $model->errors);
+            }
+            $transaction->commit();
+        } catch (Exception $exception){
+            $transaction->rollBack();
+            throw $exception;
         }
-        return false;
+        return $apply->apply_id;
     }
     
     /**
      * 收款失败，备用金归还重新申请
      *
      * @param $apply
-     * @param appmodel\Person $person
      *
      * @return boolean
      */
-    public function rePayBack($apply, $person)
+    public function rePayBack($apply)
     {
         $model = new BackForm();
         $data['BaoxiaoForm'] = [
@@ -520,36 +560,14 @@ class ApplyLogic extends BaseLogic
     /**
      * 付款失败，付款单重新申请
      *
-     * @param $apply
-     * @param appmodel\Person $person
+     * @param appmodel\Apply $reApply
      *
      * @return boolean
+     * @throws Exception
      */
-    public function reApplyPay($apply, $person)
+    public function reApplyPay($reApply)
     {
-        $model = new ApplyPayForm();
-        $data['BaoxiaoForm'] = [
-            ''
-        ];
-        if ( $model -> load($data) && $model->validate() && $apply_id = $model->save($person)) {
-            return $apply_id;
-        }
-        return false;
-    }
-    
-    /**
-     * 付款失败，请购单重新申请
-     *
-     * @param  appmodel\Apply $reApply
-     * @param appmodel\Person $person
-     *
-     * @return boolean
-     */
-    public function reApplyBuy($reApply, $person)
-    {
-        $applyId = '0000';
-        $pdfUrl = '';
-        $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
+        $applyId = $this->apply_id;
     
         $apply = new appmodel\Apply();
         $apply->apply_id = $applyId;
@@ -562,7 +580,63 @@ class ApplyLogic extends BaseLogic
         $apply->next_des = '财务付款';
         $apply->approval_persons = $reApply->approval_persons;
         $apply->copy_person = $reApply->copy_person;
-        $apply->apply_list_pdf = $pdfUrl;
+        $apply->apply_list_pdf = $reApply->apply_list_pdf;
+        $apply->cai_wu_need = $reApply->cai_wu_need;
+        $apply->org_id = $reApply->org_id;
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if (!$apply->save()) {
+                throw new Exception('付款申请单创建失败');
+            }
+            /**
+             * @var appmodel\ApplyPay $pay
+             */
+            $pay = $reApply->applyPay;
+            $applyPay =  new appmodel\ApplyPay();
+            $applyPay->apply_id = $pay->apply_id;
+            $applyPay->bank_card_id = $pay->bank_card_id;
+            $applyPay->bank_name = $pay->bank_name;
+            $applyPay->money = $pay->money;
+            $applyPay->created_at = time();
+            $applyPay->files = $pay->files;
+            $applyPay->des = $pay->des;
+            //$applyPay->pay_type = $pay->pay_type;
+            $applyPay->to_name = $pay->to_name;
+            if (!$applyPay->save()) {
+                throw new Exception('付款申请创建失败');
+            }
+            $this->approvalPerson($apply, $reApply->apply_id);
+            $this->copyPerson($apply, $reApply->apply_id);
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+    
+    /**
+     * 付款失败，请购单重新申请
+     *
+     * @param  appmodel\Apply $reApply
+     *
+     * @return boolean
+     * @throws Exception
+     */
+    public function reApplyBuy($reApply)
+    {
+        $applyId = '0000';
+        $apply = new appmodel\Apply();
+        $apply->apply_id = $applyId;
+        $apply->title = $reApply->title;
+        $apply->create_time = $_SERVER['REQUEST_TIME'];
+        $apply->type = $reApply->type;
+        $apply->person_id = $reApply->person_id;
+        $apply->person = $reApply->person;
+        $apply->status = 4;
+        $apply->next_des = '财务付款';
+        $apply->approval_persons = $reApply->approval_persons;
+        $apply->copy_person = $reApply->copy_person;
+        $apply->apply_list_pdf = $reApply->apply_list_pdf;
         $apply->cai_wu_need = $reApply->cai_wu_need;
         $apply->org_id = $reApply->org_id;
         $transaction = \Yii::$app->db->beginTransaction();
@@ -604,8 +678,8 @@ class ApplyLogic extends BaseLogic
                     }
                 }
             }
-            $this->approvalPerson($apply, $apply->apply_id);
-            $this->copyPerson($apply, $apply->apply_id);
+            $this->approvalPerson($apply, $reApply->apply_id);
+            $this->copyPerson($apply, $reApply->apply_id);
             $transaction->commit();
             return true;
         } catch (Exception $e) {
@@ -615,38 +689,61 @@ class ApplyLogic extends BaseLogic
     }
     
     /**
-     * @param $apply
+     * 审批人
      *
-     * @return array
+     * @param appmodel\Apply $apply
+     * @param int $oldApplyId
+     *
+     * @return boolean
+     * @throws Exception
      */
-    public function getApprovalLog($apply)
+    public function approvalPerson($apply, $oldApplyId)
     {
-        $approval = appmodel\ApprovalLog::find()->select('approval_person_id')->where([
-            'apply_id' => $apply->apply_id
-        ])->asArray()->all();
-        return ArrayHelper::getColumn($approval, 'approval_person_id');
+        $approvalLogs = appmodel\ApprovalLog::find()->where(['apply_id' => $oldApplyId])->all();
+        /**
+         * @var appmodel\ApprovalLog $v
+         */
+        foreach ($approvalLogs as  $v) {
+            $approval = new appmodel\ApprovalLog();
+            $approval->apply_id = $apply->apply_id;
+            $approval->approval_person_id = $v->approval_person_id;
+            $approval->approval_person = $v->approval_person;
+            $approval->steep = $v->steep;
+            $approval->is_end = $v->is_end;
+            $approval->is_to_me_now = $v->is_to_me_now;
+            $approval->des = '付款失败，重新申请';
+            $approval->result = $v->result;
+            $approval->approval_time = time();
+            if ($approval->save()) {
+                throw new Exception('审批人保存失败');
+            }
+        }
+        return true;
     }
     
     /**
-     * @param $apply
+     * 抄送人
+     * @param appmodel\Apply $apply
+     * @param $oldApplyId
      *
-     * @return array
+     * @return bool
+     * @throws Exception
      */
-    public function getCopyPersonLog($apply)
+    public function copyPerson($apply, $oldApplyId)
     {
-        $approval = appmodel\ApplyCopyPerson::find()->select('copy_person_id')->where([
-            'apply_id' => $apply->apply_id
-        ])->asArray()->all();
-        return ArrayHelper::getColumn($approval, 'approval_person_id');
-    }
-    
-    public function approvalPerson($apply, $applyId)
-    {
-        
-    }
-    
-    public function copyPerson($apply, $applyId)
-    {
-        
+        $ApplyCopyPerson = appmodel\ApplyCopyPerson::find()->where(['apply_id' => $oldApplyId])->all();
+        /**
+         * @var appmodel\ApplyCopyPerson $v
+         */
+        foreach ($ApplyCopyPerson as  $v) {
+            $copyPerson = new appmodel\ApplyCopyPerson();
+            $copyPerson->apply_id = $apply->apply_id;
+            $copyPerson->copy_person = $v->copy_person;
+            $copyPerson->copy_person_id = $v->copy_person_id;
+            if ($copyPerson->save()) {
+                throw new Exception('审批人保存失败');
+            }
+        }
+        return true;
     }
 }
