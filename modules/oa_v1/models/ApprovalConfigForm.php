@@ -25,6 +25,12 @@ class ApprovalConfigForm extends BaseForm
     
     public $org_pid = 1;//组织架构parent_id
     
+    protected $roles_arr = [
+        'caiwujingli' => [1,2,3,4,5],
+        'xingzhengjingli' => [6,7,8,9],
+        'zhaopinjingli' => [10,11,12],
+    ];
+    
     public function rules()
     {
         return [
@@ -98,6 +104,21 @@ class ApprovalConfigForm extends BaseForm
             self::SCENARIO_COPY_EDIT => ['id','config'],
         ];
     }
+
+    /**
+     * 编辑时判断权限
+     * @param string $role_name 角色别名
+     * @return boolean
+     */
+    public function checkApplyType($role_name)
+    {
+        if(isset($this->roles_arr[$role_name]) && in_array($this->apply_type, $this->roles_arr[$role_name])){
+            return true;
+        }
+        $this->addError('','你没有操作此审批的权限！');
+        return false;
+    }
+    
     /**
      * 编辑流程
      * @param array $user
@@ -122,6 +143,7 @@ class ApprovalConfigForm extends BaseForm
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
         }
     }
+    
     /**
      * 修改审批人配置
      * @param array $user
@@ -165,9 +187,10 @@ class ApprovalConfigForm extends BaseForm
     /**
      * 获得配置列表
      * @param array $params
+     * @param string $roleName
      * @return array
      */   
-    public function getList($params)
+    public function getList($params,$role_name='')
     {
         $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $start_time = ArrayHelper::getValue($params,'start_time',null);
@@ -192,6 +215,12 @@ class ApprovalConfigForm extends BaseForm
         if($end_time){
             $end_time = strtotime($end_time.' 23:59:59');
             $query->andWhere(['<=', 'updated_at', $end_time]);
+        }
+        //权限
+        if($role_name && isset($this->roles_arr[$role_name])){
+            $query->andWhere(['in','apply_type',$this->roles_arr[$role_name]]);
+        }else{
+            $query->andWhere('1 <> 1');
         }
         //排序
         switch($sort){
@@ -328,6 +357,7 @@ class ApprovalConfigForm extends BaseForm
         }
         return $res;
     }
+    
     /**
      * 格式化抄送人配置入库
      */
@@ -341,6 +371,10 @@ class ApprovalConfigForm extends BaseForm
         $data = implode(',', $this->config);
         return $data;
     }
+    /**
+     * 格式化抄送人配置出库
+     * @param string $config
+     */
     protected function getCopyConfig($config)
     {
         $data = explode(',', $config);

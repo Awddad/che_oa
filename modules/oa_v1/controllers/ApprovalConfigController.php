@@ -15,7 +15,7 @@ class ApprovalConfigController extends BaseController
         $model = new ApprovalConfigForm();
         $model->setScenario($model::SCENARIO_EDIT);
         $model->load(['ApprovalConfigForm'=>$post]);
-        if(!$model->validate()){
+        if(!$model->validate() || !$model->checkApplyType($this->roleName)){
             return $this->_returnError(403,current($model->getFirstErrors()));
         }
         $res = $model->edit($this->arrPersonInfo);
@@ -70,7 +70,7 @@ class ApprovalConfigController extends BaseController
     {
         $get = yii::$app->request->get();
         $model = new ApprovalConfigForm();
-        $res = $model->getList($get);
+        $res = $model->getList($get,$this->roleName);
         return $this->_return($res);
     }
     /**
