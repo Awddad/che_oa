@@ -181,7 +181,7 @@ class EmployeeInfoForm extends BaseForm
             if(!$model->save()){
                 throw new \Exception(current($this->getFirstErrors())); 
             }
-            if($model->status != 0){//未入职状态 不同步权限系统
+            if($model->status != 0 && $model->getOldAttribute('status') != 3){//未入职状态 已离职状态 不同步权限系统
                 $fun = $model->status == 3 ? 'delQxEmp' : 'editQxEmp';
                 $res = EmployeeLogic::instance()->$fun($model);
                 if(!$res['status']){
