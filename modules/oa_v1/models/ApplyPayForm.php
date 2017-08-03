@@ -11,7 +11,7 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApplyPay;
-use app\models\User;
+use app\models\Person;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use yii\db\Exception;
@@ -93,7 +93,7 @@ class ApplyPayForm extends BaseForm
     }
     
     /**
-     * @param User $user
+     * @param Person $user
      * @return mixed
      * @throws Exception
      */

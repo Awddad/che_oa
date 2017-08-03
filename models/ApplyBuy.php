@@ -68,4 +68,9 @@ class ApplyBuy extends \yii\db\ActiveRecord
             'status' => '请购单入库状态',
         ];
     }
+    
+    public function getBuyList()
+    {
+        return $this->hasMany(ApplyBuyList::className(), ['apply_id' => $this->apply_id]);
+    }
 }
