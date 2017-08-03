@@ -178,9 +178,11 @@ class BaseApplyLogic extends Logic
      * 请购单列表
      *
      * @param $applyId
+     * @param $flag
+     *
      * @return array
      */
-    public function getApplyBuyList($applyId)
+    public function getApplyBuyList($applyId, $flag = false)
     {
         $data = [];
         $assetLogic = AssetLogic::instance();
@@ -189,14 +191,24 @@ class BaseApplyLogic extends Logic
          * @var ApplyBuyList $v
          */
         foreach ($list as $v) {
-            $data[] = [
-                'asset_type_name' => $assetLogic->getAssetType($v->asset_type_id),
-                'asset_brand_name' => $assetLogic->getAssetBrand($v->asset_brand_id),
-                'name' => $v->name,
-                'price' => $v->price,
-                'amount' => $v->amount,
-                'in_amount' => $v->in_amount,
-            ];
+            if ($flag) {
+                $data[] = [
+                    'asset_type_id' => $v->asset_type_id,
+                    'asset_brand_id' => $v->asset_brand_id,
+                    'name' => $v->name,
+                    'price' => $v->price,
+                    'amount' => $v->amount,
+                ];
+            } else {
+                $data[] = [
+                    'asset_type_name' => $assetLogic->getAssetType($v->asset_type_id),
+                    'asset_brand_name' => $assetLogic->getAssetBrand($v->asset_brand_id),
+                    'name' => $v->name,
+                    'price' => $v->price,
+                    'amount' => $v->amount,
+                    'in_amount' => $v->in_amount,
+                ];
+            }
         }
         return $data;
     }

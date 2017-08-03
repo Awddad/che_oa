@@ -34,7 +34,7 @@ class EmailController extends Controller
             $person = Person::findOne($v['approval_person_id']);
             if($person->email) {
                 \Yii::$app->mailer->compose()->setFrom([
-                    'xj@youmeng.com' => 'OA系统通知'
+                    'oa@che.com' => 'OA系统通知'
                 ])->setTo($person->email)->setSubject('审批单提醒！')->setHtmlBody(
                     '今天你还有' . $v['total'] . '个审批未处理，快去处理吧。点击处理。'
                 );

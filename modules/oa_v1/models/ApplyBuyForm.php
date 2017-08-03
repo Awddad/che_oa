@@ -9,10 +9,10 @@
 namespace app\modules\oa_v1\models;
 
 use app\models\ApplyBuy;
+use app\models\Person;
 use app\modules\oa_v1\logic\AssetLogic;
 use Yii;
 use app\models\Apply;
-use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
@@ -124,7 +124,7 @@ class ApplyBuyForm extends BaseForm
     }
     
     /**
-     * @param User $user
+     * @param Person $user
      * @return mixed
      * @throws Exception
      */

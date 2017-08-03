@@ -4,7 +4,13 @@ namespace app\modules\oa_v1\logic;
 
 
 use app\models as appmodel;
+use app\modules\oa_v1\models\ApplyBuyForm;
+use app\modules\oa_v1\models\ApplyPayForm;
+use app\modules\oa_v1\models\BackForm;
+use app\modules\oa_v1\models\BaoxiaoForm;
+use app\modules\oa_v1\models\LoanForm;
 use yii\data\Pagination;
+use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -348,6 +354,8 @@ class ApplyLogic extends BaseLogic
      *
      * @param appmodel\Apply $apply
      * @param $files
+     *
+     * @return boolean
      */
     public function addFiles($apply, $files)
     {
@@ -398,5 +406,344 @@ class ApplyLogic extends BaseLogic
             return true;
         }
         return false;
+    }
+    
+    /**
+     * 付款失败，重新下单
+     *
+     * @param appmodel\Person $person
+     *
+     * @return boolean
+     */
+    public function PayReApply($person)
+    {
+        $applyId = \Yii::$app->request->post('apply_id');
+        $apply = appmodel\Apply::findOne($applyId);
+        if (empty($apply) || $apply->status == 6 || !in_array($apply->type, [1, 2, 3, 4, 5])) {
+            $this->error = '申请单不存在，或者该申请单不能重新申请';
+            return false;
+        }
+        if ($apply &&  $apply->person_id != $person->person_id){
+            $this->error = '错误操作';
+            return false;
+        }
+        $bank_card_id = \Yii::$app->request->post('bank_card_id');
+        $bank_name = \Yii::$app->request->post('bank_name');
+        if($apply->type == 4 || $apply->type == 5) {
+            $to_name = \Yii::$app->request->post('bank_name');
+            if (!$bank_card_id || $bank_name || $to_name) {
+                $this->error = '参数错误';
+                return false;
+            }
+        } else {
+            if (!$bank_card_id || !$bank_name) {
+                $this->error = '参数错误';
+                return false;
+            }
+        }
+        if($apply->type == 1) {
+            return $this->reExpense($apply, $person);
+        } elseif($apply->type == 2) {
+            return $this->reLoan($apply);
+        } elseif($apply->type == 3) {
+            return $this->rePayBack($apply);
+        } elseif($apply->type == 4) {
+            return $this->reApplyPay($apply);
+        } else {
+            return $this->reApplyBuy($apply);
+        }
+    }
+    
+    /**
+     * 付款失败，报销重新申请
+     *
+     * @param $apply
+     * @param appmodel\Person $person
+     *
+     * @return boolean | integer
+     */
+    public function reExpense($apply, $person)
+    {
+        $model = new BaoxiaoForm();
+        $data['BaoxiaoForm'] = [
+            ''
+        ];
+        $model -> load($data);
+        $model -> title = $model -> createApplyTitle($person->person_id);
+        $model -> create_time = time();
+        if ($model->validate() && $apply_id = $model -> saveBaoxiao()) {
+            return $apply_id;
+        }
+        return false;
+    }
+    
+    /**
+     * 付款失败，备用金重新申请
+     *
+     * @param appmodel\Apply $reApply
+     *
+     * @return boolean
+     * @throws Exception
+     */
+    public function reLoan($reApply)
+    {
+        $applyId = '9999';
+        $apply = new appmodel\Apply();
+        $apply->apply_id = $applyId;
+        $apply->title = $reApply->title;
+        $apply->create_time = $_SERVER['REQUEST_TIME'];
+        $apply->type = $reApply->type;
+        $apply->person_id = $reApply->person_id;
+        $apply->person = $reApply->person;
+        $apply->status = 4;
+        $apply->next_des = '财务付款';
+        $apply->approval_persons = $reApply->approval_persons;
+        $apply->copy_person = $reApply->copy_person;
+        $apply->apply_list_pdf = $reApply->apply_list_pdf;
+        $apply->cai_wu_need = $reApply->cai_wu_need;
+        $apply->org_id = $reApply->org_id;
+        $db = \Yii::$app->db;
+        $transaction = $db->beginTransaction();
+        try{
+            if (!$apply->save()) {
+                throw new Exception('申请失败',$apply->errors);
+            }
+            $this->approvalPerson($apply, $reApply->apply_id);
+            $this->copyPerson($apply, $reApply->apply_id);
+            /**
+             * @var appmodel\JieKuan $loan
+             */
+            $loan = $reApply->loan;
+            $model = new appmodel\JieKuan();
+            $model->apply_id = $apply->apply_id;
+            $model->bank_name = $loan->bank_name;
+            $model->bank_card_id = $loan->bank_card_id;
+            $model->bank_name_des = $loan->bank_name_des ? : '';
+            $model->pics = $loan->files;
+            $model->money = $loan->money;
+            $model->des = $loan->des;
+            $model->tips = $loan->tips;
+            $model->get_money_time = 0;
+            $model->pay_back_time = 0;
+            $model->is_pay_back = 0;
+            $model->status = 1;
+            if (!$model->save()) {
+                throw new Exception('备用金保存失败', $model->errors);
+            }
+            $transaction->commit();
+        } catch (Exception $exception){
+            $transaction->rollBack();
+            throw $exception;
+        }
+        return $apply->apply_id;
+    }
+    
+    /**
+     * 收款失败，备用金归还重新申请
+     *
+     * @param $apply
+     *
+     * @return boolean
+     */
+    public function rePayBack($apply)
+    {
+        $model = new BackForm();
+        $data['BaoxiaoForm'] = [
+            ''
+        ];
+        if ( $model -> load($data) && $model->validate() && $apply_id = $model->save($person)) {
+            return $apply_id;
+        }
+        return false;
+    }
+    
+    /**
+     * 付款失败，付款单重新申请
+     *
+     * @param appmodel\Apply $reApply
+     *
+     * @return boolean
+     * @throws Exception
+     */
+    public function reApplyPay($reApply)
+    {
+        $applyId = $this->apply_id;
+    
+        $apply = new appmodel\Apply();
+        $apply->apply_id = $applyId;
+        $apply->title = $reApply->title;
+        $apply->create_time = $_SERVER['REQUEST_TIME'];
+        $apply->type = $reApply->type;
+        $apply->person_id = $reApply->person_id;
+        $apply->person = $reApply->person;
+        $apply->status = 4;
+        $apply->next_des = '财务付款';
+        $apply->approval_persons = $reApply->approval_persons;
+        $apply->copy_person = $reApply->copy_person;
+        $apply->apply_list_pdf = $reApply->apply_list_pdf;
+        $apply->cai_wu_need = $reApply->cai_wu_need;
+        $apply->org_id = $reApply->org_id;
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if (!$apply->save()) {
+                throw new Exception('付款申请单创建失败');
+            }
+            /**
+             * @var appmodel\ApplyPay $pay
+             */
+            $pay = $reApply->applyPay;
+            $applyPay =  new appmodel\ApplyPay();
+            $applyPay->apply_id = $pay->apply_id;
+            $applyPay->bank_card_id = $pay->bank_card_id;
+            $applyPay->bank_name = $pay->bank_name;
+            $applyPay->money = $pay->money;
+            $applyPay->created_at = time();
+            $applyPay->files = $pay->files;
+            $applyPay->des = $pay->des;
+            //$applyPay->pay_type = $pay->pay_type;
+            $applyPay->to_name = $pay->to_name;
+            if (!$applyPay->save()) {
+                throw new Exception('付款申请创建失败');
+            }
+            $this->approvalPerson($apply, $reApply->apply_id);
+            $this->copyPerson($apply, $reApply->apply_id);
+            $transaction->commit();
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+    
+    /**
+     * 付款失败，请购单重新申请
+     *
+     * @param  appmodel\Apply $reApply
+     *
+     * @return boolean
+     * @throws Exception
+     */
+    public function reApplyBuy($reApply)
+    {
+        $applyId = '0000';
+        $apply = new appmodel\Apply();
+        $apply->apply_id = $applyId;
+        $apply->title = $reApply->title;
+        $apply->create_time = $_SERVER['REQUEST_TIME'];
+        $apply->type = $reApply->type;
+        $apply->person_id = $reApply->person_id;
+        $apply->person = $reApply->person;
+        $apply->status = 4;
+        $apply->next_des = '财务付款';
+        $apply->approval_persons = $reApply->approval_persons;
+        $apply->copy_person = $reApply->copy_person;
+        $apply->apply_list_pdf = $reApply->apply_list_pdf;
+        $apply->cai_wu_need = $reApply->cai_wu_need;
+        $apply->org_id = $reApply->org_id;
+        $transaction = \Yii::$app->db->beginTransaction();
+        try {
+            if (!$apply->save()) {
+                throw new Exception('付款申请单创建失败');
+            }
+            /**
+             * @var appmodel\ApplyBuy $buy
+             */
+            $buy = $reApply->applyBuy;
+            $applyPay =  new appmodel\ApplyBuy();
+            $applyPay->apply_id = $apply->apply_id;
+            $applyPay->bank_card_id = $buy->bank_card_id;
+            $applyPay->bank_name = $buy->bank_name;
+            $applyPay->money = $buy->money;
+            $applyPay->files = $buy->files;
+            $applyPay->des = $buy->des;
+            $applyPay->to_name = $buy->to_name;
+            if (!$applyPay->save()) {
+                throw new Exception('付款申请创建失败');
+            }
+            /**
+             * @var appmodel\ApplyBuyList $v
+             */
+            foreach ($buy->buyList as $v) {
+                $buyList = new appmodel\ApplyBuyList();
+                $buyList->apply_id = $apply->apply_id;
+                $buyList->asset_type_id = $v->asset_type_id;
+                $buyList->asset_type_name = $v->asset_type_name;
+                $buyList->asset_brand_id = $v->asset_brand_id;
+                $buyList->asset_brand_name = $v->asset_brand_name;
+                $buyList->name = $v->name;
+                $buyList->price = $v->price;
+                $buyList->amount = $v->amount;
+                if ($buyList->save()) {
+                    if (!$applyPay->save()) {
+                        throw new Exception('请购明细保存失败');
+                    }
+                }
+            }
+            $this->approvalPerson($apply, $reApply->apply_id);
+            $this->copyPerson($apply, $reApply->apply_id);
+            $transaction->commit();
+            return true;
+        } catch (Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+    
+    /**
+     * 审批人
+     *
+     * @param appmodel\Apply $apply
+     * @param int $oldApplyId
+     *
+     * @return boolean
+     * @throws Exception
+     */
+    public function approvalPerson($apply, $oldApplyId)
+    {
+        $approvalLogs = appmodel\ApprovalLog::find()->where(['apply_id' => $oldApplyId])->all();
+        /**
+         * @var appmodel\ApprovalLog $v
+         */
+        foreach ($approvalLogs as  $v) {
+            $approval = new appmodel\ApprovalLog();
+            $approval->apply_id = $apply->apply_id;
+            $approval->approval_person_id = $v->approval_person_id;
+            $approval->approval_person = $v->approval_person;
+            $approval->steep = $v->steep;
+            $approval->is_end = $v->is_end;
+            $approval->is_to_me_now = $v->is_to_me_now;
+            $approval->des = '付款失败，重新申请';
+            $approval->result = $v->result;
+            $approval->approval_time = time();
+            if ($approval->save()) {
+                throw new Exception('审批人保存失败');
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * 抄送人
+     * @param appmodel\Apply $apply
+     * @param $oldApplyId
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function copyPerson($apply, $oldApplyId)
+    {
+        $ApplyCopyPerson = appmodel\ApplyCopyPerson::find()->where(['apply_id' => $oldApplyId])->all();
+        /**
+         * @var appmodel\ApplyCopyPerson $v
+         */
+        foreach ($ApplyCopyPerson as  $v) {
+            $copyPerson = new appmodel\ApplyCopyPerson();
+            $copyPerson->apply_id = $apply->apply_id;
+            $copyPerson->copy_person = $v->copy_person;
+            $copyPerson->copy_person_id = $v->copy_person_id;
+            if ($copyPerson->save()) {
+                throw new Exception('审批人保存失败');
+            }
+        }
+        return true;
     }
 }

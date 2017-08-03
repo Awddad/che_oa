@@ -377,6 +377,8 @@ class ApplyController extends BaseController
     
     /**
      * 补传附件
+     *
+     * @return array
      */
     public function actionAddFiles()
     {
@@ -394,5 +396,19 @@ class ApplyController extends BaseController
             return $this->_return([]);
         }
         return $this->_returnError(400);
+    }
+    
+    /**
+     * 付款失败重新申请
+     */
+    public function actionPayReApply()
+    {
+        
+        $rst = ApplyLogic::instance()->PayReApply($this->arrPersonInfo);
+    }
+    
+    public function actionReApply()
+    {
+        
     }
 }
