@@ -369,7 +369,7 @@ class ApplyController extends BaseController
         $applyLogic = ApplyLogic::instance();
         return $this->_return([
             'to_approval_count' => $applyLogic->getToMe($this->arrPersonInfo->person_id),
-            'approval_log_count' => $applyLogic->getApprovalLogCount($this->arrPersonInfo->person_id),
+            'approval_log_count' => $applyLogic->getApprovagCount($this->arrPersonInfo->person_id),
             'apply_count' => $applyLogic->getApplyCount($this->arrPersonInfo->person_id),
             'copy_count' => $applyLogic->getCopyCount($this->arrPersonInfo->person_id)
         ]);
@@ -377,6 +377,8 @@ class ApplyController extends BaseController
     
     /**
      * 补传附件
+     *
+     * @return array
      */
     public function actionAddFiles()
     {
@@ -394,5 +396,19 @@ class ApplyController extends BaseController
             return $this->_return([]);
         }
         return $this->_returnError(400);
+    }
+    
+    /**
+     * 付款失败重新申请
+     */
+    public function actionPayReApply()
+    {
+        
+        $rst = ApplyLogic::instance()->PayReApply($this->arrPersonInfo);
+    }
+    
+    public function actionReApply()
+    {
+        
     }
 }
