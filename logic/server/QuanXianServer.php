@@ -992,7 +992,7 @@ class QuanXianServer extends Server
         $strSQL = "INSERT INTO {$strTable} ({$strKeys}) values {$strValues} ON DUPLICATE KEY UPDATE ";
         foreach($arrKeys as $key)
         {
-            if($key != $strPrimaryKey || !in_array($key, $arrNotUpdate));
+            if($key != $strPrimaryKey && !in_array($key, $arrNotUpdate))
             {
                 $strSQL .= "$key=VALUES({$key}),";
             }
