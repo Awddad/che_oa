@@ -571,28 +571,28 @@ class ApplyLogic extends BaseLogic
                 throw new Exception('付款申请单创建失败');
             }
             /**
-             * @var appmodel\ApplyBuy $applyBuy
+             * @var appmodel\ApplyBuy $buy
              */
-            $applyBuy = $reApply->applyBuy;
+            $buy = $reApply->applyBuy;
             $applyPay =  new appmodel\ApplyBuy();
             $applyPay->apply_id = $apply->apply_id;
-            $applyPay->bank_card_id = $applyBuy->bank_card_id;
-            $applyPay->bank_name = $applyBuy->bank_name;
-            $applyPay->money = $applyBuy->money;
-            $applyPay->files = $applyBuy->files;
-            $applyPay->des = $applyBuy->des;
-            $applyPay->to_name = $applyBuy->to_name;
+            $applyPay->bank_card_id = $buy->bank_card_id;
+            $applyPay->bank_name = $buy->bank_name;
+            $applyPay->money = $buy->money;
+            $applyPay->files = $buy->files;
+            $applyPay->des = $buy->des;
+            $applyPay->to_name = $buy->to_name;
             if (!$applyPay->save()) {
                 throw new Exception('付款申请创建失败');
             }
-            foreach ($applyBuy) {
-                
-            }
-            $this->approvalPerson($apply);
-            $this->copyPerson($apply);
-            $this->saveApplyBuyList();
-            $transaction->commit();
-            return $apply;
+//            foreach ($buy->buyList as $v) {
+//
+//            }
+//            $this->approvalPerson($apply);
+//            $this->copyPerson($apply);
+//            $this->saveApplyBuyList();
+//            $transaction->commit();
+//            return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();
             throw $e;
