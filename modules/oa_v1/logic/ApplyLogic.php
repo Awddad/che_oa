@@ -585,14 +585,29 @@ class ApplyLogic extends BaseLogic
             if (!$applyPay->save()) {
                 throw new Exception('付款申请创建失败');
             }
-//            foreach ($buy->buyList as $v) {
-//
-//            }
-//            $this->approvalPerson($apply);
-//            $this->copyPerson($apply);
-//            $this->saveApplyBuyList();
-//            $transaction->commit();
-//            return $apply;
+            /**
+             * @var appmodel\ApplyBuyList $v
+             */
+            foreach ($buy->buyList as $v) {
+                $buyList = new appmodel\ApplyBuyList();
+                $buyList->apply_id = $apply->apply_id;
+                $buyList->asset_type_id = $v->asset_type_id;
+                $buyList->asset_type_name = $v->asset_type_name;
+                $buyList->asset_brand_id = $v->asset_brand_id;
+                $buyList->asset_brand_name = $v->asset_brand_name;
+                $buyList->name = $v->name;
+                $buyList->price = $v->price;
+                $buyList->amount = $v->amount;
+                if ($buyList->save()) {
+                    if (!$applyPay->save()) {
+                        throw new Exception('请购明细保存失败');
+                    }
+                }
+            }
+            $this->approvalPerson($apply, $apply->apply_id);
+            $this->copyPerson($apply, $apply->apply_id);
+            $transaction->commit();
+            return true;
         } catch (Exception $e) {
             $transaction->rollBack();
             throw $e;
@@ -623,5 +638,15 @@ class ApplyLogic extends BaseLogic
             'apply_id' => $apply->apply_id
         ])->asArray()->all();
         return ArrayHelper::getColumn($approval, 'approval_person_id');
+    }
+    
+    public function approvalPerson($apply, $applyId)
+    {
+        
+    }
+    
+    public function copyPerson($apply, $applyId)
+    {
+        
     }
 }

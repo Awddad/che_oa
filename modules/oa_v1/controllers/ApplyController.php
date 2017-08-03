@@ -369,7 +369,7 @@ class ApplyController extends BaseController
         $applyLogic = ApplyLogic::instance();
         return $this->_return([
             'to_approval_count' => $applyLogic->getToMe($this->arrPersonInfo->person_id),
-            'approval_log_count' => $applyLogic->getApprovagCount($this->arrPersonInfo->person_id),
+            'approval_log_count' => $applyLogic->getApprovalLogCount($this->arrPersonInfo->person_id),
             'apply_count' => $applyLogic->getApplyCount($this->arrPersonInfo->person_id),
             'copy_count' => $applyLogic->getCopyCount($this->arrPersonInfo->person_id)
         ]);
