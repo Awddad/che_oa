@@ -374,4 +374,25 @@ class ApplyController extends BaseController
             'copy_count' => $applyLogic->getCopyCount($this->arrPersonInfo->person_id)
         ]);
     }
+    
+    /**
+     * 补传附件
+     */
+    public function actionAddFiles()
+    {
+        $applyId = Yii::$app->request->post('apply_id');
+        $files = Yii::$app->request->post('files');
+        if(!$applyId || !$files){
+            return $this->_returnError(403);
+        }
+        $apply = Apply::findOne($applyId);
+        if (!$apply || $apply->person_id != $this->arrPersonInfo->person_id) {
+            return $this->_returnError(4400, null, '未找到该申请单');
+        }
+        $rst = ApplyLogic::instance()->addFiles($apply, $files);
+        if ($rst) {
+            return $this->_return([]);
+        }
+        return $this->_returnError(400);
+    }
 }

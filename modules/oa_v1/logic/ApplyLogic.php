@@ -5,6 +5,8 @@ namespace app\modules\oa_v1\logic;
 
 use app\models as appmodel;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
+
 /**
  * 申请单逻辑
  * @author Administrator
@@ -339,5 +341,62 @@ class ApplyLogic extends BaseLogic
         ])->andWhere([
             'in', 'b.status', [4 , 5, 99]
         ])->count() ? : 0;
+    }
+    
+    /**
+     * 补传附件
+     *
+     * @param appmodel\Apply $apply
+     * @param $files
+     */
+    public function addFiles($apply, $files)
+    {
+        switch ($apply->type) {
+            case 2:
+                $info = $apply->loan;
+                break;
+            case 4:
+                $info = $apply->applyPay;
+                break;
+            case 5:
+                $info = $apply->applyBuy;
+                break;
+            case 6:
+                $info = $apply->applyDemand;
+                break;
+            case 7:
+                $info = $apply->applyUseChapter;
+                break;
+            case 8:
+                $info = $apply->assetGet;
+                break;
+            case 9:
+                $info = $apply->assetBack;
+                break;
+            case 10:
+                $info = $apply->applyPositive;
+                break;
+            case 11:
+                $info = $apply->applyLeave;
+                break;
+            case 12:
+                $info = $apply->applyTransfer;
+                break;
+            case 13:
+                $info = $apply->applyOpen;
+                break;
+            default:
+                $info = $apply->expense;
+                break;
+        }
+        if($apply->type == 2) {
+            $info->pics = ArrayHelper::merge(json_decode($info->pics), $files);
+        } else {
+            $info->files = ArrayHelper::merge(json_decode($info->pics), $files);
+        }
+        if ($info->save()) {
+            return true;
+        }
+        return false;
     }
 }
