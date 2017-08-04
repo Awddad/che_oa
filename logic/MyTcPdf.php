@@ -659,6 +659,10 @@ TABLEHTML;
             <td colspan="2">{$param['profession']}</td>
         </tr>
         <tr>
+            <td style="background-color:#f2f2f2"> 生效日期</td>
+            <td colspan="5">{$param['positive_time']}</td>
+        </tr>
+        <tr>
             <td style="background-color:#f2f2f2"> 试用期业绩自述</td>
             <td colspan="5">{$param['prosecution']}</td>
         </tr>

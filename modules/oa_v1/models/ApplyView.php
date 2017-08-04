@@ -238,6 +238,7 @@ class ApplyView extends BaseForm
 				'org' => $positive->org,//试用期部门
 				'job' => $positive->profession,//试用期职位
 				'entry_time' => date('Y年m月d日',strtotime($positive->entry_time)),//入职时间
+				'positive_time' => date('Y年m月d日',strtotime($positive->entry_time)),//转正时间
 				'files' => json_decode($positive->files),
 		];
 		return $data;

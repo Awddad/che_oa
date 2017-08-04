@@ -62,11 +62,12 @@ class AfterApproval extends BaseLogic
     protected function Positive($approvalLog)
     {
         $apply = Apply::findOne($approvalLog->apply_id);
-        $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
-        $employee->status = $employee->status == 1 ? 2 : $employee->status;
-        $employee->employee_type = EmployeeType::findOne(['slug'=>'zhengshi'])->id;
-        if ($employee->save()) {
-            return true;
+        if(strtotime($apply->applyPositive->positive_time) <= time()){//转正生效时间比现在小
+            $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
+            $employee->employee_type = EmployeeType::findOne(['slug'=>'zhengshi'])->id;
+            if ($employee->save()) {
+                return true;
+            }
         }
         return false;
     }

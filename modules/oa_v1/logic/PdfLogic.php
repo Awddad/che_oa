@@ -476,6 +476,7 @@ class PdfLogic extends Logic
             'prosecution' => $apply->applyPositive->prosecution,
             'summary' => $apply->applyPositive->summary,
             'suggest' => $apply->applyPositive->suggest,
+            'positive_time' => date('Y年m月d日', strtotime($apply->applyPositive->positive_time)),//转正时间
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
         ];
