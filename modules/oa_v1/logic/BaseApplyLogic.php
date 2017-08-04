@@ -18,6 +18,7 @@ use app\models\AssetGetList;
 use app\models\CaiWuFuKuan;
 use app\models\CaiWuShouKuan;
 use app\models\Person;
+use app\models\ApplyCopyPerson;
 
 
 /**
@@ -255,6 +256,20 @@ class BaseApplyLogic extends Logic
     }
     
     /**
+     * 获取请购基础信息
+     * @param Apply $apply
+     * @return array
+     */
+    public function getApplyBase($apply)
+    {
+        $approval_persons = $this->getApprovalPersons($apply);
+        return [
+            'approval_persons' => $this->getApprovalPersons($apply),
+            'copy_persons' => $this->getCopyPersons($apply),
+        ];
+    }
+    
+    /**
      * 固定资产申请列表
      *
      * @param $applyId
@@ -301,6 +316,42 @@ class BaseApplyLogic extends Logic
                 'price' => $v->asset->price,
                 'stock_number' => $v->assetList->stock_number
             ];
+        }
+        return $data;
+    }
+    /**
+     * 获得审批人
+     * @param app\models\Apply $apply
+     */
+    public function getApprovalPersons($apply)
+    {
+        $res = ApprovalLog::find()->where(['apply_id'=>$apply->apply_id])->orderBy('steep asc')->all();
+        $data = [];
+        if($res){
+            foreach($approval as $v){
+                $data[] = [
+                    'id' => $v->approval_person_id,
+                    'name' => $v->approval_person,
+                ];
+            }
+        }
+        return $data;
+    }
+    /**
+     * 获得抄送人
+     * @param app\models\Apply $apply
+     */
+    public function getCopyPersons($apply)
+    {
+        $res = ApplyCopyPerson::find()->where(['apply_id'=>$apply->apply_id])->all();
+        $data = [];
+        if($res){
+            foreach($approval as $v){
+                $data[] = [
+                    'id' => $v->copy_person_id,
+                    'name' => $v->copy_person,
+                ];
+            }
         }
         return $data;
     }

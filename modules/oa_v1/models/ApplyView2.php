@@ -53,7 +53,7 @@ class ApplyView2 extends BaseForm
 	{
 		$logic = BaseApplyLogic::instance();
 		//基本信息
-		$data = $logic->getBaseApply($apply);
+		$data = $logic->getApplyBase($apply);
 		//申请信息
 		$fuc = "get{$this->typeMethod[$apply['type']]}";
 		$data['info'] = $this->$fuc($apply);
