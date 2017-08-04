@@ -94,12 +94,15 @@ class ApplyController extends BaseController
 		if(empty($apply)){
 			return $this->_return('申请单不存在！', 403);
 		}
-		$model = new ApplyView();
+		if($get['reapply'] == 1){
+		    $model = new ApplyView2();
+		}else{
+		    $model = new ApplyView();
+		}
 		$data = $model->getApply($apply);
 		
 		return $this->_return($data);
 	}
-
 	
 
 	/**
