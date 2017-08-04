@@ -332,6 +332,7 @@ class BaseApplyLogic extends Logic
                 $data[] = [
                     'id' => $v->approval_person_id,
                     'name' => $v->approval_person,
+                    'default' => 0,
                 ];
             }
         }
@@ -350,6 +351,7 @@ class BaseApplyLogic extends Logic
                 $data[] = [
                     'id' => $v->copy_person_id,
                     'name' => $v->copy_person,
+                    'default' => 0,
                 ];
             }
         }
