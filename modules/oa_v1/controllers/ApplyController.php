@@ -14,6 +14,7 @@ use app\modules\oa_v1\models\ApplyView;
 use app\modules\oa_v1\logic\Profession;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\models\PersonBankInfo;
+use app\modules\oa_v1\models\ApplyView2;
 
 class ApplyController extends BaseController
 {
