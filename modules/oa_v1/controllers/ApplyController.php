@@ -422,8 +422,11 @@ class ApplyController extends BaseController
             return $this->_returnError(403);
         }
         $apply = Apply::findOne($applyId);
-        if (!$apply || $apply->person_id != $this->arrPersonInfo->person_id) {
+        if (!$apply) {
             return $this->_returnError(4400, null, '未找到该申请单');
+        }
+        if ($apply->person_id != $this->arrPersonInfo->person_id) {
+            return $this->_returnError(4400, null, '非法操作');
         }
         $rst = ApplyLogic::instance()->addFiles($apply, $files);
         if ($rst) {

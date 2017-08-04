@@ -399,9 +399,9 @@ class ApplyLogic extends BaseLogic
                 break;
         }
         if($apply->type == 2) {
-            $info->pics = ArrayHelper::merge(json_decode($info->pics), $files);
+            $info->pics = json_encode(ArrayHelper::merge(json_decode($info->pics), $files));
         } else {
-            $info->files = ArrayHelper::merge(json_decode($info->pics), $files);
+            $info->files = json_encode(ArrayHelper::merge(json_decode($info->files), $files));
         }
         if ($info->save()) {
             return true;
