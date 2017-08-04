@@ -346,7 +346,7 @@ class BaseApplyLogic extends Logic
         $res = ApplyCopyPerson::find()->where(['apply_id'=>$apply->apply_id])->all();
         $data = [];
         if($res){
-            foreach($approval as $v){
+            foreach($res as $v){
                 $data[] = [
                     'id' => $v->copy_person_id,
                     'name' => $v->copy_person,
