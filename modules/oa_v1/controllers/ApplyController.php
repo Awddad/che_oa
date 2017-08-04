@@ -308,6 +308,7 @@ class ApplyController extends BaseController
     /**
      * 财务驳回
      *
+     * @return array
      */
     public function actionCaiwuRefuse()
     {
@@ -360,6 +361,36 @@ class ApplyController extends BaseController
     }
     
     /**
+     * 付款失败，一般银行卡信息错误， 需要重新修改银行卡
+     *
+     * @return array
+     */
+    public function actionPayFail()
+    {
+        $applyId = Yii::$app->request->post('apply_id');
+        $reason = Yii::$app->request->post('reason');
+        if(!$applyId || !$reason) {
+            return $this->_returnError(403);
+        }
+        $apply = Apply::findOne($applyId);
+        if(empty($apply)){
+            return $this->_returnError(2408);
+        }
+        if($apply->cai_wu_need != 2 || $apply->status != 99 || !in_array($apply->type, [1,2,4,5])){
+            return $this->_returnError(2406);
+        }
+        // 付款失败
+        $apply->status = 6;
+        $apply->caiwu_refuse_reason = $reason;
+        $apply->next_des = '付款失败';
+        if (!$apply->save()) {
+            return $this->_returnError(2047);
+        }
+        
+        return $this->_return([], 200);
+    }
+    
+    /**
      * 我的审批统计
      *
      * @return array
@@ -403,8 +434,11 @@ class ApplyController extends BaseController
      */
     public function actionPayReApply()
     {
-        
         $rst = ApplyLogic::instance()->PayReApply($this->arrPersonInfo);
+        if ($rst) {
+            return $this->_return($rst);
+        }
+        return $this->_returnError(4400, null, ApplyLogic::instance()->error);
     }
     
     public function actionReApply()

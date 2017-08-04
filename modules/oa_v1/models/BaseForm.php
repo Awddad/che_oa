@@ -259,11 +259,17 @@ class BaseForm extends Model
      * 201705031617            01/02/03              089
      * 具体到秒的时间戳           申请类型         随机三位数
      *
+     * @param $type
+     *
      * @return string
      */
-    public function createApplyId()
+    public function createApplyId($type = null)
     {
-        return date('YmdHis'). '0' .$this->type . $this->getRandNum();
+        $type = $type ? : $this->type;
+        if ($type  < 10) {
+            $type = '0'.$type;
+        }
+        return date('YmdHis'). $type . $this->getRandNum();
     }
 
     /**

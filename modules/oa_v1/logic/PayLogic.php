@@ -35,13 +35,13 @@ class PayLogic extends BaseLogic
         ]);
         
         $status = \Yii::$app->request->post('status');
-        if($status && in_array($status, [4, 5, 99])) {
+        if($status && in_array($status, [4, 5, 6, 7, 99])) {
             $query->andWhere([
                 'a.status' => $status
             ]);
         } else {
             $query->andWhere([
-                'in', 'a.status', [4, 5, 99]
+                'in', 'a.status', [4, 5, 6, 7, 99]
             ]);
         }
         //筛选
