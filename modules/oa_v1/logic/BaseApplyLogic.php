@@ -328,7 +328,7 @@ class BaseApplyLogic extends Logic
         $res = ApprovalLog::find()->where(['apply_id'=>$apply->apply_id])->orderBy('steep asc')->all();
         $data = [];
         if($res){
-            foreach($approval as $v){
+            foreach($res as $v){
                 $data[] = [
                     'id' => $v->approval_person_id,
                     'name' => $v->approval_person,
