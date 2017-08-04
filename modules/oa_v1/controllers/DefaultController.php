@@ -255,11 +255,13 @@ class DefaultController extends BaseController
      * 下载链接，前端无法设置下载
      *
      * @param $path
-     * @param $name
      */
-    public function actionDown($path, $name)
+    public function actionDown($path)
     {
-        
+        $name = Yii::$app->request->get('name');
+        if (!$name) {
+            $name = Yii::$app->request->get('apply_id');
+        }
         $rootPath = Yii::$app->basePath. '/web'.$path;
         if(!file_exists($rootPath)){
             echo '未找到该文件';die;

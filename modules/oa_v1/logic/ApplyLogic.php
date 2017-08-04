@@ -401,7 +401,7 @@ class ApplyLogic extends BaseLogic
         if($apply->type == 2) {
             $info->pics = ArrayHelper::merge(json_decode($info->pics), $files);
         } else {
-            $info->files = ArrayHelper::merge(json_decode($info->pics), $files);
+            $info->files = ArrayHelper::merge(json_decode($info->files), $files);
         }
         if ($info->save()) {
             return true;
