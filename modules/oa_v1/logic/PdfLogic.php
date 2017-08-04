@@ -514,6 +514,7 @@ class PdfLogic extends Logic
             'finance_status' => $apply->applyLeave->finance_status ? '已结算' : '未结算',
             'account_status' => $apply->applyLeave->account_status ? '已交接' : '未交接',
             'work_status' => $apply->applyLeave->work_status ? '已交接' : '未交接',
+            'handover' => $apply->applyLeave->handover ? : '--',
             'qq' => isset($employee->account)?$employee->account->qq:'--',
 	        'email' => isset($employee->account)?$employee->account->email:'--',
 	        'phone' => isset($employee->account)?$employee->account->tel:'--',

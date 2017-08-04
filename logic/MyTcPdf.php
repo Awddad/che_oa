@@ -889,6 +889,10 @@ jdf;
             <td colspan="5">{$param['work_status']}</td>
         </tr>
         <tr>
+            <td style="background-color:#f2f2f2"> 交接人</td>
+            <td colspan="5">{$param['handover']}</td>
+        </tr>
+        <tr>
             <td style="background-color:#f2f2f2"> 审批人</td>
             <td colspan="2">{$param['approval_person']}</td>
             <td style="background-color:#f2f2f2"> 抄送人</td>
