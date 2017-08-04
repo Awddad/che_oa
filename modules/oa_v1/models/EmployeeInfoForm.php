@@ -340,7 +340,7 @@ class EmployeeInfoForm extends BaseForm
             return ['status'=>false,'msg'=>'银行卡不属于该员工'];
         }
         if($model->delete()){
-            PeopleLogic::instance()->addLog(0,$this->id,'删除员工银行卡信息',ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
+            PeopleLogic::instance()->addLog(0,$this->id,'删除员工银行卡信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }else{
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
@@ -366,7 +366,7 @@ class EmployeeInfoForm extends BaseForm
         //$model->bank_name_des = $this->bank_des;
         $model->is_salary = $this->is_salary;
         if($model->save()){
-            PeopleLogic::instance()->addLog(0,$this->id,$content,ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
+            PeopleLogic::instance()->addLog(0,$this->id,$content,ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }else{
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
@@ -382,7 +382,7 @@ class EmployeeInfoForm extends BaseForm
         $model->service_id = $this->org_id;
         $model->service = Org::findOne($this->org_id)->org_name;
         if($model->save()){
-            PeopleLogic::instance()->addLog(0,$this->id,'修改劳动合同',ArrayHelper::toArray($this),$user['person_id'],$user['person_name']);
+            PeopleLogic::instance()->addLog(0,$this->id,'修改劳动合同',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }
         return ['status'=>false, 'msg'=>current($model->getFirstErrors())];
