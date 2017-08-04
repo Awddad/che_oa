@@ -6,6 +6,7 @@ use app\models\ApplyLeave;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use Exception;
+use app\models\Person;
 
 class ApplyLeaveForm extends BaseForm
 {
@@ -22,12 +23,13 @@ class ApplyLeaveForm extends BaseForm
     public $files;
 	public $approval_persons;
 	public $copy_person;
+	public $handover_id;
     
     public function rules()
     {
         return [
             [
-                ['apply_id','leave_time','des','stock_status','finance_status','account_status','work_status','approval_persons'],
+                ['apply_id','leave_time','des','stock_status','finance_status','account_status','handover_id','work_status','approval_persons'],
                 'required',
                 'message'=>'{attribute}不能为空'
             ],
@@ -43,6 +45,7 @@ class ApplyLeaveForm extends BaseForm
             ['des','string','max' => 250,'message' => '离职说明不正确！'],
             ['leave_time','date','format' => 'yyyy-mm-dd','message' => '离职时间不正确'],
             ['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
+            ['handover_id','exist','targetClass'=>'\app\models\Person','targetAttribute'=>'person_id','message'=>'交接人不存在！'],
             ['files','safe'],
         ];
     }
@@ -97,6 +100,8 @@ class ApplyLeaveForm extends BaseForm
         $model->account_status = $this->account_status;
         $model->work_status = $this->work_status;
         $model->finance_status = $this->finance_status;
+        $model->handover_person_id = $this->handover_id;
+        $model->handover = Person::findOne($this->handover_id)->person_name;
         $model->files = $this->files?json_encode($this->files):'';
         $model->created_at = time();
         

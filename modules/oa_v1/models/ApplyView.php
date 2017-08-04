@@ -281,6 +281,8 @@ class ApplyView extends BaseForm
 	       'finance_status' => $leave->finance_status ? '是' : '否',
 	       'account_status' => $leave->account_status ? '是' : '否',
 	       'work_status' => $leave->work_status ? '是' : '否',
+	       'handover_id' => $leave->handover_person_id,
+	       'handover' => $leave->handover,
 	       'files' => json_decode($leave->files),
 	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
 	       'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
