@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\controllers;
 use yii;
 use app\modules\oa_v1\models\TalentForm;
 use app\modules\oa_v1\models\TalentInfoForm;
+use yii\web\UploadedFile;
 
 /**
  * 招聘 人才
@@ -188,5 +189,24 @@ class TalentController extends BaseController
             }
         }
         return $this->_returnError(403,'id不能为空');
+    }
+    /**
+     * 导入excel
+     */
+    public function actionImport()
+    {
+        $file = UploadedFile::getInstanceByName('file');
+        $model = new TalentForm();
+        $model->setScenario($model::SCENARIO_IMPORT);
+        $model->file = $file;
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->import($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
     }
 }

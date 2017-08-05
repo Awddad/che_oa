@@ -18,6 +18,9 @@ use app\models\PeopleFiles;
 use app\models\PeopleAbility;
 use app\modules\oa_v1\logic\RegionLogic;
 use yii\validators\RequiredValidator;
+use moonland\phpexcel\Excel;
+use app\models\Job;
+use app\models\Educational;
 
 /**
  * 人才表单
@@ -31,6 +34,10 @@ class TalentForm extends BaseForm
 	const SCENARIO_TEST = 'test';//考试
 	const SCENARIO_FACE = 'face';//面试
 	const SCENARIO_JOIN = 'join';//加入人才库
+	
+	const SCENARIO_IMPORT = 'import';//导入
+    
+    public $file;
 	
 	public $name;
 	public $phone;
@@ -75,6 +82,12 @@ class TalentForm extends BaseForm
 		        'on'=>[self::SCENARIO_JOIN],
 		        'message'=>'{attribute}不能为空',
 		    ],
+		    [
+    		    ['file'],
+    		    'required',
+    		    'on' => [self::SCENARIO_IMPORT],
+    		    'message' => '{attribute}不能为空',
+		    ],
 		    ['id','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
 		    ['talent_type','exist','targetClass'=>'\app\models\PersonType','targetAttribute'=>'id','message'=>'类型不存在！'],
 		    ['status','in', 'range' => [0, 1],'message'=>'操作错误！'],//0：不通过 1：通过
@@ -91,6 +104,8 @@ class TalentForm extends BaseForm
 		    ['current_location','exist','targetClass'=>'\app\models\Region','targetAttribute'=>'id','message'=>'地区不正确！'],
 		    ['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
 		    ['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>'org_id','message'=>'组织不存在！'],
+		    ['file','file', 'extensions' => ['xlsx','xls'],'checkExtensionByMimeType'=>false,'message'=>'文件格式错误'],
+		    ['file','checkFile'],
 		];
 	}
 	
@@ -109,6 +124,13 @@ class TalentForm extends BaseForm
 	    return true;
 	}
 	
+	public function checkFile($attribute)
+	{
+	    if (!$this->hasErrors()) {
+	        $file_name = $this->$attribute->name;
+	    }
+	}
+	
 	public function scenarios()
 	{
 	    return [
@@ -117,6 +139,7 @@ class TalentForm extends BaseForm
 	        self::SCENARIO_TEST =>['id','status'],
 	        self::SCENARIO_FACE => ['id','status','org_id','entry_time'],
 	        self::SCENARIO_JOIN => ['id','talent_type'],
+	        self::SCENARIO_IMPORT => ['file'],
 	    ];
 	}
 	/**
@@ -470,4 +493,104 @@ class TalentForm extends BaseForm
 	    return true;
 	}
 	
+	
+	public function import($user)
+	{
+	    $file = $this->file;
+	    
+	    $arr = Excel::import($file->tempName, [
+	        'setFirstRecordAsKeys' => false,
+	        'setIndexSheetByName' => true,
+	        'getOnlySheet' => 'Sheet1',
+	    ]);
+	    array_shift($arr);
+	    $error = [];//错误数组
+	    $data = [];//插入oa_talent的数组
+	    if($arr){
+	        foreach($arr as &$v){
+	            $res = $this->checkImportRow($v);
+	            if(!$res['status']){
+	                $error[] = $res['msg'];
+	            }else{
+	                $data[] = [
+	                    $v['A'],
+	                    $user['person_id'],
+	                    $v['B'],
+	                    $v['job'],
+	                    $v['E'],
+	                    $v['sex'],
+	                    $v['edu'],
+	                    $v['G'],
+	                ];
+	            }
+	            unset($res);
+	            unset($v);
+	        }
+	        if($error){
+	            return ['status'=>false,'msg'=>implode(PHP_EOL, $error)];
+	        }else{
+	            $query = \Yii::$app->db->createCommand()->batchInsert('oa_talent',[
+	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time'
+	            ],$data);
+	            $sql = $query->getRawSql();
+	            $query->execute();
+	            TalentLogic::instance()->addLog(0,'导入数据',$sql,$user['person_name'],$user['person_id']);
+	            return ['status'=>true];
+	        }
+	    }
+	    return ['status'=>false,'msg'=>'没有数据'];
+	}
+	
+	protected function checkImportRow(&$row)
+	{
+	    //var_dump($row);die();
+	    $error = [];
+	    if(!$row['A']){
+	        return ['status'=>false,'msg'=>'姓名不能为空'];
+	    }
+	    //手机号是否存在
+	    $talent = Talent::findOne(['phone'=>$row['B']]);
+	    if(empty($talent)){
+	        $emp = Employee::findOne(['phone'=>$row['B']]);
+	        if($emp){
+	            $error[] = '已入职';
+	        }
+	    }else{
+	        $error[] = '已存在招聘列表';
+	    }
+	    //职位
+	    $profession = Job::findOne(['name'=>$row['C']]);
+	    if(empty($profession)){
+	        $error[] = '职位不存在';
+	    }else{
+	        $row['job'] = $profession->id;
+	    }
+	    //性别
+	    if($row['D'] == '男'){
+	        $row['sex'] = 2;
+	    }elseif($row['D'] == '女'){
+	        $row['sex'] = 1;
+	    }else{
+	        $error[] = '性别不正确';
+	    }
+	    //年龄
+	    if($row['E'] <= 0){
+	        $error[] = '年龄不正确';
+	    }
+	    //学历
+	    $edu = Educational::findOne(['educational'=>$row['F']]);
+	    if(empty($edu)){
+	        $error[] = '学历不正确';
+	    }else{
+	        $row['edu'] = $edu->id;
+	    }
+	    //工作年限
+	    if(strlen($row['G']) > 10){
+	        $error[] = '工作年限不正确';
+	    }
+	    if($error){
+	        return ['status'=>false,'msg'=>$row['A'].':'.implode(',', $error)];
+	    }
+	    return ['status'=>true];
+	}
 }
