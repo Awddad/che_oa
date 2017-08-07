@@ -213,6 +213,7 @@ class ApplyView2 extends BaseForm
 	{
 		$data = [
 		    'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
+		    'chapter_type_id' => $apply->applyUseChapter->chapter_type,
 		    'name' => $apply->applyUseChapter->name,
             'des' => $apply->applyUseChapter->des,
             'files' => json_decode($apply->applyUseChapter->files),
