@@ -137,6 +137,7 @@ class ApplyView2 extends BaseForm
 		$jiekuan = JieKuan::find()->where("apply_id in ({$payback->jie_kuan_ids})")->all();
 		foreach ($jiekuan as $v) {
 			$data['list'][] = [
+			    'apply_id' => $v->apply_id,
 				'money' => $v->money,
 				'time' => date('Y-m-d H:i', $v->get_money_time),
 				'des' => $v->des
