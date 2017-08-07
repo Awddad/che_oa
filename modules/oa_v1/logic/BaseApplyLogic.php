@@ -262,7 +262,6 @@ class BaseApplyLogic extends Logic
      */
     public function getApplyBase($apply)
     {
-        $approval_persons = $this->getApprovalPersons($apply);
         return [
             'approval_persons' => $this->getApprovalPersons($apply),
             'copy_persons' => $this->getCopyPersons($apply),
