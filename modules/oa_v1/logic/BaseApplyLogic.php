@@ -203,6 +203,7 @@ class BaseApplyLogic extends Logic
             } else {
                 $data[] = [
                     'asset_type_id' => $v->asset_type_id,
+                    'asset_brand_id' => $v->asset_brand_id,
                     'asset_type_name' => $assetLogic->getAssetType($v->asset_type_id),
                     'asset_brand_name' => $assetLogic->getAssetBrand($v->asset_brand_id),
                     'name' => $v->name,
