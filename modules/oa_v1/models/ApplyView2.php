@@ -138,9 +138,9 @@ class ApplyView2 extends BaseForm
 		foreach ($jiekuan as $v) {
 			$data['list'][] = [
 			    'apply_id' => $v->apply_id,
+				'des' => $v->des,
+				'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
 				'money' => $v->money,
-				'time' => date('Y-m-d H:i', $v->get_money_time),
-				'des' => $v->des
 			];
 		}
 		return $data;
