@@ -10,12 +10,6 @@ use app\models\Employee;
 use yii;
 use app\models\EmployeeType;
 use app\models\Region;
-use app\models\PeopleProjectExperience;
-use app\models\PeopleWorkExperience;
-use app\models\PeopleTrainExperience;
-use app\models\PeopleEduExperience;
-use app\models\PeopleFiles;
-use app\models\PeopleAbility;
 use app\modules\oa_v1\logic\RegionLogic;
 use yii\validators\RequiredValidator;
 use moonland\phpexcel\Excel;
@@ -59,6 +53,24 @@ class TalentForm extends BaseForm
 	    '3' => '待面试',
 	    '4' => '不合适',
 	    '5' => '录用',
+	];
+	
+	//入职时需要修改的类
+	protected $peopleModel = [
+	    //项目经验
+	    '\app\models\PeopleProjectExperience',
+	    //工作经验
+	    '\app\models\PeopleWorkExperience',
+	    //培训经历
+	    '\app\models\PeopleTrainExperience',
+	    //教育经历
+	    '\app\models\PeopleEduExperience',
+	    //文件
+	    '\app\models\PeopleFiles',
+	    //能力
+	    '\app\models\PeopleAbility',
+	    //头像
+	    '\app\models\PeoplePic',
 	];
 	
 	public function rules()
@@ -421,18 +433,10 @@ class TalentForm extends BaseForm
             if (! $talent->save()) { // 保存人才信息
                 throw new \Exception(current($talent->getFirstErrors()));
             }
-            //项目经验
-            PeopleProjectExperience::updateAll(['employee_id'=>$model->id], ['talent_id'=>$talent->id]);
-            //工作经验
-            PeopleWorkExperience::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
-            //培训经历
-	        PeopleTrainExperience::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
-            //教育经历
-	        PeopleEduExperience::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
-            //文件
-	        PeopleFiles::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
-            //能力
-            PeopleAbility::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            
+            foreach ($this->peopleModel as $v){
+                $v::updateAll(['employee_id'=>$model->id],['talent_id'=>$talent->id]);
+            }
             
             TalentLogic::instance()->addLog($this->id,'面试通过，录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
             $tran->commit();
@@ -521,6 +525,8 @@ class TalentForm extends BaseForm
 	                    $v['sex'],
 	                    $v['edu'],
 	                    $v['G'],
+	                    time(),
+	                    time(),
 	                ];
 	            }
 	            unset($res);
@@ -530,7 +536,7 @@ class TalentForm extends BaseForm
 	            return ['status'=>false,'msg'=>implode(PHP_EOL, $error)];
 	        }else{
 	            $query = \Yii::$app->db->createCommand()->batchInsert('oa_talent',[
-	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time'
+	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time','created_at','updated_at'
 	            ],$data);
 	            $sql = $query->getRawSql();
 	            $query->execute();
