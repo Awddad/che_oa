@@ -312,6 +312,7 @@ class BaseApplyLogic extends Logic
          */
         foreach ($list as $v) {
             $data[] = [
+                'asset_id' => $v->asset_id,
                 'asset_type' => $assetLogic->getAssetType($v->asset->asset_type_id),
                 'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
                 'name' => $v->asset->name,
