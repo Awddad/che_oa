@@ -345,6 +345,7 @@ class ApplyView2 extends BaseForm
         $data = [
             'des' => $assetBack->des,
             'files' => json_decode($assetBack->files),
+            'get_person' => $assetBack->get_person,
             'list' => BaseApplyLogic::instance()->getAssetBackList($assetBack->asset_list_ids)
         ];
         return $data;
