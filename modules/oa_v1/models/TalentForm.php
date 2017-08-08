@@ -564,6 +564,10 @@ class TalentForm extends BaseForm
 	    }else{
 	        $error[] = '已存在招聘列表';
 	    }
+	    //手机号是否正确
+	    if(!preg_match('/^1\d{10}$/', $row['B'])){
+	        $error[] = '手机号不正确';
+	    }
 	    //职位
 	    $profession = Job::findOne(['name'=>$row['C']]);
 	    if(empty($profession)){
