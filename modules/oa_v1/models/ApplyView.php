@@ -44,8 +44,8 @@ class ApplyView extends BaseForm
         12 => 'Transfer',
         13 => 'Open',
 	];
-	
-	
+
+
 	/**
 	 * 获得申请详情
 	 * @param \app\models\Apply $apply
@@ -63,7 +63,7 @@ class ApplyView extends BaseForm
 		$data['info'] = $this->$fuc($apply);
 		return $data;
 	}
-	
+
 	/**
 	 * 报销详情
 	 * @param \app\models\Apply $apply
@@ -100,7 +100,7 @@ class ApplyView extends BaseForm
         $data['total'] = \Yii::$app->formatter->asCurrency($total);
 		return $data;
 	}
-	
+
 	/**
 	 * 借款详情
 	 * @param \app\models\Apply $apply
@@ -121,7 +121,7 @@ class ApplyView extends BaseForm
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 还款详情
 	 * @param \app\models\Apply $apply
@@ -148,7 +148,7 @@ class ApplyView extends BaseForm
 		}
 		return $data;
 	}
-	
+
 	/**
 	 * 付款详情
 	 * @param \app\models\Apply $apply
@@ -169,7 +169,7 @@ class ApplyView extends BaseForm
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 请购详情
 	 * @param \app\models\Apply $apply
@@ -188,7 +188,7 @@ class ApplyView extends BaseForm
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 需求单详情
 	 * @param \app\models\Apply $apply
@@ -206,7 +206,7 @@ class ApplyView extends BaseForm
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 用章详情
 	 * @param \app\models\Apply $apply
@@ -222,7 +222,7 @@ class ApplyView extends BaseForm
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 转正详情
 	 * @param \app\models\Apply $apply
@@ -238,12 +238,12 @@ class ApplyView extends BaseForm
 				'org' => $positive->org,//试用期部门
 				'job' => $positive->profession,//试用期职位
 				'entry_time' => date('Y年m月d日',strtotime($positive->entry_time)),//入职时间
-				'positive_time' => date('Y年m月d日',strtotime($positive->entry_time)),//转正时间
+				'positive_time' => date('Y年m月d日',strtotime($positive->positive_time)),//转正时间
 				'files' => json_decode($positive->files),
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 调职详情
 	 * @param \app\models\Apply $apply
@@ -264,7 +264,7 @@ class ApplyView extends BaseForm
 		];
 		return $data;
 	}
-	
+
 	/**
 	 * 离职详情
 	 * @param \app\models\Apply $apply
@@ -285,7 +285,7 @@ class ApplyView extends BaseForm
 	       'handover_id' => $leave->handover_person_id,
 	       'handover' => $leave->handover,
 	       'files' => json_decode($leave->files),
-	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
+	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id),
 	       'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
 	       'qq' => isset($employee->account)?$employee->account->qq:'--',
 	       'email' => isset($employee->account)?$employee->account->email:'--',
@@ -293,7 +293,7 @@ class ApplyView extends BaseForm
 	   ];
 	   return $data;
 	}
-	
+
 	/**
 	 * 开店申请
 	 * @param \app\models\Apply $apply
@@ -311,7 +311,7 @@ class ApplyView extends BaseForm
 	    ];
 	    return $data;
 	}
-    
+
     /**
      * 固定资产申请
      *
@@ -331,7 +331,7 @@ class ApplyView extends BaseForm
         ];
         return $data;
     }
-    
+
     /**
      * 固定资产归还
      *

@@ -46,7 +46,7 @@ class BaseApplyLogic extends Logic
             "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->person_id),
             "status" => 2
         ];
-        
+
         if(!empty($approvalLog)) {
             $count = count($approvalLog);
             $perTime = $apply->create_time;
@@ -69,7 +69,7 @@ class BaseApplyLogic extends Logic
                     $title .= '不通过';
                     $perTime = $v->approval_time ;
                 }
-                
+
                 $data[] = [
                     "title" => $title,
                     "name" => $v->approval_person,
@@ -117,7 +117,7 @@ class BaseApplyLogic extends Logic
                 "status" => 0
             ];
         }
-    
+
         if($apply->cai_wu_need == 2 && in_array($apply->status, [1, 2, 3, 11]) ) {
             $data[] = [
                 "title" => "付款确认",
@@ -134,7 +134,7 @@ class BaseApplyLogic extends Logic
                 "status" => 0
             ];
         }
-    
+
         if($apply->status == 99 && $apply->cai_wu_need == 2) {
             $data[] = [
                 "title" => "付款确认",
@@ -171,10 +171,10 @@ class BaseApplyLogic extends Logic
                 'diff_time' => $apply->cai_wu_time - $apply->create_time
             ];
         }
-        
+
         return $data;
     }
-    
+
     /**
      * 请购单列表
      *
@@ -215,7 +215,7 @@ class BaseApplyLogic extends Logic
         }
         return $data;
     }
-    
+
     /**
      * 需求单 需求明细
      * @param $applyId
@@ -233,7 +233,7 @@ class BaseApplyLogic extends Logic
         }
         return $data;
     }
-    
+
     /**
      * 获取请购基础信息
      * @param Apply $apply
@@ -256,7 +256,7 @@ class BaseApplyLogic extends Logic
             'status' => $apply->status
         ];
     }
-    
+
     /**
      * 获取请购基础信息
      * @param Apply $apply
@@ -269,7 +269,7 @@ class BaseApplyLogic extends Logic
             'copy_persons' => $this->getCopyPersons($apply),
         ];
     }
-    
+
     /**
      * 固定资产申请列表
      *
@@ -286,7 +286,7 @@ class BaseApplyLogic extends Logic
          */
         foreach ($list as $v) {
             $data[] = [
-                'asset_id' => $v->asset_id,
+                'id' => $v->asset_id,
                 'asset_type' => $assetLogic->getAssetType($v->asset->asset_type_id),
                 'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
                 'name' => $v->asset->name,
@@ -296,7 +296,7 @@ class BaseApplyLogic extends Logic
         }
         return $data;
     }
-    
+
     /**
      * 固定资产归还列表
      * @param $assetListIds

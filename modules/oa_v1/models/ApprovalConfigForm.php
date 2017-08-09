@@ -15,22 +15,23 @@ class ApprovalConfigForm extends BaseForm
     const SCENARIO_EDIT = 'edit';//编辑
     const SCENARIO_APPROVAL_EDIT = 'approval_edit';//编辑审批人
     const SCENARIO_COPY_EDIT = 'copy_edit';//编辑抄送人
-    
-    
+
+
     public $id;
     public $org_id;
     public $apply_type;
     public $type;
     public $config;
-    
+
     public $org_pid = 1;//组织架构parent_id
-    
+
     protected $roles_arr = [
         'caiwujingli' => [1,2,3,4,5],
         'xingzhengjingli' => [6,7,8,9],
         'zhaopinjingli' => [10,11,12],
+        'test' => [1,2,3,4,5,6,7,8,9,10,11,12],
     ];
-    
+
     public function rules()
     {
         return [
@@ -61,7 +62,7 @@ class ApprovalConfigForm extends BaseForm
             ['config','checkConfigApproval','on'=>[self::SCENARIO_APPROVAL_EDIT]],
         ];
     }
-    
+
     public function checkConfigApproval($attribute)
     {
         if (!$this -> hasErrors()) {
@@ -85,7 +86,7 @@ class ApprovalConfigForm extends BaseForm
             }
         }
     }
-        
+
     public function checkOrg($attribute)
     {
         if(!$this->hasErrors()){
@@ -118,7 +119,7 @@ class ApprovalConfigForm extends BaseForm
         $this->addError('','你没有操作此审批的权限！');
         return false;
     }
-    
+
     /**
      * 编辑流程
      * @param array $user
@@ -143,7 +144,7 @@ class ApprovalConfigForm extends BaseForm
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
         }
     }
-    
+
     /**
      * 修改审批人配置
      * @param array $user
@@ -189,7 +190,7 @@ class ApprovalConfigForm extends BaseForm
      * @param array $params
      * @param string $roleName
      * @return array
-     */   
+     */
     public function getList($params,$role_name='')
     {
         $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
@@ -198,8 +199,8 @@ class ApprovalConfigForm extends BaseForm
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $sort = ArrayHelper::getValue($params,'sort','');
-        
-         
+
+
         $query = ApprovalConfig::find();
         //关键词
         if($keywords){
@@ -234,18 +235,18 @@ class ApprovalConfigForm extends BaseForm
                 $order_by = 'updated_at desc';
                 break;
         }
-        
+
         //分页
         $pagination = new Pagination([
             'defaultPageSize' => $page_size,
             'totalCount' => $query->count(),
         ]);
-         
+
         $res = $query->orderBy($order_by)
         ->offset($pagination->offset)
         ->limit($pagination->limit)
         ->all();
-        
+
         $data = [];
         foreach ($res as $k => $v){
             $data[] = [
@@ -262,7 +263,7 @@ class ApprovalConfigForm extends BaseForm
                 'time' => date('Y-m-d H:i:s',$v->updated_at),
             ];
         }
-         
+
         return [
             'res' => $data,
             'page' => BackLogic::instance()->pageFix($pagination)
@@ -318,7 +319,7 @@ class ApprovalConfigForm extends BaseForm
         }
         return $data;
     }
-    
+
     /**
      * 格式化审批人配置入库
      */
@@ -357,7 +358,7 @@ class ApprovalConfigForm extends BaseForm
         }
         return $res;
     }
-    
+
     /**
      * 格式化抄送人配置入库
      */
