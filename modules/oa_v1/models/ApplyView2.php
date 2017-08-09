@@ -77,7 +77,7 @@ class ApplyView2 extends BaseForm
 				'bank_card_id' => $baoxiao->bank_card_id,
 				'bank_name' => $baoxiao->bank_name,
 				'bank_des' => $baoxiao->bank_name_des,
-				'files' => json_decode($baoxiao->files),
+				'files' => json_decode($baoxiao->files)?:[],
 				'list' => []
 		];
         /**
@@ -113,7 +113,7 @@ class ApplyView2 extends BaseForm
 			'bank_des' => $loan->bank_name_des,
 			'tips' => $loan->tips,
 			'des' => $loan->des,
-			'files' => json_decode($loan->pics),
+			'files' => json_decode($loan->pics)?:[],
 			'is_pay_back' => $loan->is_pay_back
 		];
 		return $data;
@@ -163,7 +163,7 @@ class ApplyView2 extends BaseForm
 			'des' => $apply->applyPay->des,
             'money' => $apply->applyPay->money,
             //'pay_type_name' => $tagTree->name,
-			'files' => json_decode($apply->applyPay->files)
+			'files' => json_decode($apply->applyPay->files)?:[]
 		];
 		return $data;
 	}
@@ -180,7 +180,7 @@ class ApplyView2 extends BaseForm
 				'bank_card_id' => $apply->applyBuy->bank_card_id,
 				'bank_name' => $apply->applyBuy->bank_name,
 				'des' => $apply->applyBuy->des,
-				'files' => json_decode($apply->applyBuy->files),
+				'files' => json_decode($apply->applyBuy->files)?:[],
 				'status' => $apply->applyBuy->status,
 				'buy_list' => BaseApplyLogic::instance()->getApplyBuyList($apply->apply_id)
 		];
@@ -199,7 +199,7 @@ class ApplyView2 extends BaseForm
             'status' => $apply->applyDemand->status,
             'status_name' => ApplyDemand::STATUS[$apply->applyDemand->status],
             'apply_buy_id' => $apply->applyDemand->apply_buy_id,
-            'files' => json_decode($apply->applyDemand->files),
+            'files' => json_decode($apply->applyDemand->files)?:[],
             'demand_list' => BaseApplyLogic::instance()->getApplyDemandList($apply->apply_id),
 		];
 		return $data;
@@ -217,7 +217,7 @@ class ApplyView2 extends BaseForm
 		    'chapter_type_id' => $apply->applyUseChapter->chapter_type,
 		    'name' => $apply->applyUseChapter->name,
             'des' => $apply->applyUseChapter->des,
-            'files' => json_decode($apply->applyUseChapter->files),
+            'files' => json_decode($apply->applyUseChapter->files)?:[],
 		];
 		return $data;
 	}
@@ -239,7 +239,7 @@ class ApplyView2 extends BaseForm
 				'job_id' => $positive->profession_id,
 				'entry_time' => date('Y-m-d',strtotime($positive->entry_time)),//入职时间
 				'positive_time' => date('Y-m-d',strtotime($positive->positive_time)),//转正时间
-				'files' => json_decode($positive->files),
+				'files' => json_decode($positive->files)?:[],
 		];
 		return $data;
 	}
@@ -286,7 +286,7 @@ class ApplyView2 extends BaseForm
 	       'work_status' => $leave->work_status,
 	       'handover_id' => $leave->handover_person_id,
 	       'handover' => $leave->handover,
-	       'files' => json_decode($leave->files),
+	       'files' => json_decode($leave->files)?:[],
 	       'stock_list' => AssetLogic::instance()->getAssetHistory($apply->person_id),
 	       'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
 	       'qq' => isset($employee->account)?$employee->account->qq:'--',
@@ -309,7 +309,7 @@ class ApplyView2 extends BaseForm
 	        'rental' => $open->rental,
 	        'summary' => $open->summary,
 	        'city' => $open->district_name,
-	        'files' => json_decode($open->files),
+	        'files' => json_decode($open->files)?:[],
 	    ];
 	    return $data;
 	}
@@ -328,7 +328,7 @@ class ApplyView2 extends BaseForm
         $applyBuy= $apply->assetGet;
         $data = [
             'des' => $applyBuy->des,
-            'files' => json_decode($applyBuy->files),
+            'files' => json_decode($applyBuy->files)?:[],
             'list' => BaseApplyLogic::instance()->getAssetGetList($apply->apply_id)
         ];
         return $data;
@@ -348,7 +348,7 @@ class ApplyView2 extends BaseForm
         $assetBack = $apply->assetBack;
         $data = [
             'des' => $assetBack->des,
-            'files' => json_decode($assetBack->files),
+            'files' => json_decode($assetBack->files)?:[],
             'get_person' => $assetBack->get_person,
             'list' => BaseApplyLogic::instance()->getAssetBackList($assetBack->asset_list_ids)
         ];
