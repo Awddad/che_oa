@@ -71,6 +71,6 @@ class ApplyBuy extends \yii\db\ActiveRecord
     
     public function getBuyList()
     {
-        return $this->hasMany(ApplyBuyList::className(), ['apply_id' => $this->apply_id]);
+        return $this->hasMany(ApplyBuyList::className(), ['apply_id' => 'apply_id']);
     }
 }
