@@ -33,7 +33,9 @@ class EmailController extends Controller
         foreach ($data as $v) {
             $person = Person::findOne($v['approval_person_id']);
             if($person->email) {
-                $email = \Yii::$app->mailer->compose()->setTo($person->email)->setSubject('审批单提醒！')->setHtmlBody(
+                $email = \Yii::$app->mailer->compose()->setFrom([
+                    'oa@che.com' => 'oa@che.com'
+                ])->setTo($person->email)->setSubject('审批单提醒！')->setHtmlBody(
                     '今天你还有' . $v['total'] . '个审批未处理，快去处理吧。点击处理。'
                 )->send();
                 if (!$email) {
