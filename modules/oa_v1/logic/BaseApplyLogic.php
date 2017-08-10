@@ -176,7 +176,7 @@ class BaseApplyLogic extends Logic
                 "name" => $apply->cai_wu_person,
                 "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
                 "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
-                "status" => 3,
+                "status" => 0,
                 'diff_time' => $apply->cai_wu_time - $perTime,
                 'des' => $apply->caiwu_refuse_reason,
             ];
