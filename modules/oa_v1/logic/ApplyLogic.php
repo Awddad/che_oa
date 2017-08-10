@@ -741,7 +741,7 @@ class ApplyLogic extends BaseLogic
                 $buyList->name = $v->name;
                 $buyList->price = $v->price;
                 $buyList->amount = $v->amount;
-                if ($buyList->save()) {
+                if (!$buyList->save()) {
                     throw new Exception('请购明细保存失败');
                 }
             }
