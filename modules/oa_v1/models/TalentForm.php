@@ -552,7 +552,7 @@ class TalentForm extends BaseForm
 	    //var_dump($row);die();
 	    $error = [];
 	    if(!$row['A']){
-	        return ['status'=>false,'msg'=>'姓名不能为空'];
+	        return ['status'=>false,'msg'=>':姓名不能为空'];
 	    }
 	    //手机号是否存在
 	    $talent = Talent::findOne(['phone'=>$row['B']]);
