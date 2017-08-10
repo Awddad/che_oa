@@ -29,7 +29,6 @@ class ApprovalConfigForm extends BaseForm
         'caiwujingli' => [1,2,3,4,5],
         'xingzhengjingli' => [6,7,8,9],
         'zhaopinjingli' => [10,11,12],
-        'test' => [1,2,3,4,5,6,7,8,9,10,11,12],
     ];
 
     public function rules()
@@ -395,6 +394,24 @@ class ApprovalConfigForm extends BaseForm
             }
         }
         return $res;
+    }
+    /**
+     * 获得可配置的审批类型
+     * @param unknown $role_name
+     */
+    public function getApplyType($role_name)
+    {
+        $data = [];
+        $tmp = $this->roles_arr[$role_name];
+        if($tmp){
+            foreach($tmp as $v){
+                $data[] = [
+                    'label'=>'申请'.$this->typeArr[$v],
+                    'value'=>$v,
+                ];
+            }
+        }
+        return $data;
     }
 
 }
