@@ -533,7 +533,7 @@ class TalentForm extends BaseForm
 	            unset($v);
 	        }
 	        if($error){
-	            return ['status'=>false,'msg'=>implode(PHP_EOL, $error)];
+	            return ['status'=>false,'msg'=>implode(';', $error)];
 	        }else{
 	            $query = \Yii::$app->db->createCommand()->batchInsert('oa_talent',[
 	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time','created_at','updated_at'
