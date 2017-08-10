@@ -170,6 +170,24 @@ class BaseApplyLogic extends Logic
                 "status" => 3,
                 'diff_time' => $apply->cai_wu_time - $apply->create_time
             ];
+        } elseif($apply->cai_wu_need == 2 && $apply->status == 6 || $apply->status == 7) {
+            $data[] = [
+                "title" => "付款失败",
+                "name" => $apply->cai_wu_person,
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cai_wu_person_id),
+                "status" => 3,
+                'diff_time' => $apply->cai_wu_time - $perTime,
+                'des' => $apply->caiwu_refuse_reason,
+            ];
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => '',
+                "status" => 3,
+                'diff_time' => $apply->cai_wu_time - $apply->create_time
+            ];
         }
 
         return $data;
