@@ -77,12 +77,7 @@ $config = [
                 'password' => 'kmmaVd3hTuu5gMTR',
                 'port' => '465',
                 'encryption' => 'ssl',
-            ],
-            //发送的邮件信息配置
-            'messageConfig' => [
-                'charset' => 'utf-8',
-                'from' => ['oa@che.com' => 'OA系统']
-            ],
+            ]
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
