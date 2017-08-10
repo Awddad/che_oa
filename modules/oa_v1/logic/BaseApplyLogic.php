@@ -271,7 +271,8 @@ class BaseApplyLogic extends Logic
             'approval_persons' => $apply->approval_persons ? : '--',
         	'pdf' => $apply->apply_list_pdf,
             'org' => Person::findOne($apply->person_id)->org_full_name,
-            'status' => $apply->status
+            'status' => $apply->status,
+            'refuse_reason' => $apply->caiwu_refuse_reason,
         ];
     }
 
