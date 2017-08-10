@@ -533,7 +533,7 @@ class TalentForm extends BaseForm
 	            unset($v);
 	        }
 	        if($error){
-	            return ['status'=>false,'msg'=>implode(PHP_EOL, $error)];
+	            return ['status'=>false,'msg'=>implode(';', $error)];
 	        }else{
 	            $query = \Yii::$app->db->createCommand()->batchInsert('oa_talent',[
 	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time','created_at','updated_at'
@@ -552,7 +552,7 @@ class TalentForm extends BaseForm
 	    //var_dump($row);die();
 	    $error = [];
 	    if(!$row['A']){
-	        return ['status'=>false,'msg'=>'姓名不能为空'];
+	        return ['status'=>false,'msg'=>':姓名不能为空'];
 	    }
 	    //手机号是否存在
 	    $talent = Talent::findOne(['phone'=>$row['B']]);
