@@ -100,4 +100,13 @@ class ApprovalConfigController extends BaseController
         }
         return $this->_return($res['data']);
     }
+    /**
+     * 获得可配置的审批类型
+     */
+    public function actionGetType()
+    {
+        $model = new ApprovalConfigForm();
+        $res = $model->getApplyType($this->roleName);
+        return $this->_return($res);
+    }
 }
