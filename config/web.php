@@ -74,9 +74,9 @@ $config = [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.exmail.qq.com',
                 'username' => 'oa@che.com',
-                'password' => 'Che123#',
-                'port' => '25',
-                'encryption' => 'tls',
+                'password' => 'kmmaVd3hTuu5gMTR',
+                'port' => '465',
+                'encryption' => 'ssl',
             ],
         ],
         'log' => [
