@@ -167,7 +167,7 @@ class BaseApplyLogic extends Logic
                 "name" => '',
                 "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
                 "org" => '',
-                "status" => 3,
+                "status" => 0,
                 'diff_time' => $apply->cai_wu_time - $apply->create_time
             ];
         } elseif($apply->cai_wu_need == 2 && $apply->status == 6 || $apply->status == 7) {
