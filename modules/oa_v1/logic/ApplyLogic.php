@@ -442,7 +442,10 @@ class ApplyLogic extends BaseLogic
             $this->error = '错误操作';
             return false;
         }
-        
+        // 添加到账号银行卡
+        if ($apply->type == 1 || $apply->type == 2) {
+            PersonLogic::instance()->addBackCard($bank_card_id, $bank_name, $apply->person_id);
+        }
         if($apply->type == 1) {
             return $this->reExpense($apply, $bank_name, $bank_card_id);
         } elseif($apply->type == 2) {
@@ -780,7 +783,7 @@ class ApplyLogic extends BaseLogic
             $approval->steep = $v->steep;
             $approval->is_end = $v->is_end;
             $approval->is_to_me_now = $v->is_to_me_now;
-            $approval->des = '付款失败，重新申请';
+            $approval->des = '付款失败，重新申请，关联订单号为：'.$oldApplyId;
             $approval->result = $v->result;
             $approval->approval_time = time();
             if (!$approval->save()) {

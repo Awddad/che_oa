@@ -45,7 +45,7 @@ class ApprovalConfig extends \yii\db\ActiveRecord
             [['apply_type', 'org_id', 'type', 'copy_person_count', 'created_at', 'updated_at'], 'integer'],
             [['approval'], 'string'],
             [['apply_name'], 'string', 'max' => 15],
-            [['org_name'], 'string', 'max' => 20],
+            [['org_name'], 'string', 'max' => 100],
             [['copy_person'], 'string', 'max' => 255],
         ];
     }

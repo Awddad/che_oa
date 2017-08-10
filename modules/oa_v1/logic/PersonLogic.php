@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\Org;
 use app\models\Person;
+use app\models\PersonBankInfo;
 use app\models\RoleOrgPermission;
 use yii\helpers\ArrayHelper;
 use yii;
@@ -365,5 +366,31 @@ class PersonLogic extends BaseLogic
         return $data;
     }
     
+    /**
+     * 添加银行卡
+     *
+     * @param $bankCardId
+     * @param $bankName
+     * @param $personId
+     *
+     * @return bool
+     */
+    public function addBackCard($bankCardId, $bankName, $personId)
+    {
+        $bank = PersonBankInfo::find()->where([
+            'bank_card_id' => $bankCardId,
+            'person_id' => $personId])->one();
+        if (empty($bank)) {
+            $bank = new PersonBankInfo();
+            $bank->bank_card_id = $bankCardId;
+            $bank->bank_name = $bankName;
+            $bank->person_id = $personId;
+            if ($bank->save()) {
+                return true;
+            }
+        }
+        
+        return true;
+    }
     
 }
