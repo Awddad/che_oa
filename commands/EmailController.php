@@ -36,7 +36,7 @@ class EmailController extends Controller
                 $email = \Yii::$app->mailer->compose()->setFrom([
                     'oa@che.com' => 'oa@che.com'
                 ])->setTo($person->email)->setSubject('审批单提醒！')->setHtmlBody(
-                    '今天你还有' . $v['total'] . '个审批未处理，快去处理吧。点击处理。'
+                    '今天你还有' . $v['total'] . '个审批未处理，快去处理吧。<a href="http://oa.admin.che.com/oa/index.html#/approvals/index?ispage=1">点击处理。</a>'
                 )->send();
                 if (!$email) {
                     echo '发送失败'.PHP_EOL;
