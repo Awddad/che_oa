@@ -21,6 +21,7 @@ $config = [
             ],
         ],
         'db' => $db,
+        'mailer' => require (__DIR__. '/mail.php'),
     ],
     'params' => $params,
     /*
