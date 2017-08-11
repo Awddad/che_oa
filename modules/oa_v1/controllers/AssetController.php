@@ -434,4 +434,12 @@ class AssetController extends BaseController
             return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($model->errors));
         }
     }
+    
+    /**
+     * 资产导入
+     */
+    public function actionImport()
+    {
+    
+    }
 }

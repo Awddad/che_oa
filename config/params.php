@@ -15,6 +15,9 @@ if(YII_ENV_DEV) //开发库
         'cai_wu' => [
             'token' => 'debf6cc22a8baf00904acc5f42535575',
             'baseUrl' => 'http://test.pocket.checheng.net/api/'
+        ],
+        'shop' => [
+            'host' => 'http://dev.api.che.com'
         ]
     ];
 }
