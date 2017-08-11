@@ -61,7 +61,7 @@ class ApplyController extends BaseController
 				'copy_person' => $v ['copy_person'] ?: '--', // 抄送人
 				'status' => $v ['status'], // 状态
 				'next_des' => $v ['next_des'], // 下步说明
-				'can_cancel' => in_array($v ['status'], [1,1]) ? 1 : 0,// 是否可以撤销
+				'can_cancel' => in_array($v ['status'], [1,11]) ? 1 : 0,// 是否可以撤销
 			    'refuse_reason' => $v['caiwu_refuse_reason'],
 			]; 
 		}
