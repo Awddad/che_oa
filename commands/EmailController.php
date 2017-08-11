@@ -23,15 +23,6 @@ class EmailController extends Controller
 {
     public function actionIndex()
     {
-        echo ApprovalLog::find()->alias('a')->select([
-            'a.approval_person_id',
-            'count(*) as total'
-        ])->rightJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
-            'a.is_to_me_now' => 1,
-            'a.result' => 0,
-        ])->andWhere([
-            'in', 'b.status', [1, 11]
-        ])->groupBy('a.approval_person_id')->createCommand()->getRawSql();die;
         $data = ApprovalLog::find()->alias('a')->select([
             'a.approval_person_id',
             'count(*) as total'
