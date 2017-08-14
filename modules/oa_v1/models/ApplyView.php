@@ -19,6 +19,7 @@ use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\models\Person;
+use yii;
 
 /**
  * 申请单详情
@@ -256,8 +257,12 @@ class ApplyView extends BaseForm
 				'entry_time' => date('Y年m月d日',strtotime($transfer->entry_time)),
 				'old_org' => $transfer->old_org_name,
 				'old_profession' => $transfer->old_profession,
+		        'old_salary' => $transfer->old_base_salary,
+		        'old_jixiao' => $transfer->old_jixiao,
 				'target_org' => $transfer->target_org_name,
 				'target_profession' => $transfer->target_profession,
+		        'target_salary' => $transfer->target_base_salary,
+		        'target_jixiao' => $transfer->target_jixiao,
 				'transfer_time' => date('Y年m月d日',strtotime($transfer->transfer_time)),
 				'des' => $transfer->des,
 				'files' => json_decode($transfer->files),
