@@ -10,6 +10,7 @@ use app\models\AssetBack;
 use app\models\AssetGet;
 use app\models\BaoXiao;
 use app\models\BaoXiaoList;
+use app\models\GoodsUp;
 use app\models\TagTree;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
@@ -44,7 +45,8 @@ class ApplyView extends BaseForm
         11 => 'Leave',
         12 => 'Transfer',
         13 => 'Open',
-	];
+        14 => 'GoodsUp',
+    ];
 
 
 	/**
@@ -353,6 +355,25 @@ class ApplyView extends BaseForm
             'des' => $assetBack->des,
             'files' => json_decode($assetBack->files),
             'list' => BaseApplyLogic::instance()->getAssetBackList($assetBack->asset_list_ids)
+        ];
+        return $data;
+    }
+    
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function getGoodsUp($apply)
+    {
+        /**
+         * @var GoodsUp $goodsUp
+         */
+        $goodsUp = $apply->goodsUp;
+        $data = [
+            'des' => $goodsUp->des,
+            'files' => json_decode($goodsUp->files)?:[],
+            'list' => $goodsUp->goodsUpDetail
         ];
         return $data;
     }

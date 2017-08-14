@@ -45,4 +45,9 @@ class GoodsUp extends \yii\db\ActiveRecord
             'des' => '备注',
         ];
     }
+    
+    public function getGoodsUpDetail()
+    {
+        return $this->hasMany(GoodsUpDetail::className(), ['apply_id' => 'apply_id']);
+    }
 }
