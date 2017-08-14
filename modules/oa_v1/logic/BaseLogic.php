@@ -22,6 +22,23 @@ use yii\data\Pagination;
  */
 class BaseLogic extends Logic
 {
+    public $apply_model = [
+        '1' => '\app\models\Baoxiao',
+        '2' => '\app\models\JieKuan',
+        '3' => '\app\models\PayBack',
+        '4' => '\app\models\ApplyPay',
+        '5' => '\app\models\ApplyBuy',
+        '6' => '\app\models\ApplyDemand',
+        '7' => '\app\models\ApplyUseChapter',
+        '8' => '\app\models\AssetGet',
+        '9' => '\app\models\AssetBack',
+        '10' => '\app\models\ApplyPositive',
+        '11' => '\app\models\ApplyLeave',
+        '12' => '\app\models\ApplyTransfer',
+        '13' => '\app\models\ApplyOpen',
+        '14' => '\app\models',
+    ];
+    
     /**
      * 分页数据处理
      *

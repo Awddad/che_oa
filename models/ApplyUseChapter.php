@@ -59,4 +59,16 @@ class ApplyUseChapter extends \yii\db\ActiveRecord
             'files' => '附件',
         ];
     }
+    
+    /**
+     * 获得用章说明
+     * @param string $apply_id
+     */
+    public static function getDes($apply_id)
+    {
+        $des = '';//说明
+        $model = static::find()->where(['apply_id'=>$apply_id])->one();
+        $des = $model->des;
+        return $des;
+    }
 }

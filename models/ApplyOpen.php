@@ -66,4 +66,5 @@ class ApplyOpen extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
     }
+
 }

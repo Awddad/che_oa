@@ -69,4 +69,15 @@ class ApplyDemand extends \yii\db\ActiveRecord
         return $this->hasMany(ApplyDemandList::className(), ['apply_id' => 'apply_id']);
     }
     
+    /**
+     * 获得需求单说明
+     * @param string $apply_id
+     */
+    public static function getDes($apply_id)
+    {
+        $des = '';//说明
+        $model = static::find()->where(['apply_id'=>$apply_id])->one();
+        $des = $model->des;
+        return $des;
+    }
 }
