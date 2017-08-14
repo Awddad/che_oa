@@ -46,6 +46,7 @@ class TalentForm extends BaseForm
 	public $talent_type;
 	public $org_id;
 	public $entry_time;
+	public $reason;
 	
 	public $status_arr = [
 	    '1' => '待沟通',
@@ -118,6 +119,7 @@ class TalentForm extends BaseForm
 		    ['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>'org_id','message'=>'组织不存在！'],
 		    ['file','file', 'extensions' => ['xlsx','xls'],'checkExtensionByMimeType'=>false,'message'=>'文件格式错误'],
 		    ['file','checkFile'],
+		    ['reason','string','max'=>20,'message'=>'不同意原因不正确！'],
 		];
 	}
 	
@@ -147,9 +149,9 @@ class TalentForm extends BaseForm
 	{
 	    return [
 	        self::SCENARIO_ADD_ZHAOPIN => ['name','phone','job','sex','age','educational','work_time','current_location'],
-	        self::SCENARIO_COMMUNION =>['id','status'],
-	        self::SCENARIO_TEST =>['id','status'],
-	        self::SCENARIO_FACE => ['id','status','org_id','entry_time'],
+	        self::SCENARIO_COMMUNION =>['id','status','reason'],
+	        self::SCENARIO_TEST =>['id','status','reason'],
+	        self::SCENARIO_FACE => ['id','status','org_id','entry_time','reason'],
 	        self::SCENARIO_JOIN => ['id','talent_type'],
 	        self::SCENARIO_IMPORT => ['file'],
 	    ];
@@ -246,16 +248,19 @@ class TalentForm extends BaseForm
 	            $content = '沟通不通过';
 	            $model->status_communion = $model->status_communion ?: 2;
 	            $model->status = 4;
+	            $model->disagree_reason = $this->reason;
 	            break;
 	        case self::SCENARIO_TEST://考试
 	            $content = '考试不通过';
 	            $model->status_test = $model->status_test ?: 2;
 	            $model->status = 4;
+	            $model->disagree_reason = $this->reason;
 	            break;
 	        case self::SCENARIO_FACE://面试
 	            $content = '面试不通过';
 	            $model->status_face = $model->status_face ?: 2;
 	            $model->status = 4;
+	            $model->disagree_reason = $this->reason;
 	            break;
 	        default:
 	            return ['status'=>false,'msg'=>'场景错误'];
@@ -382,6 +387,7 @@ class TalentForm extends BaseForm
 	    	    'work_time' => $v->work_time.'年',
 	    	    'status' => $this->status_arr[$v->status],
 	    	    'status_value' => $v->status,
+	    	    'reason' => $v->disagree_reason,
 	    	    'person_type' => $v->person_type > 0 ? $v->personType->name : '',
 	    	    'location' => RegionLogic::instance()->getRegionByChild($v->current_location),
 	    	    'create_time' => date('Y-m-d', $v->created_at),
