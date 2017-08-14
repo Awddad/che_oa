@@ -104,7 +104,7 @@ class GoodsUpLogic extends Logic
      * @param $brandId
      * @param $factoryId
      *
-     * @return bool
+     * @return bool | array
      */
     public function series($brandId, $factoryId)
     {
@@ -123,7 +123,7 @@ class GoodsUpLogic extends Logic
      *
      * @param $seriesId
      *
-     * @return bool
+     * @return bool | array
      */
     public function car($seriesId)
     {
@@ -141,7 +141,7 @@ class GoodsUpLogic extends Logic
      *
      * @param $carId
      *
-     * @return bool
+     * @return bool | array
      */
     public function colors($carId)
     {
@@ -159,7 +159,7 @@ class GoodsUpLogic extends Logic
      *
      * @param ResponseInterface $response
      *
-     * @return bool
+     * @return bool | array
      */
     private function getData($response)
     {

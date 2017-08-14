@@ -8,7 +8,9 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\GoodsUpLogic;
+use app\modules\oa_v1\models\GoodsUpForm;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -19,6 +21,24 @@ use yii\helpers\ArrayHelper;
  */
 class GoodsUpController extends BaseController
 {
+    /**
+     * 创建商品上架申请单
+     *
+     * @return array
+     */
+    public function actionIndex()
+    {
+        $form = new GoodsUpForm();
+        $form->load(['GoodsUpForm' => \Yii::$app->request->post()]);
+        if (!$form->validate()) {
+            return $this->_returnError(4400, null, BaseLogic::instance()->getFirstError($form->errors));
+        }
+        if ($rst = $form->save($this->arrPersonInfo)) {
+            return $this->_return($rst);
+        }
+        return $this->_returnError(4400, null, '创建商品上架申请单失败');
+    }
+    
     /**
      * 品牌
      *
