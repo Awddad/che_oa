@@ -36,7 +36,7 @@ class BaseLogic extends Logic
         '11' => '\app\models\ApplyLeave',
         '12' => '\app\models\ApplyTransfer',
         '13' => '\app\models\ApplyOpen',
-        '14' => '\app\models',
+        '14' => '\app\models\GoodsUp',
     ];
     
     /**
