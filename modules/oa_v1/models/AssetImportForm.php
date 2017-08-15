@@ -9,6 +9,7 @@
 namespace app\modules\oa_v1\models;
 
 
+use app\models\Person;
 use yii\base\Model;
 
 class AssetImportForm extends Model
@@ -38,6 +39,13 @@ class AssetImportForm extends Model
     {
         if (!in_array($this->$attribute, ['未使用', '使用中', '已报废', '已丢失']))  {
             $this->addError($attribute, '无效');
+        }
+        if($this->$attribute == '使用中'){
+            if (!Person::find()->where(['person_name' => $this->H])->one()
+                && !Person::find()->where(['person_name' => $this->H, 'phone' => $this->I])->one()) {
+                $this->addError($attribute, '使用人不存在');
+            }
+            
         }
     }
     
