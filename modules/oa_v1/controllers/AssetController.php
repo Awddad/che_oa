@@ -13,6 +13,7 @@ use app\models\Asset;
 use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\Person;
+use app\modules\oa_v1\logic\AssetImportLogic;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\models\AssetListForm;
 use Yii;
@@ -21,6 +22,7 @@ use app\modules\oa_v1\models\AssetBackForm;
 use app\modules\oa_v1\models\AssetGetForm;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * 资产领取，归还
@@ -440,6 +442,12 @@ class AssetController extends BaseController
      */
     public function actionImport()
     {
-    
+        $files = UploadedFile::getInstanceByName('file');
+        $logic =  AssetImportLogic::instance();
+        $result = $logic->import($files->tempName);
+        if ($logic->errorCode != 200) {
+            return $this->_returnError($logic->errorCode, null, $result);
+        }
+        return $this->_return($result);
     }
 }

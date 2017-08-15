@@ -106,4 +106,18 @@ class BaseLogic extends Logic
         $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
         return $broker;
     }
+    
+    /**
+     * @param $error
+     *
+     * @return string
+     */
+    public function getErrorMessage($error)
+    {
+        $message = '';
+        foreach ($error as $v){
+            $message .= implode('', $v).' ';
+        }
+        return $message;
+    }
 }

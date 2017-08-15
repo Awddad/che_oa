@@ -16,7 +16,10 @@ use app\models\AssetList;
 use app\models\AssetListLog;
 use app\models\AssetType;
 use app\models\Person;
+use app\modules\oa_v1\models\AssetImportForm;
 use moonland\phpexcel\Excel;
+use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 
 /**
  * 资产导入逻辑
@@ -31,11 +34,8 @@ class AssetImportLogic extends Logic
      */
     public $status = [
         '未使用' => 1,
-        '空闲中' => 1,
-        '使用' => 2,
         '使用中' => 2,
         '已报废' => 3,
-        '报废' => 3,
         '已丢失' => 4,
     ];
     
@@ -129,6 +129,14 @@ class AssetImportLogic extends Logic
         throw new \yii\base\Exception(BaseLogic::instance()->getFirstError($assetGetList->errors));
     }
     
+    /**
+     * 文件上传
+     *
+     * @param $file
+     *
+     * @return bool
+     * @throws Exception
+     */
     public function import($file)
     {
         $data = Excel::import($file, [
@@ -136,42 +144,53 @@ class AssetImportLogic extends Logic
             'setIndexSheetByName' => true,
         ]);
         array_shift($data);
+        $data = $this->checkData($data);
+        if ($this->errorCode == 500) {
+            return $data;
+        }
+        //print_r($data);die;
+        
+        $lastNumber = AssetLogic::instance()->getLastAssetNum();
+        $endNum = $lastNumber['endNum'];
         foreach ($data as $k => $v) {
-            if(!$v["A"] || !$v["B"] || !$v["C"] || !$v["D"]) {
-                continue;
-            }
+            $endNum++;
+            $stockNumber = $lastNumber['begin']. $endNum;
             $assetTypeA = $this->getAssetType($v["A"]);
             $assetTypeB = $this->getAssetType($v["B"], $assetTypeA->id);
             $assetBrand = $this->getAssetBrand($v["C"]);
-            $asset = Asset::find()->where(['name' => $v["D"]])->one();
-            if(empty($asset)) {
+            $asset = Asset::find()->where([
+                'name' => $v["D"],
+                'asset_brand_id' => $assetBrand->id,
+                'asset_type_id' => $assetTypeB->id,
+            ])->one();
+            if (empty($asset)) {
                 $asset = new Asset();
                 $asset->asset_brand_id = $assetBrand->id;
                 $asset->asset_brand_name = $v["C"];
                 $asset->asset_type_id = $assetTypeB->id;
-                $asset->asset_type_name = $v["A"] . '-'.$v["B"];
+                $asset->asset_type_name = $v["A"] . '-' . $v["B"];
                 $asset->name = $v["D"];
                 $asset->price = 0;
                 $asset->save();
             }
-            if($this->status[trim($v['G'])] == 2) {
+            if ($this->status[trim($v['G'])] == 2) {
                 /**
                  * @var Person $person
                  */
                 $person = Person::find()->where([
-                    'person_name' => $v['H'],
-                    'phone' => $v['L'],
+                    'person_name' => $v['G'],
+                    'phone' => $v['I'],
                 ])->one();
-                if($person) {
+                if ($person) {
                     $personId = $person->person_id;
-                    $des = $person->person_name.'使用中';
+                    $des = $person->person_name . '使用中';
                 } else {
                     $person = Person::find()->where([
                         'person_name' => $v['H'],
                     ])->one();
-                    if($person) {
+                    if ($person) {
                         $personId = $person->person_id;
-                        $des = $person->person_name.'使用中';
+                        $des = $person->person_name . '使用中';
                     } else {
                         $personId = 0;
                         $des = '未知-使用中';
@@ -180,39 +199,70 @@ class AssetImportLogic extends Logic
             } else {
                 $personId = 0;
             }
+            
             $assetList = new AssetList();
             $assetList->asset_id = $asset->id;
-            $assetList->asset_number = $v['E'] ? : $v['F'];
-            $assetList->stock_number = $v['F'];
-            $assetList->sn_number = $v['K'] ? : '';
-            $assetList->price = $v['M'] ? : 0;
+            $assetList->asset_number = $v['E'] ? : $stockNumber;
+            $assetList->stock_number = $stockNumber;
+            $assetList->sn_number = $v['F'] ?: '';
+            $assetList->price = $v['J'] ?: 0;
             $assetList->status = $this->status[trim($v['G'])];
             $assetList->created_at = time();
             $assetList->person_id = $personId;
             $assetList->save();
-            $asset->price += trim($v['M']);
+            $asset->price += trim($v['J']);
             $asset->amount += 1;
             $type = 2;
-            if($this->status[trim($v['G'])] == 1) {
+            if ($this->status[trim($v['G'])] == 1) {
                 $asset->free_amount += 1;
                 $des = '首次入库';
                 $type = 1;
             }
-            if($this->status[trim($v['G'])] == 3){
+            if ($this->status[trim($v['G'])] == 3) {
                 $des = '报废';
                 $type = 3;
             }
-            if($this->status[trim($v['G'])] == 4){
+            if ($this->status[trim($v['G'])] == 4) {
                 $des = '丢失';
                 $type = 4;
             }
-            $desc = isset($v['N']) ?  trim($v['N']) : $des;
+            $desc = isset($v['K']) ? trim($v['K']) : $des;
             $asset->save();
             $this->addAssetListLog($assetList->id, $type, $desc, $personId);
-            if($personId && $assetList){
+            if ($personId && $assetList) {
                 $this->addAssetGetList($assetList->id, $asset->id, $personId);
             }
-            echo '第'.$k . '条' .PHP_EOL;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 获取数据
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    public function checkData($data)
+    {
+        $returnData = [];
+        $errMessage = [];
+        foreach ($data as $k => $v) {
+            $form = new AssetImportForm();
+            $form->load(['AssetImportForm' => $v]);
+            if (!$form->validate()) {
+                $indexName = '第'. ($k+2). '行';
+                
+                $errMessage[$indexName] =  BaseLogic::instance()->getErrorMessage($form->errors);
+            }
+            $returnData[] = ArrayHelper::toArray($form);
+        }
+        if(empty($errMessage)){
+            return $returnData;
+        } else {
+            $this->errorCode = 500;
+            return $errMessage;
         }
     }
 }
