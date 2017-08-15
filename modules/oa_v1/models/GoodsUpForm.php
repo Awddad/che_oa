@@ -191,7 +191,7 @@ class GoodsUpForm extends BaseForm
         $goodsUp = new GoodsUp();
         $data['GoodsUp'] = [
             'apply_id' => $this->apply_id,
-            'files' => $this->files,
+            'files' => json_encode($this->files),
             'des' => $this->des,
         ];
         if ($goodsUp->load($data) && $goodsUp->save()) {
