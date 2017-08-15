@@ -50,4 +50,15 @@ class GoodsUp extends \yii\db\ActiveRecord
     {
         return $this->hasMany(GoodsUpDetail::className(), ['apply_id' => 'apply_id']);
     }
+    /**
+     * 获得商品上架说明
+     * @param string $apply_id
+     */
+    public static function getDes($apply_id)
+    {
+        $des = '';//说明
+        $model = static::find()->where(['apply_id'=>$apply_id])->one();
+        $des = $model->des;
+        return $des;
+    }
 }
