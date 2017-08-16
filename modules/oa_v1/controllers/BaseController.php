@@ -242,6 +242,7 @@ class BaseController extends Controller
     					11 => '离职',
     					12 => '调职',
     					13 => '开店',
+    					14 => '商品上架',
     ];
 
     public static $code = [

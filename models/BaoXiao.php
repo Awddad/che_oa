@@ -75,4 +75,20 @@ class BaoXiao extends \yii\db\ActiveRecord
     {
     	return $this->hasMany(BaoXiaoList::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * 获得报销说明
+     * @param string $apply_id
+     */
+    public static function getDes($apply_id)
+    {
+        $des = [];//说明
+        $baoxiao_list = BaoXiaoList::find()->select('des')->where(['apply_id'=>$apply_id])->all();
+        if($baoxiao_list){
+            foreach($baoxiao_list as $v){
+                $des[] = $v->des;
+            }
+        }
+        return implode(',', $des);
+    }
 }

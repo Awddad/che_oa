@@ -22,6 +22,23 @@ use yii\data\Pagination;
  */
 class BaseLogic extends Logic
 {
+    public $apply_model = [
+        '1' => '\app\models\BaoXiao',
+        '2' => '\app\models\JieKuan',
+        '3' => '\app\models\PayBack',
+        '4' => '\app\models\ApplyPay',
+        '5' => '\app\models\ApplyBuy',
+        '6' => '\app\models\ApplyDemand',
+        '7' => '\app\models\ApplyUseChapter',
+        '8' => '\app\models\AssetGet',
+        '9' => '\app\models\AssetBack',
+        '10' => '\app\models\ApplyPositive',
+        '11' => '\app\models\ApplyLeave',
+        '12' => '\app\models\ApplyTransfer',
+        '13' => '\app\models\ApplyOpen',
+        '14' => '\app\models\GoodsUp',
+    ];
+    
     /**
      * 分页数据处理
      *
@@ -88,5 +105,19 @@ class BaseLogic extends Logic
         $brokerSecret = Yii::$app->params['quan_xian']['auth_broker_secret'];//配置的项目 Secret
         $broker = new Broker($serverUrl, $brokerId, $brokerSecret);
         return $broker;
+    }
+    
+    /**
+     * @param $error
+     *
+     * @return string
+     */
+    public function getErrorMessage($error)
+    {
+        $message = '';
+        foreach ($error as $v){
+            $message .= implode('', $v).' ';
+        }
+        return $message;
     }
 }

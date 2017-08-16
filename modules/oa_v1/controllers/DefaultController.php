@@ -110,7 +110,10 @@ class DefaultController extends BaseController
                     break; 
                 case 13:
                     $id = date('YmdHis') . '13' . rand(100, 999);
-                    break;    
+                    break;
+                case 14:
+                    $id = date('YmdHis') . '14' . rand(100, 999);
+                    break;
             }
             return $this->_return(['apply_id' => $id]);
         }
@@ -313,6 +316,9 @@ class DefaultController extends BaseController
                 break;
             case 13:
                 $info = $apply->applyOpen->files;
+                break;
+            case 14:
+                $info = $apply->goodsUp->files;
                 break;
             default:
                 $info = $apply->expense->files;

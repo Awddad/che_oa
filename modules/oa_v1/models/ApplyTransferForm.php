@@ -21,8 +21,12 @@ class ApplyTransferForm extends BaseForm
 	public $copy_person;
 	public $old_org_id;
 	public $old_profession_id;
+	public $old_salary;
+	public $old_jixiao;
 	public $target_org_id;
 	public $target_profession_id;
+	public $target_salary;
+	public $target_jixiao;
 	public $entry_time;
 	public $transfer_time;
 	public $files;
@@ -33,7 +37,7 @@ class ApplyTransferForm extends BaseForm
 	{
 		return [
 				[
-					['apply_id',/*'old_org_id','old_profession_id',*/'target_org_id','target_profession_id','entry_time','transfer_time','des'],
+					['apply_id',/*'old_org_id','old_profession_id',*/'target_org_id','target_profession_id','entry_time','transfer_time','des','old_salary','target_salary'],
 					'required',
 					'message' => '{attribute}不能为空'
 				],
@@ -54,6 +58,11 @@ class ApplyTransferForm extends BaseForm
 		        ['old_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'原职位不存在'],
 		        ['target_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'调职后职位不存在'],
 				['files','safe'],
+		        [
+		            ['old_salary','old_jixiao','target_salary','target_jixiao'],
+		            'number',
+		            'message'=>'金钱格式不正确'
+		        ],
 		];
 	}
 	
@@ -116,11 +125,15 @@ class ApplyTransferForm extends BaseForm
 		$model->old_org_name = OrgLogic::instance()->getOrgName($emp->org_id);
 		$model->old_profession_id = $emp->profession;
 		$model->old_profession = Job::findOne($emp->profession)->name;
+		$model->old_base_salary = $this->old_salary;
+		$model->old_jixiao = $this->old_jixiao;
 		
 		$model->target_org_id = $this->target_org_id;
 		$model->target_org_name = OrgLogic::instance()->getOrgName($this->target_org_id);
 		$model->target_profession_id = $this->target_profession_id;
 		$model->target_profession = Job::findOne($this->target_profession_id)->name;
+		$model->target_base_salary = $this->target_salary;
+		$model->target_jixiao = $this->target_jixiao;
 		$model->entry_time = $this->entry_time;
 		$model->transfer_time = $this->transfer_time;
 		$model->des = $this->des;

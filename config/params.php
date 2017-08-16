@@ -15,6 +15,9 @@ if(YII_ENV_DEV) //开发库
         'cai_wu' => [
             'token' => 'debf6cc22a8baf00904acc5f42535575',
             'baseUrl' => 'http://test.pocket.checheng.net/api/'
+        ],
+        'shop' => [
+            'host' => 'http://dev.api.che.com'
         ]
     ];
 }
@@ -34,6 +37,9 @@ else if(YII_ENV_TEST) //测试环境
         'cai_wu' => [
             'token' => 'debf6cc22a8baf00904acc5f42535575',
             'baseUrl' => 'http://test.pocket.checheng.net/api/'
+        ],
+        'shop' => [
+            'host' => 'http://dev.api.che.com'
         ]
     ];
 }
@@ -52,6 +58,9 @@ else
         'cai_wu' => [
             'token' => '1f320d157d95ca8f5cab2dd208ad8202',
             'baseUrl' => 'http://cw.admin.che.com/api/'
+        ],
+        'shop' => [
+            'host' => 'http://api.che.com'
         ]
     ];
 }
