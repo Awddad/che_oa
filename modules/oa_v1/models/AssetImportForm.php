@@ -41,9 +41,9 @@ class AssetImportForm extends Model
             $this->addError($attribute, '无效');
         }
         if($this->$attribute == '使用中'){
-            if (!Person::find()->where(['person_name' => $this->H])->one()
-                && !Person::find()->where(['person_name' => $this->H, 'phone' => $this->I])->one()) {
-                $this->addError($attribute, '使用人不存在');
+            if (!Person::find()->where(['person_name' => $this->H, 'is_delete' => 0])->one()
+                && !Person::find()->where(['person_name' => $this->H, 'phone' => $this->I, 'is_delete' => 0])->one()) {
+                $this->addError($attribute, '使用人不存在或已离职');
             }
             
         }
