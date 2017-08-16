@@ -728,13 +728,13 @@ TABLEHTML;
         <tr>
             <td style="background-color:#f2f2f2"> 原基本薪资</td>
             <td colspan="2">{$param['old_base_salary']}</td>
-            <td style="background-color:#f2f2f2"> 调职后职位</td>
+            <td style="background-color:#f2f2f2"> 调职后基本薪资</td>
             <td colspan="2">{$param['target_base_salary']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2"> 原绩效薪资</td>
             <td colspan="2">{$param['old_jixiao']}</td>
-            <td style="background-color:#f2f2f2"> 现绩效薪资</td>
+            <td style="background-color:#f2f2f2"> 调职后效薪资</td>
             <td colspan="2">{$param['target_jixiao']}</td>
         </tr>
         <tr>
