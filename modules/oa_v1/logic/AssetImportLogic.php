@@ -180,6 +180,7 @@ class AssetImportLogic extends Logic
                 $person = Person::find()->where([
                     'person_name' => $v['G'],
                     'phone' => $v['I'],
+                    'is_delete' => 0
                 ])->one();
                 if ($person) {
                     $personId = $person->person_id;
@@ -187,6 +188,7 @@ class AssetImportLogic extends Logic
                 } else {
                     $person = Person::find()->where([
                         'person_name' => $v['H'],
+                        'is_delete' => 0
                     ])->one();
                     if ($person) {
                         $personId = $person->person_id;
