@@ -23,7 +23,7 @@ use yii\data\Pagination;
 class BaseLogic extends Logic
 {
     public $apply_model = [
-        '1' => '\app\models\Baoxiao',
+        '1' => '\app\models\BaoXiao',
         '2' => '\app\models\JieKuan',
         '3' => '\app\models\PayBack',
         '4' => '\app\models\ApplyPay',

@@ -67,4 +67,15 @@ class ApplyOpen extends \yii\db\ActiveRecord
         return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
     }
 
+    /**
+     * 获得开店说明
+     * @param string $apply_id
+     */
+    public static function getDes($apply_id)
+    {
+        $des = '';//说明
+        $model = static::find()->where(['apply_id'=>$apply_id])->one();
+        $des = $model->summary;
+        return $des;
+    }
 }

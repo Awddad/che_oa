@@ -396,7 +396,7 @@ class ApplyLogic extends BaseLogic
                 $info = $apply->applyOpen;
                 break;
             case 14:
-                $info = $apply->goodsUp->files;
+                $info = $apply->goodsUp;
                 break;
             default:
                 $info = $apply->expense;
