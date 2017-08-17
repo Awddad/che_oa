@@ -309,7 +309,7 @@ class BaseApplyLogic extends Logic
                 'asset_type' => $assetLogic->getAssetType($v->asset->asset_type_id),
                 'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
                 'name' => $v->asset->name,
-                'price' => $v->asset->price,
+                'price' => $v->assetList->price,
                 'stock_number' => $v->assetList->asset_number,
             ];
         }
@@ -335,7 +335,7 @@ class BaseApplyLogic extends Logic
                 'asset_type' => $assetLogic->getAssetType($v->asset->asset_type_id),
                 'asset_brand' => $assetLogic->getAssetBrand($v->asset->asset_brand_id),
                 'name' => $v->asset->name,
-                'price' => $v->asset->price,
+                'price' => $v->assetList->price,
                 'stock_number' => $v->assetList->stock_number
             ];
         }
