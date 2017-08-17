@@ -13,6 +13,7 @@ use app\modules\oa_v1\models\LoanForm;
 use yii\data\Pagination;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
+use app\models\ApprovalLog;
 
 /**
  * 申请单逻辑
@@ -393,6 +394,9 @@ class ApplyLogic extends BaseLogic
                 break;
             case 13:
                 $info = $apply->applyOpen;
+                break;
+            case 14:
+                $info = $apply->goodsUp;
                 break;
             default:
                 $info = $apply->expense;
@@ -828,5 +832,29 @@ class ApplyLogic extends BaseLogic
     {
         $form = new BaseForm();
         return $form->createApplyId($type);
+    }
+    
+    /**
+     * 获得说明
+     * @param string $apply_id 审批单号
+     * @param int $type 审批类型
+     */
+    public function getApplyDes($apply_id,$type)
+    {
+        $model_name = $this->apply_model[$type];
+        $des = '';
+        if(method_exists($model_name, 'getDes')){
+            $des = $model_name::getDes($apply_id);
+        }
+        return $des;
+    }
+    /**
+     * 获得审批不通过原因
+     * @param string $apply_id
+     */
+    public function getApprovalDes($apply_id)
+    {
+        $appprval_model = ApprovalLog::find()->where(['apply_id'=>$apply_id,'result'=>2])->one();
+        return $appprval_model ? $appprval_model->des : '';
     }
 }

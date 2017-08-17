@@ -9,6 +9,7 @@ use app\models\AssetBack;
 use app\models\AssetGet;
 use app\models\BaoXiao;
 use app\models\BaoXiaoList;
+use app\models\GoodsUp;
 use app\models\TagTree;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
@@ -25,26 +26,9 @@ use app\modules\oa_v1\logic\OrgLogic;
  * Class ApplyView
  * @package app\modules\oa_v1\models
  */
-class ApplyView2 extends BaseForm
+class ApplyView2 extends ApplyView
 {
-
-    protected $typeMethod = [
-        1 => 'Baoxiao',
-        2 => 'Loan',
-        3 => 'PayBack',
-        4 => 'Pay',
-        5 => 'Buy',
-        6 => 'Demand',
-        7 => 'UseChapter',
-        8 => 'AssetGet',
-        9 => 'AssetBack',
-        10 => 'Positive',
-        11 => 'Leave',
-        12 => 'Transfer',
-        13 => 'Open',
-	];
-
-
+ 
 	/**
 	 * 获得申请详情
 	 * @param \app\models\Apply $apply
@@ -256,11 +240,15 @@ class ApplyView2 extends BaseForm
 				'entry_time' => date('Y-m-d',strtotime($transfer->entry_time)),
 				'old_org' => $transfer->old_org_name,
 				'old_profession' => $transfer->old_profession,
+		        'old_salary' => $transfer->old_base_salary,
+		        'old_jixiao' => $transfer->old_jixiao,
 				'target_org' => $transfer->target_org_name,
 				'target_org_ids' => OrgLogic::instance()->getOrgIdByChild($transfer->target_org_id),
 				'target_profession' => $transfer->target_profession,
 				'target_profession_id' => $transfer->target_profession_id,
 				'transfer_time' => date('Y-m-d',strtotime($transfer->transfer_time)),
+		        'target_salary' => $transfer->target_base_salary,
+		        'target_jixiao' => $transfer->target_jixiao,
 				'des' => $transfer->des,
 				'files' => json_decode($transfer->files)?:[],
 		];
@@ -354,4 +342,5 @@ class ApplyView2 extends BaseForm
         ];
         return $data;
     }
+    
 }

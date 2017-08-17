@@ -726,6 +726,18 @@ TABLEHTML;
             <td colspan="2">{$param['target_profession']}</td>
         </tr>
         <tr>
+            <td style="background-color:#f2f2f2"> 原基本薪资</td>
+            <td colspan="2">{$param['old_base_salary']}</td>
+            <td style="background-color:#f2f2f2"> 调职后基本薪资</td>
+            <td colspan="2">{$param['target_base_salary']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2"> 原绩效薪资</td>
+            <td colspan="2">{$param['old_jixiao']}</td>
+            <td style="background-color:#f2f2f2"> 调职后效薪资</td>
+            <td colspan="2">{$param['target_jixiao']}</td>
+        </tr>
+        <tr>
             <td style="background-color:#f2f2f2"> 调职日期</td>
             <td colspan="5">{$param['transfer_time']}</td>
         </tr>

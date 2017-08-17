@@ -5,22 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "oa_apply_use_chapter".
+ * This is the model class for table "oa_goods_up".
  *
  * @property string $apply_id
- * @property integer $chapter_type
- * @property string $name
- * @property string $des
  * @property string $files
+ * @property string $des
  */
-class ApplyUseChapter extends \yii\db\ActiveRecord
+class GoodsUp extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'oa_apply_use_chapter';
+        return 'oa_goods_up';
     }
 
     /**
@@ -30,21 +28,11 @@ class ApplyUseChapter extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id'], 'required'],
-            [['chapter_type'], 'integer'],
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['name'], 'string', 'max' => 128],
-            [['des'], 'string', 'max' => 512],
+            [['des'], 'string', 'max' => 255],
         ];
     }
-    
-    const STATUS = [
-        1 => '公章',
-        2 => '财务章',
-        3 => '法人章',
-        4 => '合同专用章',
-        5 => '发票专用章',
-    ];
 
     /**
      * @inheritdoc
@@ -53,15 +41,17 @@ class ApplyUseChapter extends \yii\db\ActiveRecord
     {
         return [
             'apply_id' => '申请ID',
-            'chapter_type' => '印章类型1.公章 2.财务章 3.法人章 4.合同专用章 5.发票专用章',
-            'name' => '印章名称',
-            'des' => '事由',
             'files' => '附件',
+            'des' => '备注',
         ];
     }
     
+    public function getGoodsUpDetail()
+    {
+        return $this->hasMany(GoodsUpDetail::className(), ['apply_id' => 'apply_id']);
+    }
     /**
-     * 获得用章说明
+     * 获得商品上架说明
      * @param string $apply_id
      */
     public static function getDes($apply_id)

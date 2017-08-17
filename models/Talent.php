@@ -34,6 +34,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $status_test
  * @property integer $status_face
  * @property integer $status
+ * @property string $disagree_reason 
  * @property integer $talent
  * @property integer $created_at
  * @property integer $updated_at
@@ -64,7 +65,7 @@ class Talent extends \yii\db\ActiveRecord
             [['job', 'owner', 'age', 'sex', 'educational', 'political', 'marriage', 'job_status', 'person_type', 'current_location', 'status_communion', 'status_test', 'status_face', 'status', 'talent', 'created_at', 'updated_at', 'employee_id'], 'integer'],
             [['name', 'daogang'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
-            [['email', 'yingpin_location'], 'string', 'max' => 100],
+            [['email', 'yingpin_location','disagree_reason'], 'string', 'max' => 100],
             [['now_salary', 'want_salary', 'work_time'], 'string', 'max' => 10],
             [['birthday'], 'string', 'max' => 25],
             [['nation', 'native'], 'string', 'max' => 15],
@@ -103,6 +104,7 @@ class Talent extends \yii\db\ActiveRecord
             'status_test' => 'Status Test',
             'status_face' => 'Status Face',
             'status' => 'Status',
+            'disagree_reason' => 'Disagree Reason',
             'talent' => 'Talent',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

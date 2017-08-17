@@ -30,7 +30,8 @@ class AfterApproval extends BaseLogic
         10 => 'Positive',
         11 => 'Leave',
         12 => 'Transfer',
-        13 => 'Open'
+        13 => 'Open',
+        14 => 'GoodsUp'
     ];
 
     /**

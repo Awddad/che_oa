@@ -61,4 +61,21 @@ class PayBack extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Apply::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * 获得还款说明
+     * @param string $apply_id
+     */
+    public static function getDes($apply_id)
+    {
+        $des = [];//说明
+        $pay_back_model = static::find()->where(['apply_id'=>$apply_id])->one();
+        $jiekuan_model = JieKuan::find()->where(['in','apply_id',explode(',', $pay_back_model->jie_kuan_ids)])->all();
+        if($jiekuan_model){
+            foreach($jiekuan_model as $v){
+                $des[] = $v->des;
+            }
+        }
+        return implode(',', $des);
+    }
 }

@@ -10,6 +10,7 @@ use app\models\AssetBack;
 use app\models\AssetGet;
 use app\models\BaoXiao;
 use app\models\BaoXiaoList;
+use app\models\GoodsUp;
 use app\models\TagTree;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
@@ -19,6 +20,7 @@ use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\models\Person;
+use yii;
 
 /**
  * 申请单详情
@@ -43,7 +45,8 @@ class ApplyView extends BaseForm
         11 => 'Leave',
         12 => 'Transfer',
         13 => 'Open',
-	];
+        14 => 'GoodsUp',
+    ];
 
 
 	/**
@@ -256,8 +259,12 @@ class ApplyView extends BaseForm
 				'entry_time' => date('Y年m月d日',strtotime($transfer->entry_time)),
 				'old_org' => $transfer->old_org_name,
 				'old_profession' => $transfer->old_profession,
+		        'old_salary' => $transfer->old_base_salary,
+		        'old_jixiao' => $transfer->old_jixiao,
 				'target_org' => $transfer->target_org_name,
 				'target_profession' => $transfer->target_profession,
+		        'target_salary' => $transfer->target_base_salary,
+		        'target_jixiao' => $transfer->target_jixiao,
 				'transfer_time' => date('Y年m月d日',strtotime($transfer->transfer_time)),
 				'des' => $transfer->des,
 				'files' => json_decode($transfer->files),
@@ -348,6 +355,25 @@ class ApplyView extends BaseForm
             'des' => $assetBack->des,
             'files' => json_decode($assetBack->files),
             'list' => BaseApplyLogic::instance()->getAssetBackList($assetBack->asset_list_ids)
+        ];
+        return $data;
+    }
+    
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function getGoodsUp($apply)
+    {
+        /**
+         * @var GoodsUp $goodsUp
+         */
+        $goodsUp = $apply->goodsUp;
+        $data = [
+            'des' => $goodsUp->des,
+            'files' => json_decode($goodsUp->files)?:[],
+            'list' => $goodsUp->goodsUpDetail
         ];
         return $data;
     }

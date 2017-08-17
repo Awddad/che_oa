@@ -62,7 +62,8 @@ class ApplyController extends BaseController
 				'status' => $v ['status'], // 状态
 				'next_des' => $v ['next_des'], // 下步说明
 				'can_cancel' => in_array($v ['status'], [1,11]) ? 1 : 0,// 是否可以撤销
-			    'refuse_reason' => $v['caiwu_refuse_reason'],
+			    'refuse_reason' => $v['caiwu_refuse_reason'] ? :ApplyLogic::instance()->getApprovalDes($v['apply_id']),
+			    'des' => ApplyLogic::instance()->getApplyDes($v['apply_id'], $v['type']),
 			]; 
 		}
 		return $this->_return($data, 200);

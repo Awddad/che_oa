@@ -414,6 +414,16 @@ class Apply extends \yii\db\ActiveRecord
     }
     
     /**
+     * 商品上架
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGoodsUp()
+    {
+        return $this->hasOne(GoodsUp::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
      * @var array
      */
     public $typeArr = [
@@ -430,6 +440,7 @@ class Apply extends \yii\db\ActiveRecord
         11 => '离职',
         12 => '调职',
         13 => '开店',
+        14 => '商品上架',
     ];
     
 }
