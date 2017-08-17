@@ -203,6 +203,7 @@ class ApplyView extends BaseForm
             'des' => $apply->applyDemand->des,
             'status' => $apply->applyDemand->status,
             'status_name' => ApplyDemand::STATUS[$apply->applyDemand->status],
+            'buy_type' => ApplyDemand::BUY_TYPE[$apply->applyDemand->buy_type],
             'apply_buy_id' => $apply->applyDemand->apply_buy_id,
             'files' => json_decode($apply->applyDemand->files),
             'demand_list' => BaseApplyLogic::instance()->getApplyDemandList($apply->apply_id),

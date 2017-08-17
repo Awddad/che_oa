@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\controllers;
 
 
 use app\logic\server\JobServer;
+use app\models\Employee;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
 use yii\data\Pagination;
@@ -99,7 +100,7 @@ class JobController extends BaseController
             return $this->_returnError(403);
         }
         $model = Job::findOne($id);
-        $count = Person::find()->where(['profession' => $model->name])->count();
+        $count = Employee::find()->where(['profession' => $model->name])->count();
         if ($count > 0) {
             return $this->_returnError(4400, null, '该职位有员工，不能删除！');
         }

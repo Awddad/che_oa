@@ -22,6 +22,13 @@ class ApplyDemand extends \yii\db\ActiveRecord
         2 => '部分采购',
         3 => '已采购'
     ];
+    
+    
+    const BUY_TYPE = [
+        1 => '请购全部',
+        2 => '请购部分',
+        3 => '库存已有'
+    ];
     /**
      * @inheritdoc
      */
