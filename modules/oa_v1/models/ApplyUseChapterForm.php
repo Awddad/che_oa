@@ -97,17 +97,6 @@ class ApplyUseChapterForm extends BaseForm
     {
         $applyId = $this->apply_id;
         
-        $pdfUrl = $this->createPdf([
-            'apply_date' => date('Y年m月d日'),
-            'apply_id' => $applyId,
-            'org_full_name' => $user->org_full_name,
-            'person' => $user['person_name'],
-            'chapter_type' => ApplyUseChapter::STATUS[$this->chapter_type],
-            'chapter_name' => $this->name,
-            'des' => $this->des ? : '--',
-            'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
-            'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
-        ], 'useChapter');
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
         
         $apply = new Apply();
@@ -121,7 +110,7 @@ class ApplyUseChapterForm extends BaseForm
         $apply->next_des = '等待'.$nextName.'审批';
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
-        $apply->apply_list_pdf = $pdfUrl;
+        $apply->apply_list_pdf = '';
         $apply->cai_wu_need = $this->cai_wu_need;
         $apply->org_id = $user['org_id'];
         $transaction = Yii::$app->db->beginTransaction();

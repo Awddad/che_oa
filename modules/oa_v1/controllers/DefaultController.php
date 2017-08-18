@@ -7,6 +7,7 @@ use app\logic\server\ThirdServer;
 use app\models\Apply;
 use app\models\Employee;
 use app\models\PeoplePic;
+use app\models\Person;
 use app\models\Role;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PdfLogic;
@@ -30,7 +31,7 @@ class DefaultController extends BaseController
      * TEST
      *
      * Renders the index view for the module
-     * @return string
+     * @return array
      */
     public function actionIndex()
     {
@@ -48,6 +49,24 @@ class DefaultController extends BaseController
     {
         $person = PersonLogic::instance()->getSelectPerson($this->arrPersonInfo);
         return $this->_return($person);
+    }
+    
+    /**
+     * 所有人
+     */
+    public function actionAllPerson()
+    {
+        $person = Person::find()->where(['is_delete' => 0])->all();
+        $data = [];
+        foreach ($person as $v) {
+            $personName = $v->person_name. ' '. $v->org_full_name;
+            $data[] = [
+                'id' => $v->person_id,
+                'name' => $personName
+            ];
+        }
+        
+        return $this->_return($data);
     }
 
     /**
