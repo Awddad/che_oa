@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApplyUseChapter;
+use app\models\Org;
 use app\models\Person;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
@@ -45,6 +46,8 @@ class ApplyUseChapterForm extends BaseForm
     
     public $name;
     
+    public $name_path;
+    
     public $files = '';
     
     public $des = '';
@@ -66,7 +69,7 @@ class ApplyUseChapterForm extends BaseForm
     {
         return [
             [
-                [ 'approval_persons', 'apply_id', 'chapter_type', 'use_type', 'name', 'files', 'des'],
+                [ 'approval_persons', 'apply_id', 'chapter_type', 'use_type', 'name', 'name_path', 'files', 'des'],
                 'required',
                 'message' => '缺少必填字段'
             ],
@@ -152,6 +155,7 @@ class ApplyUseChapterForm extends BaseForm
         $model->chapter_type = $this->chapter_type;
         $model->use_type = $this->use_type;
         $model->name = $this->name;
+        $model->name_path= $this->name_path;
         $model->des = $this->des;
         if (!$model->save()) {
             throw new Exception('需求单保存失败');

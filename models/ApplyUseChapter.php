@@ -11,6 +11,7 @@ use Yii;
  * @property integer $chapter_type
  * @property integer $use_type
  * @property string $name
+ * @property string $name_path
  * @property string $des
  * @property string $files
  */
@@ -34,7 +35,7 @@ class ApplyUseChapter extends \yii\db\ActiveRecord
             [['chapter_type', 'use_type'], 'integer'],
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['name'], 'string', 'max' => 128],
+            [['name', 'name_path'], 'string', 'max' => 128],
             [['des'], 'string', 'max' => 512],
         ];
     }
