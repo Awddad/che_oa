@@ -46,7 +46,8 @@ class ApplyController extends BaseController
 		}
 		$data = [
 			'page' => $res ['pages'],
-			'res' => []
+			'res' => [],
+			'types' => [],
 		];
 		foreach ($res ['data'] as $k=>$v) {
 			$data ['res'] [] = [
@@ -65,6 +66,12 @@ class ApplyController extends BaseController
 			    'refuse_reason' => $v['caiwu_refuse_reason'] ? :ApplyLogic::instance()->getApprovalDes($v['apply_id']),
 			    'des' => ApplyLogic::instance()->getApplyDes($v['apply_id'], $v['type']),
 			]; 
+		}
+		foreach($res['types'] as $k=>$v){
+			$data['types'][] = [
+				'text' => $this->type [$v['type']],
+				'value' => $v['type']
+			];
 		}
 		return $this->_return($data, 200);
 	}

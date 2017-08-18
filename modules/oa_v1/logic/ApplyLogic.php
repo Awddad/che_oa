@@ -42,35 +42,22 @@ class ApplyLogic extends BaseLogic
             $apply_type = null;
         }
 		
-		$query;
+		$query = appmodel\Apply::find()->alias('a');
 
 		if(1 == $type){//待我审批
-			$approval_model = new appmodel\ApprovalLog();
-			$query = $approval_model::find()
-			-> andWhere(['approval_person_id'=>$user['person_id'],'is_to_me_now'=>1])
-			-> andWhere(['or', 'status=1', 'status=11'])
-			-> joinWith('apply a',true,'RIGHT JOIN')
-			-> orderBy('create_time');;
+			$query->join('LEFT JOIN', appmodel\ApprovalLog::tableName().' l', 'a.apply_id = l.apply_id')
+				->andWhere(['approval_person_id'=>$user['person_id'],'is_to_me_now'=>1])
+				->andWhere(['or', 'a.status=1', 'a.status=11']);
 		}elseif(2 == $type){//我已审批
-			$approval_model = new appmodel\ApprovalLog();
-			$query = $approval_model::find()
-			->where(['approval_person_id' => $user['person_id']])
-			-> andWhere(['>', 'result', 0])
-			-> joinWith('apply a',true,'RIGHT JOIN')
-			-> orderBy('create_time');
+			$query->join('LEFT JOIN', appmodel\ApprovalLog::tableName().' l', 'a.apply_id = l.apply_id')
+				->where(['approval_person_id' => $user['person_id']])
+				->andWhere(['>', 'result', 0]);
 		}elseif(3 == $type){//我发起的
-			$apply_model = new appmodel\Apply();
-			$query = $apply_model::find()
-			-> alias('a')
-			-> where(['person_id'=>$user['person_id']])
-			-> orderBy('create_time');
+			$query-> where(['person_id'=>$user['person_id']]);
 		}elseif(4 == $type){//抄送给我的
-			$copy_model = new appmodel\ApplyCopyPerson();
-			$query = $copy_model::find()-> joinWith('apply a',true,'RIGHT JOIN')-> where([
-			    'copy_person_id'=>$user['person_id']
-            ])->andWhere([
-                'in', 'a.status', [4 , 5, 99]
-            ])-> orderBy('create_time');
+			$query->join('LEFT JOIN', appmodel\ApplyCopyPerson::tableName().' c', 'a.apply_id = c.apply_id')
+				->where(['copy_person_id'=>$user['person_id']])
+				->andWhere(['in', 'a.status', [4 , 5, 99]]);
 		}else{
 			return false;
 		}
@@ -90,28 +77,7 @@ class ApplyLogic extends BaseLogic
 		}
 		//状态
 		if(isset($search['status']) && $search['status']){
-			
-			/*
-			switch($search['status']){
-				case 1://审核中
-					$query -> andWhere(['in','status',[1,11]]);
-					break;
-				case 2://财务确认中
-					$query -> andWhere(['status'=>4]);
-					break;
-				case 3://撤销
-					$query -> andWhere(['status'=>3]);
-					break;
-				case 4://审核不通过
-					$query -> andWhere(['status'=>2]);
-					break;
-				case 5://完成
-					$query -> andWhere(['status'=>99]);
-					break;
-				default:
-					break;
-			}
-			*/
+
 			$arr_status = [];
 			foreach($search['status'] as $v){
 				switch($v){
@@ -149,11 +115,18 @@ class ApplyLogic extends BaseLogic
 		//var_dump($_query -> createCommand()->getRawSql());die();
 		$total = $_query -> count();
 		//var_dump($total);die();
+
 		$pagination = new Pagination(['totalCount' => $total]);
 		//当前页
 		$pagination -> setPage($page-1);
 		//每页显示条数
 		$pagination->setPageSize($page_size, true);
+
+		$_query->select('a.type')->groupBy('a.type');
+		//var_dump($_query -> createCommand()->getRawSql());die();
+		$types = $_query->asArray()->all();
+		//var_dump($types);die();
+
 		//排序
 		switch(@$search['sort']){
 			case 'asc'://时间顺序
@@ -171,7 +144,8 @@ class ApplyLogic extends BaseLogic
 		
 		return [
 			'data' => $res,
-			'pages' => $this->pageFix($pagination)
+			'pages' => $this->pageFix($pagination),
+			'types' => $types,
 		];
 		
 	}
