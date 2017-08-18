@@ -86,7 +86,8 @@ class GoodsUpDetail extends \yii\db\ActiveRecord
             [['car_status', 'has_car'], 'string', 'max' => 8],
             [['sales_city', 'price_effective_cycle'], 'string', 'max' => 255],
             [['kilometre', 'invoice_type', 'shop_insurance', 'shop_insurance_type'], 'string', 'max' => 16],
-            ['shop_insurance', 'checkInsurance']
+            ['shop_insurance', 'checkInsurance'],
+            ['shop_insurance_type', 'default', 'value' => 0]
         ];
     }
     
