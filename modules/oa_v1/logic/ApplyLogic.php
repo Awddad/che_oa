@@ -857,4 +857,104 @@ class ApplyLogic extends BaseLogic
         $appprval_model = ApprovalLog::find()->where(['apply_id'=>$apply_id,'result'=>2])->one();
         return $appprval_model ? $appprval_model->des : '';
     }
+
+	/**
+	 * 获取申请列表
+	 * @param array $search
+	 * @param array $user
+	 *
+	 * @return array
+	 */
+	public function getApplyListAll($search,$user)
+	{
+		$type = ArrayHelper::getValue($search,'type',[]);
+		$start_time = ArrayHelper::getValue($search,'start_time',null);
+		$end_time = ArrayHelper::getValue($search,'end_time',null);
+		$page = ArrayHelper::getValue($search,'page',1);
+		$page_size = ArrayHelper::getValue($search,'page_size',10);
+		$keywords = ArrayHelper::getValue($search,'keywords',null);
+		$status = ArrayHelper::getValue($search, 'status',0);
+		$sort = ArrayHelper::getValue($search,'sort','desc');
+
+		$apply_model = new appmodel\Apply();
+		$query = $apply_model::find()
+			-> alias('a');
+		//开始时间
+		if($start_time){
+			$start_time = strtotime($start_time.' 0:0:0');
+			$query -> andWhere(['>','create_time',$start_time]);
+		}
+		//结束时间
+		if($end_time){
+			$end_time = strtotime($end_time.' 23:59:59');
+			$query -> andWhere(['<','create_time',$end_time]);
+		}
+		//关键词
+		if($keywords){
+			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
+		}
+		//状态
+		if($status){
+			$arr_status = [];
+			foreach($search['status'] as $v){
+				switch($v){
+					case 1://审核中
+						array_push($arr_status ,1,11);
+						break;
+					case 2://财务确认中
+						array_push($arr_status ,4);
+						break;
+					case 3://撤销
+						array_push($arr_status ,3);
+						break;
+					case 4://审核不通过
+						array_push($arr_status ,2);
+						break;
+					case 5://完成
+						array_push($arr_status ,99);
+						break;
+					default:
+						break;
+				}
+			}
+			if(count($arr_status) == 1){
+				$query -> andWhere(['status'=>$arr_status[0]]);
+			}elseif(count($arr_status) > 1){
+				$query -> andWhere(['in','status',$arr_status]);
+			}
+		}
+		//类型
+		$query -> andWhere(['in','a.type' , $type]);
+
+
+		$_query = clone $query;
+		//var_dump($_query -> createCommand()->getRawSql());die();
+		$total = $_query -> count();
+		//var_dump($total);die();
+		$pagination = new Pagination(['totalCount' => $total]);
+		//当前页
+		$pagination -> setPage($page-1);
+		//每页显示条数
+		$pagination->setPageSize($page_size, true);
+		//排序
+		switch($sort){
+			case 'asc'://时间顺序
+				$orderBy = ['create_time'=>SORT_ASC];
+				break;
+			default://时间倒序
+				$orderBy = ['create_time'=>SORT_DESC];
+				break;
+		}
+
+		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+		//var_dump($query -> createCommand()->getRawSql());die();
+		$res = $query -> asArray() -> all();
+		//var_dump($res);die();
+
+		return [
+			'data' => $res,
+			'pages' => $this->pageFix($pagination)
+		];
+
+	}
 }
