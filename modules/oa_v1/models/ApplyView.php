@@ -159,7 +159,7 @@ class ApplyView extends BaseForm
 	 */
 	protected function getPay($apply)
 	{
-	    $tagTree = TagTree::findOne($apply->applyPay->pay_type);
+	    //$tagTree = TagTree::findOne($apply->applyPay->pay_type);
 		$data = [
 			'to_name' => $apply->applyPay->to_name,
 			'bank_card_id' => $apply->applyPay->bank_card_id,
@@ -219,6 +219,7 @@ class ApplyView extends BaseForm
 	protected function getUseChapter($apply)
 	{
 		$data = [
+		    'use_type' => ApplyUseChapter::USE_TYPE[$apply->applyUseChapter->use_type],
 		    'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
 		    'name' => $apply->applyUseChapter->name,
             'des' => $apply->applyUseChapter->des,

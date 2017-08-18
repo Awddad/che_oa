@@ -199,6 +199,7 @@ class ApplyView2 extends ApplyView
 		$data = [
 		    'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
 		    'chapter_type_id' => $apply->applyUseChapter->chapter_type,
+		    'use_type' => $apply->applyUseChapter->use_type,
 		    'name' => $apply->applyUseChapter->name,
             'des' => $apply->applyUseChapter->des,
             'files' => json_decode($apply->applyUseChapter->files)?:[],

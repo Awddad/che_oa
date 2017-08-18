@@ -46,6 +46,14 @@ class ApplyUseChapter extends \yii\db\ActiveRecord
         4 => '合同专用章',
         5 => '发票专用章',
     ];
+    
+    /**
+     * @var array
+     */
+    const USE_TYPE = [
+        1 => '用章',
+        2 => '借章'
+    ];
 
     /**
      * @inheritdoc
