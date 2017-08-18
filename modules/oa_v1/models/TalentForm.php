@@ -406,25 +406,27 @@ class TalentForm extends BaseForm
             ->all();
         
         $data = [];
-        foreach ($res as $k => $v){
-	    	$data[] = [
-	    	    'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
-	    	    'talent_id' => $v->id,
-                'name' => $v->name,
-                'phone' => $v->phone,
-	    	    'profession' => empty($v->profession) ? '' : $v->profession->name,
-	    	    'sex' => $v->sex == 1 ? '女' : '男',
-	    	    'age' => $v->age,
-	    	    'educational' => empty($v->edu) ? '':$v->edu->educational,
-	    	    'work_time' => $v->work_time.'年',
-	    	    'status' => $this->status_arr[$v->status],
-	    	    'status_value' => $v->status,
-	    	    'reason' => $v->disagree_reason,
-	    	    'person_type' => $v->person_type > 0 ? $v->personType->name : '',
-	    	    'location' => RegionLogic::instance()->getRegionByChild($v->current_location),
-	    	    'create_time' => date('Y-m-d', $v->created_at),
-	    	];
-	    }
+		if($res) {
+			foreach ($res as $k => $v) {
+				$data[] = [
+					'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+					'talent_id' => $v->id,
+					'name' => $v->name,
+					'phone' => $v->phone,
+					'profession' => empty($v->profession) ? '' : $v->profession->name,
+					'sex' => $v->sex == 1 ? '女' : '男',
+					'age' => $v->age,
+					'educational' => empty($v->edu) ? '' : $v->edu->educational,
+					'work_time' => $v->work_time . '年',
+					'status' => $this->status_arr[$v->status],
+					'status_value' => $v->status,
+					'reason' => $v->disagree_reason,
+					'person_type' => $v->person_type > 0 ? $v->personType->name : '',
+					'location' => RegionLogic::instance()->getRegionByChild($v->current_location),
+					'create_time' => date('Y-m-d', $v->created_at),
+				];
+			}
+		}
 	    
 	    return [
 	        'res' => $data,
