@@ -15,6 +15,8 @@ class ApprovalConfigForm extends BaseForm
     const SCENARIO_EDIT = 'edit';//编辑
     const SCENARIO_APPROVAL_EDIT = 'approval_edit';//编辑审批人
     const SCENARIO_COPY_EDIT = 'copy_edit';//编辑抄送人
+    const SCENARIO_APPROVAL_COPY = 'approval_copy';//复制审批人
+    const SCENARIO_APPROVAL_DEL = 'approval_del';//删除审批配置
 
 
     public $id;
@@ -51,6 +53,12 @@ class ApprovalConfigForm extends BaseForm
                 ['id','config'],
                 'required',
                 'on' => [self::SCENARIO_COPY_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
+            [
+                ['id','org_id','apply_type'],
+                'required',
+                'on' => [self::SCENARIO_APPROVAL_COPY],
                 'message' => '{attribute}不能为空'
             ],
             ['id','exist','targetClass'=>'\app\models\ApprovalConfig','message'=>'配置不存在！'],
@@ -90,7 +98,7 @@ class ApprovalConfigForm extends BaseForm
     public function checkOrg($attribute)
     {
         if(!$this->hasErrors()){
-            if(!$this->id){
+            if($this->getScenario() == self::SCENARIO_APPROVAL_COPY || !$this->id){
                 $config = ApprovalConfig::findOne(['apply_type'=>$this->apply_type,'org_id'=>$this->org_id]);
                 $config && $this->addError($this->$attribute,'配置已存在！');
             }
@@ -103,6 +111,8 @@ class ApprovalConfigForm extends BaseForm
             self::SCENARIO_EDIT => ['id','org_id','apply_type'],
             self::SCENARIO_APPROVAL_EDIT => ['id','type','config'],
             self::SCENARIO_COPY_EDIT => ['id','config'],
+            self::SCENARIO_APPROVAL_COPY => ['id','org_id','apply_type'],
+            self::SCENARIO_APPROVAL_DEL => ['id'],
         ];
     }
 
@@ -185,6 +195,59 @@ class ApprovalConfigForm extends BaseForm
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
         }
     }
+
+    /**
+     * 复制审批流程
+     * @param $user
+     * @return array
+     */
+    public function copyApproval($user)
+    {
+        $_model = ApprovalConfig::findOne($this->id);
+        if(empty($_model)){
+            return ['status'=>false,'msg'=>'配置不存在！'];
+        }
+        $model = new ApprovalConfig();
+        $model->apply_type = $this->apply_type;
+        $model->apply_name = $this->typeArr[$this->apply_type];
+        $model->org_id = $this->org_id;
+        $model->org_name = OrgLogic::instance()->getOrgName($this->org_id);
+        $model->type = $_model->type;
+        $model->approval = $_model->approval;
+        $model->copy_person = $_model->copy_person;
+        $model->copy_person_count = $_model->copy_person_count;
+        if($model->save()){
+            ApprovalConfigLogic::instance()->addLog('复制审批流程',$model->id,$model->org_name,$model->apply_name,ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }else{
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }
+    }
+
+    /**
+     * 删除审批流程
+     * @param $user
+     * @param $role_name
+     * @return array
+     */
+    public function delApproval($user,$role_name)
+    {
+        $tmp = $this->roles_arr[$role_name];
+        $model = ApprovalConfig::findOne($this->id);
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'配置不存在！'];
+        }
+        if(!in_array($model->apply_type,$tmp)){
+            return ['status'=>false,'msg'=>'你没有删除此配置权限！'];
+        }
+        if(!$model->delete()){
+            return ['status'=>false,'msg'=>current($model->getFirstErrors())];
+        }else{
+            ApprovalConfigLogic::instance()->addLog('删除审批流程',$model->id,$model->org_name,$model->apply_name,ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
+
     /**
      * 获得配置列表
      * @param array $params
@@ -269,6 +332,7 @@ class ApprovalConfigForm extends BaseForm
             'page' => BackLogic::instance()->pageFix($pagination)
         ];
     }
+
     /**
      * 获得详情
      * @param int $id 配置id
