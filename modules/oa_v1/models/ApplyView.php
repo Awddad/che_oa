@@ -218,8 +218,14 @@ class ApplyView extends BaseForm
 	 */
 	protected function getUseChapter($apply)
 	{
+        if ($apply->applyUseChapter->use_type) {
+            $use_type =  ApplyUseChapter::USE_TYPE[$apply->applyUseChapter->use_type];
+        } else {
+            $use_type = '--';
+        }
+	    
 		$data = [
-		    'use_type' => ApplyUseChapter::USE_TYPE[$apply->applyUseChapter->use_type],
+		    'use_type' => $use_type,
 		    'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
 		    'name' => $apply->applyUseChapter->name,
             'des' => $apply->applyUseChapter->des,
