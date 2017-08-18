@@ -31,6 +31,7 @@ class TalentInfoForm extends BaseForm
     public $job_status;    
     public $location;    
     public $daogang;
+    public $face_time;
     
     public $profession;
     public $want_salary;
@@ -77,13 +78,14 @@ class TalentInfoForm extends BaseForm
             ['location','string','max'=>100,'on'=>[self::SCENARIO_TALENT_YINGPIN_EDIT]],//应聘地点
             ['daogang','string','max'=>20],//到岗时间
             [['want_salary','now_salary'],'string','max'=>10],//期望薪资，目前薪资
+            ['face_time','format' => 'yyyy-mm-dd HH:mm','message' => '面试时间不正确'],
         ];
     }
     
     public function scenarios()
     {
         return [
-            self::SCENARIO_TALENT_EDIT => ['id','name','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','job_status','location','daogang'],
+            self::SCENARIO_TALENT_EDIT => ['id','name','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','job_status','location','daogang','face_time'],
             self::SCENARIO_TALENT_YINGPIN_EDIT => ['id','profession','want_salary','now_salary','location'],
         ];
     }
@@ -111,6 +113,7 @@ class TalentInfoForm extends BaseForm
         $this->political && $model->political = $this->political;
         $this->nation && $model->nation = $this->nation;
         $this->job_status && $model->job_status = $this->job_status;
+        $this->face_time && $model->face_time = $this->face_time;
         if(!$model->save()){
             return ['status'=>false,'msg'=>current($this->getFirstErrors())]; 
         }else{
@@ -174,7 +177,11 @@ class TalentInfoForm extends BaseForm
             'marriage' => $model->marriage,
             'status' => $this->status_arr[$model->status],
             'status_id' => $model->status,
-            'reason' => $model->disagree_reason
+            'reason' => $model->disagree_reason,
+            'fase_time' => $model->face_time,
+            'is_test' => ($model->choice_score == -1 && $model->answer_score == -1) ? 0 : 1,
+            'choice_score' => $model->choice_score,
+            'answer_score' => $model->answer_score,
         ];
         return ['status'=>true,'data'=>$data];
     }

@@ -47,6 +47,9 @@ class TalentForm extends BaseForm
 	public $org_id;
 	public $entry_time;
 	public $reason;
+	public $choice_score;
+	public $answer_score;
+	public $face_time;
 	
 	public $status_arr = [
 	    '1' => '待沟通',
@@ -104,7 +107,7 @@ class TalentForm extends BaseForm
 		    ['id','exist','targetClass'=>'\app\models\Talent','targetAttribute'=>'id','message'=>'人不存在！'],
 		    ['talent_type','exist','targetClass'=>'\app\models\PersonType','targetAttribute'=>'id','message'=>'类型不存在！'],
 		    ['status','in', 'range' => [0, 1],'message'=>'操作错误！'],//0：不通过 1：通过
-		    ['status','checkStatus','on'=>[self::SCENARIO_FACE]],
+		    ['status','checkStatus','on'=>[self::SCENARIO_COMMUNION ,self::SCENARIO_TEST,self::SCENARIO_FACE ]],
 		    ['name','string','max'=>20,'message'=>'姓名错误！'],
 		    ['phone','match','pattern'=>'/^1\d{10}$/','message'=>'手机号不正确!'],
 		    ['phone','unique','targetClass'=>'\app\models\Talent','targetAttribute'=>['phone'],'message'=>'此人已存在,不可重复添加!'],
@@ -120,29 +123,53 @@ class TalentForm extends BaseForm
 		    ['file','file', 'extensions' => ['xlsx','xls'],'checkExtensionByMimeType'=>false,'message'=>'文件格式错误'],
 		    ['file','checkFile'],
 		    ['reason','string','max'=>20,'message'=>'不同意原因不正确！'],
+			[['choice_score','answer_score'],'integer','message'=>'分数不正确'],
+			[['choice_score','answer_score'],'compare', 'compareValue' => 0, 'operator' => '>=','message'=>'分数不能低于0分！'],
+			['face_time','date','format' => 'yyyy-mm-dd HH:mm','message' => '面试时间不正确']
 		];
 	}
 	
 	public function checkStatus($attribute)
 	{
-	    if($this->$attribute == 1){
-	        $validator = new RequiredValidator();
-	        if(!$validator->validate($this->org_id)){
-	            $this->addError('org_id','部门不能为空');
-	            return false;
-	        }elseif(!$validator->validate($this->entry_time)){
-	            $this->addError('entry_time','入职时间不能为空');
-	            return false;
-	        }
-	    }
+		$validator = new RequiredValidator();
+		if($this->$attribute == 1) {
+			switch ($this->getScenario()) {
+				case self::SCENARIO_COMMUNION:
+					break;
+				case self::SCENARIO_TEST:
+					if(!$validator->validate($this->choice_score)){
+						$this->addError('choice_score','分数不能为空');
+						return false;
+					}elseif(!$validator->validate($this->answer_score)){
+						$this->addError('answer_score','分数不能为空');
+						return false;
+					}elseif(!$validator->validate($this->face_time)){
+						$this->addError('face_time','面试时间不能为空');
+						return false;
+					}
+					break;
+				case self::SCENARIO_FACE:
+					if(!$validator->validate($this->org_id)){
+						$this->addError('org_id','部门不能为空');
+						return false;
+					}elseif(!$validator->validate($this->entry_time)){
+						$this->addError('entry_time','入职时间不能为空');
+						return false;
+					}
+					break;
+			}
+		}else{
+			if(!$validator->validate($this->reason)){
+				$this->addError('reason','不同意原因不能为空！');
+				return false;
+			}
+		}
 	    return true;
 	}
 	
 	public function checkFile($attribute)
 	{
-	    if (!$this->hasErrors()) {
-	        $file_name = $this->$attribute->name;
-	    }
+
 	}
 	
 	public function scenarios()
@@ -150,7 +177,7 @@ class TalentForm extends BaseForm
 	    return [
 	        self::SCENARIO_ADD_ZHAOPIN => ['name','phone','job','sex','age','educational','work_time','current_location'],
 	        self::SCENARIO_COMMUNION =>['id','status','reason'],
-	        self::SCENARIO_TEST =>['id','status','reason'],
+	        self::SCENARIO_TEST =>['id','status','reason','choice_score','answer_score','face_time'],
 	        self::SCENARIO_FACE => ['id','status','org_id','entry_time','reason'],
 	        self::SCENARIO_JOIN => ['id','talent_type'],
 	        self::SCENARIO_IMPORT => ['file'],
@@ -210,14 +237,19 @@ class TalentForm extends BaseForm
 	    }
 	    switch($this->getScenario()){
 	        case self::SCENARIO_COMMUNION://沟通
+				$need_test = 1;
 	            $content = '沟通通过';
 	            $model->status_communion = $model->status_communion ?: 1;
-	            $model->status = 2;
+	            $model->status = $need_test ? 2 : 3;
+				$model->need_test = $need_test;
 	            break;
 	        case self::SCENARIO_TEST://考试
 	            $content = '考试通过';
 	            $model->status_test = $model->status_test ?: 1;
 	            $model->status = 3;
+				$model->choice_score = $this->choice_score;
+				$model->answer_score = $this->answer_score;
+				$model->face_time = $this->face_time;
 	            break;
 	        case self::SCENARIO_FACE://面试
 	            return $this->employ($user);
@@ -511,7 +543,6 @@ class TalentForm extends BaseForm
 	    $arr = Excel::import($file->tempName, [
 	        'setFirstRecordAsKeys' => false,
 	        'setIndexSheetByName' => true,
-	        'getOnlySheet' => 'Sheet1',
 	    ]);
 	    array_shift($arr);
 	    $error = [];//错误数组

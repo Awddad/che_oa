@@ -35,6 +35,10 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $status_face
  * @property integer $status
  * @property string $disagree_reason 
+ * @property string $face_time
+ * @property integer $need_test
+ * @property integer $choice_score
+ * @property integer $answer_score
  * @property integer $talent
  * @property integer $created_at
  * @property integer $updated_at
@@ -62,8 +66,8 @@ class Talent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['job', 'owner', 'age', 'sex', 'educational', 'political', 'marriage', 'job_status', 'person_type', 'current_location', 'status_communion', 'status_test', 'status_face', 'status', 'talent', 'created_at', 'updated_at', 'employee_id'], 'integer'],
-            [['name', 'daogang'], 'string', 'max' => 20],
+            [['owner', 'job', 'age', 'sex', 'educational', 'political', 'marriage', 'job_status', 'person_type', 'current_location', 'status_communion', 'status_test', 'status_face', 'status', 'need_test', 'choice_score', 'answer_score', 'talent', 'created_at', 'updated_at', 'employee_id'], 'integer'],
+            [['name', 'daogang', 'face_time'], 'string', 'max' => 20],
             [['phone'], 'string', 'max' => 12],
             [['email', 'yingpin_location','disagree_reason'], 'string', 'max' => 100],
             [['now_salary', 'want_salary', 'work_time'], 'string', 'max' => 10],
@@ -105,6 +109,10 @@ class Talent extends \yii\db\ActiveRecord
             'status_face' => 'Status Face',
             'status' => 'Status',
             'disagree_reason' => 'Disagree Reason',
+            'face_time' => 'Face Time',
+            'need_test' => 'Need Test',
+            'choice_score' => 'Choice Score',
+            'answer_score' => 'Answer Score',
             'talent' => 'Talent',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
