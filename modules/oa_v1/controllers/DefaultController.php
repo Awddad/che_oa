@@ -5,6 +5,8 @@ namespace app\modules\oa_v1\controllers;
 use app\logic\server\Server;
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\Employee;
+use app\models\PeoplePic;
 use app\models\Role;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PdfLogic;
@@ -16,6 +18,7 @@ use app\models\Educational;
 use app\models\Political;
 use app\models\PersonType;
 use app\models\EmployeeType;
+use yii\helpers\ArrayHelper;
 
 
 /**
@@ -54,10 +57,20 @@ class DefaultController extends BaseController
     public function actionGetUserInfo()
     {
         $arrData = [
-            'userinfo' => $this->arrPersonInfo,
+            'userinfo' => ArrayHelper::toArray($this->arrPersonInfo),
             'roleName' => $this->roleName,
             'roleInfo' => (isset($this->arrPersonRoleInfo['roleInfo']) ? $this->arrPersonRoleInfo['roleInfo'] : []),
         ];
+        $entry_time = '';
+        $pic = '';
+        $emp = Employee::find()->where(['person_id'=>$this->arrPersonInfo['person_id']])->one();
+        if($emp){
+            $people_pic = PeoplePic::find()->where(['employee_id' => $emp->id])->one();
+            $entry_time = $emp->entry_time ?: '';
+            $pic = $people_pic ? $people_pic->file : '';
+        }
+        $arrData['userinfo']['entry_time'] = $entry_time;
+        $arrData['userinfo']['pic'] = $pic;
         return $this->_return($arrData);
     }
 
@@ -104,10 +117,10 @@ class DefaultController extends BaseController
                     break;
                 case 11:
                     $id = date('YmdHis') . '11' . rand(100, 999);
-                    break; 
+                    break;
                 case 12:
                     $id = date('YmdHis') . '12' . rand(100, 999);
-                    break; 
+                    break;
                 case 13:
                     $id = date('YmdHis') . '13' . rand(100, 999);
                     break;
@@ -184,7 +197,7 @@ class DefaultController extends BaseController
         $data = PersonLogic::instance()->getOrgs();
         return $this->_return($data);
     }
-    
+
     /**
      * 获取 PDF
      * @param $apply_id
@@ -253,7 +266,7 @@ class DefaultController extends BaseController
             echo '未找到文件';
         }
     }
-    
+
     /**
      * 下载链接，前端无法设置下载
      *
@@ -275,7 +288,7 @@ class DefaultController extends BaseController
         readfile($rootPath);
         exit;
     }
-    
+
     /**
      * 批量下载
      */
@@ -338,7 +351,7 @@ class DefaultController extends BaseController
             }
         }
         $zip->close();
-    
+
         header('Content-Type: application/zip');
         header('Content-disposition: attachment; filename='.$zipName);
         header('Content-Length: ' . filesize($zipName));
@@ -347,7 +360,7 @@ class DefaultController extends BaseController
         unlink($zipName);
         exit();
     }
-    
+
     /**
      * 获取用户拥有的项目
      *
@@ -370,7 +383,7 @@ class DefaultController extends BaseController
         }
         return $this->_returnError(500, '', '未找到相关项目');
     }
-    
+
     /**
      * 员工数据同步
      */
@@ -395,7 +408,7 @@ class DefaultController extends BaseController
         }
         return $this->_return($data);
     }
-    
+
     /**
      * 获得员工类型
      */
@@ -426,8 +439,8 @@ class DefaultController extends BaseController
         }
         return $this->_return($data);
     }
-    
-    
+
+
     /**
      * 获得人才类型
      */
@@ -443,7 +456,7 @@ class DefaultController extends BaseController
         }
         return $this->_return($data);
     }
-    
+
     /**
      * 获取公司银行卡信息
      *
