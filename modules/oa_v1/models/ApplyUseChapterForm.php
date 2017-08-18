@@ -38,6 +38,11 @@ class ApplyUseChapterForm extends BaseForm
     
     public $chapter_type;
     
+    /**
+     * @var 用途
+     */
+    public $use_type;
+    
     public $name;
     
     public $files = '';
@@ -61,7 +66,7 @@ class ApplyUseChapterForm extends BaseForm
     {
         return [
             [
-                [ 'approval_persons', 'apply_id', 'chapter_type', 'name', 'files', 'des'],
+                [ 'approval_persons', 'apply_id', 'chapter_type', 'use_type', 'name', 'files', 'des'],
                 'required',
                 'message' => '缺少必填字段'
             ],
@@ -145,6 +150,7 @@ class ApplyUseChapterForm extends BaseForm
         $model->apply_id = $this->apply_id;
         $model->files = $this->files ? json_encode($this->files): '';
         $model->chapter_type = $this->chapter_type;
+        $model->use_type = $this->use_type;
         $model->name = $this->name;
         $model->des = $this->des;
         if (!$model->save()) {

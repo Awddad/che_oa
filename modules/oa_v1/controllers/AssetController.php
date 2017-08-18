@@ -230,7 +230,8 @@ class AssetController extends BaseController
                 $use = AssetListLog::find()->where([
                     'asset_list_id' => $v->id,
                     'person_id' => $v->person_id,
-                    'type' => 2,
+                ])->andWhere([
+                    'in', 'type', [2, 6]
                 ])->one();
                 if ($use) {
                     $useDay = round((time()-$use->created_at)/3600/24).'天';
@@ -309,9 +310,9 @@ class AssetController extends BaseController
             $data['org'] = $person->org_full_name;
             $use = AssetListLog::find()->where([
                 'asset_list_id' => $assetList->id,
-                'person_id' => $assetList->person_id,
-                'type' => 2,
-            ])->one();
+            ])->andWhere([
+                'in', 'type', [2, 6]
+            ])->orderBy('id desc')->one();
             if ($use) {
                 $useDay = round((time() - $use->created_at) / 3600 / 24);
             } else {
@@ -449,5 +450,58 @@ class AssetController extends BaseController
             return $this->_returnError($logic->errorCode, null, $result);
         }
         return $this->_return($result);
+    }
+    
+    /**
+     * 固定资产分配
+     *
+     * @return array
+     */
+    public function actionAssetAllot()
+    {
+        $asset_list_id = Yii::$app->request->post('asset_list_id');
+        $person_id = Yii::$app->request->post('person_id');
+        if (!$person_id || !$asset_list_id) {
+            return $this->_returnError(400);
+        }
+        $person = Person::findOne($person_id);
+        $assetList = AssetList::findOne($asset_list_id);
+        if (empty($assetList) || empty($person)) {
+            return $this->_returnError(4400, null, '未找到该信息');
+        }
+        if ($assetList->status != 1) {
+            return $this->_returnError(4400, null, '该资产不能分配');
+        }
+        $rst = AssetLogic::instance()->assetAllot($assetList, $person, $this->arrPersonInfo);
+        if ($rst) {
+            return $this->_return(null);
+        }
+        return $this->_returnError(4400, null, AssetLogic::instance()->error);
+    }
+    
+    /**
+     * 固定资产回收
+     *
+     * @return array
+     */
+    public function actionAssetRecover()
+    {
+        $asset_list_id = Yii::$app->request->post('asset_list_id');
+        $des = Yii::$app->request->post('des');
+        if (!$asset_list_id || !$des) {
+            return $this->_returnError(400);
+        }
+        $assetList = AssetList::findOne($asset_list_id);
+        if (empty($assetList)) {
+            return $this->_returnError(4400, null, '未找到该信息');
+        }
+        if ($assetList->status != 2) {
+            return $this->_returnError(4400, null, '该资产不能回收');
+        }
+        $rst = AssetLogic::instance()->assetRecover($assetList, $this->arrPersonInfo, $des);
+        if ($rst) {
+            return $this->_return(null);
+        }
+        return $this->_returnError(4400, null, AssetLogic::instance()->error);
     }
 }
