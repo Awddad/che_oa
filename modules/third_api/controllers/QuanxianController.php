@@ -36,28 +36,28 @@ class QuanxianController extends Controller
             //组织架构相关变动
             case 'organizations/tree'://组织架构树形结构
             case 'organizations/types'://组织架构类型
-                $intResult = $objQx->curlUpdateOrg();
+                $intResult += $objQx->curlUpdateOrg();
                 break;
             case 'organizations/positions'://职位
-            	$intResult = $objQx->curlUpdatePositions();
+            	$intResult += $objQx->curlUpdatePositions();
             	break;
             case 'users'://用户列表
-                $intResult = $objQx->curlUpdateAllUser();
+                $intResult += $objQx->curlUpdateAllUser();
                 //break;
             case 'projects/users'://项目用户
-                $intResult = $objQx->curlUpdateUser();
+                $intResult += $objQx->curlUpdateUser();
                 break;
             
             //角色权限目录相关信息变动
             case 'projects/roles'://项目角色
-                $intResult = $objQx->curlUpdateRole();//角色信息
+                $intResult += $objQx->curlUpdateRole();//角色信息
                 break;
             case 'projects/permission-tree'://项目菜单权限树形结构
             case 'projects/permissions'://项目菜单权限树形结构
-                $intResult = $objQx->curlUpdateMenus();//项目菜单
+                $intResult += $objQx->curlUpdateMenus();//项目菜单
                 break;
             case 'projects/role_user':
-                $intResult = $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
+                $intResult += $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
                 break;
             //菜单信息变动
         }

@@ -70,7 +70,7 @@ class ApplyController extends BaseController
 		foreach($res['types'] as $k=>$v){
 			$data['types'][] = [
 				'text' => $this->type [$v['type']],
-				'value' => $v['type']
+				'number' => $v['type']
 			];
 		}
 		return $this->_return($data, 200);
