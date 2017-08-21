@@ -83,7 +83,7 @@ class PayLogic extends BaseLogic
             $query->andWhere([
                 'and',
                 ['>=', 'a.create_time', strtotime($beginTime)],
-                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($endTime))],
             ]);
         }
         $query->andWhere([
@@ -262,7 +262,7 @@ class PayLogic extends BaseLogic
             $query->andWhere([
                 'and',
                 ['>=', 'a.create_time', strtotime($beginTime)],
-                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($endTime))],
             ]);
         }
 

@@ -120,7 +120,7 @@ class BackLogic extends BaseLogic
             $query->andWhere([
                 'and',
                 ['>=', 'a.create_time', strtotime($beginTime)],
-                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($endTime))],
             ]);
         }
 
@@ -207,7 +207,7 @@ class BackLogic extends BaseLogic
             $query->andWhere([
                 'and',
                 ['>=', 'a.create_time', strtotime($beginTime)],
-                ['<', 'a.create_time', strtotime('+1day', strtotime($beginTime))],
+                ['<', 'a.create_time', strtotime('+1day', strtotime($endTime))],
             ]);
         }
 
