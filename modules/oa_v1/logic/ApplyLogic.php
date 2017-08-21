@@ -106,26 +106,30 @@ class ApplyLogic extends BaseLogic
 				$query -> andWhere(['in','status',$arr_status]);
 			}
 		}
+        /**
+         * 类型筛选
+         */
+        $_query = clone $query;
+        $_query->select('a.type')->groupBy('a.type');
+        //var_dump($_query -> createCommand()->getRawSql());die();
+        $types = $_query->asArray()->all();
+        //var_dump($types);die();
+
 		//类型
 		if($apply_type){
 			$query -> andWhere(['in','a.type' , $apply_type]);
 		}
 		
 		$_query = clone $query;
-		//var_dump($_query -> createCommand()->getRawSql());die();
-		$total = $_query -> count();
+		//var_dump($_query->createCommand()->getRawSql());die();
+		$total = $_query->count();
 		//var_dump($total);die();
 
 		$pagination = new Pagination(['totalCount' => $total]);
 		//当前页
-		$pagination -> setPage($page-1);
+		$pagination->setPage($page-1);
 		//每页显示条数
 		$pagination->setPageSize($page_size, true);
-
-		$_query->select('a.type')->groupBy('a.type');
-		//var_dump($_query -> createCommand()->getRawSql());die();
-		$types = $_query->asArray()->all();
-		//var_dump($types);die();
 
 		//排序
 		switch(@$search['sort']){
@@ -137,9 +141,9 @@ class ApplyLogic extends BaseLogic
 				break;
 		}
 		
-		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
-		//var_dump($query -> createCommand()->getRawSql());die();
-		$res = $query -> asArray() -> all();
+		$query -> select('*')->orderBy($orderBy)->offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+		//var_dump($query->createCommand()->getRawSql());die();
+		$res = $query->asArray()->all();
 		//var_dump($res);die();
 		
 		return [
