@@ -665,9 +665,6 @@ class QuanXianServer extends Server
             $arrBankList = []; // oa_person_bank_info表的入库数据
             $arrAccount = []; // oa_employee_account表的入库数据
             foreach ($arrRtn['data']['data'] as $val) {
-                if(preg_match('/^李科\d+$/',$val['name'])){
-                    continue;
-                }
                 $arrEmployee[] = [
                     'person_id' => $val['id'],
                     'name' => $val['name'],

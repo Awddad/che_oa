@@ -63,6 +63,7 @@ class ApplyTransferForm extends BaseForm
 		            'number',
 		            'message'=>'金钱格式不正确'
 		        ],
+				[['old_jixiao','target_jixiao'], 'default', 'value' => 0],
 		];
 	}
 	
