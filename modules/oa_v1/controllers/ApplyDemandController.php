@@ -84,7 +84,8 @@ class ApplyDemandController extends BaseController
         
         $filterStatus = $param['filter_status'];
         if ($filterStatus) {
-            $query->andWhere(['in', 'b.status', $filterStatus]);
+            $filterStatusArray = explode(',', $filterStatus);
+            $query->andWhere(['in', 'b.status', $filterStatusArray]);
         }
         
         $beforeTime = strtotime(ArrayHelper::getValue($param, 'start_time'));
