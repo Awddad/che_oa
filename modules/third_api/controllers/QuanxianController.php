@@ -43,7 +43,7 @@ class QuanxianController extends Controller
             	break;
             case 'users'://用户列表
                 $intResult = $objQx->curlUpdateAllUser();
-                break;
+                //break;
             case 'projects/users'://项目用户
                 $intResult = $objQx->curlUpdateUser();
                 break;

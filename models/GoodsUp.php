@@ -58,7 +58,7 @@ class GoodsUp extends \yii\db\ActiveRecord
     {
         $des = '';//说明
         $model = static::find()->where(['apply_id'=>$apply_id])->one();
-        $des = $model->des;
+        $des = $model ? $model->des : $des;
         return $des;
     }
 }
