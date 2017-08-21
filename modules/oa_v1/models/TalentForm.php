@@ -190,7 +190,9 @@ class TalentForm extends BaseForm
 	 */
 	public function addTalent($user)
 	{
+		$need_test = 1;
 	    $model = new Talent();
+		$model->need_test = $need_test;
 	    $model->name = $this->name;
 	    $model->phone = $this->phone;
 	    $model->job = $this->job;
@@ -237,7 +239,7 @@ class TalentForm extends BaseForm
 	    }
 	    switch($this->getScenario()){
 	        case self::SCENARIO_COMMUNION://沟通
-				$need_test = 1;
+				$need_test = $model->need_test;
 	            $content = '沟通通过';
 	            $model->status_communion = $model->status_communion ?: 1;
 	            $model->status = $need_test ? 2 : 3;
