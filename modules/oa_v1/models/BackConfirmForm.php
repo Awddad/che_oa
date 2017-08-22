@@ -16,6 +16,7 @@ use app\models\JieKuan;
 use app\models\Org;
 use app\models\PayBack;
 use app\models\Person;
+use app\modules\oa_v1\logic\BaseLogic;
 use yii\db\Exception;
 use yii\web\UploadedFile;
 
@@ -107,6 +108,24 @@ class BackConfirmForm extends CaiWuShouKuan
             $apply->cai_wu_time = time();
             $apply->cai_wu_person = $person->person_name;
             $apply->save();
+            if($apply->type == 3) {
+                //借款单操作
+                /**
+                 * @var PayBack $payBack
+                 */
+                $payBack = $apply->payBack;
+                $loanIds = explode(',', $payBack->jie_kuan_ids);
+                foreach ($loanIds as $id) {
+                    $jieKuan = JieKuan::findOne($id);
+                    //还款成功
+                    $jieKuan->status = 101;
+                    $jieKuan->pay_back_time = time();
+                    $jieKuan->is_pay_back = 1;
+                    if (!$jieKuan->save()) {
+                        throw  new Exception(BaseLogic::instance()->getFirstError($jieKuan->errors));
+                    }
+                }
+            }
             $transaction->commit();
         } catch (Exception $exception) {
             $transaction->rollBack();
@@ -124,17 +143,6 @@ class BackConfirmForm extends CaiWuShouKuan
     
             //收入 可为空
             if($apply->type == 3) {
-                //借款单操作
-                $payBack = PayBack::findOne($this->apply_id);
-                $loanIds = explode(',', $payBack->jie_kuan_ids);
-                foreach ($loanIds as $id) {
-                    $jieKuan = JieKuan::findOne($id);
-                    //还款成功
-                    $jieKuan->status = 101;
-                    $jieKuan->pay_back_time = time();
-                    $jieKuan->is_pay_back = 1;
-                    $jieKuan->save();
-                }
                 $param['other_name'] = $apply->person;
                 $param['other_card'] = $apply->payBack->bank_card_id;
                 $param['other_bank'] = $apply->payBack->bank_name;
