@@ -115,6 +115,9 @@ class GoodsUpController extends BaseController
      */
     public function actionColor($car_id)
     {
+        if (!$car_id) {
+            return $this->_returnError(403);
+        }
         $data = GoodsUpLogic::instance()->colors($car_id);
         if (!$data) {
             $this->_returnError('4400',  null, '为获取到数据，请稍后再试！');
