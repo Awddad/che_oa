@@ -114,6 +114,7 @@ class TalentForm extends BaseForm
 		    ['phone','unique','targetClass'=>'\app\models\Employee','targetAttribute'=>'phone','message'=>'此人已入职!'],
 		    ['job','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在！'],
 		    ['sex','in', 'range' => [1, 2],'message'=>'性别错误！'],//1：女  2：男
+			['age','integer','message'=>'年龄不正确'],
 		    ['age','compare', 'compareValue' => 80, 'operator' => '<=','message'=>'年龄不得高于80岁！'],
 		    ['educational','exist','targetClass'=>'\app\models\Educational','targetAttribute'=>'id','message'=>'学历不正确！'],
 		    ['work_time','integer','message'=>'工作年限不正确！'],
