@@ -14,7 +14,8 @@ class TalentInfoForm extends BaseForm
 {
     const SCENARIO_TALENT_EDIT = 'talent_edit';//人才个人信息修改
     const SCENARIO_TALENT_YINGPIN_EDIT = 'talent_yingpin_edit';//人才应聘信息修改
-    
+    const SCENARIO_TALENT_SCORE_EDIT = 'talent_score_edit';//人才考试成绩修改
+
     public $id;    
     public $name;    
     public $sex;    
@@ -36,6 +37,9 @@ class TalentInfoForm extends BaseForm
     public $profession;
     public $want_salary;
     public $now_salary;
+
+    public $choice_score;
+    public $answer_score;
     
     public $status_arr = [
         '1' => '待沟通',
@@ -60,6 +64,12 @@ class TalentInfoForm extends BaseForm
                 'on' => [self::SCENARIO_TALENT_YINGPIN_EDIT],
                 'message' => '{attribute}不能为空'
             ],
+            [
+                ['id','choice_score','answer_score'],
+                'required',
+                'on' => [self::SCENARIO_TALENT_SCORE_EDIT],
+                'message' => '{attribute}不能为空'
+            ],
             ['id','exist','targetClass'=>'\app\models\Talent','message'=>'人才不存在','on'=>[self::SCENARIO_TALENT_EDIT]],
             ['profession','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'职位不存在'],
             ['sex','in', 'range' => [1, 2], 'message'=>'性别不正确'],
@@ -79,6 +89,8 @@ class TalentInfoForm extends BaseForm
             ['daogang','string','max'=>20],//到岗时间
             [['want_salary','now_salary'],'string','max'=>10],//期望薪资，目前薪资
             ['face_time','date','format' => 'yyyy-mm-dd HH:mm','message' => '面试时间不正确'],
+            [['choice_score','answer_score'],'integer','message'=>'分数不正确'],
+            [['choice_score','answer_score'],'compare', 'compareValue' => 0, 'operator' => '>=','message'=>'分数不能低于0分！'],
         ];
     }
     
@@ -87,6 +99,7 @@ class TalentInfoForm extends BaseForm
         return [
             self::SCENARIO_TALENT_EDIT => ['id','name','sex','phone','birthday','email','age','nation','edu','political','native','work_time','marriage','job_status','location','daogang','face_time'],
             self::SCENARIO_TALENT_YINGPIN_EDIT => ['id','profession','want_salary','now_salary','location'],
+            self::SCENARIO_TALENT_SCORE_EDIT => ['id','choice_score','answer_score'],
         ];
     }
     /**
@@ -180,8 +193,6 @@ class TalentInfoForm extends BaseForm
             'reason' => $model->disagree_reason,
             'face_time' => $model->face_time,
             'is_test' => ($model->choice_score == -1 && $model->answer_score == -1) ? 0 : 1,
-            'choice_score' => $model->choice_score,
-            'answer_score' => $model->answer_score,
         ];
         return ['status'=>true,'data'=>$data];
     }
@@ -205,5 +216,46 @@ class TalentInfoForm extends BaseForm
         ];
         return ['status'=>true,'data'=>$data];
     }
-    
+
+    /**
+     * 获得成绩
+     * @param $id
+     * @return array
+     */
+    public function getScore($id)
+    {
+        $model = Talent::findOne($id);
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'人才不存在'];
+        }
+        $is_test = ($model->choice_score == -1 && $model->answer_score == -1) ? 0 : 1;
+        $data = [
+            'id' => $model->id,
+            'is_test' => $is_test,
+        ];
+        $is_test && $data['choice_score'] = $model->choice_score;
+        $is_test && $data['answer_score'] = $model->answer_score;
+        return ['status'=>true,'data'=>$data];
+    }
+
+    /**
+     * 保存成绩
+     * @param $user
+     * @return array
+     */
+    public function saveScore($user)
+    {
+        $model = Talent::findOne($this->id);
+        if(empty($model)){
+            return ['status'=>false,'msg'=>'人才不存在'];
+        }
+        $model->choice_score = $this->choice_score;
+        $model->answer_score = $this->answer_score;
+        if(!$model->save()){
+            return ['status'=>false,'msg'=>current($this->getFirstErrors())];
+        }else{
+            PeopleLogic::instance()->addLog($model->id,0,'编辑人才考试成绩',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            return ['status'=>true];
+        }
+    }
 }
