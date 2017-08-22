@@ -42,35 +42,22 @@ class ApplyLogic extends BaseLogic
             $apply_type = null;
         }
 		
-		$query;
+		$query = appmodel\Apply::find()->alias('a');
 
 		if(1 == $type){//待我审批
-			$approval_model = new appmodel\ApprovalLog();
-			$query = $approval_model::find()
-			-> andWhere(['approval_person_id'=>$user['person_id'],'is_to_me_now'=>1])
-			-> andWhere(['or', 'status=1', 'status=11'])
-			-> joinWith('apply a',true,'RIGHT JOIN')
-			-> orderBy('create_time');;
+			$query->join('LEFT JOIN', appmodel\ApprovalLog::tableName().' l', 'a.apply_id = l.apply_id')
+				->andWhere(['approval_person_id'=>$user['person_id'],'is_to_me_now'=>1])
+				->andWhere(['or', 'a.status=1', 'a.status=11']);
 		}elseif(2 == $type){//我已审批
-			$approval_model = new appmodel\ApprovalLog();
-			$query = $approval_model::find()
-			->where(['approval_person_id' => $user['person_id']])
-			-> andWhere(['>', 'result', 0])
-			-> joinWith('apply a',true,'RIGHT JOIN')
-			-> orderBy('create_time');
+			$query->join('LEFT JOIN', appmodel\ApprovalLog::tableName().' l', 'a.apply_id = l.apply_id')
+				->where(['approval_person_id' => $user['person_id']])
+				->andWhere(['>', 'result', 0]);
 		}elseif(3 == $type){//我发起的
-			$apply_model = new appmodel\Apply();
-			$query = $apply_model::find()
-			-> alias('a')
-			-> where(['person_id'=>$user['person_id']])
-			-> orderBy('create_time');
+			$query-> where(['person_id'=>$user['person_id']]);
 		}elseif(4 == $type){//抄送给我的
-			$copy_model = new appmodel\ApplyCopyPerson();
-			$query = $copy_model::find()-> joinWith('apply a',true,'RIGHT JOIN')-> where([
-			    'copy_person_id'=>$user['person_id']
-            ])->andWhere([
-                'in', 'a.status', [4 , 5, 99]
-            ])-> orderBy('create_time');
+			$query->join('LEFT JOIN', appmodel\ApplyCopyPerson::tableName().' c', 'a.apply_id = c.apply_id')
+				->where(['copy_person_id'=>$user['person_id']])
+				->andWhere(['in', 'a.status', [4 , 5, 99]]);
 		}else{
 			return false;
 		}
@@ -90,28 +77,7 @@ class ApplyLogic extends BaseLogic
 		}
 		//状态
 		if(isset($search['status']) && $search['status']){
-			
-			/*
-			switch($search['status']){
-				case 1://审核中
-					$query -> andWhere(['in','status',[1,11]]);
-					break;
-				case 2://财务确认中
-					$query -> andWhere(['status'=>4]);
-					break;
-				case 3://撤销
-					$query -> andWhere(['status'=>3]);
-					break;
-				case 4://审核不通过
-					$query -> andWhere(['status'=>2]);
-					break;
-				case 5://完成
-					$query -> andWhere(['status'=>99]);
-					break;
-				default:
-					break;
-			}
-			*/
+
 			$arr_status = [];
 			foreach($search['status'] as $v){
 				switch($v){
@@ -140,20 +106,31 @@ class ApplyLogic extends BaseLogic
 				$query -> andWhere(['in','status',$arr_status]);
 			}
 		}
+        /**
+         * 类型筛选
+         */
+        $_query = clone $query;
+        $_query->select('a.type')->groupBy('a.type');
+        //var_dump($_query -> createCommand()->getRawSql());die();
+        $types = $_query->asArray()->all();
+        //var_dump($types);die();
+
 		//类型
 		if($apply_type){
 			$query -> andWhere(['in','a.type' , $apply_type]);
 		}
 		
 		$_query = clone $query;
-		//var_dump($_query -> createCommand()->getRawSql());die();
-		$total = $_query -> count();
+		//var_dump($_query->createCommand()->getRawSql());die();
+		$total = $_query->count();
 		//var_dump($total);die();
+
 		$pagination = new Pagination(['totalCount' => $total]);
 		//当前页
-		$pagination -> setPage($page-1);
+		$pagination->setPage($page-1);
 		//每页显示条数
 		$pagination->setPageSize($page_size, true);
+
 		//排序
 		switch(@$search['sort']){
 			case 'asc'://时间顺序
@@ -164,14 +141,15 @@ class ApplyLogic extends BaseLogic
 				break;
 		}
 		
-		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
-		//var_dump($query -> createCommand()->getRawSql());die();
-		$res = $query -> asArray() -> all();
+		$query -> select('*')->orderBy($orderBy)->offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+		//var_dump($query->createCommand()->getRawSql());die();
+		$res = $query->asArray()->all();
 		//var_dump($res);die();
 		
 		return [
 			'data' => $res,
-			'pages' => $this->pageFix($pagination)
+			'pages' => $this->pageFix($pagination),
+			'types' => $types,
 		];
 		
 	}
@@ -857,4 +835,104 @@ class ApplyLogic extends BaseLogic
         $appprval_model = ApprovalLog::find()->where(['apply_id'=>$apply_id,'result'=>2])->one();
         return $appprval_model ? $appprval_model->des : '';
     }
+
+	/**
+	 * 获取申请列表
+	 * @param array $search
+	 * @param array $user
+	 *
+	 * @return array
+	 */
+	public function getApplyListAll($search,$user)
+	{
+		$type = ArrayHelper::getValue($search,'type',[]);
+		$start_time = ArrayHelper::getValue($search,'start_time',null);
+		$end_time = ArrayHelper::getValue($search,'end_time',null);
+		$page = ArrayHelper::getValue($search,'page',1);
+		$page_size = ArrayHelper::getValue($search,'page_size',10);
+		$keywords = ArrayHelper::getValue($search,'keywords',null);
+		$status = ArrayHelper::getValue($search, 'status',0);
+		$sort = ArrayHelper::getValue($search,'sort','desc');
+
+		$apply_model = new appmodel\Apply();
+		$query = $apply_model::find()
+			-> alias('a');
+		//开始时间
+		if($start_time){
+			$start_time = strtotime($start_time.' 0:0:0');
+			$query -> andWhere(['>','create_time',$start_time]);
+		}
+		//结束时间
+		if($end_time){
+			$end_time = strtotime($end_time.' 23:59:59');
+			$query -> andWhere(['<','create_time',$end_time]);
+		}
+		//关键词
+		if($keywords){
+			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
+		}
+		//状态
+		if($status){
+			$arr_status = [];
+			foreach($search['status'] as $v){
+				switch($v){
+					case 1://审核中
+						array_push($arr_status ,1,11);
+						break;
+					case 2://财务确认中
+						array_push($arr_status ,4);
+						break;
+					case 3://撤销
+						array_push($arr_status ,3);
+						break;
+					case 4://审核不通过
+						array_push($arr_status ,2);
+						break;
+					case 5://完成
+						array_push($arr_status ,99);
+						break;
+					default:
+						break;
+				}
+			}
+			if(count($arr_status) == 1){
+				$query -> andWhere(['status'=>$arr_status[0]]);
+			}elseif(count($arr_status) > 1){
+				$query -> andWhere(['in','status',$arr_status]);
+			}
+		}
+		//类型
+		$query -> andWhere(['in','a.type' , $type]);
+
+
+		$_query = clone $query;
+		//var_dump($_query -> createCommand()->getRawSql());die();
+		$total = $_query -> count();
+		//var_dump($total);die();
+		$pagination = new Pagination(['totalCount' => $total]);
+		//当前页
+		$pagination -> setPage($page-1);
+		//每页显示条数
+		$pagination->setPageSize($page_size, true);
+		//排序
+		switch($sort){
+			case 'asc'://时间顺序
+				$orderBy = ['create_time'=>SORT_ASC];
+				break;
+			default://时间倒序
+				$orderBy = ['create_time'=>SORT_DESC];
+				break;
+		}
+
+		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+		//var_dump($query -> createCommand()->getRawSql());die();
+		$res = $query -> asArray() -> all();
+		//var_dump($res);die();
+
+		return [
+			'data' => $res,
+			'pages' => $this->pageFix($pagination)
+		];
+
+	}
 }

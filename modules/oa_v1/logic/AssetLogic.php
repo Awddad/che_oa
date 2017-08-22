@@ -592,4 +592,84 @@ class AssetLogic extends Logic
         }
         
     }
+    
+    /**
+     * 资产分配
+     *
+     * @param AssetList $assetList
+     * @param Person $person
+     * @param Person $operatePerson
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function assetAllot($assetList, $person, $operatePerson)
+    {
+        $assetGetList = new AssetGetList();
+        $assetGetList->apply_id = '0';
+        $assetGetList->person_id = $person->person_id;
+        $assetGetList->asset_list_id = $assetList->id;
+        $assetGetList->asset_id = $assetList->asset_id;
+        $assetGetList->status = 2;
+        $assetGetList->created_at = time();
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            if (!$assetGetList->save()) {
+                throw new Exception(BaseLogic::instance()->getFirstError($assetGetList->errors));
+            }
+            $assetList->status = 2;
+            $assetList->person_id = $person->person_id;
+            $assetList->save();
+            $des = ' 手动分配';
+            $this->addAssetListLog($operatePerson->person_id, $assetList->id, null, 6, $des);
+            //扣除空闲库存
+            Asset::updateAllCounters(['free_amount' => -1], ['id' => $assetGetList->asset_id]);
+            $t->commit();
+            return true;
+        } catch (Exception $e) {
+            $t->rollBack();
+            $this->error = '分配失败';
+            throw $e;
+        }
+    }
+    
+    /**
+     *
+     * @param AssetGetList $assetList
+     * @param Person $operatePerson
+     * @param $des
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function assetRecover($assetList, $operatePerson, $des)
+    {
+        /**
+         * @var AssetGetList $assetGetList
+         */
+        $assetGetList = AssetGetList::find()->where([
+            'asset_list_id' => $assetList->id,
+            'person_id' => $assetList->person_id
+        ])->one();
+        // 领取表 状态改为归还
+        $assetGetList->status = AssetGetList::STATUS_BACK_SUCCESS;
+        // 资产库存状态改为 空闲中
+        $assetList->status = 1;
+        $assetList->person_id = 0;
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            $assetList->save();
+            $assetGetList->save();
+            $this->addAssetListLog($operatePerson->person_id, $assetList->id, null, 7, $des);
+            //空闲库存增1
+            Asset::updateAllCounters(['free_amount' => 1], ['id' => $assetGetList->asset_id]);
+            $t->commit();
+            return true;
+        } catch (Exception $e) {
+            $t->rollBack();
+            $this->error = '回收失败';
+            throw $e;
+        }
+    }
+    
 }

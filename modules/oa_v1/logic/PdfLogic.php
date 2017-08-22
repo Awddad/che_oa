@@ -31,7 +31,7 @@ class PdfLogic extends Logic
      *
      * @param Apply $apply
      *
-     * @return string
+     * @return string | array
      */
     public function expensePdf($apply)
     {
@@ -78,7 +78,7 @@ class PdfLogic extends Logic
      * 借款单
      *
      * @param Apply $apply
-     * @return string
+     * @return string | array
      */
     public function loanPdf($apply)
     {
@@ -116,7 +116,7 @@ class PdfLogic extends Logic
      * 还款单
      *
      * @param Apply $apply
-     * @return string
+     * @return string | array
      */
     public function payBackPdf($apply)
     {
@@ -165,7 +165,7 @@ class PdfLogic extends Logic
      * 用章
      *
      * @param Apply $apply
-     * @return string
+     * @return string | array
      */
     public function useChapter($apply)
     {
@@ -173,13 +173,19 @@ class PdfLogic extends Logic
         if(!file_exists($root_path) || \Yii::$app->request->get('debug')){
             $pdf = new MyTcPdf();
             $person = Person::findOne($apply->person_id);
+            if ($apply->applyUseChapter->use_type) {
+                $use_type =  ApplyUseChapter::USE_TYPE[$apply->applyUseChapter->use_type];
+            } else {
+                $use_type = '--';
+            }
             $arrInfo = [
                 'apply_date' => date('Y年m月d日', $apply->create_time),
                 'apply_id' => $apply->apply_id,
                 'org_full_name' => $person->org_full_name,
                 'person' => $person->person_name,
                 'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
-                'chapter_name' => $apply->applyUseChapter->name,
+                'use_type' => $use_type,
+                'name' => $apply->applyUseChapter->name,
                 'des' => $apply->applyUseChapter->des ?: '--',
                 'approval_person' => $apply->approval_persons,//多个人、分隔
                 'copy_person' => $apply->copy_person ?: '',//多个人、分隔
@@ -218,7 +224,7 @@ class PdfLogic extends Logic
      *
      * @param Apply $apply
      *
-     * @return string
+     * @return string | array
      */
     public function applyPayPdf($apply)
     {
@@ -257,7 +263,7 @@ class PdfLogic extends Logic
      * 请购
      *
      * @param Apply $apply
-     * @return string
+     * @return string | array
      */
     public function applyBuyPdf($apply)
     {
@@ -317,7 +323,7 @@ class PdfLogic extends Logic
      * 需求单
      *
      * @param Apply $apply
-     * @return string
+     * @return string | array
      */
     public function applyDemand($apply)
     {
@@ -361,7 +367,8 @@ class PdfLogic extends Logic
      * 资产获取
      *
      * @param $apply
-     * @return string
+     *
+     * @return string | array
      */
     public function assetGet($apply)
     {
@@ -408,7 +415,7 @@ class PdfLogic extends Logic
      * 资产归还
      *
      * @param $apply
-     * @return string
+     * @return string | array
      */
     public function assetBack($apply)
     {
@@ -456,7 +463,9 @@ class PdfLogic extends Logic
     
     /**
      * 转正
-     * @param  $apply
+     * @param $apply
+     *
+     * @return array
      */
     public function applyPositive($apply)
     {
@@ -488,9 +497,13 @@ class PdfLogic extends Logic
             'name' => $apply->apply_id.'.pdf'
         ];
     }
+    
     /**
      * 离职
-     * @param  $apply
+     *
+     * @param $apply
+     *
+     * @return array
      */
     public function applyLeave($apply)
     {
@@ -532,7 +545,9 @@ class PdfLogic extends Logic
     
     /**
      * 调职
-     * @param  $apply
+     * @param $apply
+     *
+     * @return array
      */
     public function applyTransfer($apply)
     {
@@ -567,9 +582,12 @@ class PdfLogic extends Logic
             'name' => $apply->apply_id.'.pdf'
         ];
     }
+    
     /**
      * 开店
-     * @param  $apply
+     * @param $apply
+     *
+     * @return array
      */
     public function applyOpen($apply)
     {

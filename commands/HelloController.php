@@ -27,4 +27,19 @@ class HelloController extends Controller
     {
         echo $message . "\n";
     }
+    
+    public function actionSql()
+    {
+        $sql = <<<_SQL
+ALTER TABLE `che_oa`.`oa_apply_use_chapter` ADD COLUMN `use_type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '1:用章 2:借章' AFTER `files`;
+ALTER TABLE `che_oa`.`oa_apply_use_chapter` ADD COLUMN `name_path` varchar(128) DEFAULT '' COMMENT '公司路径（重新申请勇）' AFTER `use_type`;
+ALTER TABLE `oa_talent`
+ADD COLUMN `face_time`  varchar(20) NOT NULL DEFAULT '' COMMENT '面试时间' AFTER `disagree_reason`;
+ADD COLUMN `need_test`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否需要考试 0不需要 1需要' AFTER `face_time`,
+ADD COLUMN `choice_score`  tinyint(3) NOT NULL DEFAULT -1 COMMENT '选择题分数' AFTER `need_test`,
+ADD COLUMN `answer_score`  tinyint(3) NOT NULL DEFAULT -1 COMMENT '问答题分数' AFTER `choice_score`;
+_SQL;
+        \Yii::$app->db->createCommand($sql)->execute();
+
+    }
 }

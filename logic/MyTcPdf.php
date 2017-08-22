@@ -280,10 +280,14 @@ TABLEHTML;
             <td colspan="2">{$param['person']}</td>
         </tr>
         <tr>
+            <td style="background-color:#f2f2f2">用章类型</td>
+            <td colspan="2">{$param['use_type']}</td>
             <td style="background-color:#f2f2f2">印章类型</td>
             <td colspan="2">{$param['chapter_type']}</td>
-            <td style="background-color:#f2f2f2"> 印章名称</td>
-            <td colspan="2">{$param['chapter_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">印章公司</td>
+            <td colspan="5">{$param['name']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>

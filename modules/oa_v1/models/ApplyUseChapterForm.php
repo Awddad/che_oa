@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApplyUseChapter;
+use app\models\Org;
 use app\models\Person;
 use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
@@ -38,7 +39,14 @@ class ApplyUseChapterForm extends BaseForm
     
     public $chapter_type;
     
+    /**
+     * @var 用途
+     */
+    public $use_type;
+    
     public $name;
+    
+    public $name_path;
     
     public $files = '';
     
@@ -61,7 +69,7 @@ class ApplyUseChapterForm extends BaseForm
     {
         return [
             [
-                [ 'approval_persons', 'apply_id', 'chapter_type', 'name', 'files', 'des'],
+                [ 'approval_persons', 'apply_id', 'chapter_type', 'use_type', 'name', 'name_path', 'files', 'des'],
                 'required',
                 'message' => '缺少必填字段'
             ],
@@ -89,17 +97,6 @@ class ApplyUseChapterForm extends BaseForm
     {
         $applyId = $this->apply_id;
         
-        $pdfUrl = $this->createPdf([
-            'apply_date' => date('Y年m月d日'),
-            'apply_id' => $applyId,
-            'org_full_name' => $user->org_full_name,
-            'person' => $user['person_name'],
-            'chapter_type' => ApplyUseChapter::STATUS[$this->chapter_type],
-            'chapter_name' => $this->name,
-            'des' => $this->des ? : '--',
-            'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
-            'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
-        ], 'useChapter');
         $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
         
         $apply = new Apply();
@@ -113,7 +110,7 @@ class ApplyUseChapterForm extends BaseForm
         $apply->next_des = '等待'.$nextName.'审批';
         $apply->approval_persons = $this->getPerson('approval_persons');
         $apply->copy_person = $this->getPerson('copy_person');
-        $apply->apply_list_pdf = $pdfUrl;
+        $apply->apply_list_pdf = '';
         $apply->cai_wu_need = $this->cai_wu_need;
         $apply->org_id = $user['org_id'];
         $transaction = Yii::$app->db->beginTransaction();
@@ -145,7 +142,9 @@ class ApplyUseChapterForm extends BaseForm
         $model->apply_id = $this->apply_id;
         $model->files = $this->files ? json_encode($this->files): '';
         $model->chapter_type = $this->chapter_type;
+        $model->use_type = $this->use_type;
         $model->name = $this->name;
+        $model->name_path= $this->name_path;
         $model->des = $this->des;
         if (!$model->save()) {
             throw new Exception('需求单保存失败');

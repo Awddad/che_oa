@@ -66,27 +66,36 @@ class ApplyDemandController extends BaseController
             $this->_returnError(403);
         }
         $param = Yii::$app->request->get();
-        $query = Apply::find()->where([
-            'status' => 99,
-            'type' => 6
+        $query = Apply::find()->alias('a')->innerJoin(
+            'oa_apply_demand b', 'a.apply_id = b.apply_id'
+        )->where([
+            'a.status' => 99,
+            'a.type' => 6
         ]);
         
         $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if($keyword) {
             $query->andWhere([
                 'or',
-                ['like','apply_id', $keyword],
-                ['like','title', $keyword]
+                ['like','a.apply_id', $keyword],
+                ['like','a.title', $keyword]
             ]);
         }
+        
+        $filterStatus = $param['filter_status'];
+        if ($filterStatus) {
+            $filterStatusArray = explode(',', $filterStatus);
+            $query->andWhere(['in', 'b.status', $filterStatusArray]);
+        }
+        
         $beforeTime = strtotime(ArrayHelper::getValue($param, 'start_time'));
         $afterTime = strtotime(ArrayHelper::getValue($param, 'end_time'));
         if ($beforeTime && $afterTime) {
             $afterTime = strtotime('+1day', $afterTime);
             $query->andWhere([
                 'and',
-                ['>', 'create_time', $beforeTime],
-                ['<', 'create_time', $afterTime]
+                ['>', 'a.create_time', $beforeTime],
+                ['<', 'a.create_time', $afterTime]
             ]);
         }
         
@@ -96,7 +105,7 @@ class ApplyDemandController extends BaseController
             'defaultPageSize' => $pageSize,
             'totalCount' => $query->count(),
         ]);
-        $model = $query->orderBy(["create_time" => SORT_DESC])
+        $model = $query->orderBy(["a.create_time" => SORT_DESC])
             ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
@@ -121,6 +130,7 @@ class ApplyDemandController extends BaseController
         }
         return $this->_return([
             'list' => $data,
+            'filter_status' => ApplyDemand::STATUS,
             'page' => BaseLogic::instance()->pageFix($pagination)
         ]);
     }

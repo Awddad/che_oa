@@ -209,4 +209,42 @@ class TalentController extends BaseController
             return $this->_returnError(400,$res['msg']);
         }
     }
+
+    /**
+     * 获得曾经
+     */
+    public function actionGetScore()
+    {
+        $id = yii::$app->request->get('id');
+        if($id){
+            $model = new TalentInfoForm();
+            $res = $model->getScore($id);
+            if($res['status']){
+                return $this->_return($res['data']);
+            }else{
+                return $this->_returnError(400,$res['msg']);
+            }
+        }
+        return $this->_returnError(403,'id不能为空');
+    }
+
+    /**
+     * 编辑成绩
+     */
+    public function actionEditScore()
+    {
+        $post = yii::$app->request->post();
+        $model = new TalentInfoForm();
+        $model->setScenario($model::SCENARIO_TALENT_SCORE_EDIT);
+        $model->load(['TalentInfoForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->saveScore($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }

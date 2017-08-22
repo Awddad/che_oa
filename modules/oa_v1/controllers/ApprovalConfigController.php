@@ -109,4 +109,44 @@ class ApprovalConfigController extends BaseController
         $res = $model->getApplyType($this->roleName);
         return $this->_return($res);
     }
+
+    /**
+     * 复制审批流程
+     */
+    public function actionCopyApproval()
+    {
+        $post = yii::$app->request->post();
+        $model = new ApprovalConfigForm();
+        $model->setScenario($model::SCENARIO_APPROVAL_COPY);
+        $model->load(['ApprovalConfigForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->copyApproval($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
+
+    /**
+     * 删除审批流程
+     */
+    public function actionDelApproval()
+    {
+        $post = yii::$app->request->post();
+        $model = new ApprovalConfigForm();
+        $model->setScenario($model::SCENARIO_APPROVAL_DEL);
+        $model->load(['ApprovalConfigForm'=>$post]);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()));
+        }
+        $res = $model->delApproval($this->arrPersonInfo,$this->roleName);
+        if($res['status']){
+            return $this->_return('成功');
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }

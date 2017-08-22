@@ -29,6 +29,8 @@ class AssetListLog extends \yii\db\ActiveRecord
         3 => '归还',
         4 => '报废',
         5 => '丢失',
+        6 => '资产分配',
+        7 => '回收',
     ];
 
     /**
