@@ -280,21 +280,13 @@ class QuanXianServer extends Server
                 }
                 */
             }
-            $result = 0;
             //更新入库 - oa_person 表
+            Person::updateAll(['is_delete'=>1],['is_delete'=>0]);
             $strTable = Person::tableName();
             $arrKeys = array_keys($arrPerson[0]);
             $strSql = $this->createReplaceSql($strTable, $arrKeys, $arrPerson, 'person_id');
-            $db = Yii::$app->db;
-            $transaction = $db->beginTransaction();
-            try {
-                $db->createCommand()->truncateTable($strTable)->execute();
-                $result = $db->createCommand($strSql)->execute();
-                $transaction->commit();
-            } catch (\Exception $ex) {
-                $transaction->rollBack();
-                echo $ex->getMessage();die();
-            }
+            $result = Yii::$app->db->createCommand($strSql)->execute();
+
             //更新入库 - oa_person_bank_info表
             /* 银行卡信息OA自己维护 2017-07-04
             $strTable = PersonBankInfo::tableName();
