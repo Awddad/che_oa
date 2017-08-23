@@ -84,7 +84,11 @@ class JiekuanController extends BaseController
         foreach ($model as $k => $v) {
             if(!$v->apply)
                 continue;
-            $org = $v->apply->personInfo->org_full_name;
+            if ($person = $v->personInfo)  {
+                $org = $person->org_full_name;
+            } else {
+                $org = '--';
+            }
             
             $data[] = [
                 'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
@@ -154,7 +158,11 @@ class JiekuanController extends BaseController
         foreach ($model as $v) {
             if(!$v->apply)
                 continue;
-            $org = $v->apply->personInfo->org_full_name;
+            if ($person = $v->personInfo)  {
+                $org = $person->org_full_name;
+            } else {
+                $org = '--';
+            }
             $data[] = [
                 'get_money_time' => date('Y-m-d H:i', $v->get_money_time),
                 'person' => $v->apply->person,

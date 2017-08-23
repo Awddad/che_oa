@@ -101,7 +101,11 @@ class ApplyBuyController extends BaseController
          * @var Apply $v
          */
         foreach ($model as $k => $v) {
-            $org = $v->personInfo->org_full_name;
+            if ($person = $v->personInfo)  {
+                $org = $person->org_full_name;
+            } else {
+                $org = '--';
+            }
             $data[] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'apply_id' => $v->apply_id,

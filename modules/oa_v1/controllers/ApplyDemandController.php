@@ -117,7 +117,7 @@ class ApplyDemandController extends BaseController
             if ($person = $v->personInfo)  {
                 $org = $person->org_full_name;
             } else {
-                $org = '';
+                $org = '--';
             }
             
             $detail = implode(',', ArrayHelper::getColumn($v->applyDemand->demandList, 'name'));
