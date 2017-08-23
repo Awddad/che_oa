@@ -126,7 +126,7 @@ class TalentForm extends BaseForm
 		    ['reason','string','max'=>20,'message'=>'不同意原因不正确！'],
 			[['choice_score','answer_score'],'integer','message'=>'分数不正确'],
 			[['choice_score','answer_score'],'compare', 'compareValue' => 0, 'operator' => '>=','message'=>'分数不能低于0分！'],
-			['face_time','date','format' => 'yyyy-mm-dd HH:mm','message' => '面试时间不正确']
+			['face_time','date','format' => 'yyyy-mm-dd','message' => '面试时间不正确']
 		];
 	}
 	
