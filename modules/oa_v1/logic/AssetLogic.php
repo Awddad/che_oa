@@ -620,7 +620,7 @@ class AssetLogic extends Logic
             $assetList->status = 2;
             $assetList->person_id = $person->person_id;
             $assetList->save();
-            $des = ' 手动分配';
+            $des = '分配给'.$person->person_name;
             $this->addAssetListLog($operatePerson->person_id, $assetList->id, null, 6, $des);
             //扣除空闲库存
             Asset::updateAllCounters(['free_amount' => -1], ['id' => $assetGetList->asset_id]);
