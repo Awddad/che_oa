@@ -114,7 +114,11 @@ class ApplyDemandController extends BaseController
          * @var Apply $v
          */
         foreach ($model as $k => $v) {
-            $org = $v->personInfo->org_full_name;
+            if ($person = $v->personInfo)  {
+                $org = $person->org_full_name;
+            } else {
+                $org = '';
+            }
             
             $detail = implode(',', ArrayHelper::getColumn($v->applyDemand->demandList, 'name'));
             
