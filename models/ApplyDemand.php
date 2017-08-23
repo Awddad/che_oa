@@ -25,6 +25,7 @@ class ApplyDemand extends \yii\db\ActiveRecord
     
     
     const BUY_TYPE = [
+        0 => '--',
         1 => '请购全部',
         2 => '请购部分',
         3 => '库存已有'

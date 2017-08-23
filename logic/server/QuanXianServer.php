@@ -234,7 +234,7 @@ class QuanXianServer extends Server
             'per_page' => 1000000,//一次拉取所有员工
             'show_deleted' => 1,
         ];
-        $arrRtn = $this->thisHttpPost($this->arrApiUrl['userlist'], $arrPost);
+        $arrRtn = $this->httpGet($this->arrApiUrl['userlist'].'?'.http_build_query($arrPost));
         if( $arrRtn['success'] == 1 && is_array($arrRtn['data']) && !empty($arrRtn['data']) &&!empty($arrRtn['data']['data']))//接口处理数据成功
         {
             //获取组织架构信息
