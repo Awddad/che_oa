@@ -569,6 +569,7 @@ class TalentForm extends BaseForm
 	                    $v['G'],
 	                    time(),
 	                    time(),
+						$v['need_test'],
 	                ];
 	            }
 	            unset($res);
@@ -578,7 +579,7 @@ class TalentForm extends BaseForm
 	            return ['status'=>false,'msg'=>implode(';', $error)];
 	        }else{
 	            $query = \Yii::$app->db->createCommand()->batchInsert('oa_talent',[
-	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time','created_at','updated_at'
+	                'name', 'owner', 'phone', 'job', 'age', 'sex', 'educational','work_time','created_at','updated_at','need_test'
 	            ],$data);
 	            $sql = $query->getRawSql();
 	            $query->execute();
@@ -616,6 +617,7 @@ class TalentForm extends BaseForm
 	        $error[] = '职位不存在';
 	    }else{
 	        $row['job'] = $profession->id;
+			$row['need_test'] = 1;
 	    }
 	    //性别
 	    if($row['D'] == '男'){
