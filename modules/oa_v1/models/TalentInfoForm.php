@@ -88,7 +88,7 @@ class TalentInfoForm extends BaseForm
             ['location','string','max'=>100,'on'=>[self::SCENARIO_TALENT_YINGPIN_EDIT]],//应聘地点
             ['daogang','string','max'=>20],//到岗时间
             [['want_salary','now_salary'],'string','max'=>10],//期望薪资，目前薪资
-            ['face_time','date','format' => 'yyyy-mm-dd HH:mm','message' => '面试时间不正确'],
+            ['face_time','date','format' => 'yyyy-mm-dd','message' => '面试时间不正确'],
             [['choice_score','answer_score'],'integer','message'=>'分数不正确'],
             [['choice_score','answer_score'],'compare', 'compareValue' => 0, 'operator' => '>=','message'=>'分数不能低于0分！'],
         ];
