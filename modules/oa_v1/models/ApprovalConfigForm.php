@@ -28,8 +28,8 @@ class ApprovalConfigForm extends BaseForm
     public $org_pid = 1;//组织架构parent_id
 
     protected $roles_arr = [
-        'caiwujingli' => [1,2,3,4,5],
-        'xingzhengjingli' => [6,7,8,9],
+        'caiwujingli' => [1,2,3,4],
+        'xingzhengjingli' => [5,6,7,8,9],
         'zhaopinjingli' => [10,11,12],
         'duodianshenpi' => [14],
     ];
