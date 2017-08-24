@@ -566,4 +566,76 @@ class AssetController extends BaseController
             'headers' => $header
         ]);
     }
+    
+    /**
+     * 个人资产查询
+     */
+    public function actionGetPersonAsset()
+    {
+        $personName = Yii::$app->request->get('person_name');
+        $query = AssetList::find()->alias('a')->innerJoin(
+            'oa_person b', 'a.person_id = b.person_id'
+        )->where([
+            'b.person_name' => $personName,
+            'a.status' => 2
+        ]);
+    
+        $pageSize = ArrayHelper::getValue(Yii::$app->request->get(), 'page_size', 20);
+    
+        $pagination = new Pagination([
+            'defaultPageSize' => $pageSize,
+            'totalCount' => $query->count(),
+        ]);
+        $assetList = $query->orderBy(["id" => SORT_DESC])
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+        $data = [];
+        /**
+         * @var AssetList $v
+         */
+        foreach ($assetList as $k => $v) {
+            $use = AssetListLog::find()->where([
+                'asset_list_id' => $v->id,
+                'person_id' => $v->person_id,
+            ])->andWhere([
+                'in', 'type', [2, 6]
+            ])->one();
+            if ($use) {
+                $useDay = round((time()-$use->created_at)/3600/24).'天';
+            } else {
+                $useDay = '--';
+            }
+            /**
+             * @var Asset $asset
+             */
+            $asset = $v->asset;
+            $typeArr = explode('-', $asset->asset_type_name);
+            $use_person = $org = '';
+            if ($v->status == 2 && $v->person_id && $person = Person::findOne($v->person_id)) {
+                $use_person = $person->person_name;
+                $org= $person->org_full_name;
+            }
+            $data[] = [
+                'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
+                'asset_id' => $v->id,
+                'type' => $typeArr[0],
+                'type_detail' => $typeArr[1],
+                'brand_name' => $asset->asset_brand_name,
+                'name' => $asset->name,
+                'created_at' => date('Y-m-d H:i', $v->created_at),
+                'stock_number' => $v->stock_number,
+                'asset_number' => $v->asset_number,
+                'sn_number' => $v->sn_number,
+                'status' => AssetList::STATUS[$v->status],
+                'use_person' => $use_person,
+                'org' => $org,
+                'use_day' => $useDay,
+            ];
+        }
+        return $this->_return([
+            'list' => $data,
+            'page' => BaseLogic::instance()->pageFix($pagination)
+        ]);
+    }
 }
