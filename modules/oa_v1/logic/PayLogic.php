@@ -87,7 +87,7 @@ class PayLogic extends BaseLogic
             ]);
         }
         $query->andWhere([
-            'in', 'b.company_id', $companyIds
+            'in', 'a.company_id', $companyIds
         ]);
         $countQuery = clone $query;
         $totalCount = $countQuery->count();
@@ -275,7 +275,7 @@ class PayLogic extends BaseLogic
             $order = \Yii::$app->request->get('asc') . ' asc';
         }
         $query->andWhere([
-            'in', 'oa_person.company_id', $companyIds
+            'in', 'oa_apply.company_id', $companyIds
         ]);
         $models = $query->orderBy($order)->all();
         $data = [];

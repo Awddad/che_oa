@@ -168,6 +168,7 @@ class BaoxiaoForm extends BaseForm
 			$nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
 			$model -> next_des = "等待{$nextName}审批";
 			$model -> org_id = $this -> user['org_id'];
+			$model -> company_id = $this -> user['company_id'];
 		}elseif('baoxiao' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> bao_xiao_list_ids = implode(',',array_column($this ->bao_xiao_list,'id'));

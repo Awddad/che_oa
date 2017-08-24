@@ -16,6 +16,7 @@ use app\models\Person;
 use app\modules\oa_v1\logic\AssetImportLogic;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\models\AssetListForm;
+use moonland\phpexcel\Excel;
 use Yii;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\models\AssetBackForm;
@@ -503,5 +504,66 @@ class AssetController extends BaseController
             return $this->_return(null);
         }
         return $this->_returnError(4400, null, AssetLogic::instance()->error);
+    }
+    
+    public function actionExport()
+    {
+        $assetList = AssetList::find()->all();
+        $data = [];
+        /**
+         * @var AssetList $v
+         */
+        foreach ($assetList as $v) {
+            /**
+             * @var Asset $asset
+             */
+            $asset = $v->asset;
+            $typeArr = explode('-', $asset->asset_type_name);
+            $use_person = $org = '';
+            if ($v->status == 2 && $v->person_id && $person = Person::findOne($v->person_id)) {
+                $use_person = $person->person_name;
+                $org= $person->org_full_name;
+            }
+            $assetListLog = AssetListLog::find()->where([
+                'asset_list_id' => $v->id
+            ])->orderBy('id desc')->one();
+            $des = (!empty($assetListLog)) ? $assetListLog->des : '';
+            $data[] = [
+                'type' => $typeArr[0],
+                'type_detail' => $typeArr[1],
+                'brand_name' => $asset->asset_brand_name,
+                'name' => $asset->name,
+                'created_at' => date('Y-m-d H:i', $v->created_at),
+                'stock_number' => $v->stock_number,
+                'asset_number' => $v->asset_number,
+                'sn_number' => $v->sn_number,
+                'status' => AssetList::STATUS[$v->status],
+                'use_person' => $use_person,
+                'org' => $org,
+                'price' => $v->price,
+                'des' => $des,
+            ];
+        }
+        $header = [
+            'type' => '类别',
+            'type_detail' => '类别详情',
+            'brand_name' => '品牌',
+            'name' => '名称',
+            'created_at' => '入库时间',
+            'stock_number' => '库存编号',
+            'asset_number' => '资产编号',
+            'sn_number' => 'sn号',
+            'status' => '状态',
+            'use_person' => '使用人',
+            'org' => '部门',
+            'price' => '采购价',
+            'des' => '说明'
+        ];
+        $columns = array_keys($header);
+        Excel::export([
+            'models' => $data,
+            'columns' => $columns,
+            'headers' => $header
+        ]);
     }
 }

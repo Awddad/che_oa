@@ -10,6 +10,7 @@ namespace app\modules\oa_v1\models;
 
 
 use app\logic\MyTcPdf;
+use app\models\Person;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use yii\base\Model;
@@ -320,5 +321,36 @@ class BaseForm extends Model
             $pdfUrl = '';
         }
         return $pdfUrl;
+    }
+    
+    /**
+     * 获取Asset 对象
+     *
+     * @param Person $person
+     *
+     * @return Apply
+     */
+    public function setApply($person)
+    {
+        $applyId = $this->apply_id;
+        $pdfUrl = '';
+        $nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
+        
+        $apply = new Apply();
+        $apply->apply_id = $applyId;
+        $apply->title = $this->createApplyTitle($person);
+        $apply->create_time = $_SERVER['REQUEST_TIME'];
+        $apply->type = $this->type;
+        $apply->person_id = $person->person_id;
+        $apply->person = $person->person_name;
+        $apply->status = 1;
+        $apply->next_des = '等待'.$nextName.'审批';
+        $apply->approval_persons = $this->getPerson('approval_persons');
+        $apply->copy_person = $this->getPerson('copy_person');
+        $apply->apply_list_pdf = $pdfUrl;
+        $apply->cai_wu_need = $this->cai_wu_need;
+        $apply->org_id = $person->org_id;
+        $apply->company_id = $person->company_id;
+        return $apply;
     }
 }

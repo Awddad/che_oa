@@ -219,6 +219,17 @@ class DefaultController extends BaseController
         $data = PersonLogic::instance()->getOrgs();
         return $this->_return($data);
     }
+    
+    /**
+     * 获取组织架构
+     *
+     * @return array
+     */
+    public function actionCompanyOrg()
+    {
+        $data = PersonLogic::instance()->getOrgs($this->arrPersonInfo->company_id);
+        return $this->_return($data);
+    }
 
     /**
      * 获取 PDF
