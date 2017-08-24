@@ -55,7 +55,7 @@ class ApplyController extends BaseController
 				'apply_id' => $v ['apply_id'], // 审批单编号
 				'date' => date('Y-m-d H:i', $v ['create_time']), // 创建时间
 				'type' => $v ['type'], // 类型
-				'type_value' => $this->type [$v ['type']], // 类型值
+				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
 				'title' => $v ['title'], // 标题
 				'person' => $v ['person'], // 发起人
 				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人
@@ -69,7 +69,7 @@ class ApplyController extends BaseController
 		}
 		foreach($res['types'] as $k=>$v){
 			$data['types'][] = [
-				'text' => $this->type [$v['type']],
+				'text' => Apply::TYPE_ARRAY [$v['type']],
 				'value' => (int)$v['type']
 			];
 		}
@@ -93,7 +93,7 @@ class ApplyController extends BaseController
 				'apply_id' => $v ['apply_id'], // 审批单编号
 				'date' => date('Y-m-d H:i', $v ['create_time']), // 创建时间
 				'type' => $v ['type'], // 类型
-				'type_value' => $this->type [$v ['type']], // 类型值
+				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
 				'title' => $v ['title'], // 标题
 				'person' => $v ['person'], // 发起人
 				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人

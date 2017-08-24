@@ -16,24 +16,6 @@ use app\models\EmployeeType;
  */
 class AfterApproval extends BaseLogic
 {
-
-    protected $typeMethod = [
-        1 => 'Baoxiao',
-        2 => 'Loan',
-        3 => 'PayBack',
-        4 => 'Pay',
-        5 => 'Buy',
-        6 => 'Demand',
-        7 => 'UseChapter',
-        8 => 'AssetGet',
-        9 => 'AssetBack',
-        10 => 'Positive',
-        11 => 'Leave',
-        12 => 'Transfer',
-        13 => 'Open',
-        14 => 'GoodsUp'
-    ];
-
     /**
      * 审批完成后
      * 

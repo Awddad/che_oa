@@ -615,4 +615,35 @@ class PdfLogic extends Logic
             'name' => $apply->apply_id.'.pdf'
         ];
     }
+    
+    /**
+     * 开店
+     * @param $apply
+     *
+     * @return array
+     */
+    public function applyTravel($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => $person->org_full_name,
+            'person' => $person->person_name,
+            'des' => $apply->travel->des,
+            'travel_list' => $apply->travel->travelList,
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'applyTravel');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
 }

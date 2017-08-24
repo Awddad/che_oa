@@ -185,7 +185,7 @@ class Apply extends \yii\db\ActiveRecord
         $this->next_des = '审批不通过，已终止';
         $person = Person::findOne($this->person_id);
         if($person->bqq_open_id) {
-            $typeName = $this->typeArr[$this->type];
+            $typeName = self::TYPE_ARRAY[$this->type];
             $data = [
                 'tips_title' => 'OA -' .$typeName. '申请不通过',
                 'tips_content' => '你发起的'. $typeName.'申请不通过，请在OA系统进行查看',
@@ -208,7 +208,7 @@ class Apply extends \yii\db\ActiveRecord
         $this->status = self::STATUS_ING;
         $persons = Person::findOne($person->approval_person_id);
         if ($persons->bqq_open_id) {
-            $typeName = $this->typeArr[$this->type];
+            $typeName = self::TYPE_ARRAY[$this->type];
             $data = [
                 'tips_title' => 'OA -' .$typeName. '申请',
                 'tips_content' => '员工'.$this->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
@@ -227,7 +227,7 @@ class Apply extends \yii\db\ActiveRecord
         $this->next_des = '等待财务部门确认';
         $this->status = self::STATUS_CONFIRM;
         /* 发送企业QQ消息 */
-        $typeName = $this->typeArr[$this->type];
+        $typeName = self::TYPE_ARRAY[$this->type];
         $person = Person::findOne($this->person_id);
         $data = [
             'tips_title' => 'OA - 付款确认',
@@ -282,7 +282,7 @@ class Apply extends \yii\db\ActiveRecord
         $this->status = self::STATUS_OK;
         /* 发送企业QQ消息 */
         $person = Person::findOne($this->person_id);
-        $typeName = $this->typeArr[$this->type];
+        $typeName = self::TYPE_ARRAY[$this->type];
         if ($person->bqq_open_id) {
             $data = [
                 'tips_title' => 'OA - ' .$typeName. '申请完成',
@@ -424,9 +424,19 @@ class Apply extends \yii\db\ActiveRecord
     }
     
     /**
+     * 出差申请
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTravel()
+    {
+        return $this->hasOne(ApplyTravel::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
      * @var array
      */
-    public $typeArr = [
+    const TYPE_ARRAY = [
         1 => '报销',
         2 => '备用金',
         3 => '还款',
@@ -441,6 +451,7 @@ class Apply extends \yii\db\ActiveRecord
         12 => '调职',
         13 => '开店',
         14 => '商品上架',
+        15 => '出差',
     ];
     
 }

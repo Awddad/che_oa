@@ -293,7 +293,7 @@ class BaseForm extends Model
      */
     public function createApplyTitle($user)
     {
-        return $user['person_name'] . '的' . $this->typeArr[$this->type] . '申请';
+        return $user['person_name'] . '的' . Apply::TYPE_ARRAY[$this->type] . '申请';
     }
     
     /**

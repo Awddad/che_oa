@@ -5,6 +5,7 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\CnyLogic;
 use app\models\ApplyDemand;
+use app\models\ApplyTravel;
 use app\models\ApplyUseChapter;
 use app\models\AssetBack;
 use app\models\AssetGet;
@@ -46,6 +47,7 @@ class ApplyView extends BaseForm
         12 => 'Transfer',
         13 => 'Open',
         14 => 'GoodsUp',
+        15 => 'Travel',
     ];
 
 
@@ -382,6 +384,20 @@ class ApplyView extends BaseForm
             'des' => $goodsUp->des,
             'files' => json_decode($goodsUp->files)?:[],
             'list' => $goodsUp->goodsUpDetail
+        ];
+        return $data;
+    }
+    
+    public function getTravel($apply)
+    {
+        /**
+         * @var ApplyTravel $travel
+         */
+        $travel = $apply->travel;
+        $data = [
+            'des' => $travel->des,
+            'files' => json_decode($travel->files)?:[],
+            'list' => $travel->travelList
         ];
         return $data;
     }

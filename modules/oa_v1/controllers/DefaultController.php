@@ -100,7 +100,7 @@ class DefaultController extends BaseController
     public function actionGetApplyId()
     {
         $intType = intval(Yii::$app->request->get('type'));
-        if(array_key_exists($intType, $this->type))
+        if(array_key_exists($intType, Apply::TYPE_ARRAY))
         {
             switch($intType)
             {
@@ -145,6 +145,9 @@ class DefaultController extends BaseController
                     break;
                 case 14:
                     $id = date('YmdHis') . '14' . rand(100, 999);
+                    break;
+                case 15:
+                    $id = date('YmdHis') . '15' . rand(100, 999);
                     break;
             }
             return $this->_return(['apply_id' => $id]);
@@ -275,6 +278,9 @@ class DefaultController extends BaseController
             case 13:
                 $pdf = PdfLogic::instance()->applyOpen($apply);
                 break;
+            case 15:
+                $pdf = PdfLogic::instance()->applyTravel($apply);
+                break;
         }
         if(!empty($pdf)) {
             header('Content-Type: application/octet-stream');
@@ -351,6 +357,9 @@ class DefaultController extends BaseController
                 break;
             case 14:
                 $info = $apply->goodsUp->files;
+                break;
+            case 15:
+                $info = $apply->travel->files;
                 break;
             default:
                 $info = $apply->expense->files;

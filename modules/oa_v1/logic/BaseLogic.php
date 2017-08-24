@@ -37,6 +37,25 @@ class BaseLogic extends Logic
         '12' => '\app\models\ApplyTransfer',
         '13' => '\app\models\ApplyOpen',
         '14' => '\app\models\GoodsUp',
+        '15' => '\app\models\ApplyTravel',
+    ];
+    
+    protected $typeMethod = [
+        1 => 'Baoxiao',
+        2 => 'Loan',
+        3 => 'PayBack',
+        4 => 'Pay',
+        5 => 'Buy',
+        6 => 'Demand',
+        7 => 'UseChapter',
+        8 => 'AssetGet',
+        9 => 'AssetBack',
+        10 => 'Positive',
+        11 => 'Leave',
+        12 => 'Transfer',
+        13 => 'Open',
+        14 => 'GoodsUp',
+        15 => 'Travel',
     ];
     
     /**
