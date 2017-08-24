@@ -568,16 +568,16 @@ class AssetController extends BaseController
     }
     
     /**
-     * 个人资产查询
+     * 搜索员工资产
+     *
+     * @return array
      */
     public function actionGetPersonAsset()
     {
-        $personName = Yii::$app->request->get('person_name');
-        $query = AssetList::find()->alias('a')->innerJoin(
-            'oa_person b', 'a.person_id = b.person_id'
-        )->where([
-            'b.person_name' => $personName,
-            'a.status' => 2
+        $personId = Yii::$app->request->get('person_id');
+        $query = AssetList::find()->where([
+            'person_id' => $personId,
+            'status' => 2
         ]);
     
         $pageSize = ArrayHelper::getValue(Yii::$app->request->get(), 'page_size', 20);
