@@ -136,6 +136,11 @@ class TalentForm extends BaseForm
 		if($this->$attribute == 1) {
 			switch ($this->getScenario()) {
 				case self::SCENARIO_COMMUNION:
+					$need_test = Talent::findOne($this->id)->need_test;
+					if(!$need_test && !$validator->validate($this->face_time)){
+						$this->addError('face_time','面试时间不能为空');
+						return false;
+					}
 					break;
 				case self::SCENARIO_TEST:
 					if(!$validator->validate($this->choice_score)){
@@ -177,7 +182,7 @@ class TalentForm extends BaseForm
 	{
 	    return [
 	        self::SCENARIO_ADD_ZHAOPIN => ['name','phone','job','sex','age','educational','work_time','current_location'],
-	        self::SCENARIO_COMMUNION =>['id','status','reason'],
+	        self::SCENARIO_COMMUNION =>['id','status','reason','face_time'],
 	        self::SCENARIO_TEST =>['id','status','reason','choice_score','answer_score','face_time'],
 	        self::SCENARIO_FACE => ['id','status','org_id','entry_time','reason'],
 	        self::SCENARIO_JOIN => ['id','talent_type'],
@@ -245,6 +250,7 @@ class TalentForm extends BaseForm
 	            $model->status_communion = $model->status_communion ?: 1;
 	            $model->status = $need_test ? 2 : 3;
 				$model->need_test = $need_test;
+				$need_test || $model->face_time = $this->face_time ?: '';
 	            break;
 	        case self::SCENARIO_TEST://考试
 	            $content = '考试通过';
@@ -427,6 +433,7 @@ class TalentForm extends BaseForm
 					'person_type' => $v->person_type > 0 ? $v->personType->name : '',
 					'location' => RegionLogic::instance()->getRegionByChild($v->current_location),
 					'create_time' => date('Y-m-d', $v->created_at),
+					'need_test' => $v->need_test,
 				];
 			}
 		}
