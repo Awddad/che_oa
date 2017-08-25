@@ -191,7 +191,7 @@ class TalentForm extends BaseForm
 	 */
 	public function addTalent($user)
 	{
-		$need_test = 1;
+		$need_test = Job::findOne($this->job)->need_exam;
 	    $model = new Talent();
 		$model->need_test = $need_test;
 	    $model->name = $this->name;
@@ -617,7 +617,7 @@ class TalentForm extends BaseForm
 	        $error[] = '职位不存在';
 	    }else{
 	        $row['job'] = $profession->id;
-			$row['need_test'] = 1;
+			$row['need_test'] = $profession->need_exam;
 	    }
 	    //性别
 	    if($row['D'] == '男'){
