@@ -255,16 +255,34 @@ class TalentController extends BaseController
     }
     
     /**
+     * 人才库导出
+     */
+    public function actionExportTalent()
+    {
+        $this->export(1);
+    }
+    
+    /**
      * 招聘导出
      */
     public function actionExport()
     {
-        $query = Talent::find();
+        $this->export();
+    }
+    
+    /**
+     * @param int $talent
+     * 招聘导出
+     */
+    public function export($talent = 0)
+    {
+        $fileName = $talent ? '人才库' : '招聘';
+        $query = Talent::find()->where(['talent' => $talent]);
     
         $start_time = Yii::$app->request->get('start_time');
         $end_time = Yii::$app->request->get('end_time');
         if ($start_time && $end_time) {
-            $query->where([
+            $query->andWhere([
                 'and',
                 ['>', 'created_at', strtotime($start_time)],
                 ['<=', 'created_at', strtotime('+1day', strtotime('end_time'))],
@@ -324,7 +342,7 @@ class TalentController extends BaseController
             
                 ],
             ],
-            'fileName' => '招聘列表'.date('YmdHis'),
+            'fileName' => $fileName .date('YmdHis'),
             'format' => 'Excel2007'
         ]);
     }
