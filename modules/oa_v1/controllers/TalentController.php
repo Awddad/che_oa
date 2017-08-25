@@ -1,6 +1,12 @@
 <?php
 namespace app\modules\oa_v1\controllers;
 
+use app\models\Educational;
+use app\models\Job;
+use app\models\Person;
+use app\models\Talent;
+use app\modules\oa_v1\logic\RegionLogic;
+use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\models\TalentForm;
 use app\modules\oa_v1\models\TalentInfoForm;
@@ -246,5 +252,80 @@ class TalentController extends BaseController
         }else{
             return $this->_returnError(400,$res['msg']);
         }
+    }
+    
+    /**
+     * 招聘导出
+     */
+    public function actionExport()
+    {
+        $query = Talent::find();
+    
+        $start_time = Yii::$app->request->get('start_time');
+        $end_time = Yii::$app->request->get('end_time');
+        if ($start_time && $end_time) {
+            $query->where([
+                'and',
+                ['>', 'created_at', strtotime($start_time)],
+                ['<=', 'created_at', strtotime('+1day', strtotime('end_time'))],
+            ]);
+        }
+        if ($keywords = trim(Yii::$app->request->get('keywords'))) {
+            $query->andWhere("instr(CONCAT(profession,org_name),'{$keywords}') > 0 ");
+        }
+        Excel::export([
+            'models' => $query->all(),
+            'columns' => [
+                'name',
+                'phone',
+                [
+                    'attribute' => 'job',
+                    'value' => function($data){
+                        return Job::findOne($data->job)->name;
+                    }
+                ],
+                [
+                    'attribute' => 'sex',
+                    'value' => function($data){
+                        return $data->sex == 1 ? '女' : '男';
+                    }
+    
+                ],
+                'age',
+                [
+                    'attribute' => 'educational',
+                    'value' => function($data){
+                        return Educational::findOne($data->educational)->educational;
+                    }
+                ],
+                'work_time',
+                [
+                    'attribute' => 'current_location',
+                    'value' => function($data){
+                        return RegionLogic::instance()->getRegionByChild($data->current_location);
+                    }
+                ],
+                [
+                    'attribute' => 'status',
+                    'value' => function($data){
+                        return Talent::STATUS[$data->status];
+                    }
+            
+                ],
+                [
+                    'attribute' => 'owner',
+                    'value' => function($data){
+                        $person = Person::findOne($data->owner);
+                        if ($person) {
+                            return $person->person_name;
+                        }
+                        return '--';
+                    }
+            
+                ],
+            ],
+            'fileName' => '招聘列表'.date('YmdHis'),
+            'format' => 'Excel2007'
+        ]);
     }
 }

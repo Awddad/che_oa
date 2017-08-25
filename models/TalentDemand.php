@@ -26,6 +26,12 @@ use yii\behaviors\TimestampBehavior;
  */
 class TalentDemand extends \yii\db\ActiveRecord
 {
+    const STATUS = [
+        0 => '未招聘',
+        1 => '招聘中',
+        2 => '已招聘',
+        3 => '取消招聘'
+    ];
     public function behaviors()
     {
         return [
@@ -61,18 +67,18 @@ class TalentDemand extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'owner' => 'Owner',
+            'owner' => '创建人',
             'org_id' => 'Org ID',
-            'org_name' => 'Org Name',
-            'profession_id' => 'Profession ID',
-            'profession' => 'Profession',
-            'number' => 'Number',
-            'sex' => 'Sex',
-            'edu_id' => 'Edu ID',
-            'edu' => 'Edu',
-            'work_time' => 'Work Time',
-            'des' => 'Des',
-            'status' => 'Status',
+            'org_name' => '部门',
+            'profession_id' => '职位ID',
+            'profession' => '职位',
+            'number' => '人数',
+            'sex' => '性别',
+            'edu_id' => '最高学历',
+            'edu' => '最高学历',
+            'work_time' => '工作年限',
+            'des' => '描述',
+            'status' => '状态',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

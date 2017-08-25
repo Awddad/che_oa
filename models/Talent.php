@@ -46,6 +46,13 @@ use yii\behaviors\TimestampBehavior;
  */
 class Talent extends \yii\db\ActiveRecord
 {
+    const STATUS = [
+        1 => '待沟通',
+        2 => '待考试',
+        3 => '待面试',
+        4 => '不合适',
+        5 => '录用'
+    ];
     public function behaviors()
     {
         return [
@@ -83,18 +90,18 @@ class Talent extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'owner' => 'Owner',
-            'name' => 'Name',
-            'phone' => 'Phone',
-            'email' => 'Email',
-            'job' => 'Job',
+            'owner' => '创建人',
+            'name' => '姓名',
+            'phone' => '手机号',
+            'email' => '邮箱',
+            'job' => '应聘职位',
             'now_salary' => 'Now Salary',
             'want_salary' => 'Want Salary',
             'yingpin_location' => 'Yingpin Location',
-            'age' => 'Age',
+            'age' => '年龄',
             'birthday' => 'Birthday',
-            'sex' => 'Sex',
-            'educational' => 'Educational',
+            'sex' => '性别',
+            'educational' => '学历',
             'nation' => 'Nation',
             'native' => 'Native',
             'political' => 'Political',
@@ -102,12 +109,12 @@ class Talent extends \yii\db\ActiveRecord
             'job_status' => 'Job Status',
             'person_type' => 'Person Type',
             'daogang' => 'Daogang',
-            'work_time' => 'Work Time',
-            'current_location' => 'Current Location',
+            'work_time' => '工作年限',
+            'current_location' => '所在地',
             'status_communion' => 'Status Communion',
             'status_test' => 'Status Test',
             'status_face' => 'Status Face',
-            'status' => 'Status',
+            'status' => '状态',
             'disagree_reason' => 'Disagree Reason',
             'face_time' => 'Face Time',
             'need_test' => 'Need Test',

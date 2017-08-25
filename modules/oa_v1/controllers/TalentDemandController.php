@@ -2,6 +2,9 @@
 namespace app\modules\oa_v1\controllers;
 
 
+use app\models\Person;
+use app\models\TalentDemand;
+use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\models\TalentDemandForm;
 
@@ -83,5 +86,57 @@ class TalentDemandController extends BaseController
             }
         }
         return $this->_returnError(403,'id不能为空');
+    }
+    
+    /**
+     * 招聘需求导出
+     */
+    public function actionExport()
+    {
+        $query = TalentDemand::find();
+    
+        $start_time = Yii::$app->request->get('start_time');
+        $end_time = Yii::$app->request->get('end_time');
+        if ($start_time && $end_time) {
+            $query->where([
+                'and',
+                ['>', 'created_at', strtotime($start_time)],
+                ['<=', 'created_at', strtotime('+1day', strtotime('end_time'))],
+            ]);
+        }
+        if ($keywords = trim(Yii::$app->request->get('keywords'))) {
+            $query->andWhere("instr(CONCAT(profession,org_name),'{$keywords}') > 0 ");
+        }
+        Excel::export([
+            'models' => $query->all(),
+            'columns' => [
+                'org_name',
+                'profession',
+                'number',
+                'sex',
+                'edu',
+                'work_time',
+                [
+                    'attribute' => 'status',
+                    'value' => function($data){
+                        return TalentDemand::STATUS[$data->status];
+                    }
+    
+                ],
+                [
+                    'attribute' => 'owner',
+                    'value' => function($data){
+                        $person = Person::findOne($data->owner);
+                        if ($person) {
+                            return $person->person_name;
+                        }
+                        return '--';
+                    }
+
+                ],
+            ],
+            'fileName' => '招聘需求'.date('YmdHis'),
+            'format' => 'Excel2007'
+        ]);
     }
 }

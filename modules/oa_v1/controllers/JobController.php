@@ -77,6 +77,8 @@ class JobController extends BaseController
                 'short_name' => $v->short_name,
                 'pid' => $v->pid,
                 'pid_name' => $parent ? $parent->name : '',
+                'need_exam' => $v->need_exam,
+                'need_exam_name' => $v->need_exam ? '是' : '否',
                 'des' => $v->des,
             ];
         }
