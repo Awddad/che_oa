@@ -17,6 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $deleted_at
+ * @property integer $need_exam
  */
 class Job extends \yii\db\ActiveRecord
 {
@@ -34,8 +35,8 @@ class Job extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['id', 'pid', 'is_delete', 'created_at', 'updated_at', 'deleted_at'], 'integer'],
+            [['name', 'need_exam'], 'required'],
+            [['id', 'pid', 'is_delete', 'created_at', 'updated_at', 'deleted_at', 'need_exam'], 'integer'],
             [['name'], 'string', 'max' => 20],
             [['short_name'], 'string', 'max' => 16],
             [['des'], 'string', 'max' => 255],
@@ -55,6 +56,7 @@ class Job extends \yii\db\ActiveRecord
             'pid' => '上级职位',
             'des' => '职位描述',
             'is_delete' => '是否删除 0：否    1：删除',
+            'need_exam' => '是否需要考试',
             'created_at' => '创建时间',
             'updated_at' => '更新时间',
             'deleted_at' => '删除时间',
