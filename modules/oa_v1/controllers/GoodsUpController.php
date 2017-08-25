@@ -8,6 +8,8 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\models\GoodsUp;
+use app\models\GoodsUpDetail;
 use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\GoodsUpLogic;
 use app\modules\oa_v1\models\GoodsUpForm;
@@ -123,5 +125,24 @@ class GoodsUpController extends BaseController
             $this->_returnError('4400',  null, '为获取到数据，请稍后再试！');
         }
         return $this->_return(ArrayHelper::index($data, null,'type'));
+    }
+    
+    /**
+     * 供应商
+     * 
+     * @return array
+     */
+    public function actionSupplier()
+    {
+        $goodsUp = GoodsUpDetail::find()->select([
+            'supplier', //供应商
+            'supplier_type', //供应商类型
+            'contacts', //联系人
+            'job', //职务
+            'phone', //电话
+            'has_bus_contracts', //是同否提供公车合同
+        ])->groupBy('supplier')->asArray()->all();
+        
+        return $this->_return($goodsUp);
     }
 }

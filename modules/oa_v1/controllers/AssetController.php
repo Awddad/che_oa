@@ -575,10 +575,10 @@ class AssetController extends BaseController
     public function actionGetPersonAsset()
     {
         $personId = Yii::$app->request->get('person_id');
-        $query = AssetList::find()->where([
-            'person_id' => $personId,
-            'status' => 2
-        ]);
+        $query = AssetList::find()->where(['status' => 2]);
+        if($personId) {
+            $query->andWhere(['person_id' => $personId,]);
+        }
     
         $pageSize = ArrayHelper::getValue(Yii::$app->request->get(), 'page_size', 20);
     
