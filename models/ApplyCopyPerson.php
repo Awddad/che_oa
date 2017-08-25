@@ -11,9 +11,15 @@ use Yii;
  * @property string $apply_id
  * @property integer $copy_person_id
  * @property string $copy_person
+ * @property integer $is_read
  */
 class ApplyCopyPerson extends \yii\db\ActiveRecord
 {
+    const IS_READ = [
+        0 => '未读',
+        1 => '已读',
+    ];
+    
     /**
      * @inheritdoc
      */
@@ -29,7 +35,7 @@ class ApplyCopyPerson extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'copy_person_id'], 'required'],
-            [['copy_person_id'], 'integer'],
+            [['copy_person_id', 'is_read'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
             [['copy_person'], 'string', 'max' => 255],
             [['apply_id', 'copy_person_id'], 'unique', 'targetAttribute' => ['apply_id', 'copy_person_id'], 'message' => 'The combination of 申请单号，审批流水号 and 抄送人的姓名 has already been taken.'],

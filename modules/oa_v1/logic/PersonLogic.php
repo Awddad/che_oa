@@ -201,7 +201,10 @@ class PersonLogic extends BaseLogic
     public function getOrgNameByPersonId($person_id)
     {
     	$person = Person::findOne($person_id);
-    	return $person->org_full_name;
+    	if (!empty($person)) {
+            return $person->org_full_name;
+        }
+        return '';
     }
 
     /**

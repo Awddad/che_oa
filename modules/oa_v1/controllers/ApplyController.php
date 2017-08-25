@@ -15,6 +15,7 @@ use app\modules\oa_v1\logic\Profession;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\models\PersonBankInfo;
 use app\modules\oa_v1\models\ApplyView2;
+use yii\helpers\ArrayHelper;
 
 class ApplyController extends BaseController
 {
@@ -50,7 +51,7 @@ class ApplyController extends BaseController
 			'types' => [],
 		];
 		foreach ($res ['data'] as $k=>$v) {
-			$data ['res'] [] = [
+			$data ['res'] [$k] = [
 				'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
 				'apply_id' => $v ['apply_id'], // 审批单编号
 				'date' => date('Y-m-d H:i', $v ['create_time']), // 创建时间
@@ -65,7 +66,12 @@ class ApplyController extends BaseController
 				'can_cancel' => in_array($v ['status'], [1,11]) ? 1 : 0,// 是否可以撤销
 			    'refuse_reason' => $v['caiwu_refuse_reason'] ? :ApplyLogic::instance()->getApprovalDes($v['apply_id']),
 			    'des' => ApplyLogic::instance()->getApplyDes($v['apply_id'], $v['type']),
-			]; 
+			];
+			
+			if (Yii::$app->request->get('type') == 4) {
+                $data ['res'][$k]['is_read'] = intval($v['is_read']);
+            }
+			
 		}
 		foreach($res['types'] as $k=>$v){
 			$data['types'][] = [
@@ -113,8 +119,8 @@ class ApplyController extends BaseController
      *
      * @return array
      */
-	public function actionGetInfo() {
-		
+	public function actionGetInfo()
+    {
 		$get = Yii::$app->request->get();
 		if (!isset($get['apply_id']) || !$get['apply_id']) {
 			return $this->_return("apply_id不能为空", 403);
@@ -126,10 +132,21 @@ class ApplyController extends BaseController
 		} else {
 			$type = (int)$get['type'];
 		}
+		// 标记已读
+        if (isset($get['is_copy'])) {
+            $copyPerson = appmodel\ApplyCopyPerson::find()->where([
+                'copy_person_id' => $this->arrPersonInfo->person_id,
+                'apply_id' => $get['apply_id'],
+            ])->one();
+            if ($copyPerson && $copyPerson->is_read == 0) {
+                $copyPerson->is_read = 1;
+                $copyPerson->save();
+            }
+        }
         /**
          * @var Apply $apply
          */
-		$apply = Apply::find()->where(['apply_id'=>$apply_id,'type'=>$type])->one();
+        $apply = Apply::find()->where(['apply_id'=>$apply_id,'type'=>$type])->one();
 		if(empty($apply)){
 			return $this->_return('申请单不存在！', 403);
 		}

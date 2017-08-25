@@ -119,6 +119,10 @@ class ApplyLogic extends BaseLogic
 		if($apply_type){
 			$query -> andWhere(['in','a.type' , $apply_type]);
 		}
+        
+        if($search['type'] == 4 && isset($search['is_read'])) {
+            $query->andWhere(['c.is_read' => $search['is_read']]);
+        }
 		
 		$_query = clone $query;
 		//var_dump($_query->createCommand()->getRawSql());die();
