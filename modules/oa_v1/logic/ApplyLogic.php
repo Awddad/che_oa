@@ -380,6 +380,9 @@ class ApplyLogic extends BaseLogic
             case 14:
                 $info = $apply->goodsUp;
                 break;
+            case 15:
+                $info = $apply->travel;
+                break;
             default:
                 $info = $apply->expense;
                 break;
