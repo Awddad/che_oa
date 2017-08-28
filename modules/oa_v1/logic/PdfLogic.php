@@ -636,6 +636,7 @@ class PdfLogic extends Logic
             'org_full_name' => $person->org_full_name,
             'person' => $person->person_name,
             'des' => $apply->travel->des,
+            'total_day' => $apply->travel->total_day,
             'travel_list' => $apply->travel->travelList,
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
