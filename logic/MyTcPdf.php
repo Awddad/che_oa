@@ -938,7 +938,7 @@ TABLEHTML;
         }
         $strHtml = <<<TABLEHTML
 <div>
-    <h2 style="text-align: center;">需求单</h2>
+    <h2 style="text-align: center;">出差申请单</h2>
     <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -959,6 +959,12 @@ TABLEHTML;
             <td style="background-color:#f2f2f2">出差天数</td>
         </tr>
         {$strListHtml}
+        <tr>
+            <td></td>
+            <td colspan="2" ></td>
+            <td colspan="2" style="background-color:#f2f2f2">合计</td>
+            <td>{$param['total_day']}</td>
+        </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">说明</td>
             <td colspan="5">{$param['des']}</td>
