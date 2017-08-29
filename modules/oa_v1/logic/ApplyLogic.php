@@ -120,7 +120,7 @@ class ApplyLogic extends BaseLogic
 			$query -> andWhere(['in','a.type' , $apply_type]);
 		}
         
-        if($search['type'] == 4 && isset($search['is_read'])) {
+        if($search['type'] == 4 && isset($search['is_read']) && $search['is_read']) {
             $query->andWhere(['c.is_read' => $search['is_read']]);
         }
 		
