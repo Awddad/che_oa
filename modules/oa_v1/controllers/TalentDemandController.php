@@ -113,7 +113,13 @@ class TalentDemandController extends BaseController
                 'org_name',
                 'profession',
                 'number',
-                'sex',
+                //'sex',
+                [
+                    'attribute' => 'sex',
+                    'value' => function($data){
+                        return $data->sex == 1 ? '女' : '男';
+                    }
+                ],
                 'edu',
                 'work_time',
                 [
