@@ -32,7 +32,7 @@ class ApplyTravel extends \yii\db\ActiveRecord
             [['total_day'], 'integer'],
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
-            [['des'], 'string', 'max' => 255],
+            [['des'], 'string', 'max' => 1000],
         ];
     }
 
