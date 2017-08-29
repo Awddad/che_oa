@@ -58,4 +58,14 @@ class ApplyTravel extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ApplyTravelList::className(), ['apply_id' => 'apply_id']);
     }
+    
+    /**
+     * @param $applyId
+     *
+     * @return string
+     */
+    public function getDes($applyId)
+    {
+        return self::findOne($applyId)->des;
+    }
 }
