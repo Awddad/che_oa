@@ -313,7 +313,11 @@ class TalentController extends BaseController
                 [
                     'attribute' => 'educational',
                     'value' => function($data){
-                        return Educational::findOne($data->educational)->educational;
+                        $educational = Educational::findOne($data->educational);
+                        if ($educational) {
+                            return $educational->educational;
+                        }
+                        return '--';
                     }
                 ],
                 'work_time',
