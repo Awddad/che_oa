@@ -56,10 +56,18 @@ class DefaultController extends BaseController
      */
     public function actionAllPerson()
     {
-        $person = Person::find()->where(['is_delete' => 0])->all();
+        if(Yii::$app->request->get('show_delete')) {
+            $person = Person::find()->all();
+        } else {
+            $person = Person::find()->where(['is_delete' => 0])->all();
+        }
         $data = [];
         foreach ($person as $v) {
-            $personName = $v->person_name. ' '. $v->org_full_name;
+            if(Yii::$app->request->get('show_delete') && $v->is_delete == 1) {
+                $personName = '(已离职)' .$v->person_name . ' ' . $v->org_full_name;
+            } else {
+                $personName = $v->person_name . ' ' . $v->org_full_name;
+            }
             $data[] = [
                 'id' => $v->person_id,
                 'name' => $personName
