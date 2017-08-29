@@ -32,6 +32,7 @@ class ApprovalConfigForm extends BaseForm
         'xingzhengjingli' => [5,6,7,8,9],
         'zhaopinjingli' => [10,11,12],
         'duodianshenpi' => [14],
+        'guanliyuan' => [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
     ];
 
     public function rules()
