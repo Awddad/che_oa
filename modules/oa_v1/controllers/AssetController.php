@@ -530,7 +530,7 @@ class AssetController extends BaseController
             $des = (!empty($assetListLog)) ? $assetListLog->des : '';
             $data[] = [
                 'type' => $typeArr[0],
-                'type_detail' => $typeArr[1],
+                'type_detail' => isset($typeArr[1]) ? $typeArr[1] : $typeArr[0],
                 'brand_name' => $asset->asset_brand_name,
                 'name' => $asset->name,
                 'created_at' => date('Y-m-d H:i', $v->created_at),
