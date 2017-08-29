@@ -82,7 +82,7 @@ class TravelForm extends BaseForm
             [['apply_id', 'des', 'travel_list', 'approval_persons'], 'required'],
             [['approval_persons', 'copy_person'], 'each', 'rule' => ['integer']],
             [['approval_persons', 'copy_person'], 'checkTotal'],
-            ['des', 'string'],
+            ['des', 'string', 'max' => 1000],
             ['files', 'safe'],
             ['total_day', 'integer'],
             ['apply_id', 'checkOnly'],
@@ -97,6 +97,7 @@ class TravelForm extends BaseForm
             'approval_persons' => '审批人',
             'copy_person' => '审批人',
             'travel_list' => '出差列表',
+            'dsc' => '出差是由'
         ];
     }
     
