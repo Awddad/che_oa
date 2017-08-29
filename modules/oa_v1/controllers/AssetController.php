@@ -563,7 +563,8 @@ class AssetController extends BaseController
         Excel::export([
             'models' => $data,
             'columns' => $columns,
-            'headers' => $header
+            'headers' => $header,
+            'fileName' => '固定资产库存管理',
         ]);
     }
     
