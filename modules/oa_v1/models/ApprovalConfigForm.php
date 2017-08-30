@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\models\Apply;
 use app\models\ApprovalConfig;
 use app\modules\oa_v1\logic\ApprovalConfigLogic;
 use app\modules\oa_v1\logic\OrgLogic;
@@ -66,7 +67,7 @@ class ApprovalConfigForm extends BaseForm
             //['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>['org_id'=>'org_id','org_pid'=>'pid'],'message'=>'适用组织不正确！'],
             ['org_id','exist','targetClass'=>'\app\models\Org', 'message'=>'适用组织不正确！'],
             ['org_id','checkOrg'],
-            ['apply_type','in','range'=>array_keys($this->typeArr),'message'=>'审批类型不正确！'],
+            ['apply_type','in','range'=>array_keys(Apply::TYPE_ARRAY),'message'=>'审批类型不正确！'],
             ['type','in','range'=>[0,1],'message'=>'条件不正确！'],
             ['config','checkConfigApproval','on'=>[self::SCENARIO_APPROVAL_EDIT]],
         ];
@@ -145,7 +146,7 @@ class ApprovalConfigForm extends BaseForm
             $title = '添加流程';
         }
         $model->apply_type = $this->apply_type;
-        $model->apply_name = $this->typeArr[$this->apply_type];
+        $model->apply_name = Apply::TYPE_ARRAY[$this->apply_type];
         $model->org_id = $this->org_id;
         $model->org_name = OrgLogic::instance()->getOrgName($this->org_id);
         if($model->save()){
@@ -210,7 +211,7 @@ class ApprovalConfigForm extends BaseForm
         }
         $model = new ApprovalConfig();
         $model->apply_type = $this->apply_type;
-        $model->apply_name = $this->typeArr[$this->apply_type];
+        $model->apply_name = Apply::TYPE_ARRAY[$this->apply_type];
         $model->org_id = $this->org_id;
         $model->org_name = OrgLogic::instance()->getOrgName($this->org_id);
         $model->type = $_model->type;
@@ -472,7 +473,7 @@ class ApprovalConfigForm extends BaseForm
         if($tmp){
             foreach($tmp as $v){
                 $data[] = [
-                    'label'=>'申请'.$this->typeArr[$v],
+                    'label'=>'申请'.Apply::TYPE_ARRAY[$v],
                     'value'=>$v,
                 ];
             }
