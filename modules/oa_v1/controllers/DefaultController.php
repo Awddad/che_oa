@@ -94,7 +94,7 @@ class DefaultController extends BaseController
         if($emp){
             $people_pic = PeoplePic::find()->where(['employee_id' => $emp->id])->one();
             $entry_time = $emp->entry_time ?: '';
-            $pic = $people_pic ? $people_pic->file : '';
+            $pic = $people_pic ? $people_pic->pic : '';
         }
         $arrData['userinfo']['entry_time'] = $entry_time;
         $arrData['userinfo']['pic'] = $pic;

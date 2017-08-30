@@ -94,17 +94,21 @@ class BaoxiaoForm extends BaseForm
 			}
 		}
 	}
-	
-	/**
-	 * 存储报销单
-	 */
-	public function saveBaoxiao()
+    
+    /**
+     * 存储报销单
+     * @param  appmodel\Person $person
+     *
+     * @return bool|string
+     */
+	public function saveBaoxiao($person)
 	{
 		$this -> apply_id = $this -> apply_id?:$this -> createId('apply');
 		$model_apply = new appmodel\Apply();
 		$this -> loadModel('apply',$model_apply);
 		$transaction = Yii::$app -> db -> beginTransaction();
 		try{
+            $model_apply->company_id = $person->company_id;
 			if($model_apply -> insert()){
 				$this -> saveBaoxiaoList();
 				$this -> baoxiao();
@@ -150,7 +154,7 @@ class BaoxiaoForm extends BaseForm
 	/**
 	 * 初始化model
 	 * @param string $type ['apply','baoxiao','baoxiaolist']
-	 * @param object $model AR对象
+	 * @param appmodel\Apply $model AR对象
 	 * @param array $data
 	 */
 	protected function loadModel($type,&$model,$data=[])
@@ -168,7 +172,6 @@ class BaoxiaoForm extends BaseForm
 			$nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
 			$model -> next_des = "等待{$nextName}审批";
 			$model -> org_id = $this -> user['org_id'];
-			$model -> company_id = $this -> user['company_id'];
 		}elseif('baoxiao' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> bao_xiao_list_ids = implode(',',array_column($this ->bao_xiao_list,'id'));
