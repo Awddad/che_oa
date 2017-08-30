@@ -144,6 +144,11 @@ class ApplyLogic extends BaseLogic
 				$orderBy = ['create_time'=>SORT_DESC];
 				break;
 		}
+        
+        if($search['type'] == 4) {
+            $orderBy = ['c.pass_at' => SORT_DESC];
+        }
+        
 		
 		$query -> select('*')->orderBy($orderBy)->offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
 		//var_dump($query->createCommand()->getRawSql());die();

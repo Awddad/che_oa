@@ -12,6 +12,7 @@ use Yii;
  * @property integer $copy_person_id
  * @property string $copy_person
  * @property integer $is_read
+ * @property integer $pass_at
  */
 class ApplyCopyPerson extends \yii\db\ActiveRecord
 {
@@ -37,6 +38,7 @@ class ApplyCopyPerson extends \yii\db\ActiveRecord
             [['apply_id', 'copy_person_id'], 'required'],
             [['copy_person_id', 'is_read'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
+            [['pass_at'], 'safe'],
             [['copy_person'], 'string', 'max' => 255],
             [['apply_id', 'copy_person_id'], 'unique', 'targetAttribute' => ['apply_id', 'copy_person_id'], 'message' => 'The combination of 申请单号，审批流水号 and 抄送人的姓名 has already been taken.'],
         ];
