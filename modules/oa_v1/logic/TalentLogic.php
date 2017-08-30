@@ -13,7 +13,7 @@ class TalentLogic extends BaseLogic
      */
 	public function isManager($role_name)
 	{
-	    if('zhaopinjingli'==$role_name){
+	    if(in_array($role_name,['zhaopinjingli', 'guanliyuan'])){
 	        return true;
 	    }else{
 	        return false;
