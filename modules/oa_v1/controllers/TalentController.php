@@ -4,8 +4,10 @@ namespace app\modules\oa_v1\controllers;
 use app\models\Educational;
 use app\models\Job;
 use app\models\Person;
+use app\models\PersonType;
 use app\models\Talent;
 use app\modules\oa_v1\logic\RegionLogic;
+use app\modules\oa_v1\logic\TalentLogic;
 use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\models\TalentForm;
@@ -291,63 +293,142 @@ class TalentController extends BaseController
         if ($keywords = trim(Yii::$app->request->get('keywords'))) {
             $query->andWhere("instr(CONCAT(profession,org_name),'{$keywords}') > 0 ");
         }
-        Excel::export([
-            'models' => $query->all(),
-            'columns' => [
-                'name',
-                'phone',
-                [
-                    'attribute' => 'job',
-                    'value' => function($data){
-                        return Job::findOne($data->job)->name;
-                    }
-                ],
-                [
-                    'attribute' => 'sex',
-                    'value' => function($data){
-                        return $data->sex == 1 ? '女' : '男';
-                    }
-    
-                ],
-                'age',
-                [
-                    'attribute' => 'educational',
-                    'value' => function($data){
-                        $educational = Educational::findOne($data->educational);
-                        if ($educational) {
-                            return $educational->educational;
+        //除招聘经理外 只能看自己添加的~
+        if(!TalentLogic::instance()->isManager($this->roleName)){
+            $query->andWhere(['owner' => $this->arrPersonInfo->person_id]);
+        }
+        if ($talent) {
+            Excel::export([
+                'models' => $query->all(),
+                'columns' => [
+                    'name',
+                    'phone',
+                    [
+                        'attribute' => 'job',
+                        'value' => function ($data) {
+                            return Job::findOne($data->job)->name;
                         }
-                        return '--';
-                    }
-                ],
-                'work_time',
-                [
-                    'attribute' => 'current_location',
-                    'value' => function($data){
-                        return RegionLogic::instance()->getRegionByChild($data->current_location);
-                    }
-                ],
-                [
-                    'attribute' => 'status',
-                    'value' => function($data){
-                        return Talent::STATUS[$data->status];
-                    }
-            
-                ],
-                [
-                    'attribute' => 'owner',
-                    'value' => function($data){
-                        $person = Person::findOne($data->owner);
-                        if ($person) {
-                            return $person->person_name;
+                    ],
+                    [
+                        'attribute' => 'sex',
+                        'value' => function ($data) {
+                            return $data->sex == 1 ? '女' : '男';
                         }
-                        return '--';
-                    }
             
+                    ],
+                    'age',
+                    [
+                        'attribute' => 'educational',
+                        'value' => function ($data) {
+                            $educational = Educational::findOne($data->educational);
+                            if ($educational) {
+                                return $educational->educational;
+                            }
+                    
+                            return '--';
+                        }
+                    ],
+                    'work_time',
+                    [
+                        'attribute' => 'current_location',
+                        'value' => function ($data) {
+                            return RegionLogic::instance()->getRegionByChild($data->current_location);
+                        }
+                    ],
+                    [
+                        'attribute' => 'status',
+                        'value' => function ($data) {
+                            return Talent::STATUS[$data->status];
+                        }
+            
+                    ],
+                    [
+                        'attribute' => 'owner',
+                        'value' => function ($data) {
+                            $person = Person::findOne($data->owner);
+                            if ($person) {
+                                return $person->person_name;
+                            }
+                    
+                            return '--';
+                        }
+            
+                    ],
                 ],
-            ],
-            'fileName' => $fileName .date('YmdHis'),
-            'format' => 'Excel2007'
-        ]);
+                'fileName' => $fileName . date('YmdHis'),
+                'format' => 'Excel2007'
+            ]);
+        } else {
+            Excel::export([
+                'models' => $query->all(),
+                'columns' => [
+                    'name',
+                    'phone',
+                    [
+                        'attribute' => 'job',
+                        'value' => function ($data) {
+                            return Job::findOne($data->job)->name;
+                        }
+                    ],
+                    [
+                        'attribute' => 'sex',
+                        'value' => function ($data) {
+                            return $data->sex == 1 ? '女' : '男';
+                        }
+            
+                    ],
+                    'age',
+                    [
+                        'attribute' => 'educational',
+                        'value' => function ($data) {
+                            $educational = Educational::findOne($data->educational);
+                            if ($educational) {
+                                return $educational->educational;
+                            }
+                    
+                            return '--';
+                        }
+                    ],
+                    'work_time',
+                    [
+                        'attribute' => 'current_location',
+                        'value' => function ($data) {
+                            return RegionLogic::instance()->getRegionByChild($data->current_location);
+                        }
+                    ],
+                    [
+                        'attribute' => 'person_type',
+                        'value' => function ($data) {
+                            $personType =  PersonType::findOne($data->person_type);
+                            if (!empty($personType)) {
+                                return $personType->name;
+                            }
+                            return '--';
+                        }
+                    ],
+                    [
+                        'attribute' => 'status',
+                        'value' => function ($data) {
+                            return Talent::STATUS[$data->status];
+                        }
+            
+                    ],
+                    [
+                        'attribute' => 'owner',
+                        'value' => function ($data) {
+                            $person = Person::findOne($data->owner);
+                            if ($person) {
+                                return $person->person_name;
+                            }
+                    
+                            return '--';
+                        }
+            
+                    ],
+                ],
+                'fileName' => $fileName . date('YmdHis'),
+                'format' => 'Excel2007'
+            ]);
+        }
     }
 }

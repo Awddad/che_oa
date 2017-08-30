@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\controllers;
 
 use app\models\Person;
 use app\models\TalentDemand;
+use app\modules\oa_v1\logic\TalentLogic;
 use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\models\TalentDemandForm;
@@ -103,6 +104,10 @@ class TalentDemandController extends BaseController
                 ['>', 'created_at', strtotime($start_time)],
                 ['<=', 'created_at', strtotime('+1day', strtotime('end_time'))],
             ]);
+        }
+        //除招聘经理外 只能看自己添加的~
+        if(!TalentLogic::instance()->isManager($this->roleName)){
+            $query->andWhere(['owner' => $this->arrPersonInfo->person_id]);
         }
         if ($keywords = trim(Yii::$app->request->get('keywords'))) {
             $query->andWhere("instr(CONCAT(profession,org_name),'{$keywords}') > 0 ");
