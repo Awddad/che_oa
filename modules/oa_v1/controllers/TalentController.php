@@ -297,7 +297,7 @@ class TalentController extends BaseController
         if(!TalentLogic::instance()->isManager($this->roleName)){
             $query->andWhere(['owner' => $this->arrPersonInfo->person_id]);
         }
-        if ($talent) {
+        if (!$talent) {
             Excel::export([
                 'models' => $query->all(),
                 'columns' => [
