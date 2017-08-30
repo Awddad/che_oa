@@ -44,7 +44,7 @@ class PdfLogic extends Logic
         $arrInfo = [
             'apply_date' => date('Y年m月d日',$apply->create_time),
             'apply_id' => $apply -> apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $apply->person,
             'bank_name' => $apply->expense->bank_name.$apply->expense-> bank_name_des,
             'bank_card_id' => $apply->expense -> bank_card_id,
@@ -92,7 +92,7 @@ class PdfLogic extends Logic
         $arrInfo =  [
             'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $person->person_name,
             'bank_name' => $apply->loan->bank_name,
             'bank_card_id' => $apply->loan->bank_card_id,
@@ -143,7 +143,7 @@ class PdfLogic extends Logic
             'list' => $data,
             'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $apply->person,
             'bank_name' => $apply->payBack->bank_name,
             'bank_card_id' => $apply->payBack->bank_card_id,
@@ -181,7 +181,7 @@ class PdfLogic extends Logic
             $arrInfo = [
                 'apply_date' => date('Y年m月d日', $apply->create_time),
                 'apply_id' => $apply->apply_id,
-                'org_full_name' => $person->org_full_name,
+                'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
                 'person' => $person->person_name,
                 'chapter_type' => ApplyUseChapter::STATUS[$apply->applyUseChapter->chapter_type],
                 'use_type' => $use_type,
@@ -237,7 +237,7 @@ class PdfLogic extends Logic
         $arrInfo = [
             'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $person->person_name,
             'to_name' => $apply->applyPay->to_name,
             'bank_card_id' => $apply->applyPay->bank_card_id,
@@ -276,7 +276,7 @@ class PdfLogic extends Logic
         $arrInfo = [
             'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $person->person_name,
             
             'to_name' => $apply->applyBuy->to_name,
@@ -334,7 +334,7 @@ class PdfLogic extends Logic
             $arrInfo = [
                 'apply_date' => date('Y年m月d日', $apply->create_time),
                 'apply_id' => $apply->apply_id,
-                'org_full_name' => $person->org_full_name,
+                'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
                 'person' => $person->person_name,
         
                 'des' => $apply->applyDemand->des ?: '--',
@@ -376,7 +376,7 @@ class PdfLogic extends Logic
         $arrInfo = [
             'apply_date' => date('Y年m月d日'),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $person->person_name,
         
             'des' => $apply->assetGet->des ? : '--',
@@ -423,7 +423,7 @@ class PdfLogic extends Logic
         $arrInfo = [
             'apply_date' => date('Y年m月d日'),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $person->person_name,
         
             'des' => $apply->assetBack->des ? : '--',
@@ -521,7 +521,7 @@ class PdfLogic extends Logic
             'assect_list' => AssetLogic::instance()->getAssetHistory($apply->person_id), 
             'finance_list' => JieKuanLogic::instance()->getHistory($apply->person_id),
             'leave_time' => date('Y年m月d日',strtotime($apply->applyLeave->leave_time)),
-            'org_name' => $person->org_full_name,
+            'org_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'prefession' => $person->profession,
             'des' => $apply->applyLeave->des,
             'stock_status' => $apply->applyLeave->stock_status ? '已归还' : '未归还',
@@ -617,7 +617,7 @@ class PdfLogic extends Logic
     }
     
     /**
-     * 开店
+     * 出差
      * @param $apply
      *
      * @return array
@@ -633,7 +633,7 @@ class PdfLogic extends Logic
         $arrInfo = [
             'apply_date' => date('Y年m月d日', $apply->create_time),
             'apply_id' => $apply->apply_id,
-            'org_full_name' => $person->org_full_name,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
             'person' => $person->person_name,
             'des' => $apply->travel->des,
             'total_day' => $apply->travel->total_day,
