@@ -117,6 +117,9 @@ class TalentDemandController extends BaseController
                 [
                     'attribute' => 'sex',
                     'value' => function($data){
+                        if ($data->sex == 0) {
+                            return '不限';
+                        }
                         return $data->sex == 1 ? '女' : '男';
                     }
                 ],
