@@ -107,7 +107,7 @@ class Talent extends \yii\db\ActiveRecord
             'political' => 'Political',
             'marriage' => 'Marriage',
             'job_status' => 'Job Status',
-            'person_type' => 'Person Type',
+            'person_type' => '人才类型',
             'daogang' => 'Daogang',
             'work_time' => '工作年限',
             'current_location' => '所在地',
