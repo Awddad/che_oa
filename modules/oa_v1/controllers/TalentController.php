@@ -6,6 +6,7 @@ use app\models\Job;
 use app\models\Person;
 use app\models\Talent;
 use app\modules\oa_v1\logic\RegionLogic;
+use app\modules\oa_v1\logic\TalentLogic;
 use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\models\TalentForm;
@@ -291,6 +292,11 @@ class TalentController extends BaseController
         if ($keywords = trim(Yii::$app->request->get('keywords'))) {
             $query->andWhere("instr(CONCAT(profession,org_name),'{$keywords}') > 0 ");
         }
+        //除招聘经理外 只能看自己添加的~
+        if(!TalentLogic::instance()->isManager($this->roleName)){
+            $query->andWhere(['owner' => $this->arrPersonInfo->person_id]);
+        }
+        
         Excel::export([
             'models' => $query->all(),
             'columns' => [
