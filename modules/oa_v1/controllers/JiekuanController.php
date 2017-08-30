@@ -84,7 +84,7 @@ class JiekuanController extends BaseController
         foreach ($model as $k => $v) {
             if(!$v->apply)
                 continue;
-            if ($person = $v->personInfo)  {
+            if ($person = $v->apply->personInfo)  {
                 $org = $person->org_full_name;
             } else {
                 $org = '--';
