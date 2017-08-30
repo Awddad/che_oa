@@ -134,14 +134,16 @@ class GoodsUpController extends BaseController
      */
     public function actionSupplier()
     {
-        $goodsUp = GoodsUpDetail::find()->select([
+        $goodsUp = GoodsUpDetail::find()->alias('a')->innerJoin(
+            'oa_apply b', 'a.apply_id = b.apply_id'
+        )->select([
             'supplier', //供应商
             'supplier_type', //供应商类型
             'contacts', //联系人
             'job', //职务
             'phone', //电话
             'has_bus_contracts', //是同否提供公车合同
-        ])->groupBy('supplier')->asArray()->all();
+        ])->where(['b.person_id' => $this->arrPersonInfo->person_id])->groupBy('supplier')->asArray()->all();
         
         return $this->_return($goodsUp);
     }
