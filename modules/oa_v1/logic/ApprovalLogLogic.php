@@ -2,6 +2,7 @@
 
 namespace app\modules\oa_v1\logic;
 
+use app\models\ApplyCopyPerson;
 use Yii;
 use app\models\ApprovalLog;
 
@@ -98,6 +99,7 @@ class ApprovalLogLogic extends BaseLogic
             $this->object->scenario = ApprovalLog::SCENARIO_PASS;
             return $this->object->save();
         } else {
+            ApplyCopyPerson::updateAll(['pass_at' => time()], ['apply_id' => $this->object->apply_id]);
             $this->object->is_end = 1;
 
             $apply = $this->object->apply;
