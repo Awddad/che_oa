@@ -2,8 +2,6 @@
 namespace app\modules\oa_v1\models;
 
 use yii;
-use app\modules\oa_v1\logic\PersonLogic;
-use app\models\Apply;
 use app\models\ApplyOpen;
 use Exception;
 use yii\data\Pagination;

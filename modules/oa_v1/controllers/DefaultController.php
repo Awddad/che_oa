@@ -299,52 +299,10 @@ class DefaultController extends BaseController
     {
         $applyId = Yii::$app->request->get('apply_id');
         $apply = Apply::findOne($applyId);
-        switch ($apply->type) {
-            case 2:
-                $info = $apply->loan->pics;
-                break;
-            case 4:
-                $info = $apply->applyPay->files;
-                break;
-            case 5:
-                $info = $apply->applyBuy->files;
-                break;
-            case 6:
-                $info = $apply->applyDemand->files;
-                break;
-            case 7:
-                $info = $apply->applyUseChapter->files;
-                break;
-            case 8:
-                $info = $apply->assetGet->files;
-                break;
-            case 9:
-                $info = $apply->assetBack->files;
-                break;
-            case 10:
-                $info = $apply->applyPositive->files;
-                break;
-            case 11:
-                $info = $apply->applyLeave->files;
-                break;
-            case 12:
-                $info = $apply->applyTransfer->files;
-                break;
-            case 13:
-                $info = $apply->applyOpen->files;
-                break;
-            case 14:
-                $info = $apply->goodsUp->files;
-                break;
-            case 15:
-                $info = $apply->travel->files;
-                break;
-            case 16:
-                $info = $apply->projectRole->files;
-                break;
-            default:
-                $info = $apply->expense->files;
-                break;
+        if ($apply->type == 2) {
+            $info = $apply->info->pics;
+        } else {
+            $info = $apply->info->files;
         }
         $zipName = $applyId.'.zip';
         $zip = new \ZipArchive();

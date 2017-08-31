@@ -25,6 +25,8 @@ use yii\web\UploadedFile;
  */
 class BaseForm extends Model
 {
+    public $apply_id;
+    
     /**
      * 是否需要财务确认
      * @var

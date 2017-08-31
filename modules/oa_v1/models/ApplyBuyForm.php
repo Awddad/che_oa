@@ -12,8 +12,6 @@ use app\models\ApplyBuy;
 use app\models\Person;
 use app\modules\oa_v1\logic\AssetLogic;
 use Yii;
-use app\models\Apply;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 

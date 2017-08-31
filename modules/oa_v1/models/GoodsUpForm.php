@@ -9,12 +9,10 @@
 namespace app\modules\oa_v1\models;
 
 
-use app\models\Apply;
 use app\models\GoodsUp;
 use app\models\GoodsUpDetail;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 
 class GoodsUpForm extends BaseForm

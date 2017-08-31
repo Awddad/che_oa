@@ -52,8 +52,8 @@ class ApplyProjectRoleForm extends BaseForm
     
     public $project_id;
     public $project_name;
-    public $role_id;
-    public $role_name;
+    public $role_id = 0;
+    public $role_name = '';
     
     
     /**
@@ -72,7 +72,7 @@ class ApplyProjectRoleForm extends BaseForm
     public function rules()
     {
         return [
-            [['apply_id', 'des', 'begin_at', 'end_at','approval_persons', 'project_id', 'project_name', 'role_id', 'role_name'], 'required'],
+            [['apply_id', 'des', 'begin_at', 'end_at','approval_persons', 'project_id', 'project_name'], 'required'],
             [['approval_persons', 'copy_person'], 'each', 'rule' => ['integer']],
             [['approval_persons', 'copy_person'], 'checkTotal'],
             ['des', 'string', 'max' => 1000],

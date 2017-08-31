@@ -55,14 +55,14 @@ class ApplyController extends BaseController
 				'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
 				'apply_id' => $v ['apply_id'], // 审批单编号
 				'date' => date('Y-m-d H:i', $v ['create_time']), // 创建时间
+                'title' => $v ['title'], // 标题
+                'status' => $v ['status'], // 状态
 				'type' => $v ['type'], // 类型
-				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
-				'title' => $v ['title'], // 标题
-				'person' => $v ['person'], // 发起人
-				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人
-				'copy_person' => $v ['copy_person'] ?: '--', // 抄送人
-				'status' => $v ['status'], // 状态
-				'next_des' => $v ['next_des'], // 下步说明
+//				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
+//				'person' => $v ['person'], // 发起人
+//				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人
+//				'copy_person' => $v ['copy_person'] ?: '--', // 抄送人
+//				'next_des' => $v ['next_des'], // 下步说明
 				'can_cancel' => in_array($v ['status'], [1,11]) ? 1 : 0,// 是否可以撤销
 			    'refuse_reason' => $v['caiwu_refuse_reason'] ? :ApplyLogic::instance()->getApprovalDes($v['apply_id']),
 			    'des' => ApplyLogic::instance()->getApplyDes($v['apply_id'], $v['type']),
@@ -88,7 +88,7 @@ class ApplyController extends BaseController
 	public function actionGetListAll()
 	{
 		$get = Yii::$app->request->get();
-		$res = ApplyLogic::instance()->getApplyListAll($get, $this->arrPersonInfo);
+		$res = ApplyLogic::instance()->getApplyListAll($get);
 		$data = [
 			'page' => $res ['pages'],
 			'res' => []
