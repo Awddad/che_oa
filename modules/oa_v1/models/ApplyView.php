@@ -5,6 +5,7 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\CnyLogic;
 use app\models\ApplyDemand;
+use app\models\ApplyProjectRole;
 use app\models\ApplyTravel;
 use app\models\ApplyUseChapter;
 use app\models\AssetBack;
@@ -48,6 +49,7 @@ class ApplyView extends BaseForm
         13 => 'Open',
         14 => 'GoodsUp',
         15 => 'Travel',
+        16 => 'ProjectRole',
     ];
 
 
@@ -398,6 +400,28 @@ class ApplyView extends BaseForm
             'des' => $travel->des,
             'files' => json_decode($travel->files)?:[],
             'list' => $travel->travelList
+        ];
+        return $data;
+    }
+    
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function getProjectRole($apply)
+    {
+        /**
+         * @var ApplyProjectRole $projectRole
+         */
+        $projectRole = $apply->projectRole;
+        $data = [
+            'des' => $projectRole->des,
+            'files' => json_decode($projectRole->files)?:[],
+            'project_name' => $projectRole->project_name,
+            'role_name' => $projectRole->role_name,
+            'begin_at' => $projectRole->begin_at,
+            'end_at' => $projectRole->end_at,
         ];
         return $data;
     }

@@ -97,7 +97,7 @@ class TravelForm extends BaseForm
             'approval_persons' => '审批人',
             'copy_person' => '审批人',
             'travel_list' => '出差列表',
-            'dsc' => '出差是由'
+            'dsc' => '出差事由'
         ];
     }
     

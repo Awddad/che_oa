@@ -435,6 +435,16 @@ class Apply extends \yii\db\ActiveRecord
     }
     
     /**
+     * 权限申请
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjectRole()
+    {
+        return $this->hasOne(ApplyProjectRole::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
      * @var array
      */
     const TYPE_ARRAY = [
@@ -453,5 +463,6 @@ class Apply extends \yii\db\ActiveRecord
         13 => '开店',
         14 => '商品上架',
         15 => '出差',
+        16 => '权限',
     ];
 }
