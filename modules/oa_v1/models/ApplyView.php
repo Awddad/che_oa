@@ -384,6 +384,8 @@ class ApplyView extends BaseForm
         $goodsUp = $apply->goodsUp;
         $data = [
             'des' => $goodsUp->des,
+            'shop_name' => $goodsUp->shop_name,
+            'shop_id' => $goodsUp->shop_id,
             'files' => json_decode($goodsUp->files)?:[],
             'list' => $goodsUp->goodsUpDetail
         ];

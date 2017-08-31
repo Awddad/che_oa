@@ -10,6 +10,8 @@ use Yii;
  * @property string $apply_id
  * @property string $files
  * @property string $des
+ * @property integer $shop_id
+ * @property string $shop_name
  */
 class GoodsUp extends \yii\db\ActiveRecord
 {
@@ -31,6 +33,8 @@ class GoodsUp extends \yii\db\ActiveRecord
             [['files'], 'string'],
             [['apply_id'], 'string', 'max' => 20],
             [['des'], 'string', 'max' => 255],
+            [['shop_name'], 'string', 'max' => 64],
+            ['shop_id', 'integer']
         ];
     }
 
