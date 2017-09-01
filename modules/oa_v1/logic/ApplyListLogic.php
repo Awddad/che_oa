@@ -100,7 +100,8 @@ class ApplyListLogic extends BaseLogic
         return [
             'res' => $data,
             'page' => $this->pageFix($pagination),
-            'types' => $types
+            'types' => $types,
+            'searchStatus' => $this->searchStatus
         ];
     }
     
@@ -171,7 +172,8 @@ class ApplyListLogic extends BaseLogic
         return [
             'res' => $data,
             'page' => $this->pageFix($pagination),
-            'types' => $types
+            'types' => $types,
+            'searchStatus' => $this->searchStatus
         ];
     }
     
@@ -232,7 +234,8 @@ class ApplyListLogic extends BaseLogic
         return [
             'res' => $data,
             'page' => $this->pageFix($pagination),
-            'types' => $types
+            'types' => $types,
+            'searchStatus' => $this->searchStatus
         ];
     }
     
@@ -400,4 +403,39 @@ class ApplyListLogic extends BaseLogic
         }
         return $data;
     }
+    
+    public $searchStatus = [
+        [
+            'text' => 0,
+            'value' => '全部',
+        ],
+        [
+            'text' => 1,
+            'value' => '审批中',
+        ],
+        [
+            'text' => 2,
+            'value' => '财务确认中',
+        ],
+        [
+            'text' => 3,
+            'value' => '撤销',
+        ],
+        [
+            'text' => 4,
+            'value' => '审核不通过',
+        ],
+        [
+            'text' => 5,
+            'value' => '完成',
+        ],
+        [
+            'text' => 6,
+            'value' => '财务驳回',
+        ],
+        [
+            'text' => 7,
+            'value' => '付款失败',
+        ]
+    ];
 }
