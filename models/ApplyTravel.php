@@ -60,12 +60,11 @@ class ApplyTravel extends \yii\db\ActiveRecord
     }
     
     /**
-     * @param $applyId
      *
      * @return string
      */
-    static public function getDes($applyId)
+    public function getDesInfo()
     {
-        return self::findOne($applyId)->des;
+        return $this->des;
     }
 }

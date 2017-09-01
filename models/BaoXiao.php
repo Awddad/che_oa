@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "oa_bao_xiao".
@@ -78,17 +79,20 @@ class BaoXiao extends \yii\db\ActiveRecord
     
     /**
      * 获得报销说明
-     * @param string $apply_id
+     *
+     * @return string
      */
-    public static function getDes($apply_id)
+    public function getDesInfo()
     {
-        $des = [];//说明
-        $baoxiao_list = BaoXiaoList::find()->select('des')->where(['apply_id'=>$apply_id])->all();
-        if($baoxiao_list){
-            foreach($baoxiao_list as $v){
-                $des[] = $v->des;
-            }
+        $list = BaoXiaoList::find()->where(['apply_id'=>$this->apply_id])->all();
+        $des = [];
+        /**
+         * @var BaoXiaoList $v
+         */
+        foreach ($list as $k => $v) {
+            $des[] = ($k+1) .'.' .$v->des .'-'. \Yii::$app->formatter->asCurrency($v->money);
         }
-        return implode(',', $des);
+        $des[] = '合计金额-'. \Yii::$app->formatter->asCurrency($this->money);
+        return implode('<br>', $des);
     }
 }

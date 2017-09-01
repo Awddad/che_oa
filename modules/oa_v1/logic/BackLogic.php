@@ -167,7 +167,7 @@ class BackLogic extends BaseLogic
                     'title' => $model->title,
                     'money' => $money,
                     'status' => $model->status,
-                    'des' => ApplyLogic::instance()->getApplyDes($model->apply_id,$model->type)
+                    'des' => $model->info->desInfo
                 ];
             }
             return [

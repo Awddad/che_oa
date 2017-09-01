@@ -13,6 +13,7 @@ use app\models\Menu;
 use app\models\Person;
 use app\models\User;
 use app\modules\oa_v1\logic\PersonLogic;
+use app\modules\oa_v1\logic\RoleLogic;
 use yii\filters\auth\CompositeAuth;
 use yii\filters\ContentNegotiator;
 use yii\filters\RateLimiter;
@@ -111,86 +112,70 @@ class BaseController extends Controller
         }
         $this->arrPersonInfo = $objPerson;
 
-        $this->setUserRoleInfo($intRoleId);
-
-        //权限管理
-        $roleInfo = Role::findOne($this->roleId);
-        // 设置角色别名
-        if(!empty($roleInfo)) {
-            $this->roleName = $roleInfo->slug;
-        }
-        $roleArr = ArrayHelper::getColumn(json_decode($roleInfo->permissions), 'url');
-        $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
-        $allMenu = ArrayHelper::getColumn(Menu::find()->asArray()->all(), 'url');
-
-        if ($action->id == 'index') {
-            $url_one = '/' . $action->controller->id;
-            if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
-                throw new HttpException(403);
-            }
-        } else {
-            if (!in_array($requestUrlArr, $roleArr) && in_array($requestUrlArr, $allMenu)) {
-                throw new HttpException(403);
-            }
-        }
+        $this->setUserRoleInfo($intRoleId, $action);
+        
         return parent::beforeAction($action);
     }
     
     /**
-     * @功能：              初始化登录用户的权限信息 包含目录权限和数据（组织架构）权限
-     * @作者：              王雕
-     * @创建时间：          2017-05-15
-     * @param int           $intRoleId      角色id
-     * @param string        $strOs          平台 web / Android 。。。。
-     * @param boolen        $blnForce       是否强刷权限信息（不使用原缓存）
-     * @return boolean      $result         true - 设置成功 / 设置失败
+     * 初始化登录用户的权限信息 包含目录权限和数据（组织架构）权限
+     * @param $intRoleId
+     * @param $action
+     * @param string $strOs
+     *
+     * @return bool
+     * @throws HttpException
      */
-    protected function setUserRoleInfo($intRoleId, $strOs = 'web', $blnForce = false)
+    protected function setUserRoleInfo($intRoleId, $action, $strOs = 'web')
     {
 
-        $result = false;
         $this->roleId = $intRoleId;
         $personId = $this->arrPersonInfo->person_id;
-        $strCacheKey = 'role_info_' . $strOs . '_' . $intRoleId . '_' . $personId;
-//        if($blnForce == false)//不强制刷新的时候 从缓存中获取
-//        {
-//            $this->arrPersonRoleInfo = \Yii::$app->cache->get($strCacheKey);
-//        }
-//
-        if(empty($this->arrPersonRoleInfo))
+
+
+        $objRoleMod = RoleLogic::instance()->getRole($intRoleId);
+        if($objRoleMod)
         {
-            $objRoleMod = Role::findOne(['id' => $intRoleId]);
-            if($objRoleMod)
+            $this->roleName = $objRoleMod->slug;
+            //目录权限
+            $arrMenuTmp = ArrayHelper::getColumn(json_decode($objRoleMod->permissions, true), 'slug');
+            //去重
+            $this->arrPersonRoleInfo['roleInfo'] = array_unique($arrMenuTmp);
+            //数据权限
+            $objRoleOrgMod = RoleOrgPermission::find()->where([
+                'person_id' => $personId,
+                'role_id' => $intRoleId
+            ])->one();
+            if($objRoleOrgMod && $objRoleOrgMod->org_ids)//设置过数据权限
             {
-                //目录权限
-                $arrMenuTmp = ArrayHelper::getColumn(json_decode($objRoleMod->permissions, true), 'slug');
-                //去重
-                $this->arrPersonRoleInfo['roleInfo'] = array_unique($arrMenuTmp);
-                //数据权限
-                $objRoleOrgMod = RoleOrgPermission::find()->where([
-                    'person_id' => $personId,
-                    'role_id' => $intRoleId
-                ])->one();
-                if($objRoleOrgMod && $objRoleOrgMod->org_ids)//设置过数据权限
-                {
-                    $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
-                    $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
-                    $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
-                    $this->companyIds = explode(',', $objRoleOrgMod->company_ids);
-                } else {
-                    $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
-                    $this->arrPersonRoleInfo['permissionOrgIds'] = $org;
-                    $this->companyIds = [$this->arrPersonInfo->company_id];
+                $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
+                $orgIds = ArrayHelper::merge($org, explode(',', $objRoleOrgMod->org_ids));
+                $this->arrPersonRoleInfo['permissionOrgIds'] = $orgIds;
+                $this->companyIds = explode(',', $objRoleOrgMod->company_ids);
+            } else {
+                $org = PersonLogic::instance()->getCompanyOrgIds($this->arrPersonInfo);
+                $this->arrPersonRoleInfo['permissionOrgIds'] = $org;
+                $this->companyIds = [$this->arrPersonInfo->company_id];
+            }
+            
+            // 判断接口权限
+            $roleArr = ArrayHelper::getColumn(json_decode($objRoleMod->permissions), 'url');
+            $requestUrlArr = explode('?', $_SERVER['REQUEST_URI']);
+            $allMenu = ArrayHelper::getColumn(RoleLogic::instance()->getMenu(), 'url');
+    
+            if ($action->id == 'index') {
+                $url_one = '/' . $action->controller->id;
+                if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                    throw new HttpException(403);
                 }
-                $result = true;//取库获取到数据了
-                \Yii::$app->cache->set($strCacheKey, $this->arrPersonRoleInfo);
+            } else {
+                if (!in_array($requestUrlArr, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                    throw new HttpException(403);
+                }
             }
         }
-        else
-        {
-            $result = true;//获取缓存了
-        }
-        return $result;
+ 
+        return true;
     }
 
     /**

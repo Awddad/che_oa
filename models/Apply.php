@@ -29,8 +29,10 @@ use yii\db\Exception;
  * @property integer $apply_list_pdf
  * @property integer $org_id
  * @property integer $company_id
+ * @property integer $end_time
  *
  * @property object $loan
+ * @property object $payBack
  * @property object $applyPay
  * @property object $applyBuy
  * @property object $applyDemand
@@ -75,7 +77,7 @@ class Apply extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'type', 'title', 'person', 'person_id', 'approval_persons'], 'required'],
-            [['create_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id'], 'integer'],
+            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
             [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
         ];
@@ -488,6 +490,9 @@ class Apply extends \yii\db\ActiveRecord
         switch ($this->type) {
             case 2:
                 $info = $this->loan;
+                break;
+            case 3:
+                $info = $this->payBack;
                 break;
             case 4:
                 $info = $this->applyPay;

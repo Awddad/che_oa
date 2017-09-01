@@ -56,13 +56,9 @@ class GoodsUp extends \yii\db\ActiveRecord
     }
     /**
      * 获得商品上架说明
-     * @param string $apply_id
      */
-    public static function getDes($apply_id)
+    public function getDesInfo()
     {
-        $des = '';//说明
-        $model = static::find()->where(['apply_id'=>$apply_id])->one();
-        $des = $model ? $model->des : $des;
-        return $des;
+        return '申请门店：'. $this->shop_name. '<br>申请说明：'.$this->des;
     }
 }

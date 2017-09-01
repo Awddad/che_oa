@@ -76,13 +76,9 @@ class ApplyBuy extends \yii\db\ActiveRecord
     
     /**
      * 获得请购说明
-     * @param string $apply_id
      */
-    public static function getDes($apply_id)
+    public function getDesInfo()
     {
-        $des = '';//说明
-        $model = static::find()->where(['apply_id'=>$apply_id])->one();
-        $des = $model ?$model->des : $des;
-        return $des;
+        return $this->des;
     }
 }

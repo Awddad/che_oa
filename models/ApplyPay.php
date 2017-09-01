@@ -65,13 +65,9 @@ class ApplyPay extends \yii\db\ActiveRecord
     }
     /**
      * 获得付款说明
-     * @param string $apply_id
      */
-    public static function getDes($apply_id)
+    public function getDesInfo()
     {
-        $des = '';//说明
-        $model = static::find()->where(['apply_id'=>$apply_id])->one();
-        $des = $model ? $model->des : $des;
-        return $des;
+        return '付款事由：'. $this->des. '<br>金额：'.Yii::$app->formatter->asCurrency($this->money);
     }
 }
