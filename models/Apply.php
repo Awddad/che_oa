@@ -330,6 +330,7 @@ class Apply extends \yii\db\ActiveRecord
                 }
             }
         }
+        $this->end_time = time();
         /* end */
         return $this->save();
     }

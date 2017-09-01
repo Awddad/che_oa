@@ -72,6 +72,8 @@ class ApplyListLogic extends BaseLogic
         }
     
         $query->andWhere(['b.approval_person_id' => $this->person->person_id]);
+        
+        $types = $this->getType($query);
     
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
@@ -92,13 +94,13 @@ class ApplyListLogic extends BaseLogic
             $apply = $approvalLog->apply;
             $dataInfo = $this->getDefaultList($apply);
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
-            $dataInfo['end_at'] = date('Y-m-d H:i',$apply->end_time);
             $dataInfo['next_des'] = $apply->next_des;
             $data[$k] = $dataInfo;
         }
         return [
             'res' => $data,
-            'page' => $this->pageFix($pagination)
+            'page' => $this->pageFix($pagination),
+            'types' => $types
         ];
     }
     
@@ -124,6 +126,8 @@ class ApplyListLogic extends BaseLogic
         }
     
         $query->andWhere(['b.approval_person_id' => $this->person->person_id])->andWhere(['>', 'b.result', 0]);
+    
+        $types = $this->getType($query);
     
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
@@ -160,13 +164,14 @@ class ApplyListLogic extends BaseLogic
             }
             $dataInfo = $this->getDefaultList($apply);
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
-            $dataInfo['end_at'] = date('Y-m-d H:i',$apply->end_time);
+            $dataInfo['end_at'] = date('Y-m-d H:i',$approvalLog->approval_time);
             $dataInfo['next_des'] = $des;
             $data[$k] = $dataInfo;
         }
         return [
             'res' => $data,
-            'page' => $this->pageFix($pagination)
+            'page' => $this->pageFix($pagination),
+            'types' => $types
         ];
     }
     
@@ -190,8 +195,10 @@ class ApplyListLogic extends BaseLogic
         } else {
             $orderBy['a.create_time'] = SORT_DESC;
         }
-        $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
+        $types = $this->getType($query);
+        
+        $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
         $pagination = new Pagination([
             'defaultPageSize' => $pageSize,
             'totalCount' => $query->count(),
@@ -224,7 +231,8 @@ class ApplyListLogic extends BaseLogic
         }
         return [
             'res' => $data,
-            'page' => $this->pageFix($pagination)
+            'page' => $this->pageFix($pagination),
+            'types' => $types
         ];
     }
     
@@ -250,7 +258,16 @@ class ApplyListLogic extends BaseLogic
             $orderBy['a.create_time'] = SORT_DESC;
         }
     
+        $query->andWhere(['b.copy_person_id' => $this->person->person_id])->andWhere(['in', 'a.status', [4, 5, 99]]);
     
+        $isRead = \Yii::$app->request->get('is_read');
+        if ($isRead){
+            $query->andWhere(['b.is_read' => $isRead]);
+        }
+        $orderBy['b.pass_at'] = SORT_DESC;
+        
+        $types = $this->getType($query);
+        
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
         $pagination = new Pagination([
@@ -259,13 +276,6 @@ class ApplyListLogic extends BaseLogic
         ]);
         $query->orderBy($orderBy)->offset($pagination->offset)->limit($pagination->limit);
         
-        $query->andWhere(['b.copy_person_id' => $this->person->person_id])->andWhere(['in', 'a.status', [4, 5, 99]]);
-        
-        $isRead = \Yii::$app->request->get('is_read');
-        if ($isRead){
-            $query->andWhere(['b.is_read' => $isRead]);
-        }
-        $orderBy['b.pass_at'] = SORT_DESC;
         $data = [];
         /**
          * @var ApplyCopyPerson $copy
@@ -289,7 +299,8 @@ class ApplyListLogic extends BaseLogic
         }
         return [
             'res' => $data,
-            'page' => $this->pageFix($pagination)
+            'page' => $this->pageFix($pagination),
+            'types' => $types
         ];
     }
     
@@ -368,5 +379,25 @@ class ApplyListLogic extends BaseLogic
             $query->andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
         }
         return $query;
+    }
+    
+    /**
+     * @param ActiveQuery $query
+     *
+     * @return array
+     */
+    private function getType($query)
+    {
+        $_query = clone $query;
+        $_query->select('a.type')->groupBy('a.type');
+        $types = $_query->asArray()->all();
+        $data = [];
+        foreach($types as $k=>$v){
+            $data['types'][] = [
+                'text' => Apply::TYPE_ARRAY [$v['type']],
+                'value' => (int)$v['type']
+            ];
+        }
+        return $data;
     }
 }
