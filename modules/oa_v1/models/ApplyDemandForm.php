@@ -8,13 +8,10 @@
 
 namespace app\modules\oa_v1\models;
 
-use app\models\ApplyBuy;
 use app\models\ApplyDemand;
 use app\models\Person;
 use Yii;
 use app\models\Apply;
-use app\models\User;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 

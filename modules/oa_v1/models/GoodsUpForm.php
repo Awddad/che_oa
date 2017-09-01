@@ -9,12 +9,10 @@
 namespace app\modules\oa_v1\models;
 
 
-use app\models\Apply;
 use app\models\GoodsUp;
 use app\models\GoodsUpDetail;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 
 class GoodsUpForm extends BaseForm
@@ -67,13 +65,17 @@ class GoodsUpForm extends BaseForm
      */
     public $goods_list = [];
     
+    public $shop_id;
+    
+    public $shop_name;
+    
     /**
      * 验证数据
      */
     public function rules()
     {
         return [
-            [['approval_persons', 'apply_id', 'goods_list'], 'required',],
+            [['approval_persons', 'apply_id', 'goods_list', 'shop_id', 'shop_name'], 'required',],
             [['approval_persons', 'copy_person'], 'each', 'rule' => ['integer']],
             [['approval_persons', 'copy_person'], 'checkTotal'],
             ['des', 'string'],
@@ -88,6 +90,8 @@ class GoodsUpForm extends BaseForm
             'approval_persons' => '审批人',
             'copy_person' => '审批人',
             'goods_list' => '商品列表',
+            'shop_id' => '销售门店',
+            'shop_name' => '销售门店',
         ];
     }
     
@@ -177,6 +181,8 @@ class GoodsUpForm extends BaseForm
             'apply_id' => $this->apply_id,
             'files' => json_encode($this->files),
             'des' => $this->des,
+            'shop_id' => $this->shop_id,
+            'shop_name' => $this->shop_name,
         ];
         if ($goodsUp->load($data) && $goodsUp->save()) {
             return true;

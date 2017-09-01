@@ -9,12 +9,9 @@
 namespace app\modules\oa_v1\models;
 
 
-use app\models\Apply;
 use app\models\AssetGet;
 use app\models\Person;
-use app\models\User;
 use app\modules\oa_v1\logic\AssetLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 
 
@@ -62,23 +59,23 @@ class AssetGetForm extends BaseForm
     }
     
     /**
-     * @param User $user
+     * @param Person $person
      * @return mixed
      * @throws Exception
      */
-    public function save($user)
+    public function save($person)
     {
-        $apply = $this->setApply($user);
+        $apply = $this->setApply($person);
         
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             if (!$apply->save()) {
                 throw new Exception('付款申请单创建失败', $apply->errors);
             }
-            $this->saveAssetGet($user);
+            $this->saveAssetGet($person);
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
-            $this->saveAssetGetList($user);
+            $this->saveAssetGetList($person);
             AssetLogic::instance()->assetGet($apply);
             $transaction->commit();
             return $apply;
@@ -91,16 +88,16 @@ class AssetGetForm extends BaseForm
     /**
      * 资产领用
      *
-     * @param $user
+     * @param Person $person
      * @return AssetGet
      * @throws Exception
      */
-    public function saveAssetGet($user)
+    public function saveAssetGet($person)
     {
         $model = new AssetGet();
         $model->apply_id = $this->apply_id;
         $model->des = $this->des;
-        $model->get_person = $user['person_id'];
+        $model->get_person = $person['person_id'];
         $model->files = $this->files ? json_encode($this->files): '';
         if (!$model->save()) {
             throw new Exception('固定资产领用单创建失败', $model->errors);
@@ -110,17 +107,17 @@ class AssetGetForm extends BaseForm
     
     /**
      * 资产领用列表
-     * @param Person $user
+     * @param Person $person
      *
      * @throws Exception
      */
-    public function saveAssetGetList($user)
+    public function saveAssetGetList($person)
     {
         $data = [];
         foreach ($this->asset_ids as $v) {
             $data[] = [
                 $this->apply_id,
-                $user->person_id,
+                $person->person_id,
                 $v,
                 1,
                 time()

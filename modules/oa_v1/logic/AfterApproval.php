@@ -24,6 +24,9 @@ class AfterApproval extends BaseLogic
      */
     public function handler($event)
     {
+        if(empty($this->typeMethod[$event->data])) {
+            return true;
+        }
         $fuc = "{$this->typeMethod[$event->data]}";
         /**
          * app\models\ApprovalLog

@@ -110,54 +110,10 @@ class DefaultController extends BaseController
         $intType = intval(Yii::$app->request->get('type'));
         if(array_key_exists($intType, Apply::TYPE_ARRAY))
         {
-            switch($intType)
-            {
-                case 1:
-                    $id = date('YmdHis') . '01' . rand(100, 999);
-                    break;
-                case 2:
-                    $id = date('YmdHis') . '02' . rand(100, 999);
-                    break;
-                case 3:
-                    $id = date('YmdHis') . '03' . rand(100, 999);
-                    break;
-                case 4:
-                    $id = date('YmdHis') . '04' . rand(100, 999);
-                    break;
-                case 5:
-                    $id = date('YmdHis') . '05' . rand(100, 999);
-                    break;
-                case 6:
-                    $id = date('YmdHis') . '06' . rand(100, 999);
-                    break;
-                case 7:
-                    $id = date('YmdHis') . '07' . rand(100, 999);
-                    break;
-                case 8:
-                    $id = date('YmdHis') . '08' . rand(100, 999);
-                    break;
-                case 9:
-                    $id = date('YmdHis') . '09' . rand(100, 999);
-                    break;
-                case 10:
-                    $id = date('YmdHis') . '10' . rand(100, 999);
-                    break;
-                case 11:
-                    $id = date('YmdHis') . '11' . rand(100, 999);
-                    break;
-                case 12:
-                    $id = date('YmdHis') . '12' . rand(100, 999);
-                    break;
-                case 13:
-                    $id = date('YmdHis') . '13' . rand(100, 999);
-                    break;
-                case 14:
-                    $id = date('YmdHis') . '14' . rand(100, 999);
-                    break;
-                case 15:
-                    $id = date('YmdHis') . '15' . rand(100, 999);
-                    break;
+            if ($intType  < 10) {
+                $intType = '0'.$intType;
             }
+            $id =  date('YmdHis'). $intType . rand(100, 999);
             return $this->_return(['apply_id' => $id]);
         }
         else
@@ -300,6 +256,9 @@ class DefaultController extends BaseController
             case 15:
                 $pdf = PdfLogic::instance()->applyTravel($apply);
                 break;
+            case 16:
+                $pdf = PdfLogic::instance()->projectRole($apply);
+                break;
         }
         if(!empty($pdf)) {
             header('Content-Type: application/octet-stream');
@@ -340,49 +299,10 @@ class DefaultController extends BaseController
     {
         $applyId = Yii::$app->request->get('apply_id');
         $apply = Apply::findOne($applyId);
-        switch ($apply->type) {
-            case 2:
-                $info = $apply->loan->pics;
-                break;
-            case 4:
-                $info = $apply->applyPay->files;
-                break;
-            case 5:
-                $info = $apply->applyBuy->files;
-                break;
-            case 6:
-                $info = $apply->applyDemand->files;
-                break;
-            case 7:
-                $info = $apply->applyUseChapter->files;
-                break;
-            case 8:
-                $info = $apply->assetGet->files;
-                break;
-            case 9:
-                $info = $apply->assetBack->files;
-                break;
-            case 10:
-                $info = $apply->applyPositive->files;
-                break;
-            case 11:
-                $info = $apply->applyLeave->files;
-                break;
-            case 12:
-                $info = $apply->applyTransfer->files;
-                break;
-            case 13:
-                $info = $apply->applyOpen->files;
-                break;
-            case 14:
-                $info = $apply->goodsUp->files;
-                break;
-            case 15:
-                $info = $apply->travel->files;
-                break;
-            default:
-                $info = $apply->expense->files;
-                break;
+        if ($apply->type == 2) {
+            $info = $apply->info->pics;
+        } else {
+            $info = $apply->info->files;
         }
         $zipName = $applyId.'.zip';
         $zip = new \ZipArchive();

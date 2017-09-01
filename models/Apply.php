@@ -29,6 +29,23 @@ use yii\db\Exception;
  * @property integer $apply_list_pdf
  * @property integer $org_id
  * @property integer $company_id
+ *
+ * @property object $loan
+ * @property object $applyPay
+ * @property object $applyBuy
+ * @property object $applyDemand
+ * @property object $applyUseChapter
+ * @property object $assetGet
+ * @property object $assetBack
+ * @property object $applyPositive
+ * @property object $applyLeave
+ * @property object $applyTransfer
+ * @property object $applyOpen
+ * @property object $goodsUp
+ * @property object $travel
+ * @property object $projectRole
+ * @property object $expense
+ * @property object $info
  */
 class Apply extends \yii\db\ActiveRecord
 {
@@ -435,6 +452,16 @@ class Apply extends \yii\db\ActiveRecord
     }
     
     /**
+     * 权限申请
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjectRole()
+    {
+        return $this->hasOne(ApplyProjectRole::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
      * @var array
      */
     const TYPE_ARRAY = [
@@ -453,5 +480,58 @@ class Apply extends \yii\db\ActiveRecord
         13 => '开店',
         14 => '商品上架',
         15 => '出差',
+        16 => '权限',
     ];
+    
+    public function getInfo()
+    {
+        switch ($this->type) {
+            case 2:
+                $info = $this->loan;
+                break;
+            case 4:
+                $info = $this->applyPay;
+                break;
+            case 5:
+                $info = $this->applyBuy;
+                break;
+            case 6:
+                $info = $this->applyDemand;
+                break;
+            case 7:
+                $info = $this->applyUseChapter;
+                break;
+            case 8:
+                $info = $this->assetGet;
+                break;
+            case 9:
+                $info = $this->assetBack;
+                break;
+            case 10:
+                $info = $this->applyPositive;
+                break;
+            case 11:
+                $info = $this->applyLeave;
+                break;
+            case 12:
+                $info = $this->applyTransfer;
+                break;
+            case 13:
+                $info = $this->applyOpen;
+                break;
+            case 14:
+                $info = $this->goodsUp;
+                break;
+            case 15:
+                $info = $this->travel;
+                break;
+            case 16:
+                $info = $this->projectRole;
+                break;
+            default:
+                $info = $this->expense;
+                break;
+        }
+        return $info;
+    }
 }

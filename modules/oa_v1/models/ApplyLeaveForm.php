@@ -3,8 +3,6 @@ namespace app\modules\oa_v1\models;
 
 use yii;
 use app\models\ApplyLeave;
-use app\modules\oa_v1\logic\PersonLogic;
-use app\models\Apply;
 use Exception;
 use app\models\Person;
 
