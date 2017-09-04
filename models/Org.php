@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  * @property string $org_name
  * @property integer $pid
  * @property string $org_short_name
+ * @property integer $manager
  */
 class Org extends \yii\db\ActiveRecord
 {
@@ -31,7 +32,7 @@ class Org extends \yii\db\ActiveRecord
     {
         return [
             [['org_id', 'org_name', 'pid'], 'required'],
-            [['org_id', 'pid'], 'integer'],
+            [['org_id', 'pid', 'manager'], 'integer'],
             [['org_name', 'org_short_name'], 'string', 'max' => 255],
         ];
     }
@@ -46,6 +47,7 @@ class Org extends \yii\db\ActiveRecord
             'org_name' => '组织名称',
             'pid' => '父id',
             'org_short_name' => '组织简称',
+            'manager' => 'Manager',
         ];
     }
 

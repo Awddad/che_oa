@@ -3,9 +3,11 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApprovalConfig;
+use app\models\Job;
 use app\modules\oa_v1\logic\ApprovalConfigLogic;
 use app\modules\oa_v1\logic\OrgLogic;
 use app\modules\oa_v1\logic\BackLogic;
+use app\modules\oa_v1\logic\ProjectLogic;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use app\models\Person;
@@ -25,15 +27,24 @@ class ApprovalConfigForm extends BaseForm
     public $apply_type;
     public $type;
     public $config;
+    public $copy_config;
+    public $distinct;
+    public $copy_rule;
 
     public $org_pid = 1;//组织架构parent_id
+    public $approval_arr = [
+        1,//员工
+        2,//部门负责人
+        3,//职位
+    ];
+
 
     protected $roles_arr = [
         'caiwujingli' => [1,2,3,4],
         'xingzhengjingli' => [5,6,7,8,9],
         'zhaopinjingli' => [10,11,12],
         'duodianshenpi' => [14],
-        'guanliyuan' => [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+        'guanliyuan' => [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
     ];
 
     public function rules()
@@ -46,7 +57,7 @@ class ApprovalConfigForm extends BaseForm
                 'message' => '{attribute}不能为空'
             ],
             [
-                ['id','type','config'],
+                ['id','type','distinct','copy_rule'],
                 'required',
                 'on' => [self::SCENARIO_APPROVAL_EDIT],
                 'message' => '{attribute}不能为空'
@@ -70,6 +81,8 @@ class ApprovalConfigForm extends BaseForm
             ['apply_type','in','range'=>array_keys(Apply::TYPE_ARRAY),'message'=>'审批类型不正确！'],
             ['type','in','range'=>[0,1],'message'=>'条件不正确！'],
             ['config','checkConfigApproval','on'=>[self::SCENARIO_APPROVAL_EDIT]],
+            ['distinct','in','range'=>[0,1],'message'=>'是否允许审批人重复不正确！'],
+            ['copy_rule','in','range'=>[0,1],'message'=>'抄送规则不正确！']
         ];
     }
 
@@ -78,16 +91,55 @@ class ApprovalConfigForm extends BaseForm
         if (!$this -> hasErrors()) {
             $data = json_decode($this->$attribute,1);
             if($data){
+                if($this->apply_type == 16){
+                    $project_arr = ProjectLogic::instance()->getProjects();
+                    $project_arr = ArrayHelper::getColumn($project_arr,'id');
+                    foreach($data as $k=>$v){
+                        if(!in_array($k,$project_arr)){
+                            $this->addError($attribute, "条件不正确！");
+                            return false;
+                        }
+                    }
+                }else{
+                    foreach($data as $k=>$v){
+                        if(!is_int($k)){
+                            $this->addError($attribute, "条件不正确！");
+                            return fasle;
+                        }
+                    }
+                }
                 foreach($data as $k => $v){
-                    if(!is_int($k)){
-                        $this->addError($attribute, "条件不正确！");
-                    }else{
-                        foreach($v as $vv){
-                            $person = Person::findOne($vv);
-                            if(empty($person)){
-                                $this->addError($attribute, "审批人不正确！");
+                    foreach($v as $vv) {
+                        if (in_array($vv['type'], $this->approval_arr)) {
+                            switch ($vv['type']) {
+                                case 1://人
+                                    $person = Person::findOne($vv['value']);
+                                    if (empty($person)) {
+                                        $this->addError($attribute, "审批人不正确~！");
+                                        return false;
+                                    }
+                                    unset($person);
+                                    break;
+                                case 2://负责人
+                                    if (!is_int($vv['value'])) {
+                                        $this->addError($attribute, "审批级别不正确！");
+                                        return false;
+                                    }
+                                    break;
+                                case 3://职位
+                                    $job = Job::findOne($vv['value']);
+                                    if (empty($job)) {
+                                        $this->addError($attribute, "审批职位不正确");
+                                        return false;
+                                    }
+                                    unset($job);
+                                    break;
+                                default:
+                                    $this->addError($attribute, "审批人类型不正确!！");
+                                    return false;
                             }
-                            unset($person);
+                        } else {
+                            $this->addError($attribute, "审批人不正确！~");
                         }
                     }
                 }
@@ -111,7 +163,7 @@ class ApprovalConfigForm extends BaseForm
     {
         return [
             self::SCENARIO_EDIT => ['id','org_id','apply_type'],
-            self::SCENARIO_APPROVAL_EDIT => ['id','type','config'],
+            self::SCENARIO_APPROVAL_EDIT => ['id','type','config','copy_config','distinct','copy_rule'],
             self::SCENARIO_COPY_EDIT => ['id','config'],
             self::SCENARIO_APPROVAL_COPY => ['id','org_id','apply_type'],
             self::SCENARIO_APPROVAL_DEL => ['id'],
@@ -170,8 +222,12 @@ class ApprovalConfigForm extends BaseForm
         }
         $model->approval = $this->setConfig();
         $model->type = $this->type;
+        $model->copy_person = $this->setCopyConfig($this->copy_config);
+        $model->copy_person_count = count($this->copy_config);
+        $model->distinct = $this->distinct;
+        $model->copy_rule = $this->copy_rule;
         if($model->save()){
-            ApprovalConfigLogic::instance()->addLog('编辑审批人',$model->id,$model->org_name,$model->apply_name,ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
+            ApprovalConfigLogic::instance()->addLog('编辑审批配置',$model->id,$model->org_name,$model->apply_name,ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             return ['status'=>true];
         }else{
             return ['status'=>false,'msg'=>current($model->getFirstErrors())];
@@ -188,7 +244,7 @@ class ApprovalConfigForm extends BaseForm
         if(empty($model)){
             return ['status'=>false,'msg'=>'配置不存在！'];
         }
-        $model->copy_person = $this->setCopyConfig();
+        $model->copy_person = $this->setCopyConfig($this->config);
         $model->copy_person_count = count($this->config);
         if($model->save()){
             ApprovalConfigLogic::instance()->addLog('编辑抄送人',$model->id,$model->org_name,$model->apply_name,ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
@@ -306,7 +362,9 @@ class ApprovalConfigForm extends BaseForm
             'defaultPageSize' => $page_size,
             'totalCount' => $query->count(),
         ]);
-
+        /**
+         * @var $res ApprovalConfig
+         */
         $res = $query->orderBy($order_by)
         ->offset($pagination->offset)
         ->limit($pagination->limit)
@@ -354,6 +412,8 @@ class ApprovalConfigForm extends BaseForm
             'approval' => $this->getConfig($model->approval),
             'copy_person' => $this->getCopyConfig($model->copy_person),
             'copy_person_count' => $model->copy_person_count,
+            'distinct' => $model->distinct,
+            'copy_rule' => $model->copy_rule,
             'time' => date('Y-m-d H:i:s',$model->updated_at),
         ];
         return ['status' => true, 'data'=>$data];
@@ -362,10 +422,14 @@ class ApprovalConfigForm extends BaseForm
      * 获得审批配置
      * @param int $org_id
      * @param int $apply_type
+     * @return array
      */
     public function getApprovalConfig($user,$apply_type)
     {
     	$org_id = $user->org_id;
+        /**
+         * @var $model ApprovalConfig
+         */
         $model = null;
         while(!$model){
         	$model = ApprovalConfig::find()->where(['org_id'=>$org_id,'apply_type'=>$apply_type])->orderBy('updated_at desc')->one();
@@ -379,9 +443,25 @@ class ApprovalConfigForm extends BaseForm
         $data = [];
         if($model){
             $data = [
-                'approval' => $this->getConfig($model->approval),
+                'approval' => [],
                 'copy_person' => $this->getCopyConfig($model->copy_person),
+                'distinct' => $model->distinct,
             ];
+            $approval = $this->getConfig($model->approval,$org_id);
+            if($model->distinct) {
+                foreach ($approval as $k => $v) {
+                    $person_tmp = [];
+                    foreach ($v['approval'] as $vv) {
+                        if ($vv['type'] == 3 || (in_array($vv['type'], [1, 2]) && !in_array($vv['id'], $person_tmp))) {
+                            in_array($vv['type'], [1, 2]) && $person_tmp[] = $vv['id'];
+                            $data['approval'][$k][] = $vv;
+                        }
+                    }
+                }
+            }else{
+                $data['approval'] = $approval;
+            }
+
         }
         return $data;
     }
@@ -393,13 +473,14 @@ class ApprovalConfigForm extends BaseForm
     {
         $data = json_decode($this->config,1);
         $data && ksort($data);
-        return json_encode($data);
+        return $data ? json_encode($data) : '';
     }
     /**
      * 格式化审批人配置出库
      * @param string $config
+     * @param int   org_id
      */
-    protected function getConfig($config)
+    protected function getConfig($config,$org_id = 0)
     {
         $data = json_decode($config,true);
         $data && ksort($data);
@@ -408,16 +489,22 @@ class ApprovalConfigForm extends BaseForm
             foreach($data as $k => $v){
                 $tmp = [];
                 foreach($v as $vv){
-                    $person = Person::findOne($vv);
-                    $tmp[] = [
-                        'id' => $person['person_id'],
-                        'label' => $person['person_name'],
-                        'org' => $person['org_full_name'],
-                        'default' => 1,//默认，前端不能删除
-                    ];
+                    switch($vv['type']){
+                        case 1://人
+                            $tmp[] = $this->getPersonById($vv['value']);
+                            break;
+                        case 2://负责人
+                            $tmp_person = $this->getPersonByLevel($org_id,$vv['value']);
+                            $tmp_person && $tmp[] = $tmp_person;
+                            break;
+                        case 3://职位
+                            $tmp[] = $this->getJobById($vv['value']);
+                            break;
+                    }
+
                 }
                 $res[] = [
-                    'min' => $k,
+                    'key' => $k,
                     'approval' => $tmp,
                 ];
             }
@@ -426,16 +513,87 @@ class ApprovalConfigForm extends BaseForm
     }
 
     /**
-     * 格式化抄送人配置入库
+     * 获得审批人信息
+     * @param $person_id
+     * @param int $type 1:人 2:负责人
+     * @return array
      */
-    protected function setCopyConfig()
+    protected function getPersonById($person_id,$type=1)
     {
-        foreach($this->config as $k => $v){
-            if($v <= 0){
-                unset($this->config[$k]);
+        $person = Person::findOne($person_id);
+        $tmp = [
+            'type' => $type,
+            'id' => $person['person_id'],
+            'label' => $person['person_name'],
+            'org' => $person['org_full_name'],
+            'default' => 1,//默认，前端不能删除
+        ];
+        return $tmp;
+    }
+
+    /**
+     * 获得负责人信息
+     * @param $org_id
+     * @param $level 几级负责人
+     * @return array
+     */
+    protected function getPersonByLevel($org_id,$level)
+    {
+        if($org_id <= 0) {
+            $tmp[] = [
+                'type' => 2,
+                'value' => $level
+            ];
+        }else {//查询负责人
+            $tmp = [];
+            $i = 1;
+            $model = Org::findOne($org_id);
+            while ($model) {
+                if ($i < $level || $model->manager <= 0) {
+                    $model = $model->parent;
+                    $i++;
+                    continue;
+                } else {
+                    $tmp = $this->getPersonById($model->manager, 2);
+                    $tmp['level'] = $level;
+                    break;
+                }
             }
         }
-        $data = implode(',', $this->config);
+        return $tmp;
+    }
+
+    /**
+     * 获得职位
+     * @param $id
+     * @return array
+     */
+    protected function getJobById($id)
+    {
+        $job = Job::findOne($id);
+        $tmp = [
+            'type' => 3,
+            'value' => $job->id,
+            'name' => $job->name,
+        ];
+        return $tmp;
+    }
+
+
+    /**
+     * 格式化抄送人配置入库
+     */
+    protected function setCopyConfig(&$config)
+    {
+        $data = '';
+        if($config) {
+            foreach ($config as $k => $v) {
+                if ($v <= 0) {
+                    unset($config[$k]);
+                }
+            }
+            $data = implode(',', $config);
+        }
         return $data;
     }
     /**
