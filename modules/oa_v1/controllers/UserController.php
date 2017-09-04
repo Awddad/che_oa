@@ -7,6 +7,8 @@
  */
 
 namespace app\modules\oa_v1\controllers;
+
+use Yii;
 use app\models\Employee;
 use app\models\EmployeeAccountParent;
 use app\models\PeopleAbility;
@@ -27,6 +29,17 @@ use app\modules\oa_v1\models\PeopleForm;
  */
 class UserController extends BaseController
 {
+    public function beforeAction($action)
+    {
+        if(Yii::$app->request->get('edit_myself')) {
+            $employee = Yii::$app->request->get('employee') ? Yii::$app->request->get('employee') : Yii::$app->request->post('employee');
+            if ($this->arrPersonInfo->employee->id != $employee) {
+                return $this->_returnError(400);
+            }
+        }
+        return parent::beforeAction($action);
+    }
+    
     /**
      * @return array
      */
@@ -119,8 +132,13 @@ class UserController extends BaseController
     public function actionAddAccountParent()
     {
         $param = \Yii::$app->request->post();
-        $param['person_id'] = $this->arrPersonInfo->person_id;
-        $param['employee_id'] = $this->arrPersonInfo->employee->id;
+        
+        $employee = \Yii::$app->request->post('employee_id');
+        if (!$employee) {
+            return $this->_returnError(403);
+        }
+        $param['person_id'] = Employee::findOne($employee)->person_id;
+        
         $model = new EmployeeAccountParent();
         if ($model->load(['EmployeeAccountParent' => $param]) && $model->save()) {
             return $this->_return(null);

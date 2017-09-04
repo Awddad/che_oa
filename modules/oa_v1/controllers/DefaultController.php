@@ -98,6 +98,7 @@ class DefaultController extends BaseController
         }
         $arrData['userinfo']['entry_time'] = $entry_time;
         $arrData['userinfo']['pic'] = $pic;
+        $arrData['userinfo']['employee'] = $emp->id;
         return $this->_return($arrData);
     }
 

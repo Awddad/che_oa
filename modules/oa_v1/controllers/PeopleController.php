@@ -6,15 +6,23 @@ use app\modules\oa_v1\models\PeopleForm;
 
 class PeopleController extends BaseController
 {
+    public function beforeAction($action)
+    {
+        if(Yii::$app->request->get('edit_myself')) {
+            $employee = Yii::$app->request->get('employee') ? Yii::$app->request->get('employee') : Yii::$app->request->post('employee');
+            if ($this->arrPersonInfo->employee->id != $employee) {
+                return $this->_returnError(400);
+            }
+        }
+        return parent::beforeAction($action);
+    }
+    
     /**
      * 修改工作经验
      */
     public function actionWorkExpEdit()
     {
         $post = Yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee_id'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_WORK_EXP_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -34,9 +42,6 @@ class PeopleController extends BaseController
     public function actionWorkExpGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $get['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_WORK_EXP_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -53,9 +58,6 @@ class PeopleController extends BaseController
     public function actionWorkExpDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_WORK_EXP_DEL);
         $model->load(['PeopleForm'=>$post]);
@@ -76,9 +78,6 @@ class PeopleController extends BaseController
     public function actionProjectExpEdit()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_PROJECT_EXP_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -98,9 +97,6 @@ class PeopleController extends BaseController
     public function actionProjectExpGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $get['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_PROJECT_EXP_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -117,9 +113,6 @@ class PeopleController extends BaseController
     public function actionProjectExpDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_PROJECT_EXP_DEL);
         $model->load(['PeopleForm'=>$post]);
@@ -140,9 +133,6 @@ class PeopleController extends BaseController
     public function actionEduExpEdit()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_EDU_EXP_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -162,9 +152,6 @@ class PeopleController extends BaseController
     public function actionEduExpGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $get['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_EDU_EXP_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -181,9 +168,6 @@ class PeopleController extends BaseController
     public function actionEduExpDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_EDU_EXP_DEL);
         $model->load(['PeopleForm'=>$post]);
@@ -204,9 +188,6 @@ class PeopleController extends BaseController
     public function actionAbilityEdit()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_ABILITY_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -226,9 +207,6 @@ class PeopleController extends BaseController
     public function actionAbilityGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_ABILITY_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -245,9 +223,6 @@ class PeopleController extends BaseController
     public function actionAbilityDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_ABILITY_DEL);
         $model->load(['PeopleForm'=>$post]);
@@ -268,9 +243,6 @@ class PeopleController extends BaseController
     public function actionFileEdit()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_FILE_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -290,9 +262,6 @@ class PeopleController extends BaseController
     public function actionFileGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $get['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_FILE_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -309,9 +278,6 @@ class PeopleController extends BaseController
     public function actionFileDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_FILE_DEL);
         $model->load(['PeopleForm'=>$post]);
@@ -333,9 +299,6 @@ class PeopleController extends BaseController
     public function actionTrainExpEdit()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_TRAIN_EXP_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -355,9 +318,6 @@ class PeopleController extends BaseController
     public function actionTrainExpGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $get['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_TRAIN_EXP_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -374,9 +334,6 @@ class PeopleController extends BaseController
     public function actionTrainExpDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_TRAIN_EXP_DEL);
         $model->load(['PeopleForm'=>$post]);
@@ -398,9 +355,6 @@ class PeopleController extends BaseController
     public function actionPicEdit()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_PIC_EDIT);
         $model->load(['PeopleForm'=>$post]);
@@ -420,9 +374,6 @@ class PeopleController extends BaseController
     public function actionPicGet()
     {
         $get = yii::$app->request->get();
-        if(Yii::$app->request->get('edit_myself')) {
-            $get['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_PIC_GET);
         $model->load(['PeopleForm'=>$get]);
@@ -439,9 +390,6 @@ class PeopleController extends BaseController
     public function actionPicDel()
     {
         $post = yii::$app->request->post();
-        if(Yii::$app->request->get('edit_myself')) {
-            $post['employee'] = $this->arrPersonInfo->employee->id;
-        }
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_PIC_DEL);
         $model->load(['PeopleForm'=>$post]);
