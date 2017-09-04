@@ -27,10 +27,9 @@ use app\modules\oa_v1\models\PeopleForm;
  */
 class UserController extends BaseController
 {
-    public function beforeAction($action)
-    {
-        return parent::beforeAction($action);
-    }
+    /**
+     * @return array
+     */
     public function actionIndex()
     {
         $model = new EmployeeInfoForm();
@@ -117,7 +116,7 @@ class UserController extends BaseController
      *
      * @return array
      */
-    public function actionAccountParent()
+    public function actionAddAccountParent()
     {
         $param = \Yii::$app->request->post();
         $param['person_id'] = $this->arrPersonInfo->person_id;
