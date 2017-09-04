@@ -209,40 +209,52 @@ class EmployeeInfoForm extends BaseForm
         if(empty($model)){
             return ['status'=>false,'msg'=>'员工不存在'];
         }
-        $data = [
-            'id' => $model->id,
-            'name' => $model->name,
-            'empno' => $model->empno,
-            'profession_id' => $model->profession,
-            'profession' => empty($model->job)?'':$model->job->name,
-            'org_id' => $model->org_id,
-            'org' => OrgLogic::instance()->getOrgName($model->org_id),
-            'org_info' => OrgLogic::instance()->getOrgIdByChild($model->org_id),
-            'id_card' => $model->id_card,
-            'entry_time' => $model->entry_time,
-            'emp_type_id' => $model->employee_type,
-            'emp_type' => empty($model->employeeType)?'':$model->employeeType->name,
-            'sex' => $model->sex,
-            'phone' => $model->phone,
-            'email' => $model->email,
-            'birthday' => $model->birthday,
-            'age' => $model->age,
-            'work_time' => $model->work_time,
-            'edu_id' => $model->educational,
-            'edu' => ($edu = Educational::findOne($model->educational)) ? $edu->educational : '',
-            'location_id' => $model->current_location,
-            'location' => RegionLogic::instance()->getRegionByChild($model->current_location),
-            'location_info' => RegionLogic::instance()->getRegionIdByChild($model->current_location),
-            'native' => $model->native,
-            'political_id' => $model->political,
-            'political' => ($tmp = Political::findOne($model->political)) ? $tmp->political : '',
-            'nation' => $model->nation,
-            'entry' => $model->status,
-            'entry_status' => $this->arr_status[$model->status],
-            'marriage' => $model->marriage
-        ];
+        $data =  $this->getEmpInfoByEmployee($model);
         return ['status'=>true,'data'=>$data];
     }
+    
+    /**
+     * @param $employee
+     *
+     * @return array
+     */
+    public function getEmpInfoByEmployee($employee)
+    {
+        $data = [
+            'id' => $employee->id,
+            'name' => $employee->name,
+            'empno' => $employee->empno,
+            'profession_id' => $employee->profession,
+            'profession' => empty($employee->job)?'':$employee->job->name,
+            'org_id' => $employee->org_id,
+            'org' => OrgLogic::instance()->getOrgName($employee->org_id),
+            'org_info' => OrgLogic::instance()->getOrgIdByChild($employee->org_id),
+            'id_card' => $employee->id_card,
+            'entry_time' => $employee->entry_time,
+            'emp_type_id' => $employee->employee_type,
+            'emp_type' => empty($employee->employeeType)?'':$employee->employeeType->name,
+            'sex' => $employee->sex,
+            'phone' => $employee->phone,
+            'email' => $employee->email,
+            'birthday' => $employee->birthday,
+            'age' => $employee->age,
+            'work_time' => $employee->work_time,
+            'edu_id' => $employee->educational,
+            'edu' => ($edu = Educational::findOne($employee->educational)) ? $edu->educational : '',
+            'location_id' => $employee->current_location,
+            'location' => RegionLogic::instance()->getRegionByChild($employee->current_location),
+            'location_info' => RegionLogic::instance()->getRegionIdByChild($employee->current_location),
+            'native' => $employee->native,
+            'political_id' => $employee->political,
+            'political' => ($tmp = Political::findOne($employee->political)) ? $tmp->political : '',
+            'nation' => $employee->nation,
+            'entry' => $employee->status,
+            'entry_status' => $this->arr_status[$employee->status],
+            'marriage' => $employee->marriage
+        ];
+        return $data;
+    }
+    
     
     /**
      * 修改帐号
@@ -299,8 +311,27 @@ class EmployeeInfoForm extends BaseForm
             'email' => $model->email,
             'phone' => $model->tel
         ];
-        return ['status'=>true,'data'=>$res];;
+        return ['status'=>true,'data'=>$res];
     }
+    
+    /**
+     * @return array
+     */
+    public function getPersonAccount($id)
+    {
+        $model = EmployeeAccount::findOne(['employee_id' => $id]);
+        if (empty($model)) {
+            return [];
+        }
+        $res = [
+            'qq' => $model->qq,
+            'email' => $model->email,
+            'phone' => $model->tel
+        ];
+        
+        return $res;
+    }
+    
     
     /**
      * 获取银行卡
@@ -311,22 +342,35 @@ class EmployeeInfoForm extends BaseForm
     {
         $emp = Employee::findOne($id);
         if($emp){
-            $data = [];
-            if($cards = $emp->bankCard){
-                foreach($cards as $v){
-                    $data[] = [
-                        'id'=>$v->id,
-                        'bank_name' => $v->bank_name,
-                        //'bank_name_des' => $v->bank_name_des,
-                        'bank_card_id' => $v->bank_card_id,
-                        'is_salary' => $v->is_salary,
-                    ];
-                }
-            }
+            $data = $this->getBandCardsEmployee($emp);
             return ['status'=>true,'data'=>$data];
         }else{
             return ['status'=>false,'msg'=>'员工不存在'];
         }
+    }
+    
+    /**
+     * 银行账号
+     *
+     * @param $employee
+     *
+     * @return array
+     */
+    public function getBandCardsEmployee($employee)
+    {
+        $data = [];
+        if($cards = $employee->bankCard){
+            foreach($cards as $v){
+                $data[] = [
+                    'id'=>$v->id,
+                    'bank_name' => $v->bank_name,
+                    //'bank_name_des' => $v->bank_name_des,
+                    'bank_card_id' => $v->bank_card_id,
+                    'is_salary' => $v->is_salary,
+                ];
+            }
+        }
+        return $data;
     }
     
     /**
@@ -397,11 +441,24 @@ class EmployeeInfoForm extends BaseForm
         if(empty($model)){
             return ['status'=>false, 'msg'=>'员工不存在'];
         }
-        $data = [
-            'emp_id' => $id,
-            'org_id' => $model->service_id,
-            'org' => $model->service,
-        ];
+        $data = $this->getServiceEmployee($model);
         return ['status'=>true,'data'=>$data];
+    }
+    
+    /**
+     * 劳动关系
+     *
+     * @param $employee
+     *
+     * @return array
+     */
+    public function getServiceEmployee($employee)
+    {
+        $data = [
+            'emp_id' => $employee->id,
+            'org_id' => $employee->service_id,
+            'org' => $employee->service,
+        ];
+        return $data;
     }
 }

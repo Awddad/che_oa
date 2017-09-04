@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\models\PeopleTrainExperience;
 use app\models\Talent;
 use app\modules\oa_v1\logic\PeopleLogic;
 use yii\helpers\ArrayHelper;
@@ -291,9 +292,14 @@ class PeopleForm extends BaseForm
     /**
      * 格式化工作经验
      * @param \app\models\PeopleWorkExperience $model
+     *
+     * @return array
      */
-    protected function workExp($model)
+    public function workExp($model)
     {
+        if (empty($model)) {
+            return [];
+        }
         return [
             'id' => $model->id,
             'company' => $model->company_name,//公司名
@@ -376,8 +382,11 @@ class PeopleForm extends BaseForm
      * 格式化项目经验
      * @param \app\models\PeopleProjectExperience $model
      */
-    protected function projectExp($model)
+    public function projectExp($model)
     {
+        if (empty($model)) {
+            return [];
+        }
         return [
             'id' => $model->id,
             'project_name' => $model->project_name,//项目名称
@@ -462,8 +471,11 @@ class PeopleForm extends BaseForm
      * 格式化教育经历
      * @param \app\models\PeopleEduExperience $model
      */
-    protected function eduExp($model)
+    public function eduExp($model)
     {
+        if (empty($model)) {
+            return [];
+        }
         return [
             'id' => $model->id,
             'school_name' => $model->school_name,//学校名
@@ -476,7 +488,7 @@ class PeopleForm extends BaseForm
     }
     
     /**
-     * 修改技能评价
+     * 修改技能评价eduExp
      * @param array $user
      */
     public function editAbility($user)
@@ -543,8 +555,11 @@ class PeopleForm extends BaseForm
      * 格式化技能评价
      * @param \app\models\PeopleAbility $model
      */
-    protected function ability($model)
+    public function ability($model)
     {
+        if (empty($model)) {
+            return [];
+        }
         return [
             'id' => $model->id,
             'name' => $model->ability_name,//技能名
@@ -619,8 +634,11 @@ class PeopleForm extends BaseForm
      * 格式化文件
      * @param \app\models\PeopleFiles $model
      */
-    protected function files($model)
+    public function files($model)
     {
+        if (empty($model)) {
+            return [];
+        }
         $res = json_decode($model->file, true);//文件
         $res = is_array(current($res)) ? current($res) : $res;
         $res['id'] = $model->id;
@@ -697,10 +715,15 @@ class PeopleForm extends BaseForm
     }
     /**
      * 格式化培训经历
-     * @param \app\models\PeopleFiles $model
+     * @param PeopleTrainExperience $model
+     *
+     * @return array
      */
-    protected function trainExp($model)
+    public function trainExp($model)
     {
+        if (empty($model)) {
+            return [];
+        }
         return [
             'id'=>$model->id,
             'train_place'=>$model->train_place,//培训地点
@@ -733,6 +756,8 @@ class PeopleForm extends BaseForm
     /**
      * 删除头像
      * @param array $user
+     *
+     * @return array
      */
     public function delPic($user)
     {
