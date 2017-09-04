@@ -67,4 +67,9 @@ class ApplyPositive extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+    
+    public function getDesInfo()
+    {
+        return $this->summary;
+    }
 }

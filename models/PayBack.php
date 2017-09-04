@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "oa_pay_back".
@@ -64,18 +65,11 @@ class PayBack extends \yii\db\ActiveRecord
     
     /**
      * 获得还款说明
-     * @param string $apply_id
      */
-    public static function getDes($apply_id)
+    public function getDesInfo()
     {
-        $des = [];//说明
-        $pay_back_model = static::find()->where(['apply_id'=>$apply_id])->one();
-        $jiekuan_model = JieKuan::find()->where(['in','apply_id',explode(',', $pay_back_model->jie_kuan_ids)])->all();
-        if($jiekuan_model){
-            foreach($jiekuan_model as $v){
-                $des[] = $v->des;
-            }
-        }
-        return implode(',', $des);
+        $jiekuanList = JieKuan::find()->where(['in','apply_id',explode(',', $this->jie_kuan_ids)])->all();
+        return implode(',', ArrayHelper::getColumn($jiekuanList, 'des'));
     }
+    
 }

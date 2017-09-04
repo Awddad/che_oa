@@ -3,6 +3,7 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\models\Apply;
+use app\modules\oa_v1\logic\ApplyListLogic;
 use app\modules\oa_v1\logic\TreeTagLogic;
 use Yii;
 use app\models as appmodel;
@@ -39,6 +40,8 @@ class ApplyController extends BaseController
 	 * 列表
 	 */
 	public function actionGetList() {
+	    $data = ApplyListLogic::instance(['person' => $this->arrPersonInfo])->getList();
+	    return $this->_return($data);
 		$get = Yii::$app->request->get();
 		$logic = new ApplyLogic ();
 		$res = $logic->getApplyList($get, $this->arrPersonInfo);
@@ -58,11 +61,11 @@ class ApplyController extends BaseController
                 'title' => $v ['title'], // 标题
                 'status' => $v ['status'], // 状态
 				'type' => $v ['type'], // 类型
-//				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
-//				'person' => $v ['person'], // 发起人
-//				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人
-//				'copy_person' => $v ['copy_person'] ?: '--', // 抄送人
-//				'next_des' => $v ['next_des'], // 下步说明
+				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
+				'person' => $v ['person'], // 发起人
+				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人
+				'copy_person' => $v ['copy_person'] ?: '--', // 抄送人
+				'next_des' => $v ['next_des'], // 下步说明
 				'can_cancel' => in_array($v ['status'], [1,11]) ? 1 : 0,// 是否可以撤销
 			    'refuse_reason' => $v['caiwu_refuse_reason'] ? :ApplyLogic::instance()->getApprovalDes($v['apply_id']),
 			    'des' => ApplyLogic::instance()->getApplyDes($v['apply_id'], $v['type']),

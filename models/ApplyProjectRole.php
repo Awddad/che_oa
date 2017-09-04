@@ -62,12 +62,11 @@ class ApplyProjectRole extends \yii\db\ActiveRecord
     }
     
     /**
-     * @param $applyId
      *
      * @return mixed|string
      */
-    public static function getDes($applyId)
+    public function getDesinfo()
     {
-        return static::find()->where(['apply_id'=>$applyId])->one()->des;
+        return $this->des;
     }
 }

@@ -13,6 +13,9 @@ use Yii;
  * @property string $copy_person
  * @property integer $is_read
  * @property integer $pass_at
+ *
+ * @property object $apply
+ *
  */
 class ApplyCopyPerson extends \yii\db\ActiveRecord
 {

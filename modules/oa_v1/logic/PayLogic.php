@@ -111,6 +111,9 @@ class PayLogic extends BaseLogic
         )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
+            /**
+             * @var Apply $model
+             */
             foreach ($models as $k => $model) {
                 if ($model->type == 1) {
                     $typeName = '申请报销';
@@ -135,7 +138,7 @@ class PayLogic extends BaseLogic
                     'title' => $model->title,
                     'money' => $money,
                     'status' => $model->status,
-                    'des' => ApplyLogic::instance()->getApplyDes($model->apply_id,$model->type)
+                    'des' => $model->info->desInfo
                 ];
             }
             return [
