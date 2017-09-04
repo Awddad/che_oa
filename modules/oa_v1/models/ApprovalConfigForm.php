@@ -445,6 +445,7 @@ class ApprovalConfigForm extends BaseForm
             $data = [
                 'approval' => [],
                 'copy_person' => $this->getCopyConfig($model->copy_person),
+                'distinct' => $model->distinct,
             ];
             $approval = $this->getConfig($model->approval,$org_id);
             if($model->distinct) {
