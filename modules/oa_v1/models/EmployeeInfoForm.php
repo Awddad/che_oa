@@ -223,7 +223,7 @@ class EmployeeInfoForm extends BaseForm
         $data = [
             'id' => $employee->id,
             'name' => $employee->name,
-            'empno' => $employee->empno,
+            'empno' => $employee->person_id,
             'profession_id' => $employee->profession,
             'profession' => empty($employee->job)?'':$employee->job->name,
             'org_id' => $employee->org_id,
