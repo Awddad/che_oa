@@ -8,6 +8,8 @@
 
 namespace app\modules\oa_v1\controllers;
 
+use app\modules\oa_v1\logic\OrgLogic;
+use moonland\phpexcel\Excel;
 use Yii;
 use app\models\Employee;
 use app\models\EmployeeAccountParent;
@@ -163,5 +165,36 @@ class UserController extends BaseController
         } else {
             return $this->_returnError(4400, BaseLogic::instance()->getFirstError($accountParent->errors));
         }
+    }
+    
+    /**
+     *
+     */
+    public function actionAccountParentExport()
+    {
+        $employee = EmployeeAccountParent::find();
+        Excel::export([
+            'models' => $employee->all(),
+            'columns' => [
+                [
+                    'header' => '员工姓名',
+                    'value' => function($data) {
+                        return $data->employee->name;
+                    }
+                ],
+                [
+                    'header' => '所属组织',
+                    'value' => function($data) {
+                        return OrgLogic::instance()->getOrgName($data->employee->org_id);
+                    }
+                ],
+                'name',
+                'relation',
+                'idnumber',
+                'bank_name',
+                'bank_card',
+            ],
+            'fileName' => '员工孝工资卡'
+        ]);
     }
 }
