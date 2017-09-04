@@ -90,15 +90,17 @@ class DefaultController extends BaseController
         ];
         $entry_time = '';
         $pic = '';
+        $employee = '';
         $emp = Employee::find()->where(['person_id'=>$this->arrPersonInfo['person_id']])->one();
         if($emp){
             $people_pic = PeoplePic::find()->where(['employee_id' => $emp->id])->one();
             $entry_time = $emp->entry_time ?: '';
             $pic = $people_pic ? $people_pic->pic : '';
+            $employee = $emp->id ? : '';
         }
         $arrData['userinfo']['entry_time'] = $entry_time;
         $arrData['userinfo']['pic'] = $pic;
-        $arrData['userinfo']['employee'] = $emp->id;
+        $arrData['userinfo']['employee'] = $employee;
         return $this->_return($arrData);
     }
 
