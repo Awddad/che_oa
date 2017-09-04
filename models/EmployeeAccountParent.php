@@ -70,4 +70,9 @@ class EmployeeAccountParent extends \yii\db\ActiveRecord
             TimestampBehavior::className()
         ];
     }
+    
+    public function getEmployee()
+    {
+        return $this->hasOne(Employee::className(), ['id' => 'employee_id']);
+    }
 }
