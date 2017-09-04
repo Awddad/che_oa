@@ -75,6 +75,16 @@ class ApplyListLogic extends BaseLogic
         
         $types = $this->getType($query);
     
+        //类型
+        if ($at = \Yii::$app->request->get('at')) {
+            $applyType = (array)@$at;
+        } else {
+            $applyType = null;
+        }
+        if ($applyType) {
+            $query->andWhere(['in', 'a.type', $applyType]);
+        }
+    
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
         $pagination = new Pagination([
@@ -129,6 +139,16 @@ class ApplyListLogic extends BaseLogic
         $query->andWhere(['b.approval_person_id' => $this->person->person_id])->andWhere(['>', 'b.result', 0]);
     
         $types = $this->getType($query);
+    
+        //类型
+        if ($at = \Yii::$app->request->get('at')) {
+            $applyType = (array)@$at;
+        } else {
+            $applyType = null;
+        }
+        if ($applyType) {
+            $query->andWhere(['in', 'a.type', $applyType]);
+        }
     
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
@@ -199,6 +219,16 @@ class ApplyListLogic extends BaseLogic
         }
     
         $types = $this->getType($query);
+    
+        //类型
+        if ($at = \Yii::$app->request->get('at')) {
+            $applyType = (array)@$at;
+        } else {
+            $applyType = null;
+        }
+        if ($applyType) {
+            $query->andWhere(['in', 'a.type', $applyType]);
+        }
         
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
         $pagination = new Pagination([
@@ -270,6 +300,16 @@ class ApplyListLogic extends BaseLogic
         $orderBy['b.pass_at'] = SORT_DESC;
         
         $types = $this->getType($query);
+    
+        //类型
+        if ($at = \Yii::$app->request->get('at')) {
+            $applyType = (array)@$at;
+        } else {
+            $applyType = null;
+        }
+        if ($applyType) {
+            $query->andWhere(['in', 'a.type', $applyType]);
+        }
         
         $pageSize = ArrayHelper::getValue(\Yii::$app->request->get(), 'page_size', 20);
     
@@ -335,6 +375,7 @@ class ApplyListLogic extends BaseLogic
         if ($status = \Yii::$app->request->get('status')) {
         
             $arr_status = [];
+            $status = explode(',', $status);
             foreach ($status as $v) {
                 switch ($v) {
                     case 1://审核中
@@ -363,16 +404,6 @@ class ApplyListLogic extends BaseLogic
                 }
             }
             $query->andWhere(['in', 'a.status', $arr_status]);
-        }
-    
-        //类型
-        if ($at = \Yii::$app->request->get('at')) {
-            $applyType = (array)@$at;
-        } else {
-            $applyType = null;
-        }
-        if ($applyType) {
-            $query->andWhere(['in', 'a.type', $applyType]);
         }
     
     
