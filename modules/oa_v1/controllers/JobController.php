@@ -227,4 +227,32 @@ class JobController extends BaseController
         }
         return $data;
     }
+
+    /**
+     * 根据职位获得人
+     * @return array
+     */
+    public function actionGetPerson()
+    {
+        $org_id = Yii::$app->request->get('org_id',0);
+        if($org_id) {
+            /**
+             * @var $person Person
+             */
+            $person = Person::find()->where(['org_id' => $org_id])->all();
+            $data =[];
+            if($person) {
+                foreach($person as $v) {
+                    $data[] = [
+                        'id' => $v->person_id,
+                        'label' => $v->person_name,
+                        'org' => $v->org_full_name,
+                    ];
+                }
+            }
+            return $this->_return($data);
+        }else{
+            return $this->_returnError(403,'org_id不能为空！');
+        }
+    }
 }
