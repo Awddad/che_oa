@@ -15,7 +15,8 @@ class ProjectController extends BaseController
 {
     public function actionGetProjects()
     {
-        $projects = ProjectLogic::instance()->getProjects();
+        $org_id = \Yii::$app->request->get('org_id',0);
+        $projects = ProjectLogic::instance()->getProjects($org_id);
         return $this->_return($projects);
     }
 }

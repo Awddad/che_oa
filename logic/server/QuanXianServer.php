@@ -212,6 +212,7 @@ class QuanXianServer extends Server
                 'org_name' => $val['name'],
                 'org_short_name' => $val['short_name'] ? : '',
                 'pid' => $pid,
+                'manager' => $val['person_in_charge'] ?: 0,
             ];
             if(isset($val['children']) && is_array($val['children']) && !empty($val['children']))
             {
