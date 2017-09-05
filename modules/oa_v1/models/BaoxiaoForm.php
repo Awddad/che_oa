@@ -37,8 +37,6 @@ class BaoxiaoForm extends BaseForm
 			],
 			['apply_id','unique','targetClass' => '\app\models\Apply', 'message' => '申请单已存在.'],
 			//['bank_card_id','match','pattern'=>'/^(\d{16}|\d{19})$/','message'=>'银行卡不正确'],
-			//['approval_persons','validatePersons','params'=>'审批人'],
-			//['copy_person','validatePersons','params'=>'抄送人'],
 			[
 				['approval_persons', 'copy_person'],
 				'each',
@@ -52,31 +50,6 @@ class BaoxiaoForm extends BaseForm
 			[['files','pics'],'safe'],
             ['apply_id', 'checkOnly']
 		];
-	}
-	public function validatePersons($attribute, $params)
-	{
-		if (!$this->hasErrors()) {
-			if($attribute == 'approval_persons'){
-				$this->$attribute = ArrayHelper::index($this->$attribute,'steep');
-				ksort($this->$attribute);
-			}
-			if (count($this->$attribute) > 7) {
-				$this->addError($attribute, "{$params}人数超过限制！");
-				return;
-			}
-			$validator = new \yii\validators\NumberValidator();
-			$validator -> integerOnly = true;
-			foreach($this->$attribute as &$v){
-				if(!$validator-> validate($v['person_id'])){
-					$this->addError($attribute, "{$params}id不正确");
-				}elseif($v['person_id']>0 && !$v['person_name'] = PersonLogic::instance() -> getPersonName($v['person_id'])){
-					$this->addError($attribute, "{$params}id不正确！");
-				}
-				if ($this->hasErrors()){
-					return;
-				}
-			}
-		}
 	}
 	public function validateList($attribute)
 	{
@@ -103,17 +76,12 @@ class BaoxiaoForm extends BaseForm
      */
 	public function saveBaoxiao($person)
 	{
-		$this -> apply_id = $this -> apply_id?:$this -> createId('apply');
-		$model_apply = new appmodel\Apply();
-		$this -> loadModel('apply',$model_apply);
+		$model_apply = $this->setApply($person);
 		$transaction = Yii::$app -> db -> beginTransaction();
 		try{
-            $model_apply->company_id = $person->company_id;
 			if($model_apply -> insert()){
 				$this -> saveBaoxiaoList();
 				$this -> baoxiao();
-				//$this -> approvalLog();
-				//$this -> copyLog();
 				$this -> approvalPerson($model_apply);
 				$this -> copyPerson($model_apply);
 				
@@ -130,6 +98,7 @@ class BaoxiaoForm extends BaseForm
                 }
                 return $this -> apply_id;
 			}
+			$this->addError('',current($model_apply->getFirstErrors()));
 			return false;
 		}catch(\Exception $e){
 			$transaction -> rollBack();
@@ -137,20 +106,7 @@ class BaoxiaoForm extends BaseForm
 			return false;
 		}
 	}
-	
-	protected function createId($type)
-	{
-		$id = '';
-		switch($type){
-			case 'apply':
-				$id = $this -> createApplyId();
-				break;
-			case 'baoxiaolist':
-				$id = 'bl'.$this -> create_time.'22'.rand(10,99).rand(100,999);
-				break;
-		}
-		return $id;
-	}
+
 	/**
 	 * 初始化model
 	 * @param string $type ['apply','baoxiao','baoxiaolist']
@@ -159,20 +115,7 @@ class BaoxiaoForm extends BaseForm
 	 */
 	protected function loadModel($type,&$model,$data=[])
 	{
-		if('apply' == $type){
-			
-			$model -> load(['Apply'=>(array)$this]);
-			$model -> apply_id = $this -> apply_id;
-			$model -> create_time = $this -> create_time;
-			$model -> title = $this -> title;
-			$model -> person = $this->user['name'];
-			$model -> person_id = $this->user['id'];
-			$model -> approval_persons = $this->getPerson('approval_persons');
-			$model -> copy_person = $this->getPerson('copy_person');
-			$nextName = PersonLogic::instance()->getPersonName($this->approval_persons[0]);
-			$model -> next_des = "等待{$nextName}审批";
-			$model -> org_id = $this -> user['org_id'];
-		}elseif('baoxiao' == $type){
+		if('baoxiao' == $type){
 			$model -> apply_id = $this -> apply_id;
 			$model -> bao_xiao_list_ids = implode(',',array_column($this ->bao_xiao_list,'id'));
 			$model -> money = $this -> money;
@@ -231,36 +174,6 @@ class BaoxiaoForm extends BaseForm
 		if(!$model_bao_xiao -> insert()){
 			throw new \Exception(current($model_bao_xiao->getErrors())[0]);
 			//throw new \Exception('报销失败');
-		}
-	}
-	protected function approvalLog()
-	{
-		$model_approval = new appmodel\ApprovalLog();
-		foreach($this -> approval_persons as $k => &$v){
-			if($k == count($this -> approval_persons)){
-				$v['is_end'] = 1;
-			}
-			$_model_approval = clone $model_approval;
-			$this -> loadModel('approval_log', $_model_approval, $v);
-			if(!$_model_approval -> insert()){
-				throw new \Exception(current($model_bao_xiao->getErrors())[0]);
-				//throw new \Exception('审核人失败');
-			}
-		}
-	}
-	protected function copyLog()
-	{
-		$model_copy = new appmodel\ApplyCopyPerson();
-		if(!$this -> copy_person){
-			return true;
-		}
-		foreach($this -> copy_person as $k => &$v){
-			$_model_copy = clone $model_copy;
-			$this -> loadModel('copy', $_model_copy, $v);
-			if(!$_model_copy -> insert()){
-				throw new \Exception(current($model_bao_xiao->getErrors())[0]);
-				//throw new \Exception('抄送人失败');
-			}
 		}
 	}
 	/**

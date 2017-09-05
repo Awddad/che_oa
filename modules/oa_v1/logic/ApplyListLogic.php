@@ -291,7 +291,7 @@ class ApplyListLogic extends BaseLogic
             $orderBy['a.create_time'] = SORT_DESC;
         }
     
-        $query->andWhere(['b.copy_person_id' => $this->person->person_id])->andWhere(['in', 'a.status', [4, 5, 99]]);
+        $query->andWhere(['b.copy_person_id' => $this->person->person_id])->andWhere(['or',['copy_rule' => 0],['a.status' => [4, 5, 99]]]);
     
         $isRead = \Yii::$app->request->get('is_read');
         if ($isRead){
