@@ -191,11 +191,7 @@ class JobController extends BaseController
      */
     public function actionAllJob()
     {
-        $data =  [
-            'value' => 0,
-            'label' => '无',
-            'children' => $this->getJob()
-        ];
+        $data =   $this->getJob();
         return $this->_return($data);
         
     }

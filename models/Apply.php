@@ -30,6 +30,7 @@ use yii\db\Exception;
  * @property integer $org_id
  * @property integer $company_id
  * @property integer $end_time
+ * @property integer $copy_rule
  *
  * @property object $loan
  * @property object $payBack
@@ -77,7 +78,7 @@ class Apply extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'type', 'title', 'person', 'person_id', 'approval_persons'], 'required'],
-            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id'], 'integer'],
+            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id', 'copy_rule'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
             [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
         ];
