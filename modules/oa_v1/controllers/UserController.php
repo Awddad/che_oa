@@ -171,12 +171,11 @@ class UserController extends BaseController
     /**
      * 删除孝工资卡
      *
-     * @param $account_parent_id
-     *
      * @return array
      */
-    public function actionDeleteAccountParent($account_parent_id)
+    public function actionDeleteAccountParent()
     {
+        $account_parent_id = Yii::$app->request->post('account_parent_id');
         $accountParent = EmployeeAccountParent::findOne($account_parent_id);
         if ($accountParent->delete()) {
             return $this->_return([]);
