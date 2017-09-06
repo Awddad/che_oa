@@ -231,11 +231,12 @@ class JobController extends BaseController
     public function actionGetPerson()
     {
         $org_id = Yii::$app->request->get('org_id',0);
-        if($org_id) {
+        $profession_id = Yii::$app->request->get('profession_id',0);
+        if($org_id && $profession_id) {
             /**
              * @var $person Person
              */
-            $person = Person::find()->where(['org_id' => $org_id])->all();
+            $person = Person::find()->where(['org_id' => $org_id,'profession'=>$profession_id])->all();
             $data =[];
             if($person) {
                 foreach($person as $v) {
