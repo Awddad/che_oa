@@ -541,9 +541,9 @@ class ApprovalConfigForm extends BaseForm
     protected function getPersonByLevel($org_id,$level)
     {
         if($org_id <= 0) {
-            $tmp[] = [
+            $tmp = [
                 'type' => 2,
-                'id' => $level
+                'level' => $level
             ];
         }else {//查询负责人
             $tmp = [];
