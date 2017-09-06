@@ -113,6 +113,7 @@ class UserController extends BaseController
              */
             foreach ($accountParent as $v) {
                 $accountParents[] = [
+                    'id' => $v->id,
                     'name' => $v->name,
                     'relation' => $v->relation,
                     'idnumber' => $v->idnumber,
@@ -161,6 +162,23 @@ class UserController extends BaseController
         $param = \Yii::$app->request->post();
         $accountParent = EmployeeAccountParent::findOne($account_parent_id);
         if ($accountParent->load(['EmployeeAccountParent' => $param]) && $accountParent->save()) {
+            return $this->_return($accountParent);
+        } else {
+            return $this->_returnError(4400, BaseLogic::instance()->getFirstError($accountParent->errors));
+        }
+    }
+    
+    /**
+     * 删除孝工资卡
+     *
+     * @param $account_parent_id
+     *
+     * @return array
+     */
+    public function actionDeleteAccountParent($account_parent_id)
+    {
+        $accountParent = EmployeeAccountParent::findOne($account_parent_id);
+        if ($accountParent->delete()) {
             return $this->_return([]);
         } else {
             return $this->_returnError(4400, BaseLogic::instance()->getFirstError($accountParent->errors));
