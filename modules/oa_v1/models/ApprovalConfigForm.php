@@ -543,7 +543,7 @@ class ApprovalConfigForm extends BaseForm
         if($org_id <= 0) {
             $tmp[] = [
                 'type' => 2,
-                'value' => $level
+                'id' => $level
             ];
         }else {//查询负责人
             $tmp = [];
@@ -574,7 +574,7 @@ class ApprovalConfigForm extends BaseForm
         $job = Job::findOne($id);
         $tmp = [
             'type' => 3,
-            'value' => $job->id,
+            'id' => $job->id,
             'name' => $job->name,
         ];
         return $tmp;
