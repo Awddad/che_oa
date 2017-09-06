@@ -144,7 +144,7 @@ class UserController extends BaseController
         
         $model = new EmployeeAccountParent();
         if ($model->load(['EmployeeAccountParent' => $param]) && $model->save()) {
-            return $this->_return(null);
+            return $this->_return($model);
         } else {
             return $this->_returnError(4400, BaseLogic::instance()->getFirstError($model->errors));
         }
