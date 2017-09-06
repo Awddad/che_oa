@@ -185,6 +185,19 @@ class UserController extends BaseController
     }
     
     /**
+     * 删除孝工资卡
+     *
+     * @param $employee_id
+     *
+     * @return array
+     */
+    public function actionAccountParent($employee_id)
+    {
+        $accountParent = EmployeeAccountParent::find()->where(['employee_id' => $employee_id])->all();
+        return $this->_return($accountParent);
+    }
+    
+    /**
      *
      */
     public function actionAccountParentExport()
