@@ -543,7 +543,7 @@ class ApprovalConfigForm extends BaseForm
         if($org_id <= 0) {
             $tmp = [
                 'type' => 2,
-                'level' => $level
+                'id' => $level
             ];
         }else {//查询负责人
             $tmp = [];
