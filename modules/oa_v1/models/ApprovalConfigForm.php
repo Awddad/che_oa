@@ -455,7 +455,8 @@ class ApprovalConfigForm extends BaseForm
                     foreach ($v['approval'] as $vv) {
                         if ($vv['type'] == 3 || (in_array($vv['type'], [1, 2]) && !in_array($vv['id'], $person_tmp))) {
                             in_array($vv['type'], [1, 2]) && $person_tmp[] = $vv['id'];
-                            $data['approval'][$k][] = $vv;
+                            $data['approval'][$k]['key'] = $v['key'];
+                            $data['approval'][$k]['approval'] = $vv;
                         }
                     }
                 }
