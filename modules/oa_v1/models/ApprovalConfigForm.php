@@ -451,7 +451,7 @@ class ApprovalConfigForm extends BaseForm
             $approval = $this->getConfig($model->approval,$org_id);
             if($model->distinct) {
                 foreach ($approval as $k => $v) {
-                    $person_tmp = [];
+                    $person_tmp = [$user->person_id];
                     foreach ($v['approval'] as $vv) {
                         if ($vv['type'] == 3 || (in_array($vv['type'], [1, 2]) && !in_array($vv['id'], $person_tmp))) {
                             in_array($vv['type'], [1, 2]) && $person_tmp[] = $vv['id'];
