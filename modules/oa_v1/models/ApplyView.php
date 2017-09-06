@@ -420,7 +420,9 @@ class ApplyView extends BaseForm
         $data = [
             'des' => $projectRole->des,
             'files' => json_decode($projectRole->files)?:[],
+            'project_id' => $projectRole->project_name,
             'project_name' => $projectRole->project_name,
+            'role_id' => $projectRole->project_name,
             'role_name' => $projectRole->role_name,
             'begin_at' => $projectRole->begin_at,
             'end_at' => $projectRole->end_at,

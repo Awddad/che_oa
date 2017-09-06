@@ -348,5 +348,26 @@ class ApplyView2 extends ApplyView
         ];
         return $data;
     }
-    
+	/**
+	 * @param Apply $apply
+	 *
+	 * @return array
+	 */
+	public function getProjectRole($apply)
+	{
+		/**
+		 * @var ApplyProjectRole $projectRole
+		 */
+		$projectRole = $apply->projectRole;
+		$data = [
+			'des' => $projectRole->des,
+			'files' => json_decode($projectRole->files)?:[],
+			'project_name' => $projectRole->project_name,
+			'project_id' => $projectRole->project_id,
+			'role_name' => $projectRole->role_name,
+			'begin_at' => $projectRole->begin_at,
+			'end_at' => $projectRole->end_at,
+		];
+		return $data;
+	}
 }
