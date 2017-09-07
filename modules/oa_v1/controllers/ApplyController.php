@@ -42,47 +42,6 @@ class ApplyController extends BaseController
 	public function actionGetList() {
 	    $data = ApplyListLogic::instance(['person' => $this->arrPersonInfo])->getList();
 	    return $this->_return($data);
-		$get = Yii::$app->request->get();
-		$logic = new ApplyLogic ();
-		$res = $logic->getApplyList($get, $this->arrPersonInfo);
-		if (!$res) {
-			return $this->_return(null, 403);
-		}
-		$data = [
-			'page' => $res ['pages'],
-			'res' => [],
-			'types' => [],
-		];
-		foreach ($res ['data'] as $k=>$v) {
-			$data ['res'] [$k] = [
-				'id' => ($data['page']['currentPage']-1)*$data['page']['perPage'] + $k+1,
-				'apply_id' => $v ['apply_id'], // 审批单编号
-				'date' => date('Y-m-d H:i', $v ['create_time']), // 创建时间
-                'title' => $v ['title'], // 标题
-                'status' => $v ['status'], // 状态
-				'type' => $v ['type'], // 类型
-				'type_value' => Apply::TYPE_ARRAY [$v ['type']], // 类型值
-				'person' => $v ['person'], // 发起人
-				'approval_persons' => str_replace(',', ' -> ', $v ['approval_persons']), // 审批人
-				'copy_person' => $v ['copy_person'] ?: '--', // 抄送人
-				'next_des' => $v ['next_des'], // 下步说明
-				'can_cancel' => in_array($v ['status'], [1,11]) ? 1 : 0,// 是否可以撤销
-			    'refuse_reason' => $v['caiwu_refuse_reason'] ? :ApplyLogic::instance()->getApprovalDes($v['apply_id']),
-			    'des' => ApplyLogic::instance()->getApplyDes($v['apply_id'], $v['type']),
-			];
-			
-			if (Yii::$app->request->get('type') == 4) {
-                $data ['res'][$k]['is_read'] = intval($v['is_read']);
-            }
-			
-		}
-		foreach($res['types'] as $k=>$v){
-			$data['types'][] = [
-				'text' => Apply::TYPE_ARRAY [$v['type']],
-				'value' => (int)$v['type']
-			];
-		}
-		return $this->_return($data, 200);
 	}
 
 	/**
