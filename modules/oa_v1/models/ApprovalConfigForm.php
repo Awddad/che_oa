@@ -3,7 +3,9 @@ namespace app\modules\oa_v1\models;
 
 use app\models\Apply;
 use app\models\ApprovalConfig;
+use app\models\Employee;
 use app\models\Job;
+use app\models\PeoplePic;
 use app\modules\oa_v1\logic\ApprovalConfigLogic;
 use app\modules\oa_v1\logic\OrgLogic;
 use app\modules\oa_v1\logic\BackLogic;
@@ -456,7 +458,7 @@ class ApprovalConfigForm extends BaseForm
                         if ($vv['type'] == 3 || (in_array($vv['type'], [1, 2]) && !in_array($vv['id'], $person_tmp))) {
                             in_array($vv['type'], [1, 2]) && $person_tmp[] = $vv['id'];
                             $data['approval'][$k]['key'] = $v['key'];
-                            $data['approval'][$k]['approval'] = $vv;
+                            $data['approval'][$k]['approval'][] = $vv;
                         }
                     }
                 }
@@ -522,12 +524,13 @@ class ApprovalConfigForm extends BaseForm
      */
     protected function getPersonById($person_id,$type=1)
     {
-        $person = Person::findOne($person_id);
+        $person = (new \yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
         $tmp = [
             'type' => $type,
             'id' => $person['person_id'],
             'label' => $person['person_name'],
             'org' => $person['org_full_name'],
+            'pic' => $person['pic']?:'',
             'default' => 1,//默认，前端不能删除
         ];
         return $tmp;

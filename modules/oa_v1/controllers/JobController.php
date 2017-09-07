@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\controllers;
 
 use app\logic\server\JobServer;
 use app\models\Employee;
+use app\models\PeoplePic;
 use app\models\Person;
 use app\modules\oa_v1\logic\BaseLogic;
 use yii\data\Pagination;
@@ -236,20 +237,21 @@ class JobController extends BaseController
             /**
              * @var $person Person
              */
-            $person = Person::find()->where(['org_id' => $org_id,'profession'=>$profession])->all();
+            $person = (new \yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.org_id' => $org_id,'p.profession'=>$profession])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->all();
             $data =[];
             if($person) {
                 foreach($person as $v) {
                     $data[] = [
-                        'id' => $v->person_id,
-                        'label' => $v->person_name,
-                        'org' => $v->org_full_name,
+                        'id' => $v['person_id'],
+                        'label' => $v['person_name'],
+                        'org' => $v['org_full_name'],
+                        'pic' => $v['pic']?:'',
                     ];
                 }
             }
             return $this->_return($data);
         }else{
-            return $this->_returnError(403,'org_id不能为空！');
+            return $this->_returnError(403,'不能为空！');
         }
     }
 }

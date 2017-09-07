@@ -8,7 +8,9 @@
 
 namespace app\modules\oa_v1\logic;
 
+use app\models\Employee;
 use app\models\Org;
+use app\models\PeoplePic;
 use app\models\Person;
 use app\models\PersonBankInfo;
 use app\models\RoleOrgPermission;
@@ -83,6 +85,11 @@ class PersonLogic extends BaseLogic
             ];
         }
         $data = ArrayHelper::index($data,'id');
+        $ids = array_keys($data);
+        $pic = (new \yii\db\Query())->select('p.pic,e.person_id')->from(PeoplePic::tableName().' p')->rightJoin(Employee::tableName().' e','e.id=p.employee_id')->where(['person_id'=>$ids])->indexBy('person_id')->all();
+        foreach($data as $k=>$v){
+            $data[$k]['pic'] = isset($pic[$k]['pic'])?$pic[$k]['pic']:"";
+        }
         sort($data);
         return $data;
     }
