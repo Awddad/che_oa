@@ -183,9 +183,10 @@ class ApplyListLogic extends BaseLogic
             } else {
                 $des = $apply->next_des;
             }
+            $end_at = $approvalLog->approval_time ? date('Y-m-d H:i',$approvalLog->approval_time) : '--';
             $dataInfo = $this->getDefaultList($apply);
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
-            $dataInfo['end_at'] = date('Y-m-d H:i',$approvalLog->approval_time);
+            $dataInfo['end_at'] = $end_at;
             $dataInfo['next_des'] = $des;
             $data[$k] = $dataInfo;
         }
@@ -255,9 +256,10 @@ class ApplyListLogic extends BaseLogic
             } else {
                 $des = $apply->next_des;
             }
+            $end_at = $apply->end_time ? date('Y-m-d H:i',$apply->end_time) : '--';
             $dataInfo = $this->getDefaultList($apply);
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
-            $dataInfo['end_at'] = date('Y-m-d H:i',$apply->end_time);
+            $dataInfo['end_at'] = $end_at;
             $dataInfo['next_des'] = $des;
             $data[$k] = $dataInfo;
         }
@@ -333,10 +335,11 @@ class ApplyListLogic extends BaseLogic
             } else {
                 $des = $apply->next_des;
             }
+            $end_at = $apply->end_time ? date('Y-m-d H:i',$apply->end_time) : '--';
             $dataInfo = $this->getDefaultList($apply);
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
             $dataInfo['is_read'] = $copy->is_read;
-            $dataInfo['end_at'] = date('Y-m-d H:i',$apply->end_time);
+            $dataInfo['end_at'] = $end_at;
             $dataInfo['next_des'] = $des;
             $data[$k] = $dataInfo;
         }
