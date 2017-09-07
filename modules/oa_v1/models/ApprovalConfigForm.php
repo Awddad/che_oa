@@ -452,21 +452,30 @@ class ApprovalConfigForm extends BaseForm
                 'copy_rule' => $model->copy_rule,
             ];
             $approval = $this->getConfig($model->approval,$org_id);
-            if($model->distinct) {
-                foreach ($approval as $k => $v) {
-                    $person_tmp = [$user->person_id];
-                    foreach ($v['approval'] as $vv) {
-                        if ($vv['type'] == 3 || (in_array($vv['type'], [1, 2]) && !in_array($vv['id'], $person_tmp))) {
-                            in_array($vv['type'], [1, 2]) && $person_tmp[] = $vv['id'];
-                            $data['approval'][$k]['key'] = $v['key'];
-                            $data['approval'][$k]['approval'][] = $vv;
+            foreach ($approval as $k => &$v) {
+                $person_tmp = [$user->person_id];
+                foreach ($v['approval'] as $kk => &$vv) {
+                    if(in_array($vv['type'], [1, 2])){
+                        if(in_array($vv['id'], $person_tmp)) {
+                            unset($vv);
+                        }elseif( $model->distinct ){//是否去重
+                            $person_tmp[] = $vv['id'];
+                        }
+                    }elseif($vv['type'] == 3){
+                        foreach($vv['person'] as $kkk => &$vvv){
+                            if(in_array($vvv['id'], $person_tmp)){
+                                unset($vvv);
+                            }elseif( $model->distinct ){//是否去重
+                                $person_tmp[] = $vvv['id'];
+                            }
+                        }
+                        if(count($vv['person']) <= 0){
+                            unset($vv);
                         }
                     }
                 }
-            }else{
-                $data['approval'] = $approval;
             }
-
+            $data['approval'] = $approval;
         }
         return $data;
     }
@@ -503,7 +512,8 @@ class ApprovalConfigForm extends BaseForm
                             $tmp_person && $tmp[] = $tmp_person;
                             break;
                         case 3://职位
-                            $tmp[] = $this->getJobById($vv['value'],$org_id);
+                            $tmp_job = $this->getJobById($vv['value'],$org_id);
+                            $tmp_job && $tmp[] = $tmp_job;
                             break;
                     }
 
@@ -584,6 +594,7 @@ class ApprovalConfigForm extends BaseForm
                 'name' => $job->name,
             ];
         }else{
+            $tmp = [];
             $job = Job::findOne($id);
             $company_id = QuanXianServer::instance()->getCompanyId($org_id);
             $persons = (new \yii\db\Query())
