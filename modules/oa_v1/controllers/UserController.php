@@ -49,6 +49,10 @@ class UserController extends BaseController
     {
         $model = new EmployeeInfoForm();
         $employee = $this->arrPersonInfo->employee;
+        if ($employee) {
+            return [];
+        }
+        
         $baseInfo = $model->getEmpInfoByEmployee($employee);
         $service  = $model->getServiceEmployee($employee);
         $bandCards  = $model->getBandCardsEmployee($employee);
