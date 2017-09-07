@@ -49,7 +49,7 @@ class UserController extends BaseController
     {
         $model = new EmployeeInfoForm();
         $employee = $this->arrPersonInfo->employee;
-        if ($employee) {
+        if (empty($employee)) {
             return [];
         }
         
