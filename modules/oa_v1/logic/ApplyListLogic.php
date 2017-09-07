@@ -209,7 +209,7 @@ class ApplyListLogic extends BaseLogic
     
         $query->where(['person_id' => $this->person->person_id]);
     
-        $this->getQueryParam($query);
+        $query = $this->getQueryParam($query);
     
         //排序
         $sort = \Yii::$app->request->get('sort');
@@ -408,6 +408,18 @@ class ApplyListLogic extends BaseLogic
             }
             $query->andWhere(['in', 'a.status', $arr_status]);
         }
+    
+        //时间搜索
+        if (\Yii::$app->request->get('start_time') && \Yii::$app->request->get('end_time')) {
+            $start_time = strtotime(\Yii::$app->request->get('start_time') . ' 0:0:0');
+            $end_time = strtotime(\Yii::$app->request->get('end_time') . ' 23:59:59');
+            $query->andWhere([
+                'and',
+                ['>', 'create_time', $start_time],
+                ['<', 'create_time', $end_time]
+            ]);
+        }
+        
     
     
         //关键词搜索
