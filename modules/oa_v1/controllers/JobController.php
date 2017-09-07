@@ -231,13 +231,13 @@ class JobController extends BaseController
      */
     public function actionGetPerson()
     {
-        $org_id = Yii::$app->request->get('org_id',0);
+        $company_id = Yii::$app->request->get('company_id',0);
         $profession = Yii::$app->request->get('profession',0);
-        if($org_id && $profession) {
+        if($company_id && $profession) {
             /**
              * @var $person Person
              */
-            $person = (new \yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.org_id' => $org_id,'p.profession'=>$profession])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->all();
+            $person = (new \yii\db\Query())->select('p.*,pic.*')->from(Person::tableName().' p')->where(['p.company_id' => $company_id,'p.profession'=>$profession])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->all();
             $data =[];
             if($person) {
                 foreach($person as $v) {
@@ -251,7 +251,7 @@ class JobController extends BaseController
             }
             return $this->_return($data);
         }else{
-            return $this->_returnError(403,'不能为空！');
+            return $this->_returnError(403,'参数不能为空！');
         }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\logic\server\QuanXianServer;
 use app\models\Apply;
 use app\models\ApprovalConfig;
 use app\models\Employee;
@@ -502,7 +503,7 @@ class ApprovalConfigForm extends BaseForm
                             $tmp_person && $tmp[] = $tmp_person;
                             break;
                         case 3://职位
-                            $tmp[] = $this->getJobById($vv['value']);
+                            $tmp[] = $this->getJobById($vv['value'],$org_id);
                             break;
                     }
 
@@ -573,14 +574,41 @@ class ApprovalConfigForm extends BaseForm
      * @param $id
      * @return array
      */
-    protected function getJobById($id)
+    protected function getJobById($id,$org_id)
     {
-        $job = Job::findOne($id);
-        $tmp = [
-            'type' => 3,
-            'id' => $job->id,
-            'name' => $job->name,
-        ];
+        if($org_id <= 0 ) {
+            $job = Job::findOne($id);
+            $tmp = [
+                'type' => 3,
+                'id' => $job->id,
+                'name' => $job->name,
+            ];
+        }else{
+            $job = Job::findOne($id);
+            $company_id = QuanXianServer::instance()->getCompanyId($org_id);
+            $persons = (new \yii\db\Query())
+                ->select('p.*,pic.pic')
+                ->from(Person::tableName().' p')
+                ->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')
+                ->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')
+                ->where(['p.company_id'=>$company_id,'e.profession'=>$job->id])
+                ->all();
+            if($persons) {
+                $tmp = [
+                    'type' => 3,
+                    'id' => $job->id,
+                    'name' => $job->name,
+                ];
+                foreach ($persons as $person) {
+                    $tmp['person'][] = [
+                        'id' => $person['person_id'],
+                        'label' => $person['person_name'],
+                        'org' => $person['org_full_name'],
+                        'pic' => $person['pic'] ?: '',
+                    ];
+                }
+            }
+        }
         return $tmp;
     }
 
@@ -614,11 +642,13 @@ class ApprovalConfigForm extends BaseForm
                 if($v <= 0){
                     continue;
                 }
-                $person = Person::findOne($v);
+                //$person = Person::findOne($v);
+                $person = (new \yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.person_id'=>$v])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
                 $res[] = [
                     'id' => $person['person_id'],
                     'label' => $person['person_name'],
                     'org' => $person['org_full_name'],
+                    'pic' => $person['pic'] ?:'',
                     'default' => 1,//默认，前端不能删除
                 ];
             }
