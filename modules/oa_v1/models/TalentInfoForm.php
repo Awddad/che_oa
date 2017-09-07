@@ -7,7 +7,6 @@ use app\models\Job;
 use yii\helpers\ArrayHelper;
 use app\models\Educational;
 use app\models\Political;
-use app\models\Region;
 use app\modules\oa_v1\logic\RegionLogic;
 
 class TalentInfoForm extends BaseForm

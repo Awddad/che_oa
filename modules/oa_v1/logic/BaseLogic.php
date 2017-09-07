@@ -38,6 +38,7 @@ class BaseLogic extends Logic
         '13' => '\app\models\ApplyOpen',
         '14' => '\app\models\GoodsUp',
         '15' => '\app\models\ApplyTravel',
+        '16' => '\app\models\ApplyProjectRole',
     ];
     
     protected $typeMethod = [
@@ -55,7 +56,6 @@ class BaseLogic extends Logic
         12 => 'Transfer',
         13 => 'Open',
         14 => 'GoodsUp',
-        15 => 'Travel',
     ];
     
     /**

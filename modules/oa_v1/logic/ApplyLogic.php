@@ -4,12 +4,7 @@ namespace app\modules\oa_v1\logic;
 
 
 use app\models as appmodel;
-use app\modules\oa_v1\models\ApplyBuyForm;
-use app\modules\oa_v1\models\ApplyPayForm;
-use app\modules\oa_v1\models\BackForm;
-use app\modules\oa_v1\models\BaoxiaoForm;
 use app\modules\oa_v1\models\BaseForm;
-use app\modules\oa_v1\models\LoanForm;
 use yii\data\Pagination;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
@@ -22,258 +17,286 @@ use app\models\ApprovalLog;
  */
 class ApplyLogic extends BaseLogic
 {
-	/**
-	 * 获取申请列表
-	 * @param array $search
-	 * @param array $user
+    /**
+     * 获取申请列表
      *
-     * @return array
-	 */
-	public function getApplyList($search,$user)
-	{
-		$type = $search['type'];
-		$page = isset($search['page']) ? (1 <= $search['page'] ? (int)$search['page'] : 1) : 1;
-		$page_size = @$search['page_size'] ? : 20;
-		$keywords = $search['keywords'];
-		$keywords = trim($keywords);
-		if(isset($search['at']) && $search['at'] != '') {
+     * @param array $search
+     * @param array $user
+     *
+     * @return array | bool
+     */
+    public function getApplyList($search, $user)
+    {
+        $type = $search['type'];
+        
+        $query = appmodel\Apply::find()->alias('a');
+        
+        if (1 == $type) {//待我审批
+            $query->join('LEFT JOIN', appmodel\ApprovalLog::tableName() . ' l', 'a.apply_id = l.apply_id')
+                ->andWhere(['approval_person_id' => $user['person_id'], 'is_to_me_now' => 1])
+                ->andWhere(['or', 'a.status=1', 'a.status=11']);
+        } elseif (2 == $type) {//我已审批
+            $query->join('LEFT JOIN', appmodel\ApprovalLog::tableName() . ' l', 'a.apply_id = l.apply_id')
+                ->where(['approval_person_id' => $user['person_id']])
+                ->andWhere(['>', 'result', 0]);
+        } elseif (3 == $type) {//我发起的
+            $query->where(['person_id' => $user['person_id']]);
+        } elseif (4 == $type) {//抄送给我的
+            $query->join('LEFT JOIN', appmodel\ApplyCopyPerson::tableName() . ' c', 'a.apply_id = c.apply_id')
+                ->where(['copy_person_id' => $user['person_id']])
+                ->andWhere(['in', 'a.status', [4, 5, 99]]);
+        } else {
+            return false;
+        }
+        
+        $page = isset($search['page']) ? (1 <= $search['page'] ? (int)$search['page'] : 1) : 1;
+        $page_size = @$search['page_size'] ?: 20;
+        
+        //时间搜索
+        if (@$search['start_time'] && @$search['end_time']) {
+            $start_time = strtotime($search['start_time'] . ' 0:0:0');
+            $end_time = strtotime($search['end_time'] . ' 23:59:59');
+            $query->andWhere([
+                'and',
+                ['>', 'create_time', $start_time],
+                ['<', 'create_time', $end_time]
+            ]);
+        }
+        
+        //关键词搜索
+        $keywords = trim($search['keywords']);
+        if ($keywords) {
+            $query->andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
+        }
+        //状态
+        if (isset($search['status']) && $search['status']) {
+            
+            $arr_status = [];
+            foreach ($search['status'] as $v) {
+                switch ($v) {
+                    case 1://审核中
+                        array_push($arr_status, 1, 11);
+                        break;
+                    case 2://财务确认中
+                        array_push($arr_status, 4);
+                        break;
+                    case 3://撤销
+                        array_push($arr_status, 3);
+                        break;
+                    case 4://审核不通过
+                        array_push($arr_status, 2);
+                        break;
+                    case 5://完成
+                        array_push($arr_status, 99);
+                        break;
+                    case 6://财务驳回
+                        array_push($arr_status, 5);
+                        break;
+                    case 7://付款失败
+                        array_push($arr_status, 6, 7);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            $query->andWhere(['in', 'status', $arr_status]);
+        }
+        
+        //类型
+        if (isset($search['at']) && $search['at'] != '') {
             $apply_type = (array)@$search['at'];
         } else {
             $apply_type = null;
         }
-		
-		$query = appmodel\Apply::find()->alias('a');
-
-		if(1 == $type){//待我审批
-			$query->join('LEFT JOIN', appmodel\ApprovalLog::tableName().' l', 'a.apply_id = l.apply_id')
-				->andWhere(['approval_person_id'=>$user['person_id'],'is_to_me_now'=>1])
-				->andWhere(['or', 'a.status=1', 'a.status=11']);
-		}elseif(2 == $type){//我已审批
-			$query->join('LEFT JOIN', appmodel\ApprovalLog::tableName().' l', 'a.apply_id = l.apply_id')
-				->where(['approval_person_id' => $user['person_id']])
-				->andWhere(['>', 'result', 0]);
-		}elseif(3 == $type){//我发起的
-			$query-> where(['person_id'=>$user['person_id']]);
-		}elseif(4 == $type){//抄送给我的
-			$query->join('LEFT JOIN', appmodel\ApplyCopyPerson::tableName().' c', 'a.apply_id = c.apply_id')
-				->where(['copy_person_id'=>$user['person_id']])
-				->andWhere(['in', 'a.status', [4 , 5, 99]]);
-		}else{
-			return false;
-		}
-		//开始时间
-		if(@$search['start_time']){
-			$start_time = strtotime($search['start_time'].' 0:0:0');
-			$query -> andWhere(['>','create_time',$start_time]);
-		}
-		//结束时间
-		if(@$search['end_time']){
-			$end_time = strtotime($search['end_time'].' 23:59:59');
-			$query -> andWhere(['<','create_time',$end_time]);
-		}
-		//关键词
-		if($keywords){
-			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
-		}
-		//状态
-		if(isset($search['status']) && $search['status']){
-
-			$arr_status = [];
-			foreach($search['status'] as $v){
-				switch($v){
-					case 1://审核中
-						array_push($arr_status ,1,11);
-						break;
-					case 2://财务确认中
-						array_push($arr_status ,4);
-						break;
-					case 3://撤销
-						array_push($arr_status ,3);
-						break;
-					case 4://审核不通过
-						array_push($arr_status ,2);
-						break;
-					case 5://完成
-						array_push($arr_status ,99);
-						break;
-					default:
-						break;
-				}
-			}
-			if(count($arr_status) == 1){
-				$query -> andWhere(['status'=>$arr_status[0]]);
-			}elseif(count($arr_status) > 1){
-				$query -> andWhere(['in','status',$arr_status]);
-			}
-		}
+        if ($apply_type) {
+            $query->andWhere(['in', 'a.type', $apply_type]);
+        }
+        
+        if ($search['type'] == 4 && isset($search['is_read']) && $search['is_read']) {
+            $query->andWhere(['c.is_read' => $search['is_read']]);
+        }
+        
+        $_query = clone $query;
+        $total = $_query->count();
+        
+        $pagination = new Pagination(['totalCount' => $total]);
+        //当前页
+        $pagination->setPage($page - 1);
+        //每页显示条数
+        $pagination->setPageSize($page_size, true);
+        
+        //排序
+        switch (@$search['sort']) {
+            case 'asc'://时间顺序
+                $orderBy = ['create_time' => SORT_ASC];
+                break;
+            default://时间倒序
+                $orderBy = ['create_time' => SORT_DESC];
+                break;
+        }
+        
+        if ($search['type'] == 4) {
+            $orderBy = ['c.pass_at' => SORT_DESC];
+        }
+        
+        
+        $query->select('*')->orderBy($orderBy)->offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+        //var_dump($query->createCommand()->getRawSql());die();
+        $res = $query->asArray()->all();
+        //var_dump($res);die();
+        
+        
         /**
          * 类型筛选
          */
         $_query = clone $query;
         $_query->select('a.type')->groupBy('a.type');
-        //var_dump($_query -> createCommand()->getRawSql());die();
         $types = $_query->asArray()->all();
-        //var_dump($types);die();
-
-		//类型
-		if($apply_type){
-			$query -> andWhere(['in','a.type' , $apply_type]);
-		}
         
-        if($search['type'] == 4 && isset($search['is_read']) && $search['is_read']) {
-            $query->andWhere(['c.is_read' => $search['is_read']]);
+        return [
+            'data' => $res,
+            'pages' => $this->pageFix($pagination),
+            'types' => $types,
+        ];
+        
+    }
+    
+    /**
+     * 获取申请详情
+     *
+     * @param int $apply_id 审批号
+     * @param int $type 审批类型
+     */
+    public function getApplyInfo($apply_id, $type = null)
+    {
+        $app_model = new appmodel\Apply();
+        $apply = $app_model::find()->where(['apply_id' => $apply_id])->asArray()->one();
+        if (!$apply || ($type && $type != $apply['type'])) {
+            return false;
         }
-		
-		$_query = clone $query;
-		//var_dump($_query->createCommand()->getRawSql());die();
-		$total = $_query->count();
-		//var_dump($total);die();
-
-		$pagination = new Pagination(['totalCount' => $total]);
-		//当前页
-		$pagination->setPage($page-1);
-		//每页显示条数
-		$pagination->setPageSize($page_size, true);
-
-		//排序
-		switch(@$search['sort']){
-			case 'asc'://时间顺序
-				$orderBy = ['create_time'=>SORT_ASC];
-				break;
-			default://时间倒序
-				$orderBy = ['create_time'=>SORT_DESC];
-				break;
-		}
+        $caiwu = ['shoukuan' => [], 'fukuan' => []];
+        switch ($apply['type']) {
+            case 1://报销
+                $info = $this->getBaoxiaoInfo($apply_id);
+                $caiwu['fukuan'] = $this->getFukuanInfo($apply_id);
+                break;
+            case 2://借款
+                $info = $this->getJiekuanInfo($apply_id);
+                $caiwu['fukuan'] = $this->getFukuanInfo($apply_id);
+                break;
+            case 3://还款
+                $info = $this->getPaybackInfo($apply_id);
+                $caiwu['shoukuan'] = $this->getShoukuanInfo($apply_id);
+                break;
+            default:
+                $info = '';
+                break;
+        }
+        $apply['info'] = $info;
+        $apply['caiwu'] = $caiwu;
+        $apply['approval'] = $this->getApproval($apply_id);;
+        $apply['copy_person'] = $this->getCopyPerson($apply_id);
         
-        if($search['type'] == 4) {
-            $orderBy = ['c.pass_at' => SORT_DESC];
+        return $apply;
+    }
+    
+    /**
+     * 报销明细
+     *
+     * @param int $apply_id
+     */
+    public function getBaoxiaoInfo($apply_id)
+    {
+        $model = new appmodel\BaoXiao();
+        $_model = new appmodel\BaoXiaoList();
+        $info = $model::find()->where(['apply_id' => $apply_id])->asArray()->one();
+        if ($info['bao_xiao_list_ids'])
+            $info['list'] = $_model::find()->where("id in ({$info['bao_xiao_list_ids']})")->asArray()->all();;
+        
+        return $info;
+    }
+    
+    /**
+     * 借款明细
+     *
+     * @param int $apply_id
+     */
+    public function getJiekuanInfo($apply_id)
+    {
+        $model = new appmodel\JieKuan();
+        $info = $model::find()->where(['apply_id' => $apply_id])->asArray()->one();
+        
+        return $info;
+    }
+    
+    /**
+     * 还款明细
+     *
+     * @param int $apply_id
+     */
+    public function getPaybackInfo($apply_id)
+    {
+        $model = new appmodel\PayBack();
+        $info = $model::find()->where(['apply_id' => $apply_id])->asArray()->one();
+        if ($info['jie_kuan_ids']) {
+            $_model = new appmodel\JieKuan();
+            $info['list'] = $_model::find()->where("apply_id in ({$info['jie_kuan_ids']})")->asArray()->all();
         }
         
-		
-		$query -> select('*')->orderBy($orderBy)->offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
-		//var_dump($query->createCommand()->getRawSql());die();
-		$res = $query->asArray()->all();
-		//var_dump($res);die();
-		
-		return [
-			'data' => $res,
-			'pages' => $this->pageFix($pagination),
-			'types' => $types,
-		];
-		
-	}
-	/**
-	 * 获取申请详情
-	 * @param int $apply_id 审批号
-	 * @param int $type 审批类型
-	 */
-	public function getApplyInfo($apply_id,$type = null)
-	{
-		$app_model = new appmodel\Apply();
-		$apply = $app_model::find() -> where(['apply_id'=>$apply_id]) -> asArray() -> one() ;
-		if(!$apply || ($type && $type != $apply['type'])){
-			return false;
-		}
-		$caiwu = ['shoukuan'=>[],'fukuan'=>[]];
-		switch($apply['type']){
-			case 1://报销
-				$info = $this -> getBaoxiaoInfo($apply_id);
-				$caiwu['fukuan'] = $this -> getFukuanInfo($apply_id);
-				break;
-			case 2://借款
-				$info = $this -> getJiekuanInfo($apply_id);
-				$caiwu['fukuan'] = $this -> getFukuanInfo($apply_id);
-				break;
-			case 3://还款
-				$info = $this -> getPaybackInfo($apply_id);
-				$caiwu['shoukuan'] = $this -> getShoukuanInfo($apply_id);
-				break;
-			default:
-				break;
-		}
-		$apply['info'] = $info;
-		$apply['caiwu'] = $caiwu;
-		$apply['approval'] =  $this -> getApproval($apply_id);;
-		$apply['copy_person'] = $this -> getCopyPerson($apply_id);
-		return $apply;
-	}
-	/**
-	 * 报销明细
-	 * @param int $apply_id
-	 */
-	public function getBaoxiaoInfo($apply_id)
-	{
-		$model = new appmodel\BaoXiao();
-		$_model = new appmodel\BaoXiaoList();
-		$info = $model::find() -> where(['apply_id' => $apply_id]) -> asArray() -> one();
-		if($info['bao_xiao_list_ids'])
-			$info['list'] = $_model::find() -> where("id in ({$info['bao_xiao_list_ids']})") -> asArray() -> all();;
-		return $info;
-	}
-	/**
-	 * 借款明细
-	 * @param int $apply_id
-	 */
-	public function getJiekuanInfo($apply_id)
-	{
-		$model = new appmodel\JieKuan();
-		$info = $model::find() -> where(['apply_id'=>$apply_id]) -> asArray() -> one();
-		return $info;
-	}
-	/**
-	 * 还款明细
-	 * @param int $apply_id
-	 */
-	public function getPaybackInfo($apply_id)
-	{
-		$model = new appmodel\PayBack();
-		$info = $model::find() -> where(['apply_id'=>$apply_id]) -> asArray() -> one();
-		if($info['jie_kuan_ids']){
-			$_model = new appmodel\JieKuan();
-			$info['list'] = $_model::find() -> where("apply_id in ({$info['jie_kuan_ids']})") -> asArray() -> all();
-		}
-		return $info;
-	}
-	/**
-	 * 财务付款信息
-	 * @param int $apply_id
-	 */
-	public function getFukuanInfo($apply_id)
-	{
-		$model = new appmodel\CaiWuFuKuan();
-		$fukuan = $model::find() -> where(['apply_id' => $apply_id]) -> asArray() -> one();
-		return $fukuan;
-	}
-	/**
-	 * 财务收款信息
-	 * @param int $apply_id
-	 */
-	public function getShoukuanInfo($apply_id)
-	{
-		$model = new appmodel\CaiWuShouKuan();
-		$shoukuan = $model::find() -> where(['apply_id' => $apply_id]) -> asArray() -> one();
-		return $shoukuan;
-	}
-	/**
-	 * 审批人信息
-	 * @param int $apply_id
-	 */
-	public function getApproval($apply_id)
-	{
-		$model = new appmodel\ApprovalLog();
-		$approval = $model::find() -> where(['apply_id' => $apply_id]) -> orderBy('steep') -> asArray() -> all();
-		return $approval;
-	}
-	/**
-	 * 抄送人信息
-	 * @param int $apply_id
-	 */
-	public function getCopyPerson($apply_id)
-	{
-		$model = new appmodel\ApplyCopyPerson();
-		$copy_person = $model::find() -> where(['apply_id' => $apply_id]) -> asArray() -> all();
-		return $copy_person;
-	}
+        return $info;
+    }
+    
+    /**
+     * 财务付款信息
+     *
+     * @param int $apply_id
+     */
+    public function getFukuanInfo($apply_id)
+    {
+        $model = new appmodel\CaiWuFuKuan();
+        $fukuan = $model::find()->where(['apply_id' => $apply_id])->asArray()->one();
+        
+        return $fukuan;
+    }
+    
+    /**
+     * 财务收款信息
+     *
+     * @param int $apply_id
+     */
+    public function getShoukuanInfo($apply_id)
+    {
+        $model = new appmodel\CaiWuShouKuan();
+        $shoukuan = $model::find()->where(['apply_id' => $apply_id])->asArray()->one();
+        
+        return $shoukuan;
+    }
+    
+    /**
+     * 审批人信息
+     *
+     * @param int $apply_id
+     */
+    public function getApproval($apply_id)
+    {
+        $model = new appmodel\ApprovalLog();
+        $approval = $model::find()->where(['apply_id' => $apply_id])->orderBy('steep')->asArray()->all();
+        
+        return $approval;
+    }
+    
+    /**
+     * 抄送人信息
+     *
+     * @param int $apply_id
+     */
+    public function getCopyPerson($apply_id)
+    {
+        $model = new appmodel\ApplyCopyPerson();
+        $copy_person = $model::find()->where(['apply_id' => $apply_id])->asArray()->all();
+        
+        return $copy_person;
+    }
     
     /**
      * 待我审批
@@ -282,14 +305,14 @@ class ApplyLogic extends BaseLogic
      *
      * @return int|string
      */
-	public function getToMe($personId)
+    public function getToMe($personId)
     {
         return appmodel\ApprovalLog::find()->alias('a')->rightJoin('oa_apply b', 'b.apply_id = a.apply_id')->where([
             'approval_person_id' => $personId,
             'is_to_me_now' => 1
         ])->andWhere([
             'in', 'b.status', [1, 11]
-        ])->count() ? : 0;
+        ])->count() ?: 0;
     }
     
     /**
@@ -305,7 +328,7 @@ class ApplyLogic extends BaseLogic
             'a.approval_person_id' => $personId,
         ])->andWhere([
             '>', 'a.result', 0
-        ])->count()  ? : 0;
+        ])->count() ?: 0;
     }
     
     /**
@@ -319,7 +342,7 @@ class ApplyLogic extends BaseLogic
     {
         return appmodel\Apply::find()->where([
             'person_id' => $personId,
-        ])->count()  ? : 0;
+        ])->count() ?: 0;
     }
     
     /**
@@ -334,8 +357,8 @@ class ApplyLogic extends BaseLogic
         return appmodel\ApplyCopyPerson::find()->alias('a')->rightJoin('oa_apply b', 'a.apply_id = b.apply_id')->where([
             'a.copy_person_id' => $personId,
         ])->andWhere([
-            'in', 'b.status', [4 , 5, 99]
-        ])->count() ? : 0;
+            'in', 'b.status', [4, 5, 99]
+        ])->count() ?: 0;
     }
     
     /**
@@ -348,58 +371,15 @@ class ApplyLogic extends BaseLogic
      */
     public function addFiles($apply, $files)
     {
-        switch ($apply->type) {
-            case 2:
-                $info = $apply->loan;
-                break;
-            case 4:
-                $info = $apply->applyPay;
-                break;
-            case 5:
-                $info = $apply->applyBuy;
-                break;
-            case 6:
-                $info = $apply->applyDemand;
-                break;
-            case 7:
-                $info = $apply->applyUseChapter;
-                break;
-            case 8:
-                $info = $apply->assetGet;
-                break;
-            case 9:
-                $info = $apply->assetBack;
-                break;
-            case 10:
-                $info = $apply->applyPositive;
-                break;
-            case 11:
-                $info = $apply->applyLeave;
-                break;
-            case 12:
-                $info = $apply->applyTransfer;
-                break;
-            case 13:
-                $info = $apply->applyOpen;
-                break;
-            case 14:
-                $info = $apply->goodsUp;
-                break;
-            case 15:
-                $info = $apply->travel;
-                break;
-            default:
-                $info = $apply->expense;
-                break;
-        }
-        if($apply->type == 2) {
-            $info->pics = json_encode(ArrayHelper::merge(json_decode($info->pics), $files));
+        if ($apply->type == 2) {
+            $apply->info->pics = json_encode(ArrayHelper::merge(json_decode($apply->info->pics), $files));
         } else {
-            $info->files = json_encode(ArrayHelper::merge(json_decode($info->files), $files));
+            $apply->info->files = json_encode(ArrayHelper::merge(json_decode($apply->info->files), $files));
         }
-        if ($info->save()) {
+        if ($apply->info->save()) {
             return true;
         }
+        
         return false;
     }
     
@@ -416,37 +396,41 @@ class ApplyLogic extends BaseLogic
         $apply = appmodel\Apply::findOne($applyId);
         if (empty($apply) || $apply->status != 6 || !in_array($apply->type, [1, 2, 3, 4, 5])) {
             $this->error = '申请单不存在，或者该申请单不能重新申请';
+            
             return false;
         }
         $bank_card_id = \Yii::$app->request->post('bank_card_id');
         $bank_name = \Yii::$app->request->post('bank_name');
-        if($apply->type == 4 || $apply->type == 5) {
+        if ($apply->type == 4 || $apply->type == 5) {
             $to_name = \Yii::$app->request->post('to_name');
             if (!$bank_card_id || !$bank_name || !$to_name) {
                 $this->error = '参数错误';
+                
                 return false;
             }
         } else {
             if (!$bank_card_id || !$bank_name) {
                 $this->error = '参数错误';
+                
                 return false;
             }
         }
-        if ($apply &&  $apply->person_id != $person->person_id){
+        if ($apply && $apply->person_id != $person->person_id) {
             $this->error = '错误操作';
+            
             return false;
         }
         // 添加到账号银行卡
         if ($apply->type == 1 || $apply->type == 2) {
             PersonLogic::instance()->addBackCard($bank_card_id, $bank_name, $apply->person_id);
         }
-        if($apply->type == 1) {
+        if ($apply->type == 1) {
             return $this->reExpense($apply, $bank_name, $bank_card_id);
-        } elseif($apply->type == 2) {
+        } elseif ($apply->type == 2) {
             return $this->reLoan($apply, $bank_name, $bank_card_id);
-        } elseif($apply->type == 3) {
+        } elseif ($apply->type == 3) {
             return $this->rePayBack($apply);
-        } elseif($apply->type == 4) {
+        } elseif ($apply->type == 4) {
             return $this->reApplyPay($apply, $bank_name, $bank_card_id, $to_name);
         } else {
             return $this->reApplyBuy($apply, $bank_name, $bank_card_id, $to_name);
@@ -480,9 +464,10 @@ class ApplyLogic extends BaseLogic
         $apply->apply_list_pdf = $reApply->apply_list_pdf;
         $apply->cai_wu_need = $reApply->cai_wu_need;
         $apply->org_id = $reApply->org_id;
+        $apply->copy_rule = $reApply->copy_rule;
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
-        try{
+        try {
             if (!$apply->save()) {
                 throw new Exception('付款申请单创建失败');
             }
@@ -504,7 +489,7 @@ class ApplyLogic extends BaseLogic
                 }
                 $listIds = [$baoXiaoList->id];
             }
-            $baoXiao =  new appmodel\BaoXiao();
+            $baoXiao = new appmodel\BaoXiao();
             $baoXiao->apply_id = $apply->apply_id;
             $baoXiao->bank_card_id = $bankCardId;
             $baoXiao->bank_name = $bankName;
@@ -526,6 +511,7 @@ class ApplyLogic extends BaseLogic
             $transaction->rollBack();
             throw $e;
         }
+        
         return $apply->apply_id;
     }
     
@@ -556,11 +542,12 @@ class ApplyLogic extends BaseLogic
         $apply->apply_list_pdf = $reApply->apply_list_pdf;
         $apply->cai_wu_need = $reApply->cai_wu_need;
         $apply->org_id = $reApply->org_id;
+        $apply->copy_rule = $reApply->copy_rule;
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
-        try{
+        try {
             if (!$apply->save()) {
-                throw new Exception('申请失败',$apply->errors);
+                throw new Exception('申请失败', $apply->errors);
             }
             $this->approvalPerson($apply, $reApply->apply_id);
             $this->copyPerson($apply, $reApply->apply_id);
@@ -572,7 +559,7 @@ class ApplyLogic extends BaseLogic
             $model->apply_id = $apply->apply_id;
             $model->bank_name = $bankName;
             $model->bank_card_id = $bankCardId;
-            $model->bank_name_des = $loan->bank_name_des ? : '';
+            $model->bank_name_des = $loan->bank_name_des ?: '';
             $model->pics = $loan->pics;
             $model->money = $loan->money;
             $model->des = $loan->des;
@@ -590,10 +577,11 @@ class ApplyLogic extends BaseLogic
                 throw new Exception('重新申请失败');
             }
             $transaction->commit();
-        } catch (Exception $exception){
+        } catch (Exception $exception) {
             $transaction->rollBack();
             throw $exception;
         }
+        
         return $apply->apply_id;
     }
     
@@ -637,6 +625,7 @@ class ApplyLogic extends BaseLogic
         $apply->apply_list_pdf = $reApply->apply_list_pdf;
         $apply->cai_wu_need = $reApply->cai_wu_need;
         $apply->org_id = $reApply->org_id;
+        $apply->copy_rule = $reApply->copy_rule;
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             if (!$apply->save()) {
@@ -646,7 +635,7 @@ class ApplyLogic extends BaseLogic
              * @var appmodel\ApplyPay $pay
              */
             $pay = $reApply->applyPay;
-            $applyPay =  new appmodel\ApplyPay();
+            $applyPay = new appmodel\ApplyPay();
             $applyPay->apply_id = $apply->apply_id;
             $applyPay->bank_card_id = $bankCardId;
             $applyPay->bank_name = $bankName;
@@ -671,6 +660,7 @@ class ApplyLogic extends BaseLogic
             $transaction->rollBack();
             throw $e;
         }
+        
         return $apply->apply_id;
     }
     
@@ -702,6 +692,7 @@ class ApplyLogic extends BaseLogic
         $apply->apply_list_pdf = $reApply->apply_list_pdf;
         $apply->cai_wu_need = $reApply->cai_wu_need;
         $apply->org_id = $reApply->org_id;
+        $apply->copy_rule = $reApply->copy_rule;
         $transaction = \Yii::$app->db->beginTransaction();
         try {
             if (!$apply->save()) {
@@ -711,7 +702,7 @@ class ApplyLogic extends BaseLogic
              * @var appmodel\ApplyBuy $buy
              */
             $buy = $reApply->applyBuy;
-            $applyPay =  new appmodel\ApplyBuy();
+            $applyPay = new appmodel\ApplyBuy();
             $applyPay->apply_id = $apply->apply_id;
             $applyPay->bank_card_id = $bankCardId;
             $applyPay->bank_name = $bankName;
@@ -751,6 +742,7 @@ class ApplyLogic extends BaseLogic
             $transaction->rollBack();
             throw $e;
         }
+        
         return $apply->apply_id;
     }
     
@@ -769,7 +761,7 @@ class ApplyLogic extends BaseLogic
         /**
          * @var appmodel\ApprovalLog $v
          */
-        foreach ($approvalLogs as  $v) {
+        foreach ($approvalLogs as $v) {
             $approval = new appmodel\ApprovalLog();
             $approval->apply_id = $apply->apply_id;
             $approval->approval_person_id = $v->approval_person_id;
@@ -777,18 +769,20 @@ class ApplyLogic extends BaseLogic
             $approval->steep = $v->steep;
             $approval->is_end = $v->is_end;
             $approval->is_to_me_now = $v->is_to_me_now;
-            $approval->des = '付款失败，重新申请，关联订单号为：'.$oldApplyId;
+            $approval->des = '付款失败，重新申请，关联订单号为：' . $oldApplyId;
             $approval->result = $v->result;
             $approval->approval_time = time();
             if (!$approval->save()) {
                 throw new Exception('审批人保存失败');
             }
         }
+        
         return true;
     }
     
     /**
      * 抄送人
+     *
      * @param appmodel\Apply $apply
      * @param $oldApplyId
      *
@@ -801,7 +795,7 @@ class ApplyLogic extends BaseLogic
         /**
          * @var appmodel\ApplyCopyPerson $v
          */
-        foreach ($ApplyCopyPerson as  $v) {
+        foreach ($ApplyCopyPerson as $v) {
             $copyPerson = new appmodel\ApplyCopyPerson();
             $copyPerson->apply_id = $apply->apply_id;
             $copyPerson->copy_person = $v->copy_person;
@@ -810,6 +804,7 @@ class ApplyLogic extends BaseLogic
                 throw new Exception('审批人保存失败');
             }
         }
+        
         return true;
     }
     
@@ -821,130 +816,137 @@ class ApplyLogic extends BaseLogic
     public function getApplyId($type)
     {
         $form = new BaseForm();
+        
         return $form->createApplyId($type);
     }
     
     /**
      * 获得说明
+     *
      * @param string $apply_id 审批单号
      * @param int $type 审批类型
      */
-    public function getApplyDes($apply_id,$type)
+    public function getApplyDes($apply_id, $type)
     {
         $model_name = $this->apply_model[$type];
         $des = '';
-        if(method_exists($model_name, 'getDes')){
+        if (method_exists($model_name, 'getDes')) {
             $des = $model_name::getDes($apply_id);
         }
+        
         return $des;
     }
+    
     /**
      * 获得审批不通过原因
+     *
      * @param string $apply_id
      */
     public function getApprovalDes($apply_id)
     {
-        $appprval_model = ApprovalLog::find()->where(['apply_id'=>$apply_id,'result'=>2])->one();
+        $appprval_model = ApprovalLog::find()->where(['apply_id' => $apply_id, 'result' => 2])->one();
+        
         return $appprval_model ? $appprval_model->des : '';
     }
-
-	/**
-	 * 获取申请列表
-	 * @param array $search
-	 * @param array $user
-	 *
-	 * @return array
-	 */
-	public function getApplyListAll($search,$user)
-	{
-		$type = ArrayHelper::getValue($search,'type',[]);
-		$start_time = ArrayHelper::getValue($search,'start_time',null);
-		$end_time = ArrayHelper::getValue($search,'end_time',null);
-		$page = ArrayHelper::getValue($search,'page',1);
-		$page_size = ArrayHelper::getValue($search,'page_size',10);
-		$keywords = ArrayHelper::getValue($search,'keywords',null);
-		$status = ArrayHelper::getValue($search, 'status',0);
-		$sort = ArrayHelper::getValue($search,'sort','desc');
-
-		$apply_model = new appmodel\Apply();
-		$query = $apply_model::find()
-			-> alias('a');
-		//开始时间
-		if($start_time){
-			$start_time = strtotime($start_time.' 0:0:0');
-			$query -> andWhere(['>','create_time',$start_time]);
-		}
-		//结束时间
-		if($end_time){
-			$end_time = strtotime($end_time.' 23:59:59');
-			$query -> andWhere(['<','create_time',$end_time]);
-		}
-		//关键词
-		if($keywords){
-			$query -> andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
-		}
-		//状态
-		if($status){
-			$arr_status = [];
-			foreach($search['status'] as $v){
-				switch($v){
-					case 1://审核中
-						array_push($arr_status ,1,11);
-						break;
-					case 2://财务确认中
-						array_push($arr_status ,4);
-						break;
-					case 3://撤销
-						array_push($arr_status ,3);
-						break;
-					case 4://审核不通过
-						array_push($arr_status ,2);
-						break;
-					case 5://完成
-						array_push($arr_status ,99);
-						break;
-					default:
-						break;
-				}
-			}
-			if(count($arr_status) == 1){
-				$query -> andWhere(['status'=>$arr_status[0]]);
-			}elseif(count($arr_status) > 1){
-				$query -> andWhere(['in','status',$arr_status]);
-			}
-		}
-		//类型
-		$query -> andWhere(['in','a.type' , $type]);
-
-
-		$_query = clone $query;
-		//var_dump($_query -> createCommand()->getRawSql());die();
-		$total = $_query -> count();
-		//var_dump($total);die();
-		$pagination = new Pagination(['totalCount' => $total]);
-		//当前页
-		$pagination -> setPage($page-1);
-		//每页显示条数
-		$pagination->setPageSize($page_size, true);
-		//排序
-		switch($sort){
-			case 'asc'://时间顺序
-				$orderBy = ['create_time'=>SORT_ASC];
-				break;
-			default://时间倒序
-				$orderBy = ['create_time'=>SORT_DESC];
-				break;
-		}
-
-		$query -> select('*') -> orderBy($orderBy) -> offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
-		//var_dump($query -> createCommand()->getRawSql());die();
-		$res = $query -> asArray() -> all();
-		//var_dump($res);die();
-
-		return [
-			'data' => $res,
-			'pages' => $this->pageFix($pagination)
-		];
-
-	}
+    
+    /**
+     * 获取申请列表
+     *
+     * @param array $search
+     *
+     * @return array
+     */
+    public function getApplyListAll($search)
+    {
+        $type = ArrayHelper::getValue($search, 'type', []);
+        $start_time = ArrayHelper::getValue($search, 'start_time', null);
+        $end_time = ArrayHelper::getValue($search, 'end_time', null);
+        $page = ArrayHelper::getValue($search, 'page', 1);
+        $page_size = ArrayHelper::getValue($search, 'page_size', 10);
+        $keywords = ArrayHelper::getValue($search, 'keywords', null);
+        $status = ArrayHelper::getValue($search, 'status', 0);
+        $sort = ArrayHelper::getValue($search, 'sort', 'desc');
+        
+        $apply_model = new appmodel\Apply();
+        $query = $apply_model::find()
+            ->alias('a');
+        //开始时间
+        if ($start_time) {
+            $start_time = strtotime($start_time . ' 0:0:0');
+            $query->andWhere(['>', 'create_time', $start_time]);
+        }
+        //结束时间
+        if ($end_time) {
+            $end_time = strtotime($end_time . ' 23:59:59');
+            $query->andWhere(['<', 'create_time', $end_time]);
+        }
+        //关键词
+        if ($keywords) {
+            $query->andWhere("instr(CONCAT(a.apply_id,a.title,a.person,a.approval_persons,a.copy_person),'{$keywords}') > 0 ");
+        }
+        //状态
+        if ($status) {
+            $arr_status = [];
+            foreach ($search['status'] as $v) {
+                switch ($v) {
+                    case 1://审核中
+                        array_push($arr_status, 1, 11);
+                        break;
+                    case 2://财务确认中
+                        array_push($arr_status, 4);
+                        break;
+                    case 3://撤销
+                        array_push($arr_status, 3);
+                        break;
+                    case 4://审核不通过
+                        array_push($arr_status, 2);
+                        break;
+                    case 5://完成
+                        array_push($arr_status, 99);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (count($arr_status) == 1) {
+                $query->andWhere(['status' => $arr_status[0]]);
+            } elseif (count($arr_status) > 1) {
+                $query->andWhere(['in', 'status', $arr_status]);
+            }
+        }
+        //类型
+        $query->andWhere(['in', 'a.type', $type]);
+        
+        
+        $_query = clone $query;
+        //var_dump($_query -> createCommand()->getRawSql());die();
+        $total = $_query->count();
+        //var_dump($total);die();
+        $pagination = new Pagination(['totalCount' => $total]);
+        //当前页
+        $pagination->setPage($page - 1);
+        //每页显示条数
+        $pagination->setPageSize($page_size, true);
+        //排序
+        switch ($sort) {
+            case 'asc'://时间顺序
+                $orderBy = ['create_time' => SORT_ASC];
+                break;
+            default://时间倒序
+                $orderBy = ['create_time' => SORT_DESC];
+                break;
+        }
+        
+        $query->select('*')->orderBy($orderBy)->offset($pagination->getPage() * $pagination->pageSize)->limit($pagination->getLimit());
+        //var_dump($query -> createCommand()->getRawSql());die();
+        $res = $query->asArray()->all();
+        
+        //var_dump($res);die();
+        
+        return [
+            'data' => $res,
+            'pages' => $this->pageFix($pagination)
+        ];
+        
+    }
 }

@@ -980,4 +980,49 @@ TABLEHTML;
 TABLEHTML;
         return $strHtml;
     }
+    
+    public function projectRole($param)
+    {
+        $strListHtml = '';
+        $strHtml = <<<TABLEHTML
+<div>
+    <h2 style="text-align: center;">出差申请单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">开通系统</td>
+            <td colspan="2">{$param['project_name']}</td>
+            <td style="background-color:#f2f2f2">系统角色</td>
+            <td colspan="2">{$param['role_name']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">使用日期</td>
+            <td colspan="5">{$param['time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">申请说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
 }

@@ -5,6 +5,7 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\CnyLogic;
 use app\models\ApplyDemand;
+use app\models\ApplyProjectRole;
 use app\models\ApplyTravel;
 use app\models\ApplyUseChapter;
 use app\models\AssetBack;
@@ -48,6 +49,7 @@ class ApplyView extends BaseForm
         13 => 'Open',
         14 => 'GoodsUp',
         15 => 'Travel',
+        16 => 'ProjectRole',
     ];
 
 
@@ -382,6 +384,8 @@ class ApplyView extends BaseForm
         $goodsUp = $apply->goodsUp;
         $data = [
             'des' => $goodsUp->des,
+            'shop_name' => $goodsUp->shop_name,
+            'shop_id' => $goodsUp->shop_id,
             'files' => json_decode($goodsUp->files)?:[],
             'list' => $goodsUp->goodsUpDetail
         ];
@@ -398,6 +402,30 @@ class ApplyView extends BaseForm
             'des' => $travel->des,
             'files' => json_decode($travel->files)?:[],
             'list' => $travel->travelList
+        ];
+        return $data;
+    }
+    
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function getProjectRole($apply)
+    {
+        /**
+         * @var ApplyProjectRole $projectRole
+         */
+        $projectRole = $apply->projectRole;
+        $data = [
+            'des' => $projectRole->des,
+            'files' => json_decode($projectRole->files)?:[],
+            'project_id' => $projectRole->project_name,
+            'project_name' => $projectRole->project_name,
+            'role_id' => $projectRole->project_name,
+            'role_name' => $projectRole->role_name,
+            'begin_at' => $projectRole->begin_at,
+            'end_at' => $projectRole->end_at,
         ];
         return $data;
     }

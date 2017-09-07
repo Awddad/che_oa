@@ -8,11 +8,9 @@
 
 namespace app\modules\oa_v1\models;
 
-use app\logic\MyTcPdf;
 use app\models\Apply;
 use app\models\JieKuan;
 use app\models\PayBack;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 
 

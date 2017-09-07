@@ -9,11 +9,9 @@
 namespace app\modules\oa_v1\models;
 
 
-use app\models\Apply;
 use app\models\ApplyTravel;
 use app\models\ApplyTravelList;
 use app\modules\oa_v1\logic\BaseLogic;
-use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 
@@ -97,7 +95,7 @@ class TravelForm extends BaseForm
             'approval_persons' => '审批人',
             'copy_person' => '审批人',
             'travel_list' => '出差列表',
-            'dsc' => '出差是由'
+            'dsc' => '出差事由'
         ];
     }
     

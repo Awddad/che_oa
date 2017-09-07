@@ -29,6 +29,26 @@ use yii\db\Exception;
  * @property integer $apply_list_pdf
  * @property integer $org_id
  * @property integer $company_id
+ * @property integer $end_time
+ * @property integer $copy_rule
+ *
+ * @property object $loan
+ * @property object $payBack
+ * @property object $applyPay
+ * @property object $applyBuy
+ * @property object $applyDemand
+ * @property object $applyUseChapter
+ * @property object $assetGet
+ * @property object $assetBack
+ * @property object $applyPositive
+ * @property object $applyLeave
+ * @property object $applyTransfer
+ * @property object $applyOpen
+ * @property object $goodsUp
+ * @property object $travel
+ * @property object $projectRole
+ * @property object $expense
+ * @property object $info
  */
 class Apply extends \yii\db\ActiveRecord
 {
@@ -58,7 +78,7 @@ class Apply extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'type', 'title', 'person', 'person_id', 'approval_persons'], 'required'],
-            [['create_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id'], 'integer'],
+            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id', 'copy_rule'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
             [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
         ];
@@ -311,6 +331,7 @@ class Apply extends \yii\db\ActiveRecord
                 }
             }
         }
+        $this->end_time = time();
         /* end */
         return $this->save();
     }
@@ -435,6 +456,16 @@ class Apply extends \yii\db\ActiveRecord
     }
     
     /**
+     * 权限申请
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProjectRole()
+    {
+        return $this->hasOne(ApplyProjectRole::className(), ['apply_id' => 'apply_id']);
+    }
+    
+    /**
      * @var array
      */
     const TYPE_ARRAY = [
@@ -453,5 +484,61 @@ class Apply extends \yii\db\ActiveRecord
         13 => '开店',
         14 => '商品上架',
         15 => '出差',
+        16 => '权限',
     ];
+    
+    public function getInfo()
+    {
+        switch ($this->type) {
+            case 2:
+                $info = $this->loan;
+                break;
+            case 3:
+                $info = $this->payBack;
+                break;
+            case 4:
+                $info = $this->applyPay;
+                break;
+            case 5:
+                $info = $this->applyBuy;
+                break;
+            case 6:
+                $info = $this->applyDemand;
+                break;
+            case 7:
+                $info = $this->applyUseChapter;
+                break;
+            case 8:
+                $info = $this->assetGet;
+                break;
+            case 9:
+                $info = $this->assetBack;
+                break;
+            case 10:
+                $info = $this->applyPositive;
+                break;
+            case 11:
+                $info = $this->applyLeave;
+                break;
+            case 12:
+                $info = $this->applyTransfer;
+                break;
+            case 13:
+                $info = $this->applyOpen;
+                break;
+            case 14:
+                $info = $this->goodsUp;
+                break;
+            case 15:
+                $info = $this->travel;
+                break;
+            case 16:
+                $info = $this->projectRole;
+                break;
+            default:
+                $info = $this->expense;
+                break;
+        }
+        return $info;
+    }
 }

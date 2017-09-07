@@ -8,10 +8,6 @@
 
 namespace app\modules\oa_v1\models;
 
-
-use app\logic\MyTcPdf;
-use app\modules\oa_v1\logic\PersonLogic;
-use app\models\Apply;
 use app\models\JieKuan;
 use yii\db\Exception;
 

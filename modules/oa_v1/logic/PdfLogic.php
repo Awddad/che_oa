@@ -15,6 +15,7 @@ use app\logic\MyTcPdf;
 use app\models\Apply;
 use app\models\ApplyBuyList;
 use app\models\ApplyDemandList;
+use app\models\ApplyProjectRole;
 use app\models\ApplyUseChapter;
 use app\models\AssetGetList;
 use app\models\AssetList;
@@ -642,6 +643,44 @@ class PdfLogic extends Logic
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
         ];
         $pdf->createdPdf($root_path, $arrInfo, 'applyTravel');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
+    
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function projectRole($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        /**
+         * @var ApplyProjectRole $projectRole
+         */
+        $projectRole = $apply->projectRole;
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
+            'person' => $person->person_name,
+            'des' => $projectRole->des,
+            
+            'project_name' => $projectRole->project_name,
+            'role_name' => $projectRole->role_name,
+            'time' => $projectRole->begin_at . ' ~ '. $projectRole->end_at,
+            
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'projectRole');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'

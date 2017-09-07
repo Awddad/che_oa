@@ -15,6 +15,18 @@ use app\modules\oa_v1\logic\EmployeeLogic;
  */
 class EmployeeController extends BaseController
 {
+    public function beforeAction($action)
+    {
+        if(Yii::$app->request->get('edit_myself')) {
+            $employee = Yii::$app->request->get('id') ? Yii::$app->request->get('id')
+                : Yii::$app->request->post('id');
+            if ($this->arrPersonInfo->employee->id != $employee) {
+                return $this->_returnError(400);
+            }
+        }
+        return parent::beforeAction($action);
+    }
+    
     /**
      * 获得员工列表
      */

@@ -8,11 +8,10 @@
 
 namespace app\modules\oa_v1\models;
 
-use app\models\Apply;
 use app\models\AssetBack;
 use app\models\AssetGetList;
+use app\models\Person;
 use app\models\User;
-use app\modules\oa_v1\logic\PersonLogic;
 use Yii;
 use yii\db\Exception;
 
@@ -68,13 +67,13 @@ class AssetBackForm extends BaseForm
     }
     
     /**
-     * @param User $user
+     * @param Person $person
      * @return mixed
      * @throws Exception
      */
-    public function save($user)
+    public function save($person)
     {
-        $apply = $this->setApply($user);
+        $apply = $this->setApply($person);
         
         $transaction = \Yii::$app->db->beginTransaction();
         try {

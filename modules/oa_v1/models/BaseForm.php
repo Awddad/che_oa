@@ -25,6 +25,8 @@ use yii\web\UploadedFile;
  */
 class BaseForm extends Model
 {
+    public $apply_id;
+    
     /**
      * 是否需要财务确认
      * @var
@@ -331,6 +333,7 @@ class BaseForm extends Model
         $apply->cai_wu_need = $this->cai_wu_need;
         $apply->org_id = $person->org_id;
         $apply->company_id = $person->company_id;
+        $apply->copy_rule = intval(\Yii::$app->request->post('copy_rule', 1));
         return $apply;
     }
 }

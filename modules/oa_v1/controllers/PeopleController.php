@@ -1,17 +1,28 @@
 <?php
 namespace app\modules\oa_v1\controllers;
 
-use yii;
+use Yii;
 use app\modules\oa_v1\models\PeopleForm;
 
 class PeopleController extends BaseController
 {
+    public function beforeAction($action)
+    {
+        if(Yii::$app->request->get('edit_myself')) {
+            $employee = Yii::$app->request->get('employee') ? Yii::$app->request->get('employee') : Yii::$app->request->post('employee');
+            if ($this->arrPersonInfo->employee->id != $employee) {
+                return $this->_returnError(400);
+            }
+        }
+        return parent::beforeAction($action);
+    }
+    
     /**
      * 修改工作经验
      */
     public function actionWorkExpEdit()
     {
-        $post = yii::$app->request->post();
+        $post = Yii::$app->request->post();
         $model = new PeopleForm();
         $model->setScenario($model::SCENARIO_WORK_EXP_EDIT);
         $model->load(['PeopleForm'=>$post]);

@@ -80,4 +80,14 @@ class Person extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Org::className(), ['org_id' => 'org_id']);
     }
+    
+    /**
+     * 获取基本信息
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEmployee()
+    {
+        return $this->hasOne(Employee::className(), ['person_id' => 'person_id']);
+    }
 }

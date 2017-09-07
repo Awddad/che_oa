@@ -15,8 +15,10 @@ use yii\behaviors\TimestampBehavior;
  * @property string $org_name
  * @property integer $type
  * @property string $approval
+ * @property integer $distinct
  * @property string $copy_person
  * @property integer $copy_person_count
+ * @property integer $copy_rule
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -42,7 +44,7 @@ class ApprovalConfig extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['apply_type', 'org_id', 'type', 'copy_person_count', 'created_at', 'updated_at'], 'integer'],
+            [['apply_type', 'org_id', 'type', 'distinct', 'copy_person_count', 'copy_rule', 'created_at', 'updated_at'], 'integer'],
             [['approval'], 'string'],
             [['apply_name'], 'string', 'max' => 15],
             [['org_name'], 'string', 'max' => 100],
@@ -63,8 +65,10 @@ class ApprovalConfig extends \yii\db\ActiveRecord
             'org_name' => '公司名',
             'type' => '0：不分条件   1：分条件',
             'approval' => '审批人配置 json',
+            'distinct' => 'Distinct',
             'copy_person' => '抄送人配置',
             'copy_person_count' => '抄送人总数',
+            'copy_rule' => 'Copy Rule',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
