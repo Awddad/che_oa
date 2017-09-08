@@ -40,14 +40,16 @@ class ProjectLogic extends Logic
             }
             if($model) {
                 $config = json_decode($model->approval,1);
-                $keys = array_keys($config);
-                $projects = ArrayHelper::index($projects, 'id');
-                foreach($projects as $k=>$v){
-                    if(in_array($k,$keys)){
-                        unset($projects[$k]);
+                $keys = $config ? array_keys($config) : [];
+                if(current($keys) != 0) {
+                    $projects = ArrayHelper::index($projects, 'id');
+                    foreach ($projects as $k => $v) {
+                        if (!in_array($k, $keys)) {
+                            unset($projects[$k]);
+                        }
                     }
+                    $projects = array_values($projects);
                 }
-                $projects = array_values($projects);
             }
         }
         return $projects;
