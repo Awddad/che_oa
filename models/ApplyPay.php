@@ -68,6 +68,6 @@ class ApplyPay extends \yii\db\ActiveRecord
      */
     public function getDesInfo()
     {
-        return '付款事由：'. $this->des. '<br>金额：'.Yii::$app->formatter->asCurrency($this->money);
+        return $this->des. ' - '.Yii::$app->formatter->asCurrency($this->money);
     }
 }

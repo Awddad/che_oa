@@ -90,7 +90,7 @@ class BaoXiao extends \yii\db\ActiveRecord
          * @var BaoXiaoList $v
          */
         foreach ($list as $k => $v) {
-            $des[] = ($k+1) .'.' .$v->des .'-'. \Yii::$app->formatter->asCurrency($v->money);
+            $des[] = ($k+1) .'、' .$v->des .'-'. \Yii::$app->formatter->asCurrency($v->money);
         }
         $des[] = '合计金额-'. \Yii::$app->formatter->asCurrency($this->money);
         return implode('<br>', $des);
