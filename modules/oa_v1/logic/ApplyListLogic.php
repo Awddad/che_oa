@@ -379,34 +379,36 @@ class ApplyListLogic extends BaseLogic
         
             $arr_status = [];
             $status = explode(',', $status);
-            foreach ($status as $v) {
-                switch ($v) {
-                    case 1://审核中
-                        array_push($arr_status, 1, 11);
-                        break;
-                    case 2://财务确认中
-                        array_push($arr_status, 4);
-                        break;
-                    case 3://撤销
-                        array_push($arr_status, 3);
-                        break;
-                    case 4://审核不通过
-                        array_push($arr_status, 2);
-                        break;
-                    case 5://完成
-                        array_push($arr_status, 99);
-                        break;
-                    case 6://财务驳回
-                        array_push($arr_status, 5);
-                        break;
-                    case 7://付款失败
-                        array_push($arr_status, 6, 7);
-                        break;
-                    default:
-                        break;
+            if(!in_array(0, $status)) {
+                foreach ($status as $v) {
+                    switch ($v) {
+                        case 1://审核中
+                            array_push($arr_status, 1, 11);
+                            break;
+                        case 2://财务确认中
+                            array_push($arr_status, 4);
+                            break;
+                        case 3://撤销
+                            array_push($arr_status, 3);
+                            break;
+                        case 4://审核不通过
+                            array_push($arr_status, 2);
+                            break;
+                        case 5://完成
+                            array_push($arr_status, 99);
+                            break;
+                        case 6://财务驳回
+                            array_push($arr_status, 5);
+                            break;
+                        case 7://付款失败
+                            array_push($arr_status, 6, 7);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                $query->andWhere(['in', 'a.status', $arr_status]);
             }
-            $query->andWhere(['in', 'a.status', $arr_status]);
         }
     
         //时间搜索

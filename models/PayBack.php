@@ -69,7 +69,16 @@ class PayBack extends \yii\db\ActiveRecord
     public function getDesInfo()
     {
         $jiekuanList = JieKuan::find()->where(['in','apply_id',explode(',', $this->jie_kuan_ids)])->all();
-        return implode(',', ArrayHelper::getColumn($jiekuanList, 'des'));
+        $total = 0;
+        /**
+         * @var JieKuan $v
+         */
+        foreach ($jiekuanList as $k => $v){
+            $des[] = ($k+1) .'、' .$v->des .'-'. \Yii::$app->formatter->asCurrency($v->money);
+            $total += $v->money;
+        }
+        $des[] = '合计金额-'. \Yii::$app->formatter->asCurrency($total);
+        return implode('<br>', $des);
     }
     
 }

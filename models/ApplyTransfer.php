@@ -87,6 +87,6 @@ class ApplyTransfer extends \yii\db\ActiveRecord
      */
     public function getDesInfo()
     {
-        return $this->des;
+        return '--';
     }
 }

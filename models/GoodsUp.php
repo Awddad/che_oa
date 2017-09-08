@@ -59,6 +59,6 @@ class GoodsUp extends \yii\db\ActiveRecord
      */
     public function getDesInfo()
     {
-        return '申请门店：'. $this->shop_name. '<br>申请说明：'.$this->des;
+        return  $this->shop_name ? : '--' . ' - '.$this->des ? : '--';
     }
 }

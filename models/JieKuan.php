@@ -118,6 +118,6 @@ class JieKuan extends \yii\db\ActiveRecord
      */
     public function getDesInfo()
     {
-        return '备用金事由：'.$this->des . '<br> 备用金金额：'.  Yii::$app->formatter->asCurrency($this->money);
+        return $this->des . ' - '.  Yii::$app->formatter->asCurrency($this->money);
     }
 }
