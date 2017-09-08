@@ -103,7 +103,7 @@ class EmployeeInfoForm extends BaseForm
             ['sex','in', 'range' => [1, 2], 'message'=>'性别不正确'],
             ['phone','match','pattern'=>'/^1\d{10}/','message'=>'手机号不正确'],
             ['birthday','date','format' => 'yyyy-mm-dd','message' => '生日时间不正确'],
-            ['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
+            //['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
             ['email','email','message'=>'email不正确'],
             ['age', 'integer','message'=>'年龄不正确'],
             ['nation','string','max'=>15],//民族
@@ -161,7 +161,7 @@ class EmployeeInfoForm extends BaseForm
         //$model->empno = $this->empno;
         $model->profession = $this->profession;
         $model->id_card = $this->id_card;
-        $model->entry_time = $this->entry_time;
+        $model->entry_time = $this->entry_time?:'';
         $model->employee_type = $this->emp_type;
         $model->sex = $this->sex;
         $model->phone = $this->phone;
