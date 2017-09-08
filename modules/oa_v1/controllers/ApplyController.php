@@ -355,6 +355,7 @@ class ApplyController extends BaseController
         $apply->cai_wu_person_id = $this->arrPersonInfo->person_id;
         $apply->caiwu_refuse_reason = $reason;
         $apply->next_des = '付款确认驳回';
+        $apply->end_time = time();
         if($apply->type == 3) {
             $db = Yii::$app->db;
             $transaction = $db->beginTransaction();
@@ -405,6 +406,7 @@ class ApplyController extends BaseController
         $apply->status = 6;
         $apply->caiwu_refuse_reason = $reason;
         $apply->next_des = '付款失败';
+        $apply->end_time = time();
         if (!$apply->save()) {
             return $this->_returnError(2047);
         }
