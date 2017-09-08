@@ -214,6 +214,7 @@ class Apply extends \yii\db\ActiveRecord
             ];
             BaseLogic::instance()->sendQqMsg($data);
         }
+        $this->end_time = time();
         return $this->save();
         
     }

@@ -223,6 +223,7 @@ class ApplyController extends BaseController
 
 		$apply->status = Apply::STATUS_REVOKED;
 		$apply->next_des = '该申请已撤销';
+        $apply->end_time = time();
 		// 还款单撤销特殊处理
 		if($apply->type == 3) {
             $db = Yii::$app->db;
