@@ -59,6 +59,6 @@ class GoodsUp extends \yii\db\ActiveRecord
      */
     public function getDesInfo()
     {
-        return  $this->shop_name ? : '--' . ' - '.$this->des ? : '--';
+        return  $this->shop_name ? : '--' . ' - '. $this->des ? : '--';
     }
 }
