@@ -56,4 +56,29 @@ _SQL;
             echo $v->apply_id.PHP_EOL;
         }
     }
+
+    public function actionConfig()
+    {
+        $data = \app\models\ApprovalConfig::find()->all();
+        foreach($data as $k=>$v){
+            $config = json_decode($v->approval);
+            if(!$config){
+                continue;
+            }
+            $approval = [];
+            foreach($config as $kk => $vv){
+                foreach($vv as $vvv) {
+                    $approval[$kk][] = [
+                        'type' => 1,
+                        'value' => $vvv,
+                    ];
+                }
+            }
+            $v->approval = json_encode($approval);
+            if(!$v->save()){
+                echo current($v->getFirstErrors()).PHP_EOL;
+            }
+
+        }
+    }
 }
