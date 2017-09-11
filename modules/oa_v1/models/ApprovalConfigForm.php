@@ -578,7 +578,7 @@ class ApprovalConfigForm extends BaseForm
                     continue;
                 } else {
                     $tmp = $this->getPersonById($model->manager, 2);
-                    $tmp['level'] = $level;
+                    $tmp && $tmp['level'] = $level;
                     break;
                 }
             }
