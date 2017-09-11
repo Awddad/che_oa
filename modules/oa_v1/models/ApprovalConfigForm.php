@@ -460,8 +460,7 @@ class ApprovalConfigForm extends BaseForm
                             unset($approval[$k]['approval'][$kk]);
                         }elseif( $model->distinct ){//是否去重
                             $person_tmp[] = $vv['id'];
-                        }
-                        if(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vv['id']){
+                        }elseif(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vv['id']){
                             //去除连续重复
                             unset($approval[$k]['approval'][$kk-1]);
                         }
@@ -471,8 +470,7 @@ class ApprovalConfigForm extends BaseForm
                                 unset($approval[$k]['approval'][$kk]['person'][$kkk]);
                             }elseif( $model->distinct ){//是否去重
                                 $person_tmp[] = $vvv['id'];
-                            }
-                            if(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vvv['id']){
+                            }elseif(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vvv['id']){
                                 //去除连续重复
                                 unset($approval[$k]['approval'][$kk]['person'][$kkk]);
                             }
