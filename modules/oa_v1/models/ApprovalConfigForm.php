@@ -535,7 +535,7 @@ class ApprovalConfigForm extends BaseForm
      */
     protected function getPersonById($person_id,$type=1)
     {
-        $person = (new \yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
+        $person = (new \yii\db\Query())->select('p.*,pic.pic')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
         $tmp = [
             'type' => $type,
             'id' => $person['person_id'],
