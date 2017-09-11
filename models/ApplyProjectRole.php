@@ -67,6 +67,6 @@ class ApplyProjectRole extends \yii\db\ActiveRecord
      */
     public function getDesinfo()
     {
-        return $this->des;
+        return $this->project_name. '-'. $this->role_name. '-' .$this->des;
     }
 }
