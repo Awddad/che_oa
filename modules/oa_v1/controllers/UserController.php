@@ -224,9 +224,19 @@ class UserController extends BaseController
                 ],
                 'name',
                 'relation',
-                'idnumber',
+                [
+                    'attribute' => 'idnumber',
+                    'value' => function($data) {
+                        return "'".strval($data->idnumber);
+                    },
+                ],
                 'bank_name',
-                'bank_card',
+                [
+                    'attribute' => 'bank_card',
+                    'value' => function($data) {
+                        return "'".strval($data->bank_card);
+                    },
+                ],
             ],
             'fileName' => '员工孝工资卡'
         ]);

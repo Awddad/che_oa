@@ -67,4 +67,27 @@ class QuanxianController extends Controller
             echo '更新成功，影响数据条数:' . $intResult;
         die();
     }
+
+    /**
+     * @功能：手动同步权限系统(测试使用)
+     * @作者：yjr
+     * @创建时间：2017-09-11
+     */
+    public function actionSync()
+    {
+        $objQx = new QuanXianServer();
+        $intResult = 0;
+        $intResult += $objQx->curlUpdateOrg();
+        $intResult += $objQx->curlUpdatePositions();
+        $intResult += $objQx->curlUpdateAllUser();
+        $intResult += $objQx->curlUpdateUser();
+        $intResult += $objQx->curlUpdateRole();//角色信息
+        $intResult += $objQx->curlUpdateMenus();//项目菜单
+        $intResult += $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
+        if ($intResult == 0)
+            echo '更新成功';
+        else
+            echo '更新成功，影响数据条数:' . $intResult;
+        die();
+    }
 }
