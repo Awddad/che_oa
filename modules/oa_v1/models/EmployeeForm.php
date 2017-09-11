@@ -238,7 +238,7 @@ class EmployeeForm extends BaseForm
         foreach($res as $k => $v){
             $data[] = [
                 'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,
-                'empno' => $v->empno,
+                'empno' => $v->person_id,
                 'employee_id' => $v->id,
                 'name' => $v->name,
                 'phone' => $v->phone,
