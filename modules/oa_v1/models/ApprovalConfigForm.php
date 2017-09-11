@@ -429,7 +429,7 @@ class ApprovalConfigForm extends BaseForm
      */
     public function getApprovalConfig($user,$apply_type)
     {
-    	$org_id = $user->org_id;
+    	$user_org_id = $org_id = $user->org_id;
         /**
          * @var $model ApprovalConfig
          */
@@ -451,26 +451,34 @@ class ApprovalConfigForm extends BaseForm
                 'distinct' => $model->distinct,
                 'copy_rule' => $model->copy_rule,
             ];
-            $approval = $this->getConfig($model->approval,$org_id);
-            foreach ($approval as $k => &$v) {
+            $approval = $this->getConfig($model->approval,$user_org_id);
+            foreach ($approval as $k => $v) {
                 $person_tmp = [$user->person_id];
-                foreach ($v['approval'] as $kk => &$vv) {
+                foreach ($v['approval'] as $kk => $vv) {
                     if(in_array($vv['type'], [1, 2])){
                         if(in_array($vv['id'], $person_tmp)) {
-                            unset($vv);
+                            unset($approval[$k]['approval'][$kk]);
                         }elseif( $model->distinct ){//是否去重
                             $person_tmp[] = $vv['id'];
                         }
+                        if(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vv['id']){
+                            //去除连续重复
+                            unset($approval[$k]['approval'][$kk]);
+                        }
                     }elseif($vv['type'] == 3){
-                        foreach($vv['person'] as $kkk => &$vvv){
+                        foreach($vv['person'] as $kkk => $vvv){
                             if(in_array($vvv['id'], $person_tmp)){
-                                unset($vvv);
+                                unset($approval[$k]['approval'][$kk]['person'][$kkk]);
                             }elseif( $model->distinct ){//是否去重
                                 $person_tmp[] = $vvv['id'];
                             }
+                            if(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vvv['id']){
+                                //去除连续重复
+                                unset($approval[$k]['approval'][$kk]['person'][$kkk]);
+                            }
                         }
                         if(count($vv['person']) <= 0){
-                            unset($vv);
+                            unset($approval[$k]['approval'][$kk]);
                         }
                     }
                 }
@@ -535,7 +543,7 @@ class ApprovalConfigForm extends BaseForm
      */
     protected function getPersonById($person_id,$type=1)
     {
-        $person = (new \yii\db\Query())->select('p.*,pic.pic')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
+        $person = (new \yii\db\Query())->select('p.*,pic.pic')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id,'is_delete'=>0])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
         $tmp = [
             'type' => $type,
             'id' => $person['person_id'],
