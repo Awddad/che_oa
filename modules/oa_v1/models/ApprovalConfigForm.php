@@ -455,7 +455,7 @@ class ApprovalConfigForm extends BaseForm
             foreach ($approval as $k => $v) {
                 $person_tmp = [$user->person_id];
                 foreach ($v['approval'] as $kk => $vv) {
-                    if(in_array($vv['type'], [1, 2])){
+                    if(in_array($vv['type'], [1, 2])){//指定人和负责人
                         if(in_array($vv['id'], $person_tmp)) {
                             unset($approval[$k]['approval'][$kk]);
                         }elseif( $model->distinct ){//是否去重
@@ -463,9 +463,9 @@ class ApprovalConfigForm extends BaseForm
                         }
                         if(isset($approval[$k]['approval'][$kk-1]) && $approval[$k]['approval'][$kk-1]['id'] == $vv['id']){
                             //去除连续重复
-                            unset($approval[$k]['approval'][$kk]);
+                            unset($approval[$k]['approval'][$kk-1]);
                         }
-                    }elseif($vv['type'] == 3){
+                    }elseif($vv['type'] == 3){//职位
                         foreach($vv['person'] as $kkk => $vvv){
                             if(in_array($vvv['id'], $person_tmp)){
                                 unset($approval[$k]['approval'][$kk]['person'][$kkk]);
@@ -482,6 +482,7 @@ class ApprovalConfigForm extends BaseForm
                         }
                     }
                 }
+                $approval[$k]['approval'] = array_values($approval[$k]['approval']);
             }
             $data['approval'] = $approval;
         }
