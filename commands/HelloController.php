@@ -7,6 +7,8 @@
 
 namespace app\commands;
 
+use app\models\Apply;
+use app\models\ApprovalLog;
 use yii\console\Controller;
 
 /**
@@ -31,15 +33,27 @@ class HelloController extends Controller
     public function actionSql()
     {
         $sql = <<<_SQL
-ALTER TABLE `che_oa`.`oa_apply_use_chapter` ADD COLUMN `use_type` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '1:用章 2:借章' AFTER `files`;
-ALTER TABLE `che_oa`.`oa_apply_use_chapter` ADD COLUMN `name_path` varchar(128) DEFAULT '' COMMENT '公司路径（重新申请勇）' AFTER `use_type`;
-ALTER TABLE `oa_talent`
-ADD COLUMN `face_time`  varchar(20) NOT NULL DEFAULT '' COMMENT '面试时间' AFTER `disagree_reason`;
-ADD COLUMN `need_test`  tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否需要考试 0不需要 1需要' AFTER `face_time`,
-ADD COLUMN `choice_score`  tinyint(3) NOT NULL DEFAULT -1 COMMENT '选择题分数' AFTER `need_test`,
-ADD COLUMN `answer_score`  tinyint(3) NOT NULL DEFAULT -1 COMMENT '问答题分数' AFTER `choice_score`;
 _SQL;
         \Yii::$app->db->createCommand($sql)->execute();
 
+    }
+    
+    /**
+     * 更新结束时间
+     */
+    public function actionFixed()
+    {
+        $data = \app\models\Apply::find()->where(['status' => 99])->all();
+        /**
+         * @var Apply $v
+         */
+        foreach ($data as $k => $v) {
+            $approvalLog = ApprovalLog::find()->where([
+                'apply_id' => $v->apply_id
+            ])->orderBy('approval_time desc')->limit(1)->one();
+            $v->end_time = $approvalLog->approval_time;
+            $v->save();
+            echo $v->apply_id.PHP_EOL;
+        }
     }
 }
