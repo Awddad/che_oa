@@ -464,6 +464,7 @@ class ApplyLogic extends BaseLogic
         $apply->apply_list_pdf = $reApply->apply_list_pdf;
         $apply->cai_wu_need = $reApply->cai_wu_need;
         $apply->org_id = $reApply->org_id;
+        $apply->company_id = $reApply->company_id;
         $apply->copy_rule = $reApply->copy_rule;
         $db = \Yii::$app->db;
         $transaction = $db->beginTransaction();
