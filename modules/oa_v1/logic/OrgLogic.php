@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\logic;
 
+use app\logic\server\QuanXianServer;
 use app\models\Org;
 use yii\helpers\ArrayHelper;
 
@@ -82,5 +83,15 @@ class OrgLogic extends BaseLogic
             }
         }
         return $str;
+    }
+
+    /**
+     * 获得公司名
+     * @param $org_id
+     */
+    public function getCompany($org_id)
+    {
+        $company_id = QuanXianServer::instance()->getCompanyId($org_id);
+        return $company_id ? Org::findOne($company_id)->org_name : '';
     }
 }

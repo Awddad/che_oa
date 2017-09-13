@@ -241,4 +241,47 @@ class UserController extends BaseController
             'fileName' => '员工孝工资卡'
         ]);
     }
+
+    /**
+     * 员工编号导出
+     */
+    public function actionEmpnoExport()
+    {
+        Excel::export([
+            'models' => Employee::find()->where(['status'=>2])->all(),
+            'columns' => [
+                [
+                    'header' => '员工编号',
+                    'value' => function($data) {
+                        return $data->person_id;
+                    }
+                ],
+                [
+                    'header' => '公司',
+                    'value' => function($data) {
+                        return OrgLogic::instance()->getCompany($data->org_id);
+                    }
+                ],
+                [
+                    'header' => '部门',
+                    'value' => function($data) {
+                        return $data->org ? $data->org->org_name : '';
+                    }
+                ],
+                [
+                    'attribute' => '职位',
+                    'value' => function($data) {
+                        return $data->job?$data->job->name:'';
+                    },
+                ],
+                [
+                    'attribute' => '姓名',
+                    'value' => function($data) {
+                        return $data->name;
+                    },
+                ],
+            ],
+            'fileName' => '员工编号'
+        ]);
+    }
 }
