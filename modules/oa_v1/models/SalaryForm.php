@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\modules\oa_v1\logic\RoleLogic;
 use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\logic\SalaryLogic;
@@ -63,6 +64,10 @@ class SalaryForm extends BaseForm
         ]);
         if($this->checkTitle($arr[1]) && $arr[2]){
             array_shift($arr);
+            $r = $this->checkEmpno($arr);
+            if(!$r['status']){
+                return ['status'=>false,'msg'=>$r['msg']];
+            }
             $date = date('Ym',strtotime($file_name));
             $sql = "INSERT INTO `oa_salary` (`empno`, `date`, `cost_depart`, `depart`, `position`, `name`, `base_salary`, `jixiao`, `need_workdays`, `static_workdays`, `static_salary`, `holiday_salary`, `away_subsidy`, `other_subsidy`, `forfeit`, `staitic_salary`, `jixiao_money`, `xiao_salary`, `shebao`, `gongjijin`, `before_tax_salary`, `tax`, `illness_money`, `after_tax_salary`, `after_tax_salary_person`, `des`, `id_card`, `bank_card`, `bank_name_des`, `yanglao`, `yiliao`, `shiye`, `entry_time`) VALUES ";
             foreach($arr as $v){ 
@@ -160,6 +165,19 @@ jdf;
         }
         return false;
     }
+
+    public function checkEmpno($arr)
+    {
+        $person_ids = ArrayHelper::getColumn($arr,'B');
+        $_person_ids = Employee::find()->select('person_id')->where(['>','person_id',0])->asArray()->all();
+
+        $_person_ids = ArrayHelper::getColumn($_person_ids,'person_id');
+        $diff = array_diff($person_ids,$_person_ids);
+        if($diff){
+            return ['status'=>false,'msg'=>'员工编号：'implode(',',$diff).'不存在'];
+        }
+        return ['status'=>true];
+    }
     
     
     public function getList($params,$user,$arrPersonRole)
@@ -168,6 +186,7 @@ jdf;
         $page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $date = ArrayHelper::getValue($params,'date',null);
+        $self = ArrayHelper::getValue($params,'self',null);
          
         $query = Salary::find()->select([
             'empno' ,
@@ -216,15 +235,15 @@ jdf;
             $query->andWhere(['date'=>$date]);
         }
         //权限
-        if(!SalaryLogic::instance()->isHr($arrPersonRole)){
-            $emp = Employee::find()->where(['person_id' => $user['person_id']])->one();
-            if($emp && $emp->empno){
-                $query -> andWhere(['empno' => $emp->empno]);
+        if($self || !RoleLogic::instance()->isHr($arrPersonRole)){
+            $emp = Employee::find()->where(['person_id' => $user->person_id])->one();
+            if($emp && $emp->person_id){
+                $query -> andWhere(['empno' => $emp->person_id]);
             }else{
                 return false;
             }
         }
-        
+
         //分页
         $pagination = new Pagination([
             'defaultPageSize' => $page_size,
