@@ -110,6 +110,7 @@ class SalaryForm extends BaseForm
 jdf;
             }
             $sql = substr($sql, 0, - 1);
+            $sql .= " ON DUPLICATE KEY UPDATE `base_salary`=VALUES(base_salary), `jixiao`=VALUES(jixiao), `need_workdays`=VALUES(need_workdays), `static_workdays`=VALUES(static_workdays), `static_salary`=VALUES(static_salary), `holiday_salary`=VALUES(holiday_salary), `away_subsidy`=VALUES(away_subsidy), `other_subsidy`=VALUES(other_subsidy), `forfeit`=VALUES(static_salary), `staitic_salary`=VALUES(staitic_salary), `jixiao_money`=VALUES(jixiao_money), `xiao_salary`=VALUES(xiao_salary), `shebao`=VALUES(shebao), `gongjijin`=VALUES(gongjijin), `before_tax_salary`=VALUES(before_tax_salary), `tax`=VALUES(tax), `illness_money`=VALUES(illness_money), `after_tax_salary`=VALUES(after_tax_salary), `after_tax_salary_person`=VALUES(after_tax_salary_person), `des`=VALUES(des), `id_card`=VALUES(id_card), `bank_card`=VALUES(bank_card), `bank_name_des`=VALUES(bank_name_des), `yanglao`=VALUES(yanglao), `yiliao`=VALUES(yiliao), `shiye`=VALUES(shiye), `entry_time`=VALUES(entry_time)";
             $res = yii::$app->db->createCommand($sql)->execute();
             $sql = base64_encode(yii::$app->getSecurity()->encryptByKey($sql,$this->s_key));
             SalaryLogic::instance()->addLog($sql,$user['person_id'],$user['person_name']);
@@ -168,13 +169,18 @@ jdf;
 
     public function checkEmpno($arr)
     {
-        $person_ids = ArrayHelper::getColumn($arr,'B');
-        $_person_ids = Employee::find()->select('person_id')->where(['>','person_id',0])->asArray()->all();
+        $persons = Employee::find()->select('person_id,name')->where(['status'=>2])->andWhere(['>','person_id',0])->asArray()->all();
 
-        $_person_ids = ArrayHelper::getColumn($_person_ids,'person_id');
-        $diff = array_diff($person_ids,$_person_ids);
-        if($diff){
-            return ['status'=>false,'msg'=>'员工编号：'.implode(',',$diff).'不存在'];
+        $persons = ArrayHelper::index($persons, 'person_id');
+
+        $error = [];
+        foreach($arr as $k=>$v){
+            if(isset($persons[$v['B']]) && $persons[$v['B']]['name'] != $v['F']){
+                $error[] = "序号{$v['A']}:员工编号不正确！";
+            }
+        }
+        if($error){
+            return ['status'=>false,'msg'=>implode(';', $error)];
         }
         return ['status'=>true];
     }
