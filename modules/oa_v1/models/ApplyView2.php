@@ -147,6 +147,7 @@ class ApplyView2 extends ApplyView
 			'des' => $apply->applyPay->des,
             'money' => $apply->applyPay->money,
             //'pay_type_name' => $tagTree->name,
+			'end_time' => $apply->applyPay->end_time,
 			'files' => json_decode($apply->applyPay->files)?:[]
 		];
 		return $data;

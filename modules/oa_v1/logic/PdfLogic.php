@@ -247,9 +247,10 @@ class PdfLogic extends Logic
             'money' => \Yii::$app->formatter->asCurrency($apply->applyPay->money),
             'money_supper' => CnyLogic::instance()->cny($apply->applyPay->money),
             'des' => $apply->applyPay->des ? : '--',
+            'end_time' => $apply->applyPay->end_time ? : '--',
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
-            'caiwu' => $apply->cai_wu_person ? : ''
+            'caiwu' => $apply->cai_wu_person ? : '',
         ];
     
         
