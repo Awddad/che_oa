@@ -52,18 +52,7 @@ class SalaryLogic extends BaseLogic
 	    return false;
 	}
 	
-	/**
-	 * 是否是人事
-	 * @param array $arrPersonRole
-	 */
-	public function isHr($arrPersonRole)
-	{
-	    if(in_array('all_salary',$arrPersonRole['roleInfo'])){
-	        return true;
-	    }else{
-	        return false;
-	    }
-	}
+
 	
 	
 	/**

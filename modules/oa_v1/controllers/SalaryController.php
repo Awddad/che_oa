@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\controllers;
 
+use app\modules\oa_v1\logic\RoleLogic;
 use app\modules\oa_v1\models\SalaryForm;
 use yii\web\UploadedFile;
 use yii;
@@ -52,7 +53,7 @@ class SalaryController extends BaseController
     {
         $get = yii::$app->request->get();
         $logic = SalaryLogic::instance();
-        //if(!$logic->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
+        //if(!RoleLogic::instance()->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
         if(!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo)){
             return $this->_returnError(405,null,null);
         }
