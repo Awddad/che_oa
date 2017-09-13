@@ -124,6 +124,7 @@ class PayLogic extends BaseLogic
                 }elseif ($model->type == 4) {
                     $typeName = '申请付款';
                     $money = $model->applyPay->money;
+                    $end_time = $model->applyPay->end_time;
                 }else {
                     $typeName = '申请请购';
                     $money = $model->applyBuy->money;
@@ -138,7 +139,8 @@ class PayLogic extends BaseLogic
                     'title' => $model->title,
                     'money' => $money,
                     'status' => $model->status,
-                    'des' => $model->info->desInfo
+                    'des' => $model->info->desInfo,
+                    'end_time' => $end_time ? : '--',
                 ];
             }
             return [
