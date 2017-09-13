@@ -53,6 +53,8 @@ class ApplyPayForm extends BaseForm
     public $des;
     
     public $pay_type = 0;
+
+    public $end_time;
     
     /**
      * 审批人
@@ -71,10 +73,11 @@ class ApplyPayForm extends BaseForm
     {
         return [
             [
-                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'apply_id', 'to_name'],
+                ['money', 'bank_card_id', 'bank_name', 'des', 'approval_persons', 'apply_id', 'to_name', 'end_time'],
                 'required',
                 'message' => '缺少必填字段'
             ],
+            ['end_time', 'date','format' => 'yyyy-mm-dd','message' => '最晚付款时间不正确'],
             [
                 ['approval_persons', 'copy_person'],
                 'each',
@@ -86,7 +89,7 @@ class ApplyPayForm extends BaseForm
             ['files', 'safe'],
             ['pay_type', 'integer'],
             ['des', 'string'],
-            ['apply_id', 'checkOnly']
+            ['apply_id', 'checkOnly'],
         ];
     }
     
@@ -131,6 +134,7 @@ class ApplyPayForm extends BaseForm
         $applyPay->des = $this->des;
         $applyPay->pay_type = $this->pay_type;
         $applyPay->to_name = $this->to_name;
+        $applyPay->end_time = $this->end_time?:'';
         if (!$applyPay->save()) {
             throw new Exception('付款申请创建失败');
         }

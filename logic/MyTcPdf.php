@@ -337,7 +337,9 @@ TABLEHTML;
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">对方开户行</td>
-            <td colspan="5">{$param['bank_name']}</td>
+            <td colspan="2">{$param['bank_name']}</td>
+            <td style="background-color:#f2f2f2" colspan="1">最晚付款时间</td>
+            <td colspan="2">{$param['end_time']}</td>
         </tr>
         <tr>
             <td colspan="2" style="background-color:#f2f2f2" rowspan="2">金额</td>
