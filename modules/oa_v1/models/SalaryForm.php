@@ -174,7 +174,7 @@ jdf;
         $_person_ids = ArrayHelper::getColumn($_person_ids,'person_id');
         $diff = array_diff($person_ids,$_person_ids);
         if($diff){
-            return ['status'=>false,'msg'=>'员工编号：'implode(',',$diff).'不存在'];
+            return ['status'=>false,'msg'=>'员工编号：'.implode(',',$diff).'不存在'];
         }
         return ['status'=>true];
     }
