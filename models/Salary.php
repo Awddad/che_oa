@@ -7,7 +7,6 @@ use Yii;
 /**
  * This is the model class for table "oa_salary".
  *
- * @property integer $id
  * @property string $empno
  * @property string $date
  * @property integer $org_id
@@ -75,7 +74,6 @@ class Salary extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'empno' => 'Empno',
             'date' => 'Date',
             'org_id' => 'Org ID',
