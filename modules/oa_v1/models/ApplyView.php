@@ -448,7 +448,7 @@ class ApplyView extends BaseForm
 		$data = [
 			'des' => $certificate->des,
 			'files' => json_decode($certificate->files)?:[],
-			'use_time' => $certificate->start_time.'-'.$certificate->end_time,
+			'use_time' => $certificate->start_time.' - '.$certificate->end_time,
 			'org_id' => $certificate->org_id,
 			'org' => OrgLogic::instance()->getOrgName($certificate->org_id),
 		];
