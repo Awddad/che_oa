@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\models;
 
 
 use app\logic\CnyLogic;
+use app\models\ApplyCertificate;
 use app\models\ApplyDemand;
 use app\models\ApplyProjectRole;
 use app\models\ApplyTravel;
@@ -20,6 +21,7 @@ use app\models\JieKuan;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
+use app\modules\oa_v1\logic\OrgLogic;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\models\Person;
 use yii;
@@ -50,6 +52,7 @@ class ApplyView extends BaseForm
         14 => 'GoodsUp',
         15 => 'Travel',
         16 => 'ProjectRole',
+		17 => 'Certificate',
     ];
 
 
@@ -430,4 +433,25 @@ class ApplyView extends BaseForm
         ];
         return $data;
     }
+
+	/**
+	 * @param Apply $apply
+	 *
+	 * @return array
+	 */
+	public function getCertificate($apply)
+	{
+		/**
+		 * @var ApplyCertificate $certificate
+		 */
+		$certificate = $apply->certificate;
+		$data = [
+			'des' => $certificate->des,
+			'files' => json_decode($certificate->files)?:[],
+			'use_time' => $certificate->start_time.'-'.$certificate->end_time,
+			'org_id' => $certificate->org_id,
+			'org' => OrgLogic::instance()->getOrgName($certificate->org_id),
+		];
+		return $data;
+	}
 }
