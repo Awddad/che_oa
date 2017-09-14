@@ -64,4 +64,24 @@ class SalaryController extends BaseController
         }
         return $this->_return($res);
     }
+
+
+    /**
+     * 下载薪酬模版
+     *
+     * @param $path
+     */
+    public function actionDown()
+    {
+        $name = '薪酬年-月.xls';
+        $rootPath = Yii::$app->basePath. '/web/template/salary_template.xls';
+        if(!file_exists($rootPath)){
+            echo '未找到该文件';die;
+        }
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="'.$name.'"');
+        header('Content-Transfer-Encoding: binary');
+        readfile($rootPath);
+        exit;
+    }
 }
