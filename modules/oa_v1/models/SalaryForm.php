@@ -18,6 +18,8 @@ class SalaryForm extends BaseForm
     public $file;
     
     private $s_key = '!@ndy1#2%3';
+
+    private $pattern_file_name = '/^薪酬(\d{4}-\d{2}).xls$/';
     
     public function rules()
     {
@@ -37,6 +39,9 @@ class SalaryForm extends BaseForm
     {
         if (!$this->hasErrors()) {
             $file_name = $this->$attribute->name;
+            if(!preg_match($this->pattern_file_name, $file_name)){
+                $this->addError($attribute,'文件名不正确');
+            }
         }
     }
     
@@ -53,8 +58,9 @@ class SalaryForm extends BaseForm
         $file = $this->file;
         
         $file_name = mb_substr($file->name,0,mb_strpos($file->name, '.'));
+        $file_name = preg_replace($this->pattern_file_name,'$1',$file->name);
         if(0 >= strtotime($file_name)){
-            return ['status'=>false,'msg'=>'文件名不是日期'];
+            return ['status'=>false,'msg'=>'日期不正确'];
         }
         
         $arr = Excel::import($file->tempName, [
@@ -62,7 +68,10 @@ class SalaryForm extends BaseForm
             'setIndexSheetByName' => true,
             'getOnlySheet' => 'Sheet1',
         ]);
-        if($this->checkTitle($arr[1]) && $arr[2]){
+        if($this->checkTitle($arr[1])){
+            if(!isset($arr[2])){
+                return ['status'=>false,'msg'=>'内容不能为空'];
+            }
             array_shift($arr);
             $r = $this->checkEmpno($arr);
             if(!$r['status']){
