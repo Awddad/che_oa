@@ -62,8 +62,8 @@ class ApplyCertificateForm extends BaseForm
     public function checkUseTime($attribute)
     {
         if(!$this->hasErrors()){
-            $validator = new DateValidator(['format'=>'yyyymmdd']);
-            $time = explode('-',$this->$attribute);
+            $validator = new DateValidator(['format'=>'yyyy-mm-dd']);
+            $time = explode(' - ',$this->$attribute);
             foreach($time as $v){
                 if(!$validator->validate($v)){
                     $this->addError($attribute,'使用时间不正确');
@@ -100,7 +100,7 @@ class ApplyCertificateForm extends BaseForm
      */
     public function saveCertificate($apply)
     {
-        $time = explode('-',$this->use_time);
+        $time = explode(' - ',$this->use_time);
         $model = new ApplyCertificate();
         $model->apply_id = $apply->apply_id;
         $model->type = $this->c_type;
