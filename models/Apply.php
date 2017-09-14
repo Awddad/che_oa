@@ -47,6 +47,7 @@ use yii\db\Exception;
  * @property object $goodsUp
  * @property object $travel
  * @property object $projectRole
+ * @property object $certificate
  * @property object $expense
  * @property object $info
  */
@@ -465,6 +466,15 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ApplyProjectRole::className(), ['apply_id' => 'apply_id']);
     }
+
+    /**
+     * 证件申请
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCertificate()
+    {
+        return $this->hasOne(ApplyCertificate::className(),['apply_id'=>'apply_id']);
+    }
     
     /**
      * @var array
@@ -486,6 +496,7 @@ class Apply extends \yii\db\ActiveRecord
         14 => '商品上架',
         15 => '出差',
         16 => '权限',
+        17 => '证件',
     ];
     
     public function getInfo()
@@ -535,6 +546,9 @@ class Apply extends \yii\db\ActiveRecord
                 break;
             case 16:
                 $info = $this->projectRole;
+                break;
+            case 17:
+                $info = $this->certificate;
                 break;
             default:
                 $info = $this->expense;

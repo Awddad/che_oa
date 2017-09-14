@@ -14,6 +14,7 @@ use app\logic\Logic;
 use app\logic\MyTcPdf;
 use app\models\Apply;
 use app\models\ApplyBuyList;
+use app\models\ApplyCertificate;
 use app\models\ApplyDemandList;
 use app\models\ApplyProjectRole;
 use app\models\ApplyUseChapter;
@@ -682,6 +683,44 @@ class PdfLogic extends Logic
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
         ];
         $pdf->createdPdf($root_path, $arrInfo, 'projectRole');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
+
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function applyCertificate($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        /**
+         * @var ApplyCertificate $certificate
+         */
+        $certificate = $apply->certificate;
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
+            'person' => $person->person_name,
+            'des' => $certificate->des,
+
+            'type' => $certificate->type_name,
+            'to_org' => OrgLogic::instance()->getOrgName($certificate->org_id),
+            'use_time' => date('Y-m-d',$certificate->start_time) . ' ~ '. date('Y-m-d', $certificate->end_time),
+
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'certificate');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
