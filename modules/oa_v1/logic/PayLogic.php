@@ -111,6 +111,7 @@ class PayLogic extends BaseLogic
         )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
+            $end_time = '--';
             /**
              * @var Apply $model
              */
