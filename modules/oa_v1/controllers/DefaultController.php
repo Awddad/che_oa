@@ -265,6 +265,9 @@ class DefaultController extends BaseController
             case 17:
                 $pdf = PdfLogic::instance()->applyCertificate($apply);
                 break;
+            case 18:
+                $pdf = PdfLogic::instance()->applyHoliday($apply);
+                break;
         }
         if(!empty($pdf)) {
             header('Content-Type: application/octet-stream');

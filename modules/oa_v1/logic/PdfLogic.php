@@ -16,6 +16,7 @@ use app\models\Apply;
 use app\models\ApplyBuyList;
 use app\models\ApplyCertificate;
 use app\models\ApplyDemandList;
+use app\models\ApplyHoliday;
 use app\models\ApplyProjectRole;
 use app\models\ApplyUseChapter;
 use app\models\AssetGetList;
@@ -715,12 +716,50 @@ class PdfLogic extends Logic
 
             'type' => $certificate->type_name,
             'to_org' => OrgLogic::instance()->getOrgName($certificate->org_id),
-            'use_time' => date('Y-m-d',$certificate->start_time) . ' ~ '. date('Y-m-d', $certificate->end_time),
+            'use_time' => date('Y-m-d',strtotime($certificate->start_time)) . ' ~ '. date('Y-m-d', strtotime($certificate->end_time)),
 
             'approval_person' =>$apply->approval_persons,//多个人、分隔
             'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
         ];
         $pdf->createdPdf($root_path, $arrInfo, 'certificate');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
+    }
+
+    /**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function applyHoliday($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        /**
+         * @var ApplyHoliday $holiday
+         */
+        $holiday = $apply->holiday;
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
+            'person' => $person->person_name,
+            'des' => $holiday->des,
+
+            'type' => $holiday->type_name,
+            'time' => date('Y-m-d H:i',strtotime($holiday->start_time)) . ' ~ '. date('Y-m-d H:i', strtotime($holiday->end_time)),
+            'duration' => $holiday->duration.'小时',
+
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'holiday');
         return [
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'

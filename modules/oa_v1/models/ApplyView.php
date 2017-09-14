@@ -6,6 +6,7 @@ namespace app\modules\oa_v1\models;
 use app\logic\CnyLogic;
 use app\models\ApplyCertificate;
 use app\models\ApplyDemand;
+use app\models\ApplyHoliday;
 use app\models\ApplyProjectRole;
 use app\models\ApplyTravel;
 use app\models\ApplyUseChapter;
@@ -53,6 +54,7 @@ class ApplyView extends BaseForm
         15 => 'Travel',
         16 => 'ProjectRole',
 		17 => 'Certificate',
+		18 => 'Holiday',
     ];
 
 
@@ -451,6 +453,29 @@ class ApplyView extends BaseForm
 			'use_time' => $certificate->start_time.' - '.$certificate->end_time,
 			'org_id' => $certificate->org_id,
 			'org' => OrgLogic::instance()->getOrgName($certificate->org_id),
+			'type' => $certificate->type,
+			'type_name' => $certificate->type_name,
+		];
+		return $data;
+	}
+
+	/**
+	 * @param Apply $apply
+	 *
+	 * @return array
+	 */
+	public function getHoliday($apply)
+	{
+		/**
+		 * @var ApplyHoliday $holiday
+		 */
+		$holiday = $apply->holiday;
+		$data = [
+			'des' => $holiday->des,
+			'files' => json_decode($holiday->files)?:[],
+			'time' => date('Y-m-d H:i',strtotime($holiday->start_time)).' - '.date('Y-m-d H:i', strtotime($holiday->end_time)),
+			'type' => $holiday->type,
+			'type_name' => $holiday->type_name
 		];
 		return $data;
 	}
