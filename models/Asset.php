@@ -18,6 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $amount
  * @property string $price
  * @property integer $free_amount
+ * @property integer $is_delete
  * @property integer $created_at
  * @property integer $updated_at
  */
@@ -37,7 +38,7 @@ class Asset extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['asset_type_id', 'asset_brand_id', 'amount', 'free_amount', 'created_at', 'updated_at'], 'integer'],
+            [['asset_type_id', 'asset_brand_id', 'amount', 'free_amount', 'created_at', 'updated_at', 'is_delete'], 'integer'],
             [['price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['asset_type_name', 'asset_brand_name', 'name'], 'string', 'max' => 128],
