@@ -474,6 +474,7 @@ class ApplyView extends BaseForm
 			'des' => $holiday->des,
 			'files' => json_decode($holiday->files)?:[],
 			'time' => date('Y-m-d H:i',strtotime($holiday->start_time)).' - '.date('Y-m-d H:i', strtotime($holiday->end_time)),
+			'duration' => $holiday->duration,
 			'type' => $holiday->type,
 			'type_name' => $holiday->type_name
 		];
