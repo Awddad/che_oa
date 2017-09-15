@@ -142,8 +142,10 @@ class AssetController extends BaseController
             $data[] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
+                'asset_type_id' => AssetLogic::instance()->getTypeIdByChild($v->asset_type_id),
                 'asset_type_name' => $v->asset_type_name,
                 'asset_brand_name' => $v->asset_brand_name,
+                'asset_brand_id' => $v->asset_brand_id,
                 'name' => $v->name,
                 'amount' => $v->amount,
                 'price' => Yii::$app->formatter->asCurrency($v->price),

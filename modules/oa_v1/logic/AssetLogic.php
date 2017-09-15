@@ -671,5 +671,19 @@ class AssetLogic extends Logic
             throw $e;
         }
     }
-    
+
+
+    /**
+     * 获得资产类别id
+     * @param int $type_id
+     */
+    public function getTypeIdByChild($type_id)
+    {
+        $data = [];
+        while(($res = AssetType::findOne($type_id)) && $res['parent_id'] >= 0){
+            $data[] = (int)$res['id'];
+            $type_id = $res['parent_id'];
+        }
+        return array_reverse($data);
+    }
 }
