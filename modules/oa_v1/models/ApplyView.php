@@ -453,7 +453,7 @@ class ApplyView extends BaseForm
 			'use_time' => $certificate->start_time.' - '.$certificate->end_time,
 			'org_id' => $certificate->org_id,
 			'org' => OrgLogic::instance()->getOrgName($certificate->org_id),
-			'type' => $certificate->type,
+			'type' => explode(',',$certificate->type),
 			'type_name' => $certificate->type_name,
 		];
 		return $data;

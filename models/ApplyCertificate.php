@@ -34,9 +34,9 @@ class ApplyCertificate extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id'], 'required'],
-            [['type', 'org_id', 'created_at'], 'integer'],
+            [['org_id', 'created_at'], 'integer'],
             [['files'], 'string'],
-            [['apply_id', 'type_name'], 'string', 'max' => 20],
+            [['apply_id', 'type', 'type_name'], 'string', 'max' => 20],
             [['start_time', 'end_time'], 'string', 'max' => 10],
             [['des'], 'string', 'max' => 1024],
         ];
