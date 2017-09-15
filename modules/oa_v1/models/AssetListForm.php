@@ -79,6 +79,7 @@ class AssetListForm extends Model
             'asset_type_id' => $this->asset_type_id,
             'asset_brand_id' => $this->asset_brand_id,
             'name' => $this->name,
+            'is_delete' => 0,
             //'price' => $this->price,
         ])->one();
         $assetLogic = AssetLogic::instance();
