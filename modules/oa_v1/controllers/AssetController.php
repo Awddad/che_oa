@@ -105,7 +105,7 @@ class AssetController extends BaseController
     public function actionList()
     {
         $param = Yii::$app->request->get();
-        $query = Asset::find()->where([]);
+        $query = Asset::find()->where(['is_delete'=>0]);
     
         $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if($keyword) {
@@ -162,17 +162,29 @@ class AssetController extends BaseController
      * @param $asset_id
      * @return array
      */
-    public function actionAssetList($asset_id)
+    public function actionAssetList()
     {
         $param = Yii::$app->request->get();
-        $query = AssetList::find()->innerJoin('oa_asset', 'oa_asset.id = oa_asset_list.asset_id')->where([
-            'oa_asset_list.asset_id' => $asset_id
-        ]);
-    
+        $query = AssetList::find()->innerJoin('oa_asset', 'oa_asset.id = oa_asset_list.asset_id');
+
+        $asset_id = ArrayHelper::getValue($param, 'asset_id');
+        if($asset_id){
+            $query->andwhere([
+                'oa_asset_list.asset_id' => $asset_id
+            ]);
+        }
+
         $status = ArrayHelper::getValue($param, 'status');
         if ($status) {
             $query->andWhere([
                 'oa_asset_list.status' => $status
+            ]);
+        }
+
+        $asset_type_id = ArrayHelper::getValue($param, 'asset_type_id');
+        if ($asset_type_id) {
+            $query->andWhere([
+                'oa_asset.asset_type_id' => $asset_type_id
             ]);
         }
     
@@ -215,6 +227,7 @@ class AssetController extends BaseController
             'defaultPageSize' => $pageSize,
             'totalCount' => $query->count(),
         ]);
+        //echo $query->createCommand()->getRawSql();die();
         $model = $query->orderBy(["id" => SORT_DESC])
             ->offset($pagination->offset)
             ->limit($pagination->limit)
@@ -251,6 +264,7 @@ class AssetController extends BaseController
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
+                'asset_type_name' => Asset::findOne($v->asset_id)->asset_type_name,
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'stock_number' => $v->stock_number,
                 'asset_number' => $v->asset_number,
@@ -429,7 +443,7 @@ class AssetController extends BaseController
     public function actionAddAsset()
     {
         $model = new AssetListForm();
-    
+        $model->setScenario($model::SCENARIO_ADD);
         $param = \Yii::$app->request->post();
         $data['AssetListForm'] = $param;
         if ($model->load($data) && $model->validate() &&  $model->save($this->arrPersonInfo)) {
@@ -639,5 +653,18 @@ class AssetController extends BaseController
             'list' => $data,
             'page' => BaseLogic::instance()->pageFix($pagination)
         ]);
+    }
+
+    public function actionDelAsset()
+    {
+        $model = new AssetListForm();
+        $model->setScenario($model::SCENARIO_DEL);
+        $param = \Yii::$app->request->post();
+        $data['AssetListForm'] = $param;
+        if ($model->load($data) && $model->validate() &&  $model->del($this->arrPersonInfo)) {
+            return $this->_return([]);
+        } else {
+            return $this->_returnError(4400, null ,current($model->getFirstErrors()));
+        }
     }
 }
