@@ -269,6 +269,7 @@ class AssetController extends BaseController
                 'asset_type_id' => $asset->asset_type_id,
                 'asset_brand_name' => $asset->asset_brand_name,
                 'asset_brand_id' => $asset->asset_brand_id,
+                'name' => $asset->name,
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'stock_number' => $v->stock_number,
                 'asset_number' => $v->asset_number,
