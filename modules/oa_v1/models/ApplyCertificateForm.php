@@ -82,7 +82,7 @@ class ApplyCertificateForm extends BaseForm
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$apply->save()){
-                throw new Exception(current($apply->getFirstErrors()));
+                throw new \Exception(current($apply->getFirstErrors()));
             }
             $this->saveCertificate($apply);
             $this->approvalPerson($apply);
@@ -117,7 +117,7 @@ class ApplyCertificateForm extends BaseForm
         $model->created_at = time();
 
         if(!$model->save()){
-            throw new Exception(current($model->getFirstErrors()));
+            throw new \Exception(current($model->getFirstErrors()));
         }
     }
 
