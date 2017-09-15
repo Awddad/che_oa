@@ -268,6 +268,7 @@ jdf;
         $res = $query->orderBy("empno asc")
         ->offset($pagination->offset)
         ->limit($pagination->limit)
+        ->asArray()
         ->all();
          
         
