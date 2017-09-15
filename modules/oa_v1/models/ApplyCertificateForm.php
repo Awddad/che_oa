@@ -50,7 +50,7 @@ class ApplyCertificateForm extends BaseForm
             [
                 ['approval_persons', 'copy_person'], 'checkTotal'
             ],
-            ['c_type','in', 'range'=>array_keys($this->_type), 'message'=>'证件类型不正确'],
+            [['c_type'],'each','rule'=>['in', 'range'=>array_keys($this->_type), 'message'=>'证件类型不正确']],
             ['org_id','exist','targetClass'=>'\app\models\Org','targetAttribute'=>'org_id','message'=>'组织不存在！'],
             ['des','string','max' => 1000,'message' => '说明不正确！'],
             ['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
@@ -100,11 +100,15 @@ class ApplyCertificateForm extends BaseForm
      */
     public function saveCertificate($apply)
     {
+        $type_name = [];
+        foreach($this->c_type as $v){
+            $type_name[] =  $this->_type[$v];
+        }
         $time = explode(' - ',$this->use_time);
         $model = new ApplyCertificate();
         $model->apply_id = $apply->apply_id;
-        $model->type = $this->c_type;
-        $model->type_name = $this->_type[$this->c_type];
+        $model->type = implode(',',$this->c_type);
+        $model->type_name = implode(',',$type_name);
         $model->org_id = $this->org_id;
         $model->start_time = $time[0];
         $model->end_time = $time[1];
