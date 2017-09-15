@@ -371,4 +371,16 @@ class ApplyView2 extends ApplyView
 		];
 		return $data;
 	}
+
+	/**
+	 * @param Apply $apply
+	 *
+	 * @return array
+	 */
+	public function getCertificate($apply)
+	{
+		$data = parent::getCertificate($apply);
+		$data['org_ids'] = OrgLogic::instance()->getOrgIdByChild($data['org_id']);
+		return $data;
+	}
 }
