@@ -133,9 +133,7 @@ class BaseApplyLogic extends Logic
                 "org" => '',
                 "status" => 0
             ];
-        }
-
-        if($apply->status == 99 && $apply->cai_wu_need == 2) {
+        }elseif($apply->status == 99 && $apply->cai_wu_need == 2) {
             $data[] = [
                 "title" => "付款确认",
                 "name" => $apply->cai_wu_person,
