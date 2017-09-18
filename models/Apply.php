@@ -26,6 +26,10 @@ use yii\db\Exception;
  * @property integer $cai_wu_person_id
  * @property integer $cai_wu_time
  * @property string $caiwu_refuse_reason
+ * @property string $cancel_person
+ * @property integer $cancel_person_id
+ * @property string $cancel_reason
+ * @property integer $cancel_time
  * @property integer $apply_list_pdf
  * @property integer $org_id
  * @property integer $company_id
@@ -80,9 +84,9 @@ class Apply extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'type', 'title', 'person', 'person_id', 'approval_persons'], 'required'],
-            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id', 'copy_rule'], 'integer'],
+            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id', 'copy_rule','cancel_time'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
-            [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
+            [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'caiwu_refuse_reason', 'cancel_person', 'cancel_reason', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
         ];
     }
 
