@@ -324,7 +324,8 @@ class AssetController extends BaseController
             'apply_buy_id' => $assetList->apply_buy_id,
             'apply_demand_id' => $demandId,
             'org' => '',
-            'use_person' => ''
+            'use_person' => '',
+            'phone' => $assetList->tel
         ];
         if($assetList->status == 2 && $assetList->person_id) {
             $person = Person::findOne($assetList->person_id);
