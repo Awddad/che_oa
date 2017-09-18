@@ -112,6 +112,10 @@ class AssetListForm extends Model
         }
     }
 
+    /**
+     * @param $person Person
+     * @return bool
+     */
     public function del($person)
     {
         $query = AssetList::find()->select('status,count(*) count')->where(['asset_id'=>$this->asset_id])->groupBy('status');

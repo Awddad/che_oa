@@ -40,7 +40,7 @@ class ApplyController extends BaseController
 	 * 列表
 	 */
 	public function actionGetList() {
-	    $data = ApplyListLogic::instance(['person' => $this->arrPersonInfo])->getList();
+	    $data = ApplyListLogic::instance(['person' => $this->arrPersonInfo,'roleName'=>$this->roleName])->getList();
 	    return $this->_return($data);
 	}
 
@@ -472,4 +472,37 @@ class ApplyController extends BaseController
     {
         
     }
+
+    /**
+     * 作废
+     */
+	public function actionCancel()
+	{
+		$applyId = Yii::$app->request->post('apply_id');
+		$reason = Yii::$app->request->post('reason');
+		if(!$applyId || !$reason) {
+			return $this->_returnError(403);
+		}
+		$apply = Apply::findOne($applyId);
+		if(empty($apply)){
+			return $this->_returnError(2408);
+		}
+		if($apply->status != 99){
+			return $this->_returnError(2406);
+		}
+		if($apply->type != 18){
+			return $this->_returnError(2406);
+		}
+		$apply->status = 8;
+		$apply->cancel_person = $this->arrPersonInfo->person_name;
+		$apply->cancel_time = time();
+		$apply->cancel_person_id = $this->arrPersonInfo->person_id;
+		$apply->cancel_reason = $reason;
+		$apply->next_des = '作废';
+		$apply->end_time = time();
+		if (!$apply->save()) {
+			return $this->_returnError(400);
+		}
+		return $this->_return([], 200);
+	}
 }

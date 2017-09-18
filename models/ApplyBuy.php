@@ -16,6 +16,7 @@ use Yii;
  * @property string $des
  * @property string $files
  * @property integer $status
+ * @property ApplyBuyList $buyList
  */
 class ApplyBuy extends \yii\db\ActiveRecord
 {

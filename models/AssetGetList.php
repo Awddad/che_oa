@@ -16,6 +16,8 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property Asset  $asset
+ * @property AssetList  $assetList
  */
 class AssetGetList extends \yii\db\ActiveRecord
 {
@@ -92,7 +94,10 @@ class AssetGetList extends \yii\db\ActiveRecord
     {
         return $this->hasOne(AssetList::className(), ['id' =>'asset_list_id']);
     }
-    
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getAsset()
     {
         return $this->hasOne(Asset::className(), ['id' => 'asset_id']);

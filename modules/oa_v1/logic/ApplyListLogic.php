@@ -29,6 +29,7 @@ class ApplyListLogic extends BaseLogic
      * @var Person $person
      */
     public $person;
+    public $roleName;
     
     public function getList()
     {
@@ -159,6 +160,7 @@ class ApplyListLogic extends BaseLogic
         $query->orderBy($orderBy)->offset($pagination->offset)->limit($pagination->limit);
     
         $data = [];
+        $can_cancel = in_array($this->roleName,[$this->roleName]);
         /**
          * @var ApprovalLog $approvalLog
          */
@@ -188,6 +190,7 @@ class ApplyListLogic extends BaseLogic
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
             $dataInfo['end_at'] = $end_at;
             $dataInfo['next_des'] = $des;
+            $dataInfo['can_cancel'] = $can_cancel && $apply->type==18 && $apply->status==99 ? 1 : 0;
             $data[$k] = $dataInfo;
         }
         return [
