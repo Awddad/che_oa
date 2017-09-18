@@ -3,7 +3,6 @@ namespace app\modules\oa_v1\models;
 
 
 
-use app\logic\CnyLogic;
 use app\models\ApplyCertificate;
 use app\models\ApplyDemand;
 use app\models\ApplyHoliday;
@@ -15,7 +14,6 @@ use app\models\AssetGet;
 use app\models\BaoXiao;
 use app\models\BaoXiaoList;
 use app\models\GoodsUp;
-use app\models\TagTree;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
 use app\models\JieKuan;
@@ -23,7 +21,6 @@ use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
 use app\modules\oa_v1\logic\OrgLogic;
-use app\modules\oa_v1\logic\RegionLogic;
 use app\models\Person;
 use yii;
 
@@ -150,6 +147,9 @@ class ApplyView extends BaseForm
 			'des' => $payback->des,
 			'list' => []
 		];
+		/**
+		 * @var $jiekuan JieKuan
+		 */
 		$jiekuan = JieKuan::find()->where("apply_id in ({$payback->jie_kuan_ids})")->all();
 		foreach ($jiekuan as $v) {
 			$data['list'][] = [
@@ -299,10 +299,11 @@ class ApplyView extends BaseForm
 	{
 	   $leave = $apply->applyLeave;
 	   $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
+	   $person = Person::find()->where(['person_id'=>$apply->person_id])->one();
 	   $data = [
 	       'leave_time'=>date('Y年m月d日',strtotime($leave->leave_time)),
 	       'des' => $leave->des,
-	       'profession' => Person::find()->where(['person_id'=>$apply->person_id])->one()->profession,
+	       'profession' => $person->profession,
 	       'stock_status' => $leave->stock_status ? '是' : '否',
 	       'finance_status' => $leave->finance_status ? '是' : '否',
 	       'account_status' => $leave->account_status ? '是' : '否',

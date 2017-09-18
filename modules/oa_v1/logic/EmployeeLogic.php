@@ -8,7 +8,7 @@ class EmployeeLogic extends BaseLogic
 {
     /**
      * 修改权限系统用户
-     * @param app\models\Employee $employee
+     * @param \app\models\Employee $employee
      * @return array
      */
     public function editQxEmp($employee)
@@ -33,7 +33,7 @@ class EmployeeLogic extends BaseLogic
     }
     /**
      * 添加权限系统用户
-     * @param app\models\Employee $employee
+     * @param \app\models\Employee $employee
      * @return array
      */
     public function addQxEmp($employee)
@@ -57,7 +57,7 @@ class EmployeeLogic extends BaseLogic
     }
     /**
      * 删除权限系统用户
-     * @param app\models\Employee $employee
+     * @param \app\models\Employee $employee
      * @return array
      */
     public function delQxEmp($employee)

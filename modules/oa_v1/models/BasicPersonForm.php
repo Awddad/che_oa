@@ -51,7 +51,7 @@ class BasicPersonForm extends BaseForm
 		$keywords = trim(ArrayHelper::getValue($params,'keywords',null));
 		$start_time = ArrayHelper::getValue($params,'start_time',null);
 		$end_time = ArrayHelper::getValue($params,'end_time',null);
-		$page = ArrayHelper::getValue($params,'page',1);
+		//$page = ArrayHelper::getValue($params,'page',1);
 		$page_size = ArrayHelper::getValue($params,'page_size',10);
 	
 		$query = PersonType::find();

@@ -161,7 +161,6 @@ class AssetController extends BaseController
     /**
      * 资产列表详情
      *
-     * @param $asset_id
      * @return array
      */
     public function actionAssetList()
@@ -178,6 +177,7 @@ class AssetController extends BaseController
 
         $status = ArrayHelper::getValue($param, 'status');
         if ($status) {
+            is_string($status) && $status = explode(',',$status);
             $query->andWhere([
                 'oa_asset_list.status' => $status
             ]);
@@ -243,6 +243,9 @@ class AssetController extends BaseController
                 $person = Person::findOne($v->person_id);
                 $usePerson = $person->person_name;
                 $org = $person->org_full_name;
+                /**
+                 * @var $use AssetListLog
+                 */
                 $use = AssetListLog::find()->where([
                     'asset_list_id' => $v->id,
                     'person_id' => $v->person_id,
@@ -331,6 +334,9 @@ class AssetController extends BaseController
             $person = Person::findOne($assetList->person_id);
             $data['use_person'] = $person->person_name;
             $data['org'] = $person->org_full_name;
+            /**
+             * @var $use AssetListLog
+             */
             $use = AssetListLog::find()->where([
                 'asset_list_id' => $assetList->id,
             ])->andWhere([
@@ -436,7 +442,7 @@ class AssetController extends BaseController
         if(empty($param) || !isset($param['asset_list_id'])  || !isset($param['sn_number'])) {
             return $this->_returnError(403);
         }
-        $rst = AssetList::updateAll(['sn_number' => $param['sn_number']], ['id' => $param['asset_list_id']]);
+        AssetList::updateAll(['sn_number' => $param['sn_number']], ['id' => $param['asset_list_id']]);
         return $this->_return([], 200, '添加成功');
     }
 
@@ -452,7 +458,7 @@ class AssetController extends BaseController
         if(empty($param) || !isset($param['asset_list_id'])  || !isset($param['tel'])) {
             return $this->_returnError(403);
         }
-        $rst = AssetList::updateAll(['tel' => $param['tel']], ['id' => $param['asset_list_id']]);
+        AssetList::updateAll(['tel' => $param['tel']], ['id' => $param['asset_list_id']]);
         return $this->_return([], 200, '添加成功');
     }
     
@@ -559,6 +565,9 @@ class AssetController extends BaseController
                 $use_person = $person->person_name;
                 $org= $person->org_full_name;
             }
+            /**
+             * @var $assetListLog AssetListLog
+             */
             $assetListLog = AssetListLog::find()->where([
                 'asset_list_id' => $v->id
             ])->orderBy('id desc')->one();
@@ -631,6 +640,9 @@ class AssetController extends BaseController
          * @var AssetList $v
          */
         foreach ($assetList as $k => $v) {
+            /**
+             * @var $use AssetListLog
+             */
             $use = AssetListLog::find()->where([
                 'asset_list_id' => $v->id,
                 'person_id' => $v->person_id,

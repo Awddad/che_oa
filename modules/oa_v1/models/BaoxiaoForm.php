@@ -2,12 +2,10 @@
 namespace app\modules\oa_v1\models;
 
 use app\modules\oa_v1\logic\BaseLogic;
-use yii\helpers\ArrayHelper;
 
 use Yii;
 use app\models as appmodel;
-use app\logic\MyTcPdf;
-use app\modules\oa_v1\logic\PersonLogic;
+use yii\web\UploadedFile;
 
 
 class BaoxiaoForm extends BaseForm
@@ -109,8 +107,8 @@ class BaoxiaoForm extends BaseForm
 
 	/**
 	 * 初始化model
-	 * @param string $type ['apply','baoxiao','baoxiaolist']
-	 * @param appmodel\Apply $model AR对象
+	 * @param string $type ['baoxiao','baoxiaolist']
+	 * @param object $model AR对象
 	 * @param array $data
 	 */
 	protected function loadModel($type,&$model,$data=[])
@@ -137,18 +135,6 @@ class BaoxiaoForm extends BaseForm
 			//$model -> type_name = $typeName;
 			//$model -> type = $data['type'];
 			$model -> des = $data['des'];
-		}elseif('approval_log' == $type){
-			$model -> apply_id = $this -> apply_id;
-			$model -> approval_person = $data['person_name'];
-			$model -> approval_person_id = $data['person_id'];
-			$model -> steep = $data['steep'];
-			$model -> result = 0;
-			$model -> is_end = isset($data['is_end']) ? $data['is_end']: 0;
-			$model -> is_to_me_now = $data['steep'] == 1 ? 1 : 0;
-		}elseif('copy' == $type){
-			$model -> apply_id = $this -> apply_id;
-			$model -> copy_person_id = $data['person_id'];
-			$model -> copy_person = $data['person_name'];
 		}
 	}
 	
@@ -178,8 +164,9 @@ class BaoxiaoForm extends BaseForm
 	}
 	/**
 	 * 保存文件
-	 * @param unknown_type $file
-	 * @param unknown_type $dir
+	 * @param UploadedFile $file
+	 * @param string $dir
+	 * @return array
 	 */
 	public function saveFile($file,$dir)
 	{
@@ -190,6 +177,9 @@ class BaoxiaoForm extends BaseForm
 			mkdir($root_path,0777,true);
 		}
 		$res = [];
+		/**
+		 * @var $v UploadedFile
+		 */
 		foreach($file as $v){
 			$base_name = iconv("UTF-8","gb2312", $v -> baseName);
 			$tmp_file_name = $base_name.$this->user['id'].rand(100,999).'.'.$v -> extension;
@@ -204,41 +194,5 @@ class BaoxiaoForm extends BaseForm
 		return $res;
 	}
     
-    /**
-     * @param $dir
-     * @param appmodel\Person $person
-     */
-	public function saveAccount($dir, $person)
-	{
-		$arrInfo = [
-			'apply_date' => date('Y年m月d日',$this -> create_time),
-			'apply_id' => $this -> apply_id,
-			'org_full_name' => $person->org_full_name,
-			'person' => $this -> user['name'],
-			'bank_name' => $this -> bank_name.$this -> bank_name_des,
-			'bank_card_id' => $this -> bank_card_id,
-			'approval_person' => $this->getPerson('approval_persons'),//多个人、分隔
-			'copy_person' => $this->getPerson('copy_person'),//多个人、分隔
-			'list' => [],
-			'tips' => '--',
-            'caiwu' => '--'
-		];
-		foreach($this -> bao_xiao_list as $v){
-			$arrInfo['list'][] = [
-                'type_name' => $v['type_name'],
-                'money' => \Yii::$app->formatter->asCurrency($v['money']),
-                'detail' => @$v['des']
-            ];
-		}
-		$base_dir = str_replace('\\', '/', Yii::$app -> basePath);
-		$root_path = $base_dir.'/web'.$dir;
-		if(!is_dir($root_path)){
-			mkdir($root_path,0777,true);
-		}
-		
-		$fileName = $arrInfo['apply_id'].'.pdf';
-		$myPdf = new MyTcPdf();
-		$myPdf -> createBaoXiaoDanPdf($root_path.'/'.$fileName, $arrInfo);
-		appmodel\Apply::updateAll(['apply_list_pdf' => "$dir/$fileName"],"apply_id='{$this->apply_id}'");
-	}
+
 }

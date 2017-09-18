@@ -18,6 +18,8 @@ use Yii;
  * @property integer $apply_buy_id
  * @property integer $created_at
  * @property integer $person_id
+ *
+ * @property Asset $asset
  */
 class AssetList extends \yii\db\ActiveRecord
 {
