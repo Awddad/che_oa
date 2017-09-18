@@ -437,10 +437,7 @@ class AssetController extends BaseController
             return $this->_returnError(403);
         }
         $rst = AssetList::updateAll(['sn_number' => $param['sn_number']], ['id' => $param['asset_list_id']]);
-        if($rst) {
-            return $this->_return([], 200, '添加成功');
-        }
-        return $this->_returnError(500);
+        return $this->_return([], 200, '添加成功');
     }
 
     /**
@@ -456,10 +453,7 @@ class AssetController extends BaseController
             return $this->_returnError(403);
         }
         $rst = AssetList::updateAll(['tel' => $param['tel']], ['id' => $param['asset_list_id']]);
-        if($rst) {
-            return $this->_return([], 200, '添加成功');
-        }
-        return $this->_returnError(500);
+        return $this->_return([], 200, '添加成功');
     }
     
     /**
