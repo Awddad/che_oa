@@ -133,10 +133,11 @@ class AssetListForm extends Model
                     default:
                         break;
                 }
-            }else{
-                $this->addError('',$error);
-                return false;
             }
+        }
+        if($error){
+            $this->addError('',$error);
+            return false;
         }
         $asset = Asset::findOne($this->asset_id);
         $asset->is_delete=1;
