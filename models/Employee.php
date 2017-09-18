@@ -32,6 +32,8 @@ use Yii;
  * @property string $service
  * @property integer $service_id
  * @property integer $person_id
+ *
+ * @property EmployeeType $employeeType
  */
 class Employee extends \yii\db\ActiveRecord
 {

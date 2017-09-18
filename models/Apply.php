@@ -36,24 +36,24 @@ use yii\db\Exception;
  * @property integer $end_time
  * @property integer $copy_rule
  *
- * @property object $loan
- * @property object $payBack
- * @property object $applyPay
- * @property object $applyBuy
- * @property object $applyDemand
- * @property object $applyUseChapter
- * @property object $assetGet
- * @property object $assetBack
- * @property object $applyPositive
- * @property object $applyLeave
- * @property object $applyTransfer
- * @property object $applyOpen
- * @property object $goodsUp
- * @property object $travel
+ * @property JieKuan $loan
+ * @property PayBack $payBack
+ * @property ApplyPay $applyPay
+ * @property ApplyBuy $applyBuy
+ * @property ApplyDemand $applyDemand
+ * @property ApplyUseChapter $applyUseChapter
+ * @property AssetGet $assetGet
+ * @property AssetBack $assetBack
+ * @property ApplyPositive $applyPositive
+ * @property ApplyLeave $applyLeave
+ * @property ApplyTransfer $applyTransfer
+ * @property ApplyOpen $applyOpen
+ * @property GoodsUp $goodsUp
+ * @property ApplyTravel $travel
  * @property object $projectRole
- * @property object $certificate
- * @property object $holiday
- * @property object $expense
+ * @property ApplyCertificate $certificate
+ * @property ApplyHoliday $holiday
+ * @property BaoXiao $expense
  * @property object $info
  */
 class Apply extends \yii\db\ActiveRecord

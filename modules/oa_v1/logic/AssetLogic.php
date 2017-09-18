@@ -635,7 +635,7 @@ class AssetLogic extends Logic
     
     /**
      *
-     * @param AssetGetList $assetList
+     * @param AssetList $assetList
      * @param Person $operatePerson
      * @param $des
      *

@@ -2,10 +2,8 @@
 namespace app\modules\oa_v1\models;
 
 use app\modules\oa_v1\logic\PeopleLogic;
-use app\models\Job;
 use yii\helpers\ArrayHelper;
 use app\models\Employee;
-use app\models\Region;
 use app\models\Political;
 use app\models\EmployeeAccount;
 use app\models\PersonBankInfo;
@@ -134,6 +132,7 @@ class EmployeeInfoForm extends BaseForm
                 return false;
             }
         }
+        return false;
     }
     
     public function scenarios()
@@ -149,6 +148,7 @@ class EmployeeInfoForm extends BaseForm
     /**
      * 保存员工基本信息
      * @param array $user
+     * @return array
      */
     public function saveEmployee($user)
     {
@@ -259,6 +259,7 @@ class EmployeeInfoForm extends BaseForm
     /**
      * 修改帐号
      * @param array $user
+     * @return array
      */
     public function saveAccount($user)
     {
@@ -314,7 +315,9 @@ class EmployeeInfoForm extends BaseForm
         return ['status'=>true,'data'=>$res];
     }
     
+
     /**
+     * @param $id
      * @return array
      */
     public function getPersonAccount($id)
@@ -372,9 +375,12 @@ class EmployeeInfoForm extends BaseForm
         }
         return $data;
     }
-    
+
     /**
+     *
      * 删除银行卡
+     * @param $user
+     * @return array
      */
     public function delBankCard($user)
     {
@@ -394,6 +400,8 @@ class EmployeeInfoForm extends BaseForm
     
     /**
      * 编辑银行卡
+     * @param $user
+     * @return array
      */
     public function saveBankCard($user)
     {
@@ -419,6 +427,7 @@ class EmployeeInfoForm extends BaseForm
     /**
      * 修改劳动合同
      * @param array $user
+     * @return array
      */
     public function editService($user)
     {
@@ -433,7 +442,8 @@ class EmployeeInfoForm extends BaseForm
     }
     /**
      * 获得劳动合同
-     * @param unknown $id
+     * @param int $id
+     * @return array
      */
     public function getService($id)
     {
