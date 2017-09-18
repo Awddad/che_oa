@@ -279,6 +279,7 @@ class AssetController extends BaseController
                 'stock_number' => $v->stock_number,
                 'asset_number' => $v->asset_number,
                 'status' => $status,
+                'status_id' => $v->status,
                 'price' => Yii::$app->formatter->asCurrency($v->price),
                 'use_person' => $usePerson,
                 'org' => $org,
