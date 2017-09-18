@@ -160,7 +160,7 @@ class ApplyListLogic extends BaseLogic
         $query->orderBy($orderBy)->offset($pagination->offset)->limit($pagination->limit);
     
         $data = [];
-        $can_cancel = in_array($this->roleName,[$this->roleName]);
+        $can_cancel = in_array($this->roleName,['zhaopin','zhaopinjingli','guanliyuan']);
         /**
          * @var ApprovalLog $approvalLog
          */
