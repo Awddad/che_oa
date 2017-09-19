@@ -111,11 +111,11 @@ class PayLogic extends BaseLogic
         )->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {
-            $end_time = '--';
             /**
              * @var Apply $model
              */
             foreach ($models as $k => $model) {
+                $end_time = '--';
                 if ($model->type == 1) {
                     $typeName = '申请报销';
                     $money = $model->expense->money;
