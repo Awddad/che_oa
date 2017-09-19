@@ -123,17 +123,13 @@ class ApprovalLog extends \yii\db\ActiveRecord
             switch ($this->scenario) {
                 case self::SCENARIO_FAIL;
                     return $this->apply->approvalFail();
-                    break;
                 case self::SCENARIO_PASS;
                     $nextApproval = $this->nextApprovalLog;
                     return ($nextApproval->setApprovalPerson() && $this->apply->approvalPass($nextApproval));
-                    break;
                 case self::SCENARIO_CONFIRM;
                     return $this->apply->approvalConfirm();
-                    break;
                 case self::SCENARIO_COMPLETE;
                     return $this->apply->approvalComplete();
-                    break;
             }
             return true;
         } else {

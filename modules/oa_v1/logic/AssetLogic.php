@@ -652,17 +652,17 @@ class AssetLogic extends Logic
             'person_id' => $assetList->person_id
         ])->one();
         // 领取表 状态改为归还
-        $assetGetList->status = AssetGetList::STATUS_BACK_SUCCESS;
+        $assetGetList && $assetGetList->status = AssetGetList::STATUS_BACK_SUCCESS;
         // 资产库存状态改为 空闲中
         $assetList->status = 1;
         $assetList->person_id = 0;
         $t = Yii::$app->db->beginTransaction();
         try {
             $assetList->save();
-            $assetGetList->save();
+            $assetGetList && $assetGetList->save();
             $this->addAssetListLog($operatePerson->person_id, $assetList->id, null, 7, $des);
             //空闲库存增1
-            Asset::updateAllCounters(['free_amount' => 1], ['id' => $assetGetList->asset_id]);
+            Asset::updateAllCounters(['free_amount' => 1], ['id' => $assetList->asset_id]);
             $t->commit();
             return true;
         } catch (Exception $e) {
