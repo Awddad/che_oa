@@ -78,7 +78,7 @@ class Org extends \yii\db\ActiveRecord
         $orgInfo = $this->getOrgInfo();
         if ($hiddenTop) {
             unset($orgInfo[0]);
-        };
+        }
 
         if ($short) {
             return array_map(function ($value) {

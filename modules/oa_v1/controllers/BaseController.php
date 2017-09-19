@@ -165,7 +165,7 @@ class BaseController extends Controller
     
             if ($action->id == 'index') {
                 $url_one = '/' . $action->controller->id;
-                if (!in_array($url_one, $roleArr) && !in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
+                if (!in_array($url_one, $roleArr) && in_array($requestUrlArr, $allMenu)) {
                     throw new HttpException(403);
                 }
             } else {
