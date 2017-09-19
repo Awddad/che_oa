@@ -511,6 +511,8 @@ class AssetController extends BaseController
         $assetList = AssetList::findOne($asset_list_id);
         if (empty($assetList) || empty($person)) {
             return $this->_returnError(4400, null, '未找到该信息');
+        }elseif($person->is_delete == 1){
+            return $this->_returnError(4400, null, '不能分配给离职人员');
         }
         if ($assetList->status != 1) {
             return $this->_returnError(4400, null, '该资产不能分配');
