@@ -255,7 +255,7 @@ class QuanXianServer extends Server
                     'org_id' => $val['organization_id'],
                     'org_name' => (isset($arrOrgList[$val['organization_id']]) ? $arrOrgList[$val['organization_id']] : ''),
                     'org_full_name' => $this->getOrgFullName($val['organization_id'], $arrOrgListTmp),
-                    'is_delete' => ($val['status'] == 1 ? 0 : 1),
+                    'is_delete' => ($val['deleted_at'] ? 1 : 0),
                     'profession' => $val['position_name'],
                     'email' => $val['email'],
                     'phone' => $val['phone'],
