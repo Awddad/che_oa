@@ -366,7 +366,7 @@ class ApplyListLogic extends BaseLogic
             'title' => $apply->title, // 标题
             'status' => $apply->status, // 状态
             'type' => $apply->type, // 类型
-            'des' => $apply->info->desInfo,
+            'des' => $apply->info?$apply->info->desInfo:'--',
         ];
     }
     
