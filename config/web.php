@@ -38,7 +38,7 @@ $config = [
                         } else {
                             $code = intval(Yii::$app->errorHandler->exception->getCode());
                             $response->data = [
-                                'message' => Yii::$app->errorHandler->exception->getMessage(),
+                                'message' => $code < 200 ? '系统异常！' : Yii::$app->errorHandler->exception->getMessage(),
                                 'code' => $code ? :  $response->statusCode,
                                 'data' => [],
                             ];
