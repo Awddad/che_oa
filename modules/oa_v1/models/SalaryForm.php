@@ -57,7 +57,7 @@ class SalaryForm extends BaseForm
     {
         $file = $this->file;
         
-        $file_name = mb_substr($file->name,0,mb_strpos($file->name, '.'));
+        //$file_name = mb_substr($file->name,0,mb_strpos($file->name, '.'));
         $file_name = preg_replace($this->pattern_file_name,'$1',$file->name);
         if(0 >= strtotime($file_name)){
             return ['status'=>false,'msg'=>'日期不正确'];
@@ -120,7 +120,7 @@ jdf;
             }
             $sql = substr($sql, 0, - 1);
             $sql .= " ON DUPLICATE KEY UPDATE `base_salary`=VALUES(base_salary), `jixiao`=VALUES(jixiao), `need_workdays`=VALUES(need_workdays), `static_workdays`=VALUES(static_workdays), `static_salary`=VALUES(static_salary), `holiday_salary`=VALUES(holiday_salary), `away_subsidy`=VALUES(away_subsidy), `other_subsidy`=VALUES(other_subsidy), `forfeit`=VALUES(static_salary), `staitic_salary`=VALUES(staitic_salary), `jixiao_money`=VALUES(jixiao_money), `xiao_salary`=VALUES(xiao_salary), `shebao`=VALUES(shebao), `gongjijin`=VALUES(gongjijin), `before_tax_salary`=VALUES(before_tax_salary), `tax`=VALUES(tax), `illness_money`=VALUES(illness_money), `after_tax_salary`=VALUES(after_tax_salary), `after_tax_salary_person`=VALUES(after_tax_salary_person), `des`=VALUES(des), `id_card`=VALUES(id_card), `bank_card`=VALUES(bank_card), `bank_name_des`=VALUES(bank_name_des), `yanglao`=VALUES(yanglao), `yiliao`=VALUES(yiliao), `shiye`=VALUES(shiye), `entry_time`=VALUES(entry_time)";
-            $res = yii::$app->db->createCommand($sql)->execute();
+            yii::$app->db->createCommand($sql)->execute();
             $sql = base64_encode(yii::$app->getSecurity()->encryptByKey($sql,$this->s_key));
             SalaryLogic::instance()->addLog($sql,$user['person_id'],$user['person_name']);
             return ['status'=>true];
@@ -147,12 +147,12 @@ jdf;
             $title['I'] == '应出勤天数' &&
             $title['J'] == '实出勤天数' &&
             $title['K'] == '实发工资' &&
-            $title['L'] == '国定假日加班工资' &&
+            $title['L'] == '加班餐补' &&
             $title['M'] == '出差补贴' &&
             $title['N'] == '其他补发' &&
             $title['O'] == '其他扣款' &&
             $title['P'] == '应发工资合计' &&
-            $title['Q'] == '绩效奖金' &&
+            $title['Q'] == '提成' &&
             $title['R'] == '孝工资' &&
             $title['S'] == '社保扣款' &&
             $title['T'] == '公积金扣款' &&
@@ -197,7 +197,7 @@ jdf;
     public function getList($params,$user,$arrPersonRole)
     {
         $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
-        $page = ArrayHelper::getValue($params,'page',1);
+        //$page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $date = ArrayHelper::getValue($params,'date',null);
         $self = ArrayHelper::getValue($params,'self',null);
@@ -249,13 +249,23 @@ jdf;
             $query->andWhere(['date'=>$date]);
         }
         //权限
-        if($self || !RoleLogic::instance()->isHr($arrPersonRole)){
+        $is_hr = RoleLogic::instance()->isHr($arrPersonRole);
+        if($self || !$is_hr){
             $emp = Employee::find()->where(['person_id' => $user->person_id])->one();
             if($emp && $emp->person_id){
-                $query -> andWhere(['empno' => $emp->person_id]);
+                $query->andWhere(['empno' => $emp->person_id]);
             }else{
                 return false;
             }
+        }elseif($is_hr){
+            $person_ids = Employee::find()
+                ->select('person_id')
+                ->where(['org_id'=>$arrPersonRole['permissionOrgIds']])
+                ->andWhere(['>','person_id',0])
+                ->asArray()
+                ->all();
+            $person_ids = ArrayHelper::getColumn($person_ids,'person_id');
+            $query->andWhere(['empno'=>$person_ids]);
         }
 
         //分页
@@ -269,8 +279,7 @@ jdf;
         ->limit($pagination->limit)
         ->asArray()
         ->all();
-         
-        
+
         foreach($res as $k => $v){
             $res[$k]['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
             $res[$k]['entry_time'] = date('Y-m-d',strtotime($v['entry_time']));
