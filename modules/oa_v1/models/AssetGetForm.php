@@ -82,7 +82,8 @@ class AssetGetForm extends BaseForm
             return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();
-            throw $e;
+            //throw $e;
+            return false;
         }
     }
     
