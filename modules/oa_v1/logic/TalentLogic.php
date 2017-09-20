@@ -44,9 +44,9 @@ class TalentLogic extends BaseLogic
 			    throw new \Exception('error');
 			}
 		}catch (\Exception $e){
-			yii::info("人才日志错误 {$person_name} {$content} {$model->data}");
+			yii::warning("人才日志错误 {$person_name} {$content} {$model->data}");
 		}catch (\Throwable $e){
-			yii::info("人才日志错误 {$person_name} {$content} {$model->data}");
+			yii::warning("人才日志错误 {$person_name} {$content} {$model->data}");
 		}
 	}
 }

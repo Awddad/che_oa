@@ -7,18 +7,20 @@ use app\models\Employee;
 
 class SalaryLogic extends BaseLogic
 {
-    private $_seeKey = '7/p%^^&haha1>)999';
     private $_token_time = 86400;
     
     /**
      * 通过密码获得token
-     * @param arra $person 登入用户
+     * @param array $person 登入用户
      * @param string $pwd 密码（md5）
      * @param string $strOs 平台
      * @return string|boolean
      */
     public function getTokenByPwd($person, $pwd,$strOs = 'web')
     {
+		/**
+		 * @var $emp Employee
+		 */
         $emp = Employee::find()->where([
             'person_id' => $person['person_id']
         ])->one();
@@ -39,6 +41,7 @@ class SalaryLogic extends BaseLogic
 	 * @param string $token
 	 * @param array $person 登入用户
 	 * @param string $strOs 平台
+	 * @return bool
 	 */
 	public function checkToken($token,$person,$strOs = 'web')
 	{
@@ -74,9 +77,9 @@ class SalaryLogic extends BaseLogic
 			    throw new \Exception('error');
 			}
 		}catch (\Exception $e){
-			yii::info("薪酬导入日志错误 {$person_name} {$model->data}");
+			yii::warning("薪酬导入日志错误 {$person_name} {$model->data}");
 		}catch (\Throwable $e){
-			yii::info("薪酬导入日志错误 {$person_name} {$model->data}");
+			yii::warning("薪酬导入日志错误 {$person_name} {$model->data}");
 		}
 	}
 }

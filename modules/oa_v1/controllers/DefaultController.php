@@ -91,16 +91,22 @@ class DefaultController extends BaseController
         $entry_time = '';
         $pic = '';
         $employee = '';
+        $set_id_card = false;
+        /**
+         * @var $emp Employee
+         */
         $emp = Employee::find()->where(['person_id'=>$this->arrPersonInfo['person_id']])->one();
         if($emp){
             $people_pic = PeoplePic::find()->where(['employee_id' => $emp->id])->one();
             $entry_time = $emp->entry_time ?: '';
             $pic = $people_pic ? $people_pic->pic : '';
             $employee = $emp->id ? : '';
+            $set_id_card = $emp->id_card ? 1 : 0;
         }
         $arrData['userinfo']['entry_time'] = $entry_time;
         $arrData['userinfo']['pic'] = $pic;
         $arrData['userinfo']['employee'] = $employee;
+        $arrData['userinfo']['set_id_card'] = $set_id_card;
         return $this->_return($arrData);
     }
 
