@@ -379,8 +379,8 @@ class BaseForm extends Model
                 $copyPerson = Person::findOne($v);
                 if ($copyPerson->bqq_open_id) {
                     $data = [
-                        'tips_title' => 'OA - ' . $typeName . '申请',
-                        'tips_content' => '员工' . $apply->person . '发起了一笔' . $typeName . '审批',
+                        'tips_title' => 'OA - 抄送提醒',
+                        'tips_content' => '员工' . $apply->person . '发起了一笔' . $typeName . '审批。',
                         'receivers' => $copyPerson->bqq_open_id,
                     ];
                     BaseLogic::instance()->sendQqMsg($data);
