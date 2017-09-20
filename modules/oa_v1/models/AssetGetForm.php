@@ -78,6 +78,7 @@ class AssetGetForm extends BaseForm
             $this->saveAssetGetList($person);
             AssetLogic::instance()->assetGet($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
             return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();

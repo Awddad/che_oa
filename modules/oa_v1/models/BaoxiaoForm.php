@@ -85,16 +85,7 @@ class BaoxiaoForm extends BaseForm
 				$this -> copyPerson($model_apply);
 				
 				$transaction -> commit();
-                $person = appmodel\Person::findOne($this->approval_persons[0]);
-                if($person->bqq_open_id) {
-                    $typeName = appmodel\Apply::TYPE_ARRAY[$this->type];
-                    $data = [
-                        'tips_title' => 'OA -' .$typeName. '申请',
-                        'tips_content' => '员工'.$model_apply->person.'发起'. $typeName.'申请，请在OA系统进行审批处理',
-                        'receivers' => $person->bqq_open_id,
-                    ];
-                    BaseLogic::instance()->sendQqMsg($data);
-                }
+                $this->afterApplySave($model_apply);
                 return $this -> apply_id;
 			}
 			$this->addError('',current($model_apply->getFirstErrors()));

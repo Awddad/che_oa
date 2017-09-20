@@ -139,6 +139,7 @@ class ApplyBuyForm extends BaseForm
             $this->copyPerson($apply);
             $this->saveApplyBuyList();
             $transaction->commit();
+            $this->afterApplySave($apply);
             return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();

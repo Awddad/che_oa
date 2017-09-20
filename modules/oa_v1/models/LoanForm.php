@@ -152,6 +152,7 @@ class LoanForm extends BaseForm
             $this->copyPerson($apply);
             $this->saveLoan($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
         } catch (Exception $exception){
             $transaction->rollBack();
             throw $exception;

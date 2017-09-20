@@ -92,6 +92,7 @@ class ApplyHolidayForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
             return ['status'=>true,'apply_id'=>$this->apply_id];
         }catch(Exception $e){
             $transaction->rollBack();
