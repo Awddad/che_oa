@@ -283,7 +283,9 @@ class AssetController extends BaseController
                 'price' => Yii::$app->formatter->asCurrency($v->price),
                 'use_person' => $usePerson,
                 'org' => $org,
-                'use_day' => $useDay
+                'use_day' => $useDay,
+                'sn' => $v->sn_number ?: '--',
+                'tel' => $v->tel ?: '--',
             ];
         }
         return $this->_return([
