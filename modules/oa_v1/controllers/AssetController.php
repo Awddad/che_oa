@@ -105,7 +105,7 @@ class AssetController extends BaseController
     public function actionList()
     {
         $param = Yii::$app->request->get();
-        $query = Asset::find()->where([]);
+        $query = Asset::find()->where(['is_delete'=>0]);
     
         $keyword = trim(ArrayHelper::getValue($param, 'keywords'));
         if($keyword) {
@@ -142,8 +142,10 @@ class AssetController extends BaseController
             $data[] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
+                'asset_type_id' => AssetLogic::instance()->getTypeIdByChild($v->asset_type_id),
                 'asset_type_name' => $v->asset_type_name,
                 'asset_brand_name' => $v->asset_brand_name,
+                'asset_brand_id' => $v->asset_brand_id,
                 'name' => $v->name,
                 'amount' => $v->amount,
                 'price' => Yii::$app->formatter->asCurrency($v->price),
@@ -159,20 +161,32 @@ class AssetController extends BaseController
     /**
      * 资产列表详情
      *
-     * @param $asset_id
      * @return array
      */
-    public function actionAssetList($asset_id)
+    public function actionAssetList()
     {
         $param = Yii::$app->request->get();
-        $query = AssetList::find()->innerJoin('oa_asset', 'oa_asset.id = oa_asset_list.asset_id')->where([
-            'oa_asset_list.asset_id' => $asset_id
-        ]);
-    
+        $query = AssetList::find()->innerJoin('oa_asset', 'oa_asset.id = oa_asset_list.asset_id');
+
+        $asset_id = ArrayHelper::getValue($param, 'asset_id');
+        if($asset_id){
+            $query->andwhere([
+                'oa_asset_list.asset_id' => $asset_id
+            ]);
+        }
+
         $status = ArrayHelper::getValue($param, 'status');
         if ($status) {
+            is_string($status) && $status = explode(',',$status);
             $query->andWhere([
                 'oa_asset_list.status' => $status
+            ]);
+        }
+
+        $asset_type_id = ArrayHelper::getValue($param, 'asset_type_id');
+        if ($asset_type_id) {
+            $query->andWhere([
+                'oa_asset.asset_type_id' => $asset_type_id
             ]);
         }
     
@@ -215,6 +229,7 @@ class AssetController extends BaseController
             'defaultPageSize' => $pageSize,
             'totalCount' => $query->count(),
         ]);
+        //echo $query->createCommand()->getRawSql();die();
         $model = $query->orderBy(["id" => SORT_DESC])
             ->offset($pagination->offset)
             ->limit($pagination->limit)
@@ -228,6 +243,9 @@ class AssetController extends BaseController
                 $person = Person::findOne($v->person_id);
                 $usePerson = $person->person_name;
                 $org = $person->org_full_name;
+                /**
+                 * @var $use AssetListLog
+                 */
                 $use = AssetListLog::find()->where([
                     'asset_list_id' => $v->id,
                     'person_id' => $v->person_id,
@@ -247,18 +265,27 @@ class AssetController extends BaseController
             }
           
             $status = $v::STATUS[$v->status];
-            
+
+            $asset = Asset::findOne($v->asset_id);
             $data[$k] = [
                 'index' => $pagination->pageSize * $pagination->getPage() + $k + 1,
                 'id' => $v->id,
+                'asset_type_name' => $asset->asset_type_name,
+                'asset_type_id' => $asset->asset_type_id,
+                'asset_brand_name' => $asset->asset_brand_name,
+                'asset_brand_id' => $asset->asset_brand_id,
+                'name' => $asset->name,
                 'created_at' => date("Y-m-d H:i", $v->created_at),
                 'stock_number' => $v->stock_number,
                 'asset_number' => $v->asset_number,
                 'status' => $status,
+                'status_id' => $v->status,
                 'price' => Yii::$app->formatter->asCurrency($v->price),
                 'use_person' => $usePerson,
                 'org' => $org,
-                'use_day' => $useDay
+                'use_day' => $useDay,
+                'sn' => $v->sn_number ?: '--',
+                'tel' => $v->tel ?: '--',
             ];
         }
         return $this->_return([
@@ -303,12 +330,16 @@ class AssetController extends BaseController
             'apply_buy_id' => $assetList->apply_buy_id,
             'apply_demand_id' => $demandId,
             'org' => '',
-            'use_person' => ''
+            'use_person' => '',
+            'phone' => $assetList->tel
         ];
         if($assetList->status == 2 && $assetList->person_id) {
             $person = Person::findOne($assetList->person_id);
             $data['use_person'] = $person->person_name;
             $data['org'] = $person->org_full_name;
+            /**
+             * @var $use AssetListLog
+             */
             $use = AssetListLog::find()->where([
                 'asset_list_id' => $assetList->id,
             ])->andWhere([
@@ -412,13 +443,26 @@ class AssetController extends BaseController
         $param = Yii::$app->request->post();
     
         if(empty($param) || !isset($param['asset_list_id'])  || !isset($param['sn_number'])) {
-            $this->_returnError(400);
+            return $this->_returnError(403);
         }
-        $rst = AssetList::updateAll(['sn_number' => $param['sn_number']], ['id' => $param['asset_list_id']]);
-        if($rst) {
-            return $this->_return([], 200, '添加成功');
+        AssetList::updateAll(['sn_number' => $param['sn_number']], ['id' => $param['asset_list_id']]);
+        return $this->_return([], 200, '添加成功');
+    }
+
+    /**
+     * 添加 手机号
+     *
+     * @return array
+     */
+    public function actionTel()
+    {
+        $param = Yii::$app->request->post();
+
+        if(empty($param) || !isset($param['asset_list_id'])  || !isset($param['tel'])) {
+            return $this->_returnError(403);
         }
-        return $this->_returnError(500);
+        AssetList::updateAll(['tel' => $param['tel']], ['id' => $param['asset_list_id']]);
+        return $this->_return([], 200, '添加成功');
     }
     
     /**
@@ -429,7 +473,7 @@ class AssetController extends BaseController
     public function actionAddAsset()
     {
         $model = new AssetListForm();
-    
+        $model->setScenario($model::SCENARIO_ADD);
         $param = \Yii::$app->request->post();
         $data['AssetListForm'] = $param;
         if ($model->load($data) && $model->validate() &&  $model->save($this->arrPersonInfo)) {
@@ -469,6 +513,8 @@ class AssetController extends BaseController
         $assetList = AssetList::findOne($asset_list_id);
         if (empty($assetList) || empty($person)) {
             return $this->_returnError(4400, null, '未找到该信息');
+        }elseif($person->is_delete == 1){
+            return $this->_returnError(4400, null, '不能分配给离职人员');
         }
         if ($assetList->status != 1) {
             return $this->_returnError(4400, null, '该资产不能分配');
@@ -524,6 +570,9 @@ class AssetController extends BaseController
                 $use_person = $person->person_name;
                 $org= $person->org_full_name;
             }
+            /**
+             * @var $assetListLog AssetListLog
+             */
             $assetListLog = AssetListLog::find()->where([
                 'asset_list_id' => $v->id
             ])->orderBy('id desc')->one();
@@ -596,6 +645,9 @@ class AssetController extends BaseController
          * @var AssetList $v
          */
         foreach ($assetList as $k => $v) {
+            /**
+             * @var $use AssetListLog
+             */
             $use = AssetListLog::find()->where([
                 'asset_list_id' => $v->id,
                 'person_id' => $v->person_id,
@@ -639,5 +691,18 @@ class AssetController extends BaseController
             'list' => $data,
             'page' => BaseLogic::instance()->pageFix($pagination)
         ]);
+    }
+
+    public function actionDelAsset()
+    {
+        $model = new AssetListForm();
+        $model->setScenario($model::SCENARIO_DEL);
+        $param = \Yii::$app->request->post();
+        $data['AssetListForm'] = $param;
+        if ($model->load($data) && $model->validate() &&  $model->del($this->arrPersonInfo)) {
+            return $this->_return([]);
+        } else {
+            return $this->_returnError(4400, null ,current($model->getFirstErrors()));
+        }
     }
 }

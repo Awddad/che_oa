@@ -9,7 +9,7 @@ use app\modules\oa_v1\logic\BackLogic;
 use app\models\Employee;
 use yii;
 use app\models\EmployeeType;
-use app\models\Region;
+use yii\db\Exception;
 use app\modules\oa_v1\logic\RegionLogic;
 use yii\validators\RequiredValidator;
 use moonland\phpexcel\Excel;
@@ -220,6 +220,7 @@ class TalentForm extends BaseForm
 	/**
 	 * 审批操作
 	 * @param array $user
+	 * @return array
 	 */
 	public function operate($user)
 	{
@@ -317,6 +318,7 @@ class TalentForm extends BaseForm
 	/**
 	 * 移入人才库
 	 * @param array $user 登入用户
+	 * @return array
 	 */
 	public function joinTalent($user)
 	{
@@ -337,6 +339,8 @@ class TalentForm extends BaseForm
 	/**
 	 * 获得列表
 	 * @param array $params
+	 * @param array $user
+	 * @param string $role_name
 	 * @return array
 	 */
 	public function getList($params,$user,$role_name)
@@ -344,7 +348,7 @@ class TalentForm extends BaseForm
 	    $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
 	    $start_time = ArrayHelper::getValue($params,'start_time',null);
 	    $end_time = ArrayHelper::getValue($params,'end_time',null);
-	    $page = ArrayHelper::getValue($params,'page',1);
+	    //$page = ArrayHelper::getValue($params,'page',1);
 	    $page_size = ArrayHelper::getValue($params,'page_size',10);
 	    $status = ArrayHelper::getValue($params, 'status',0);
 	    $talent = ArrayHelper::getValue($params, 'talent',0);
@@ -408,7 +412,9 @@ class TalentForm extends BaseForm
 	        'defaultPageSize' => $page_size,
 	        'totalCount' => $query->count(),
 	    ]);
-	    
+		/**
+		 * @var $res Talent
+		 */
 	    $res = $query->orderBy("created_at desc")
 	    ->offset($pagination->offset)
 	    ->limit($pagination->limit)
@@ -475,13 +481,13 @@ class TalentForm extends BaseForm
 	    $tran = yii::$app->db->beginTransaction();
         try {
             if (!$model->save()) { // 添加人事表
-                throw new \Exception(current($model->getFirstErrors()));
+                throw new Exception(current($model->getFirstErrors()));
             }
             $talent->status_face = $talent->status_face ?: 1;
             $talent->employee_id = $model->id;
             $talent->status = 5;
             if (! $talent->save()) { // 保存人才信息
-                throw new \Exception(current($talent->getFirstErrors()));
+                throw new Exception(current($talent->getFirstErrors()));
             }
             
             foreach ($this->peopleModel as $v){
@@ -491,7 +497,7 @@ class TalentForm extends BaseForm
             TalentLogic::instance()->addLog($this->id,'面试通过，录用',ArrayHelper::toArray($model),$user['person_name'],$user['person_id']);
             $tran->commit();
             return ['status'=>true];
-	    }catch(\Exception $e){
+	    }catch(Exception $e){
 	        $tran->rollBack();
 	        return ['status'=>false,'msg'=>$e->getMessage()];
 	    }

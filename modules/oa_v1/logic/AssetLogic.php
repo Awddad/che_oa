@@ -14,7 +14,6 @@ use app\models\ApplyBuy;
 use app\models\ApplyBuyList;
 use app\models\Asset;
 use app\models\AssetBack;
-use app\models\AssetGet;
 use app\models\AssetGetList;
 use app\models\AssetList;
 use app\models\AssetListLog;
@@ -43,12 +42,18 @@ class AssetLogic extends Logic
      */
     public function getAssetType($assetTypeId = 1)
     {
+        /**
+         * @var $data AssetType
+         */
         $data = AssetType::find()->where(['id' => $assetTypeId])->one();
         if (isset($data->parent_id) && $data->parent_id > 0) {
+            /**
+             * @var $parent AssetType
+             */
             $parent = AssetType::find()->where(['id' => $data->parent_id])->one();
         }
         
-        return (isset($parent->name) ? $parent->name . '-' : '') . $data->name;//'固定资产-电子产品-手机';
+        return (isset($parent) ? $parent->name . '-' : '') . $data->name;//'固定资产-电子产品-手机';
     }
     
     /**
@@ -65,6 +70,9 @@ class AssetLogic extends Logic
         if (empty($res)) {
             return [];
         }
+        /**
+         * @var $v AssetType
+         */
         foreach ($res as $v) {
             if ($child = $this->getAssetTypeByParentId($v->id)) {
                 $data[] = [
@@ -92,9 +100,12 @@ class AssetLogic extends Logic
      */
     public function getAssetBrand($assetBrand)
     {
+        /**
+         * @var $res AssetBrand
+         */
         $res = AssetBrand::find()->where(['id' => $assetBrand])->one();
         
-        return $res->name;
+        return $res ? $res->name : '';
     }
     
     /**
@@ -107,6 +118,9 @@ class AssetLogic extends Logic
             return [];
         }
         $data = [];
+        /**
+         * @var $v AssetBrand
+         */
         foreach ($res as $v) {
             $data[] = [
                 'label' => $v->name,
@@ -153,6 +167,9 @@ class AssetLogic extends Logic
          * @var Asset $v
          */
         foreach ($model as $v) {
+            /**
+             * @var $assetList AssetList
+             */
             $assetList = AssetList::find()->where(['asset_id' => $v->id])->one();
             $data[] = [
                 'id' => $v->id,
@@ -221,6 +238,9 @@ class AssetLogic extends Logic
             ->all();
         
         $data = [];
+        /**
+         * @var $v AssetGetList
+         */
         foreach ($res as $v) {
             $asset = Asset::findOne($v->asset_id);
             $data[] = [
@@ -337,6 +357,9 @@ class AssetLogic extends Logic
     public function assetGetCancel($apply)
     {
         $applyGetList = AssetGetList::find()->where(['apply_id' => $apply->apply_id])->all();
+        /**
+         * @var $v AssetGetList
+         */
         foreach ($applyGetList as $v) {
             //撤销恢复库存
             Asset::updateAllCounters(['free_amount' => 1], ['id' => $v->asset_id]);
@@ -415,6 +438,9 @@ class AssetLogic extends Logic
             $des = '领用,审批单号：' . $applyId;
         }
         if($type == 3) {
+            /**
+             * @var $AssetListLog AssetListLog
+             */
             $AssetListLog = AssetListLog::find()->where([
                 'asset_list_id' => $assetListId,
                 'person_id' => $personId,
@@ -635,7 +661,7 @@ class AssetLogic extends Logic
     
     /**
      *
-     * @param AssetGetList $assetList
+     * @param AssetList $assetList
      * @param Person $operatePerson
      * @param $des
      *
@@ -652,17 +678,17 @@ class AssetLogic extends Logic
             'person_id' => $assetList->person_id
         ])->one();
         // 领取表 状态改为归还
-        $assetGetList->status = AssetGetList::STATUS_BACK_SUCCESS;
+        $assetGetList && $assetGetList->status = AssetGetList::STATUS_BACK_SUCCESS;
         // 资产库存状态改为 空闲中
         $assetList->status = 1;
         $assetList->person_id = 0;
         $t = Yii::$app->db->beginTransaction();
         try {
             $assetList->save();
-            $assetGetList->save();
+            $assetGetList && $assetGetList->save();
             $this->addAssetListLog($operatePerson->person_id, $assetList->id, null, 7, $des);
             //空闲库存增1
-            Asset::updateAllCounters(['free_amount' => 1], ['id' => $assetGetList->asset_id]);
+            Asset::updateAllCounters(['free_amount' => 1], ['id' => $assetList->asset_id]);
             $t->commit();
             return true;
         } catch (Exception $e) {
@@ -671,5 +697,20 @@ class AssetLogic extends Logic
             throw $e;
         }
     }
-    
+
+
+    /**
+     * 获得资产类别id
+     * @param int $type_id
+     * @return array
+     */
+    public function getTypeIdByChild($type_id)
+    {
+        $data = [];
+        while(($res = AssetType::findOne($type_id)) && $res['parent_id'] >= 0){
+            $data[] = (int)$res['id'];
+            $type_id = $res['parent_id'];
+        }
+        return array_reverse($data);
+    }
 }

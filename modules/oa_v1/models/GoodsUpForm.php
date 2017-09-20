@@ -9,6 +9,8 @@
 namespace app\modules\oa_v1\models;
 
 
+use app\logic\server\PhoneLetter;
+use app\models\ApprovalLog;
 use app\models\GoodsUp;
 use app\models\GoodsUpDetail;
 use app\models\Person;
@@ -161,6 +163,12 @@ class GoodsUpForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
+            $nextApproval = ApprovalLog::findOne(['apply_id'=>$this->apply_id,'is_to_me_now'=>1]);
+            $content = "您好，{$nextApproval->approval_person}，{$apply->person}提交了一条商品上架审批，请及时处理。";
+            $tel = Person::findOne($nextApproval->approval_person_id)->phone;
+            PhoneLetter::instance()->sendYY($tel, $content);
+
             return $apply->apply_id;
         } catch (Exception $e) {
             $transaction->rollBack();

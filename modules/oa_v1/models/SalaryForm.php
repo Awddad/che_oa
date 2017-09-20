@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use app\modules\oa_v1\logic\RoleLogic;
 use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\logic\SalaryLogic;
@@ -17,6 +18,8 @@ class SalaryForm extends BaseForm
     public $file;
     
     private $s_key = '!@ndy1#2%3';
+
+    private $pattern_file_name = '/^薪酬(\d{4}-\d{2}).xls$/';
     
     public function rules()
     {
@@ -36,6 +39,9 @@ class SalaryForm extends BaseForm
     {
         if (!$this->hasErrors()) {
             $file_name = $this->$attribute->name;
+            if(!preg_match($this->pattern_file_name, $file_name)){
+                $this->addError($attribute,'文件名不正确');
+            }
         }
     }
     
@@ -51,9 +57,10 @@ class SalaryForm extends BaseForm
     {
         $file = $this->file;
         
-        $file_name = mb_substr($file->name,0,mb_strpos($file->name, '.'));
+        //$file_name = mb_substr($file->name,0,mb_strpos($file->name, '.'));
+        $file_name = preg_replace($this->pattern_file_name,'$1',$file->name);
         if(0 >= strtotime($file_name)){
-            return ['status'=>false,'msg'=>'文件名不是日期'];
+            return ['status'=>false,'msg'=>'日期不正确'];
         }
         
         $arr = Excel::import($file->tempName, [
@@ -61,8 +68,15 @@ class SalaryForm extends BaseForm
             'setIndexSheetByName' => true,
             'getOnlySheet' => 'Sheet1',
         ]);
-        if($this->checkTitle($arr[1]) && $arr[2]){
+        if($this->checkTitle($arr[1])){
+            if(!isset($arr[2])){
+                return ['status'=>false,'msg'=>'内容不能为空'];
+            }
             array_shift($arr);
+            $r = $this->checkEmpno($arr);
+            if(!$r['status']){
+                return ['status'=>false,'msg'=>$r['msg']];
+            }
             $date = date('Ym',strtotime($file_name));
             $sql = "INSERT INTO `oa_salary` (`empno`, `date`, `cost_depart`, `depart`, `position`, `name`, `base_salary`, `jixiao`, `need_workdays`, `static_workdays`, `static_salary`, `holiday_salary`, `away_subsidy`, `other_subsidy`, `forfeit`, `staitic_salary`, `jixiao_money`, `xiao_salary`, `shebao`, `gongjijin`, `before_tax_salary`, `tax`, `illness_money`, `after_tax_salary`, `after_tax_salary_person`, `des`, `id_card`, `bank_card`, `bank_name_des`, `yanglao`, `yiliao`, `shiye`, `entry_time`) VALUES ";
             foreach($arr as $v){ 
@@ -105,7 +119,8 @@ class SalaryForm extends BaseForm
 jdf;
             }
             $sql = substr($sql, 0, - 1);
-            $res = yii::$app->db->createCommand($sql)->execute();
+            $sql .= " ON DUPLICATE KEY UPDATE `base_salary`=VALUES(base_salary), `jixiao`=VALUES(jixiao), `need_workdays`=VALUES(need_workdays), `static_workdays`=VALUES(static_workdays), `static_salary`=VALUES(static_salary), `holiday_salary`=VALUES(holiday_salary), `away_subsidy`=VALUES(away_subsidy), `other_subsidy`=VALUES(other_subsidy), `forfeit`=VALUES(static_salary), `staitic_salary`=VALUES(staitic_salary), `jixiao_money`=VALUES(jixiao_money), `xiao_salary`=VALUES(xiao_salary), `shebao`=VALUES(shebao), `gongjijin`=VALUES(gongjijin), `before_tax_salary`=VALUES(before_tax_salary), `tax`=VALUES(tax), `illness_money`=VALUES(illness_money), `after_tax_salary`=VALUES(after_tax_salary), `after_tax_salary_person`=VALUES(after_tax_salary_person), `des`=VALUES(des), `id_card`=VALUES(id_card), `bank_card`=VALUES(bank_card), `bank_name_des`=VALUES(bank_name_des), `yanglao`=VALUES(yanglao), `yiliao`=VALUES(yiliao), `shiye`=VALUES(shiye), `entry_time`=VALUES(entry_time)";
+            yii::$app->db->createCommand($sql)->execute();
             $sql = base64_encode(yii::$app->getSecurity()->encryptByKey($sql,$this->s_key));
             SalaryLogic::instance()->addLog($sql,$user['person_id'],$user['person_name']);
             return ['status'=>true];
@@ -132,12 +147,12 @@ jdf;
             $title['I'] == '应出勤天数' &&
             $title['J'] == '实出勤天数' &&
             $title['K'] == '实发工资' &&
-            $title['L'] == '国定假日加班工资' &&
+            $title['L'] == '加班餐补' &&
             $title['M'] == '出差补贴' &&
             $title['N'] == '其他补发' &&
             $title['O'] == '其他扣款' &&
             $title['P'] == '应发工资合计' &&
-            $title['Q'] == '绩效奖金' &&
+            $title['Q'] == '提成' &&
             $title['R'] == '孝工资' &&
             $title['S'] == '社保扣款' &&
             $title['T'] == '公积金扣款' &&
@@ -153,21 +168,39 @@ jdf;
             $title['AD'] == '养老' &&
             $title['AE'] == '医疗' &&
             $title['AF'] == '失业' &&
-            $title['AG'] == '入职日期' &&
-            1 == 1
+            $title['AG'] == '入职日期'
         ){
             return true;
         }
         return false;
+    }
+
+    public function checkEmpno($arr)
+    {
+        $persons = Employee::find()->select('person_id,name')->where(['status'=>2])->andWhere(['>','person_id',0])->asArray()->all();
+
+        $persons = ArrayHelper::index($persons, 'person_id');
+
+        $error = [];
+        foreach($arr as $k=>$v){
+            if(!isset($persons[$v['B']]) || $persons[$v['B']]['name'] != $v['F']){
+                $error[] = "序号{$v['A']}:员工编号或姓名不正确！";
+            }
+        }
+        if($error){
+            return ['status'=>false,'msg'=>implode(';', $error)];
+        }
+        return ['status'=>true];
     }
     
     
     public function getList($params,$user,$arrPersonRole)
     {
         $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
-        $page = ArrayHelper::getValue($params,'page',1);
+        //$page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $date = ArrayHelper::getValue($params,'date',null);
+        $self = ArrayHelper::getValue($params,'self',null);
          
         $query = Salary::find()->select([
             'empno' ,
@@ -216,27 +249,37 @@ jdf;
             $query->andWhere(['date'=>$date]);
         }
         //权限
-        if(!SalaryLogic::instance()->isHr($arrPersonRole)){
-            $emp = Employee::find()->where(['person_id' => $user['person_id']])->one();
-            if($emp && $emp->empno){
-                $query -> andWhere(['empno' => $emp->empno]);
+        $is_hr = RoleLogic::instance()->isHr($arrPersonRole);
+        if($self || !$is_hr){
+            $emp = Employee::find()->where(['person_id' => $user->person_id])->one();
+            if($emp && $emp->person_id){
+                $query->andWhere(['empno' => $emp->person_id]);
             }else{
                 return false;
             }
+        }elseif($is_hr){
+            $person_ids = Employee::find()
+                ->select('person_id')
+                ->where(['org_id'=>$arrPersonRole['permissionOrgIds']])
+                ->andWhere(['>','person_id',0])
+                ->asArray()
+                ->all();
+            $person_ids = ArrayHelper::getColumn($person_ids,'person_id');
+            $query->andWhere(['empno'=>$person_ids]);
         }
-        
+
         //分页
         $pagination = new Pagination([
             'defaultPageSize' => $page_size,
             'totalCount' => $query->count(),
         ]);
         //echo $query->createCommand()->getRawSql();die();
-        $res = $query->orderBy("id desc")
+        $res = $query->orderBy("empno asc")
         ->offset($pagination->offset)
         ->limit($pagination->limit)
+        ->asArray()
         ->all();
-         
-        
+
         foreach($res as $k => $v){
             $res[$k]['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
             $res[$k]['entry_time'] = date('Y-m-d',strtotime($v['entry_time']));

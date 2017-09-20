@@ -15,6 +15,7 @@ use Yii;
  * @property string $bank_card_id
  * @property string $bank_name
  * @property string $bank_name_des
+ * @property string $end_time
  * @property string $files
  * @property integer $created_at
  */
@@ -42,6 +43,7 @@ class ApplyPay extends \yii\db\ActiveRecord
             [['to_name', 'bank_name_des'], 'string', 'max' => 128],
             [['bank_card_id'], 'string', 'max' => 50],
             [['bank_name'], 'string', 'max' => 64],
+            [['end_time'], 'string', 'max' => 10],
         ];
     }
 

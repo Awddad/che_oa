@@ -8,11 +8,10 @@ use app\modules\oa_v1\logic\OrgLogic;
 use yii\data\Pagination;
 use app\modules\oa_v1\logic\BackLogic;
 use app\models\EmployeeType;
-use app\logic\server\QuanXianServer;
-use app\models\Role;
 use app\models\EmployeeAccount;
 use app\models\Org;
 use app\modules\oa_v1\logic\EmployeeLogic;
+use yii\db\Exception;
 
 class EmployeeForm extends BaseForm
 {
@@ -91,6 +90,10 @@ class EmployeeForm extends BaseForm
      */
     public function addEmployee()
     {
+        /**
+         * @var $employeeType EmployeeType
+         */
+        $employeeType = EmployeeType::find()->where(['slug'=>'shiyong'])->one();
         $model = new Employee();
         $model->name = $this->name;
         $model->phone = $this->phone;
@@ -98,7 +101,7 @@ class EmployeeForm extends BaseForm
         $model->org_id = $this->org_id;
         $model->entry_time = $this->entry_time;
         $model->status = 0;
-        $model->employee_type = EmployeeType::find()->where(['slug'=>'shiyong'])->one()->id;
+        $model->employee_type = $employeeType->id;
         $tran = yii::$app->db->beginTransaction();
         try{
             if($model->save()){
@@ -110,12 +113,12 @@ class EmployeeForm extends BaseForm
                     $tran->commit();
                     return ['status'=>true];
                 }else{
-                    throw new \Exception($res['msg']);
+                    throw new Exception($res['msg']);
                 }
             }else{
-                throw new \Exception(current($model->getFirstErrors()));
+                throw new Exception(current($model->getFirstErrors()));
             }
-        }catch (\Exception $e){
+        }catch (Exception $e){
             $tran->rollBack();
             return ['status'=>false,'msg'=>$e->getMessage()];
         }
@@ -207,7 +210,7 @@ class EmployeeForm extends BaseForm
         ];
         
         $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
-        $page = ArrayHelper::getValue($params,'page',1);
+        //$page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $org_id = ArrayHelper::getValue($params, 'org_id',0);
          
@@ -235,6 +238,9 @@ class EmployeeForm extends BaseForm
         ->all();
         
         $data = [];
+        /**
+         * @var $v Employee
+         */
         foreach($res as $k => $v){
             $data[] = [
                 'id' => $pagination->pageSize * $pagination->getPage() + $k + 1,

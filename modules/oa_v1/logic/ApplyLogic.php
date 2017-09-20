@@ -166,6 +166,7 @@ class ApplyLogic extends BaseLogic
      *
      * @param int $apply_id 审批号
      * @param int $type 审批类型
+     * @return array
      */
     public function getApplyInfo($apply_id, $type = null)
     {
@@ -204,6 +205,7 @@ class ApplyLogic extends BaseLogic
      * 报销明细
      *
      * @param int $apply_id
+     * @return array
      */
     public function getBaoxiaoInfo($apply_id)
     {
@@ -220,6 +222,8 @@ class ApplyLogic extends BaseLogic
      * 借款明细
      *
      * @param int $apply_id
+     * @return array
+     *
      */
     public function getJiekuanInfo($apply_id)
     {
@@ -233,6 +237,7 @@ class ApplyLogic extends BaseLogic
      * 还款明细
      *
      * @param int $apply_id
+     * @return array
      */
     public function getPaybackInfo($apply_id)
     {
@@ -250,6 +255,7 @@ class ApplyLogic extends BaseLogic
      * 财务付款信息
      *
      * @param int $apply_id
+     * @return array
      */
     public function getFukuanInfo($apply_id)
     {
@@ -263,6 +269,7 @@ class ApplyLogic extends BaseLogic
      * 财务收款信息
      *
      * @param int $apply_id
+     * @return array
      */
     public function getShoukuanInfo($apply_id)
     {
@@ -276,6 +283,7 @@ class ApplyLogic extends BaseLogic
      * 审批人信息
      *
      * @param int $apply_id
+     * @return array
      */
     public function getApproval($apply_id)
     {
@@ -289,6 +297,7 @@ class ApplyLogic extends BaseLogic
      * 抄送人信息
      *
      * @param int $apply_id
+     * @return array
      */
     public function getCopyPerson($apply_id)
     {
@@ -399,6 +408,7 @@ class ApplyLogic extends BaseLogic
         }
         $bank_card_id = \Yii::$app->request->post('bank_card_id');
         $bank_name = \Yii::$app->request->post('bank_name');
+        $to_name = '';
         if ($apply->type == 4 || $apply->type == 5) {
             $to_name = \Yii::$app->request->post('to_name');
             if (!$bank_card_id || !$bank_name || !$to_name) {
@@ -827,6 +837,7 @@ class ApplyLogic extends BaseLogic
      *
      * @param string $apply_id 审批单号
      * @param int $type 审批类型
+     * @return array
      */
     public function getApplyDes($apply_id, $type)
     {
@@ -838,14 +849,17 @@ class ApplyLogic extends BaseLogic
         
         return $des;
     }
-    
+
     /**
      * 获得审批不通过原因
-     *
-     * @param string $apply_id
+     * @param $apply_id
+     * @return mixed|string
      */
     public function getApprovalDes($apply_id)
     {
+        /**
+         * @var  $appprval_model ApprovalLog
+         */
         $appprval_model = ApprovalLog::find()->where(['apply_id' => $apply_id, 'result' => 2])->one();
         
         return $appprval_model ? $appprval_model->des : '';
@@ -951,4 +965,5 @@ class ApplyLogic extends BaseLogic
         ];
         
     }
+
 }

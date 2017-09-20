@@ -2,10 +2,8 @@
 namespace app\modules\oa_v1\models;
 
 use app\modules\oa_v1\logic\PeopleLogic;
-use app\models\Job;
 use yii\helpers\ArrayHelper;
 use app\models\Employee;
-use app\models\Region;
 use app\models\Political;
 use app\models\EmployeeAccount;
 use app\models\PersonBankInfo;
@@ -15,6 +13,7 @@ use app\models\Educational;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\modules\oa_v1\logic\OrgLogic;
 use app\models\Org;
+use yii\db\Exception;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -134,6 +133,7 @@ class EmployeeInfoForm extends BaseForm
                 return false;
             }
         }
+        return false;
     }
     
     public function scenarios()
@@ -149,6 +149,7 @@ class EmployeeInfoForm extends BaseForm
     /**
      * 保存员工基本信息
      * @param array $user
+     * @return array
      */
     public function saveEmployee($user)
     {
@@ -179,19 +180,19 @@ class EmployeeInfoForm extends BaseForm
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$model->save()){
-                throw new \Exception(current($this->getFirstErrors())); 
+                throw new Exception(current($this->getFirstErrors()));
             }
             if($model->status != 0 && $model->getOldAttribute('status') != 3){//未入职状态 已离职状态 不同步权限系统
                 $fun = $model->status == 3 ? 'delQxEmp' : 'editQxEmp';
                 $res = EmployeeLogic::instance()->$fun($model);
                 if(!$res['status']){
-                    throw new \Exception($res['msg']);
+                    throw new Exception($res['msg']);
                 }
             }
             PeopleLogic::instance()->addLog(0,$model->id,'编辑员工个人信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             $transaction->commit();
             return ['status'=>true];
-        }catch(\Exception $e){
+        }catch(Exception $e){
             $transaction->rollBack();
             return ['status'=>false,'msg'=>$e->getMessage()];
         }
@@ -259,6 +260,7 @@ class EmployeeInfoForm extends BaseForm
     /**
      * 修改帐号
      * @param array $user
+     * @return array
      */
     public function saveAccount($user)
     {
@@ -276,18 +278,18 @@ class EmployeeInfoForm extends BaseForm
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$model->save()){
-                throw new \Exception(current($model->getFirstErrors()));
+                throw new Exception(current($model->getFirstErrors()));
             }
             if($employee->status != 0){//待入职状态 不同步权限系统
                 $res = EmployeeLogic::instance()->editQxEmp($employee);
                 if(!$res['status']){
-                    throw new \Exception($res['msg']);
+                    throw new Exception($res['msg']);
                 }
             }
             PeopleLogic::instance()->addLog(0,$model->employee_id,'编辑员工帐号信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             $transaction->commit();
             return ['status'=>true];
-        }catch(\Exception $e){
+        }catch(Exception $e){
             $transaction->rollBack();
             return ['status'=>false,'msg'=>$e->getMessage()];
         }
@@ -314,7 +316,9 @@ class EmployeeInfoForm extends BaseForm
         return ['status'=>true,'data'=>$res];
     }
     
+
     /**
+     * @param $id
      * @return array
      */
     public function getPersonAccount($id)
@@ -372,9 +376,12 @@ class EmployeeInfoForm extends BaseForm
         }
         return $data;
     }
-    
+
     /**
+     *
      * 删除银行卡
+     * @param $user
+     * @return array
      */
     public function delBankCard($user)
     {
@@ -394,6 +401,8 @@ class EmployeeInfoForm extends BaseForm
     
     /**
      * 编辑银行卡
+     * @param $user
+     * @return array
      */
     public function saveBankCard($user)
     {
@@ -419,6 +428,7 @@ class EmployeeInfoForm extends BaseForm
     /**
      * 修改劳动合同
      * @param array $user
+     * @return array
      */
     public function editService($user)
     {
@@ -433,7 +443,8 @@ class EmployeeInfoForm extends BaseForm
     }
     /**
      * 获得劳动合同
-     * @param unknown $id
+     * @param int $id
+     * @return array
      */
     public function getService($id)
     {

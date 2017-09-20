@@ -3,8 +3,8 @@ namespace app\modules\oa_v1\models;
 
 use yii;
 use app\models\ApplyLeave;
-use Exception;
 use app\models\Person;
+use yii\db\Exception;
 
 class ApplyLeaveForm extends BaseForm
 {
@@ -61,6 +61,7 @@ class ApplyLeaveForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
             return ['status'=>true,'apply_id'=>$this->apply_id];
         }catch(Exception $e){
             $transaction->rollBack();

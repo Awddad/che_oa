@@ -15,9 +15,6 @@ use app\models\ApplyBuyList;
 use app\models\ApplyDemandList;
 use app\models\ApprovalLog;
 use app\models\AssetGetList;
-use app\models\CaiWuFuKuan;
-use app\models\CaiWuShouKuan;
-use app\models\Person;
 use app\models\ApplyCopyPerson;
 
 
@@ -39,6 +36,7 @@ class BaseApplyLogic extends Logic
     {
         $data = [];
         $approvalLog = ApprovalLog::find()->where(['apply_id' => $apply->apply_id])->all();
+        $perTime = '';
         $data[] = [
             "title" => "发起申请",
             "name" => $apply->person,
@@ -50,6 +48,9 @@ class BaseApplyLogic extends Logic
         if(!empty($approvalLog)) {
             $count = count($approvalLog);
             $perTime = $apply->create_time;
+            /**
+             * @var $approvalLog ApprovalLog
+             */
             foreach ($approvalLog as $k => $v){
                 $status = $diff_time = 0;
                 $title = $v->approval_person.'审批';
@@ -133,9 +134,7 @@ class BaseApplyLogic extends Logic
                 "org" => '',
                 "status" => 0
             ];
-        }
-
-        if($apply->status == 99 && $apply->cai_wu_need == 2) {
+        }elseif($apply->status == 99 && $apply->cai_wu_need == 2) {
             $data[] = [
                 "title" => "付款确认",
                 "name" => $apply->cai_wu_person,
@@ -187,6 +186,24 @@ class BaseApplyLogic extends Logic
                 "org" => '',
                 "status" => 0,
                 'diff_time' => $apply->cai_wu_time - $apply->create_time
+            ];
+        } elseif($apply->status == 8){
+            $data[] = [
+                "title" => "作废",
+                "name" => $apply->cancel_person,
+                "date"=> date('Y-m-d H:i', $apply->cancel_time),
+                "org" => PersonLogic::instance()->getOrgNameByPersonId($apply->cancel_person_id),
+                "status" => 3,
+                'diff_time' => $apply->cancel_time - $apply->create_time,
+                'des' => $apply->cancel_reason
+            ];
+            $data[] = [
+                "title" => "完成",
+                "name" => '',
+                "date"=> date('Y-m-d H:i', $apply->cai_wu_time),
+                "org" => '',
+                "status" => 0,
+                'diff_time' => $apply->cancel_time - $apply->create_time
             ];
         }
 
@@ -243,6 +260,9 @@ class BaseApplyLogic extends Logic
     {
         $data = [];
         $list = ApplyDemandList::find()->where(['apply_id' => $applyId])->all();
+        /**
+         * @var $list ApplyDemandList
+         */
         foreach ($list as $v) {
             $data[] = [
                 'name' => $v->name,
@@ -344,13 +364,17 @@ class BaseApplyLogic extends Logic
     }
     /**
      * 获得审批人
-     * @param app\models\Apply $apply
+     * @param \app\models\Apply $apply
+     * @return array
      */
     public function getApprovalPersons($apply)
     {
         $res = ApprovalLog::find()->where(['apply_id'=>$apply->apply_id])->orderBy('steep asc')->all();
         $data = [];
         if($res){
+            /**
+             * @var $v ApprovalLog
+             */
             foreach($res as $v){
                 $data[] = [
                     'id' => $v->approval_person_id,
@@ -363,13 +387,17 @@ class BaseApplyLogic extends Logic
     }
     /**
      * 获得抄送人
-     * @param app\models\Apply $apply
+     * @param \app\models\Apply $apply
+     * @return array
      */
     public function getCopyPersons($apply)
     {
         $res = ApplyCopyPerson::find()->where(['apply_id'=>$apply->apply_id])->all();
         $data = [];
         if($res){
+            /**
+             * @var $v ApplyCopyPerson
+             */
             foreach($res as $v){
                 $data[] = [
                     'id' => $v->copy_person_id,

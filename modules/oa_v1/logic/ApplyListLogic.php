@@ -29,6 +29,7 @@ class ApplyListLogic extends BaseLogic
      * @var Person $person
      */
     public $person;
+    public $roleName;
     
     public function getList()
     {
@@ -159,6 +160,7 @@ class ApplyListLogic extends BaseLogic
         $query->orderBy($orderBy)->offset($pagination->offset)->limit($pagination->limit);
     
         $data = [];
+        $can_cancel = in_array($this->roleName,['zhaopin','zhaopinjingli','guanliyuan']);
         /**
          * @var ApprovalLog $approvalLog
          */
@@ -171,6 +173,9 @@ class ApplyListLogic extends BaseLogic
                 if($approvalLog->result == 2)  {
                     $des = $apply->next_des. '<br>原因:' .$approvalLog->des;
                 } else {
+                    /**
+                     * @var $log ApprovalLog
+                     */
                     $log = ApprovalLog::find()->where([
                         'apply_id' => $approvalLog->apply_id,
                         'result' => 2
@@ -188,6 +193,7 @@ class ApplyListLogic extends BaseLogic
             $dataInfo['id'] = $pagination->pageSize * $pagination->getPage() + $k + 1;
             $dataInfo['end_at'] = $end_at;
             $dataInfo['next_des'] = $des;
+            $dataInfo['can_cancel'] = $can_cancel && $apply->type==18 && $apply->status==99 ? 1 : 0;
             $data[$k] = $dataInfo;
         }
         return [
@@ -245,11 +251,14 @@ class ApplyListLogic extends BaseLogic
          */
         foreach ($query->all() as $k => $apply) {
             if ($apply->status == 2) {
-                    $log = ApprovalLog::find()->where([
-                        'apply_id' => $apply->apply_id,
-                        'result' => 2
-                    ])->one();
-                    $des = $apply->next_des. '<br>原因:' .$log->des;
+                /**
+                 * @var $log ApprovalLog
+                 */
+                $log = ApprovalLog::find()->where([
+                    'apply_id' => $apply->apply_id,
+                    'result' => 2
+                ])->one();
+                $des = $apply->next_des. '<br>原因:' .$log->des;
         
             } elseif ($apply->status == 5 || $apply->status == 6 || $apply->status == 7) {
                 $des = $apply->next_des.'<br>原因:' .$apply->caiwu_refuse_reason;

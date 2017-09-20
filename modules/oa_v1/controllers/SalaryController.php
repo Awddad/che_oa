@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\controllers;
 
+use app\modules\oa_v1\logic\RoleLogic;
 use app\modules\oa_v1\models\SalaryForm;
 use yii\web\UploadedFile;
 use yii;
@@ -52,7 +53,7 @@ class SalaryController extends BaseController
     {
         $get = yii::$app->request->get();
         $logic = SalaryLogic::instance();
-        //if(!$logic->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
+        //if(!RoleLogic::instance()->isHr($this->arrPersonRoleInfo) && (!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo))){
         if(!isset($get['_token']) || !$logic->checkToken($get['_token'], $this->arrPersonInfo)){
             return $this->_returnError(405,null,null);
         }
@@ -62,5 +63,25 @@ class SalaryController extends BaseController
             return $this->_returnError(404);
         }
         return $this->_return($res);
+    }
+
+
+    /**
+     * 下载薪酬模版
+     *
+     * @param $path
+     */
+    public function actionDown()
+    {
+        $name = '薪酬'.date("Y-m").'.xls';
+        $rootPath = Yii::$app->basePath. '/web/template/salary_template.xls';
+        if(!file_exists($rootPath)){
+            echo '未找到该文件';die;
+        }
+        header('Content-Type: application/x-xls');
+        header('Content-Disposition: attachment; filename="'.$name.'"');
+        header('Content-Transfer-Encoding: binary');
+        readfile($rootPath);
+        exit;
     }
 }

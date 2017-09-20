@@ -26,28 +26,34 @@ use yii\db\Exception;
  * @property integer $cai_wu_person_id
  * @property integer $cai_wu_time
  * @property string $caiwu_refuse_reason
+ * @property string $cancel_person
+ * @property integer $cancel_person_id
+ * @property string $cancel_reason
+ * @property integer $cancel_time
  * @property integer $apply_list_pdf
  * @property integer $org_id
  * @property integer $company_id
  * @property integer $end_time
  * @property integer $copy_rule
  *
- * @property object $loan
- * @property object $payBack
- * @property object $applyPay
- * @property object $applyBuy
- * @property object $applyDemand
- * @property object $applyUseChapter
- * @property object $assetGet
- * @property object $assetBack
- * @property object $applyPositive
- * @property object $applyLeave
- * @property object $applyTransfer
- * @property object $applyOpen
- * @property object $goodsUp
- * @property object $travel
+ * @property JieKuan $loan
+ * @property PayBack $payBack
+ * @property ApplyPay $applyPay
+ * @property ApplyBuy $applyBuy
+ * @property ApplyDemand $applyDemand
+ * @property ApplyUseChapter $applyUseChapter
+ * @property AssetGet $assetGet
+ * @property AssetBack $assetBack
+ * @property ApplyPositive $applyPositive
+ * @property ApplyLeave $applyLeave
+ * @property ApplyTransfer $applyTransfer
+ * @property ApplyOpen $applyOpen
+ * @property GoodsUp $goodsUp
+ * @property ApplyTravel $travel
  * @property object $projectRole
- * @property object $expense
+ * @property ApplyCertificate $certificate
+ * @property ApplyHoliday $holiday
+ * @property BaoXiao $expense
  * @property object $info
  */
 class Apply extends \yii\db\ActiveRecord
@@ -78,9 +84,9 @@ class Apply extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id', 'type', 'title', 'person', 'person_id', 'approval_persons'], 'required'],
-            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id', 'copy_rule'], 'integer'],
+            [['create_time', 'end_time', 'type', 'person_id', 'status', 'cai_wu_need', 'cai_wu_person_id', 'cai_wu_time', 'org_id', 'company_id', 'copy_rule','cancel_time'], 'integer'],
             [['apply_id'], 'string', 'max' => 20],
-            [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
+            [['title', 'person', 'approval_persons', 'copy_person', 'next_des', 'cai_wu_person', 'caiwu_refuse_reason', 'cancel_person', 'cancel_reason', 'apply_list_pdf', 'caiwu_refuse_reason'], 'string', 'max' => 255],
         ];
     }
 
@@ -274,7 +280,7 @@ class Apply extends \yii\db\ActiveRecord
                     if ($copyPerson->bqq_open_id) {
                         $data = [
                             'tips_title' => 'OA - ' . $typeName . '申请完成',
-                            'tips_content' => '员工' .$person->person_name . '发起的' . $typeName . '已完成，请在OA系统进行查看',
+                            'tips_content' => '员工' .$this->person . '发起的' . $typeName . '已完成，请在OA系统进行查看',
                             'receivers' => $copyPerson->bqq_open_id,
                         ];
                         BaseLogic::instance()->sendQqMsg($data);
@@ -465,6 +471,24 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ApplyProjectRole::className(), ['apply_id' => 'apply_id']);
     }
+
+    /**
+     * 证件申请
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCertificate()
+    {
+        return $this->hasOne(ApplyCertificate::className(),['apply_id'=>'apply_id']);
+    }
+
+    /**
+     * 休假申请
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHoliday()
+    {
+        return $this->hasOne(ApplyHoliday::className(),['apply_id'=>'apply_id']);
+    }
     
     /**
      * @var array
@@ -486,6 +510,8 @@ class Apply extends \yii\db\ActiveRecord
         14 => '商品上架',
         15 => '出差',
         16 => '权限',
+        17 => '证件',
+        18 => '休假'
     ];
     
     public function getInfo()
@@ -535,6 +561,12 @@ class Apply extends \yii\db\ActiveRecord
                 break;
             case 16:
                 $info = $this->projectRole;
+                break;
+            case 17:
+                $info = $this->certificate;
+                break;
+            case 18:
+                $info = $this->holiday;
                 break;
             default:
                 $info = $this->expense;

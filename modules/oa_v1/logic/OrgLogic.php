@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\logic;
 
+use app\logic\server\QuanXianServer;
 use app\models\Org;
 use yii\helpers\ArrayHelper;
 
@@ -43,7 +44,7 @@ class OrgLogic extends BaseLogic
     public function getAllChildID($pid = 0)
     {
         $data = [$pid];
-        $res = Org::find()->where(['pid' => $pid])->asArray()->all();;
+        $res = Org::find()->where(['pid' => $pid])->asArray()->all();
         $data = ArrayHelper::merge($data, array_column($res,'org_id'));
         foreach($res as $v){
             $tmp = $this->getAllChildID($v['org_id']);
@@ -55,6 +56,7 @@ class OrgLogic extends BaseLogic
     /**
      * 获得组织id
      * @param int $org_id
+     * @return array
      */
     public function getOrgIdByChild($org_id)
     {
@@ -82,5 +84,16 @@ class OrgLogic extends BaseLogic
             }
         }
         return $str;
+    }
+
+    /**
+     * 获得公司名
+     * @param $org_id
+     * @return string
+     */
+    public function getCompany($org_id)
+    {
+        $company_id = QuanXianServer::instance()->getCompanyId($org_id);
+        return $company_id ? Org::findOne($company_id)->org_name : '';
     }
 }

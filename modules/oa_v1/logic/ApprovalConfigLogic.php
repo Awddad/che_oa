@@ -30,9 +30,9 @@ class ApprovalConfigLogic extends BaseLogic
         $model->person_id = $person_id;
         try{
             if(!$model->insert()){
-                throw new \Exception('error');
+                throw new yii\base\Exception('error');
             }
-        }catch (\Exception $e){
+        }catch (yii\base\Exception $e){
             yii::info("审批流程操作日志错误 {$person_name} {$title} {$model->data}");
         }catch (\Throwable $e){
             yii::info("审批流程操作日志错误 {$person_name} {$title} {$model->data}");

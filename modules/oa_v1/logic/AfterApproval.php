@@ -4,7 +4,6 @@ namespace app\modules\oa_v1\logic;
 use app\models\Apply;
 use app\models\ApprovalLog;
 use app\models\Employee;
-use app\logic\server\QuanXianServer;
 use yii\base\Event;
 use app\models\EmployeeType;
 
@@ -49,6 +48,9 @@ class AfterApproval extends BaseLogic
     {
         $apply = Apply::findOne($approvalLog->apply_id);
         if(strtotime($apply->applyPositive->positive_time) <= time()){//转正生效时间比现在小
+            /**
+             * @var $employee Employee
+             */
             $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
             $employee->employee_type = EmployeeType::findOne(['slug'=>'zhengshi'])->id;
             if ($employee->save()) {
@@ -68,7 +70,9 @@ class AfterApproval extends BaseLogic
     {
         $apply = Apply::findOne($approvalLog->apply_id);
         $transfer = $apply->applyTransfer;
-        
+        /**
+         * @var $employee Employee
+         */
         $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
         
         $employee->org_id = $transfer->target_org_id;
@@ -90,8 +94,9 @@ class AfterApproval extends BaseLogic
     protected function Leave($approvalLog)
     {
         $apply = Apply::findOne($approvalLog->apply_id);
-        $leave = $apply->applyLeave;
-        
+        /**
+         * @var $employee Employee
+         */
         $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
         
         $employee->status = 3;

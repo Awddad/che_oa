@@ -337,7 +337,9 @@ TABLEHTML;
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">对方开户行</td>
-            <td colspan="5">{$param['bank_name']}</td>
+            <td colspan="2">{$param['bank_name']}</td>
+            <td style="background-color:#f2f2f2" colspan="1">最晚付款时间</td>
+            <td colspan="2">{$param['end_time']}</td>
         </tr>
         <tr>
             <td colspan="2" style="background-color:#f2f2f2" rowspan="2">金额</td>
@@ -1012,6 +1014,94 @@ TABLEHTML;
         </tr>
         <tr>
             <td style="background-color:#f2f2f2" colspan="1">申请说明</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+
+    public function certificate($param)
+    {
+        $strHtml = <<<TABLEHTML
+<div>
+    <h2 style="text-align: center;">用证申请单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">证件类型</td>
+            <td colspan="2">{$param['type']}</td>
+            <td style="background-color:#f2f2f2">用证部门</td>
+            <td colspan="2">{$param['to_org']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">用证时间</td>
+            <td colspan="5">{$param['use_time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">使用事由</td>
+            <td colspan="5">{$param['des']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">审批人</td>
+            <td colspan="2">{$param['approval_person']}</td>
+            <td style="background-color:#f2f2f2">抄送人</td>
+            <td colspan="2">{$param['copy_person']}</td>
+        </tr>
+    </table>
+</div>
+TABLEHTML;
+        return $strHtml;
+    }
+
+    public function holiday($param)
+    {
+        $strHtml = <<<TABLEHTML
+<div>
+    <h2 style="text-align: center;">用证申请单</h2>
+    <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
+        <tr>
+            <td style="background-color:#f2f2f2">日期</td>
+            <td colspan="2">{$param['apply_date']}</td>
+            <td style="background-color:#f2f2f2">单号</td>
+            <td colspan="2">{$param['apply_id']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">部门</td>
+            <td colspan="2">{$param['org_full_name']}</td>
+            <td style="background-color:#f2f2f2"> 姓名</td>
+            <td colspan="2">{$param['person']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2">休假类型</td>
+            <td colspan="2">{$param['type']}</td>
+            <td style="background-color:#f2f2f2">休假时间</td>
+            <td colspan="2">{$param['time']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">休假时长</td>
+            <td colspan="5">{$param['duration']}</td>
+        </tr>
+        <tr>
+            <td style="background-color:#f2f2f2" colspan="1">休假事由</td>
             <td colspan="5">{$param['des']}</td>
         </tr>
         <tr>

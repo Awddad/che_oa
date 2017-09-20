@@ -3,7 +3,7 @@ namespace app\modules\oa_v1\models;
 
 use yii;
 use app\models\ApplyOpen;
-use Exception;
+use yii\db\Exception;
 use yii\data\Pagination;
 use app\modules\oa_v1\logic\BackLogic;
 use app\modules\oa_v1\logic\RegionLogic;
@@ -64,6 +64,7 @@ class ApplyOpenForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
             return ['status'=>true,'apply_id'=>$this->apply_id];
         }catch(Exception $e){
             $transaction->rollBack();

@@ -85,6 +85,7 @@ class AssetBackForm extends BaseForm
             $this->copyPerson($apply);
             $this->saveAssetGetList();
             $transaction->commit();
+            $this->afterApplySave($apply);
             return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();

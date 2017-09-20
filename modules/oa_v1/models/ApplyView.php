@@ -3,8 +3,9 @@ namespace app\modules\oa_v1\models;
 
 
 
-use app\logic\CnyLogic;
+use app\models\ApplyCertificate;
 use app\models\ApplyDemand;
+use app\models\ApplyHoliday;
 use app\models\ApplyProjectRole;
 use app\models\ApplyTravel;
 use app\models\ApplyUseChapter;
@@ -13,14 +14,13 @@ use app\models\AssetGet;
 use app\models\BaoXiao;
 use app\models\BaoXiaoList;
 use app\models\GoodsUp;
-use app\models\TagTree;
 use app\modules\oa_v1\logic\BaseApplyLogic;
 use app\models\Apply;
 use app\models\JieKuan;
 use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\JieKuanLogic;
 use app\models\Employee;
-use app\modules\oa_v1\logic\RegionLogic;
+use app\modules\oa_v1\logic\OrgLogic;
 use app\models\Person;
 use yii;
 
@@ -50,6 +50,8 @@ class ApplyView extends BaseForm
         14 => 'GoodsUp',
         15 => 'Travel',
         16 => 'ProjectRole',
+		17 => 'Certificate',
+		18 => 'Holiday',
     ];
 
 
@@ -145,6 +147,9 @@ class ApplyView extends BaseForm
 			'des' => $payback->des,
 			'list' => []
 		];
+		/**
+		 * @var $jiekuan JieKuan
+		 */
 		$jiekuan = JieKuan::find()->where("apply_id in ({$payback->jie_kuan_ids})")->all();
 		foreach ($jiekuan as $v) {
 			$data['list'][] = [
@@ -172,6 +177,7 @@ class ApplyView extends BaseForm
 			'des' => $apply->applyPay->des,
             'money' => $apply->applyPay->money,
             //'pay_type_name' => $tagTree->name,
+			'end_time' => $apply->applyPay->end_time ? : '--',
 			'files' => json_decode($apply->applyPay->files)
 		];
 		return $data;
@@ -293,10 +299,11 @@ class ApplyView extends BaseForm
 	{
 	   $leave = $apply->applyLeave;
 	   $employee = Employee::find()->where(['person_id'=>$apply->person_id])->one();
+	   $person = Person::find()->where(['person_id'=>$apply->person_id])->one();
 	   $data = [
 	       'leave_time'=>date('Y年m月d日',strtotime($leave->leave_time)),
 	       'des' => $leave->des,
-	       'profession' => Person::find()->where(['person_id'=>$apply->person_id])->one()->profession,
+	       'profession' => $person->profession,
 	       'stock_status' => $leave->stock_status ? '是' : '否',
 	       'finance_status' => $leave->finance_status ? '是' : '否',
 	       'account_status' => $leave->account_status ? '是' : '否',
@@ -429,4 +436,49 @@ class ApplyView extends BaseForm
         ];
         return $data;
     }
+
+	/**
+	 * @param Apply $apply
+	 *
+	 * @return array
+	 */
+	public function getCertificate($apply)
+	{
+		/**
+		 * @var ApplyCertificate $certificate
+		 */
+		$certificate = $apply->certificate;
+		$data = [
+			'des' => $certificate->des,
+			'files' => json_decode($certificate->files)?:[],
+			'use_time' => $certificate->start_time.' - '.$certificate->end_time,
+			'org_id' => $certificate->org_id,
+			'org' => OrgLogic::instance()->getOrgName($certificate->org_id),
+			'type' => explode(',',$certificate->type),
+			'type_name' => $certificate->type_name,
+		];
+		return $data;
+	}
+
+	/**
+	 * @param Apply $apply
+	 *
+	 * @return array
+	 */
+	public function getHoliday($apply)
+	{
+		/**
+		 * @var ApplyHoliday $holiday
+		 */
+		$holiday = $apply->holiday;
+		$data = [
+			'des' => $holiday->des,
+			'files' => json_decode($holiday->files)?:[],
+			'time' => date('Y-m-d H:i',strtotime($holiday->start_time)).' - '.date('Y-m-d H:i', strtotime($holiday->end_time)),
+			'duration' => $holiday->duration,
+			'type' => $holiday->type,
+			'type_name' => $holiday->type_name
+		];
+		return $data;
+	}
 }
