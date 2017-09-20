@@ -3,8 +3,8 @@ namespace app\modules\oa_v1\models;
 
 use yii;
 use app\models\ApplyLeave;
-use Exception;
 use app\models\Person;
+use yii\db\Exception;
 
 class ApplyLeaveForm extends BaseForm
 {

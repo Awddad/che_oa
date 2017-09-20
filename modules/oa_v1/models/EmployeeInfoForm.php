@@ -13,6 +13,7 @@ use app\models\Educational;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\modules\oa_v1\logic\OrgLogic;
 use app\models\Org;
+use yii\db\Exception;
 
 class EmployeeInfoForm extends BaseForm
 {
@@ -179,19 +180,19 @@ class EmployeeInfoForm extends BaseForm
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$model->save()){
-                throw new \Exception(current($this->getFirstErrors())); 
+                throw new Exception(current($this->getFirstErrors()));
             }
             if($model->status != 0 && $model->getOldAttribute('status') != 3){//未入职状态 已离职状态 不同步权限系统
                 $fun = $model->status == 3 ? 'delQxEmp' : 'editQxEmp';
                 $res = EmployeeLogic::instance()->$fun($model);
                 if(!$res['status']){
-                    throw new \Exception($res['msg']);
+                    throw new Exception($res['msg']);
                 }
             }
             PeopleLogic::instance()->addLog(0,$model->id,'编辑员工个人信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             $transaction->commit();
             return ['status'=>true];
-        }catch(\Exception $e){
+        }catch(Exception $e){
             $transaction->rollBack();
             return ['status'=>false,'msg'=>$e->getMessage()];
         }
@@ -277,18 +278,18 @@ class EmployeeInfoForm extends BaseForm
         $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$model->save()){
-                throw new \Exception(current($model->getFirstErrors()));
+                throw new Exception(current($model->getFirstErrors()));
             }
             if($employee->status != 0){//待入职状态 不同步权限系统
                 $res = EmployeeLogic::instance()->editQxEmp($employee);
                 if(!$res['status']){
-                    throw new \Exception($res['msg']);
+                    throw new Exception($res['msg']);
                 }
             }
             PeopleLogic::instance()->addLog(0,$model->employee_id,'编辑员工帐号信息',ArrayHelper::toArray($model),$user['person_id'],$user['person_name']);
             $transaction->commit();
             return ['status'=>true];
-        }catch(\Exception $e){
+        }catch(Exception $e){
             $transaction->rollBack();
             return ['status'=>false,'msg'=>$e->getMessage()];
         }

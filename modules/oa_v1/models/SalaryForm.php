@@ -168,8 +168,7 @@ jdf;
             $title['AD'] == '养老' &&
             $title['AE'] == '医疗' &&
             $title['AF'] == '失业' &&
-            $title['AG'] == '入职日期' &&
-            1 == 1
+            $title['AG'] == '入职日期'
         ){
             return true;
         }

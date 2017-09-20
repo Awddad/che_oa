@@ -99,7 +99,7 @@ class BackConfirmForm extends CaiWuShouKuan
             $this->org_name = Org::findOne($this->org_id)->org_name;
             //$this->create_time = time();
             if (!$this->save()) {
-                new Exception('确认失败', $this->errors);
+                throw new Exception('确认失败', $this->errors);
             }
             $apply = Apply::findOne($this->apply_id);
             $apply->status = 99; //订单完成

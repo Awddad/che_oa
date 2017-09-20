@@ -44,7 +44,7 @@ class OrgLogic extends BaseLogic
     public function getAllChildID($pid = 0)
     {
         $data = [$pid];
-        $res = Org::find()->where(['pid' => $pid])->asArray()->all();;
+        $res = Org::find()->where(['pid' => $pid])->asArray()->all();
         $data = ArrayHelper::merge($data, array_column($res,'org_id'));
         foreach($res as $v){
             $tmp = $this->getAllChildID($v['org_id']);
