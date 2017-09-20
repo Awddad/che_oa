@@ -145,6 +145,9 @@ class BackLogic extends BaseLogic
         $pagination->setPageSize($perPage, true);
 
         $pagination->setPage($currentPage - 1);
+        /**
+         * @var $models Apply
+         */
         $models = $query->limit($pagination->getLimit())->offset(
             $pagination->getPage() * $pagination->pageSize
         )->orderBy($order)->all();
@@ -223,7 +226,9 @@ class BackLogic extends BaseLogic
         $query->andWhere([
             'in', 'oa_apply.company_id', $companyIds
         ]);
-
+        /**
+         * @var $models Apply
+         */
         $models = $query->orderBy($order)->all();
         $data = [];
         if (!empty($models)) {

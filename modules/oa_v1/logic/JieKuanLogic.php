@@ -39,6 +39,9 @@ class JieKuanLogic extends Logic
         ];
         $res = Apply::find()->where(['person_id'=>$personId,'type'=>2])->all();
         $data = [];
+        /**
+         * @var $res Apply
+         */
         foreach($res as $k => $v){
             if($v->loan->status == 1){
                 continue;

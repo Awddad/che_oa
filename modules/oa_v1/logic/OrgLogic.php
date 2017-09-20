@@ -56,6 +56,7 @@ class OrgLogic extends BaseLogic
     /**
      * 获得组织id
      * @param int $org_id
+     * @return array
      */
     public function getOrgIdByChild($org_id)
     {
@@ -88,6 +89,7 @@ class OrgLogic extends BaseLogic
     /**
      * 获得公司名
      * @param $org_id
+     * @return string
      */
     public function getCompany($org_id)
     {
