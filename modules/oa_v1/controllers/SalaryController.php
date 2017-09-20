@@ -73,7 +73,7 @@ class SalaryController extends BaseController
      */
     public function actionDown()
     {
-        $name = '薪酬年-月.xls';
+        $name = '薪酬'.date("Y-m").'.xls';
         $rootPath = Yii::$app->basePath. '/web/template/salary_template.xls';
         if(!file_exists($rootPath)){
             echo '未找到该文件';die;
