@@ -61,6 +61,7 @@ class RoleLogic extends Logic
     /**
      * 是否是人事
      * @param array $arrPersonRole
+     * @return bool
      */
     public function isHr($arrPersonRole)
     {

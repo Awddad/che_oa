@@ -173,6 +173,9 @@ class ApplyListLogic extends BaseLogic
                 if($approvalLog->result == 2)  {
                     $des = $apply->next_des. '<br>原因:' .$approvalLog->des;
                 } else {
+                    /**
+                     * @var $log ApprovalLog
+                     */
                     $log = ApprovalLog::find()->where([
                         'apply_id' => $approvalLog->apply_id,
                         'result' => 2
@@ -248,11 +251,14 @@ class ApplyListLogic extends BaseLogic
          */
         foreach ($query->all() as $k => $apply) {
             if ($apply->status == 2) {
-                    $log = ApprovalLog::find()->where([
-                        'apply_id' => $apply->apply_id,
-                        'result' => 2
-                    ])->one();
-                    $des = $apply->next_des. '<br>原因:' .$log->des;
+                /**
+                 * @var $log ApprovalLog
+                 */
+                $log = ApprovalLog::find()->where([
+                    'apply_id' => $apply->apply_id,
+                    'result' => 2
+                ])->one();
+                $des = $apply->next_des. '<br>原因:' .$log->des;
         
             } elseif ($apply->status == 5 || $apply->status == 6 || $apply->status == 7) {
                 $des = $apply->next_des.'<br>原因:' .$apply->caiwu_refuse_reason;

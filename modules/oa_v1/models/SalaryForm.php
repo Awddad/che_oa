@@ -185,7 +185,7 @@ jdf;
         $error = [];
         foreach($arr as $k=>$v){
             if(!isset($persons[$v['B']]) || $persons[$v['B']]['name'] != $v['F']){
-                $error[] = "序号{$v['A']}:员工编号不正确！";
+                $error[] = "序号{$v['A']}:员工编号或姓名不正确！";
             }
         }
         if($error){
