@@ -120,6 +120,7 @@ class TravelForm extends BaseForm
             $this->travelListSave();
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
+            $this->afterApplySave($apply);
             $transaction->commit();
             return $apply->apply_id;
         } catch (Exception $e) {

@@ -3,7 +3,6 @@ namespace app\modules\oa_v1\models;
 
 use yii;
 use app\models\ApplyPositive;
-use app\models\Apply;
 use app\modules\oa_v1\logic\PersonLogic;
 use yii\db\Exception;
 use app\models\Job;
@@ -62,6 +61,7 @@ class ApplyPositiveForm extends BaseForm
 			$this->approvalPerson($apply);
 			$this->copyPerson($apply);
 			$transaction->commit();
+			$this->afterApplySave($apply);
 			return ['status'=>true,'apply_id'=>$this->apply_id];
 		}catch(Exception $e){
 			$transaction->rollBack();

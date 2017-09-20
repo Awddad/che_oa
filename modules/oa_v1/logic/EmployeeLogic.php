@@ -20,10 +20,10 @@ class EmployeeLogic extends BaseLogic
         $params = [
             'person_id' => $employee->person_id,
             'name' => $employee->name,
-            'email' => $account ? $account->email : $employee->email,
+            'email' => $account && $account->email ? $account->email : $employee->email,
             'org_id'=> $employee->org_id, // 组织
             'position_id' => $employee->profession, // 职位
-            'phone' => $account ? $account->tel : $employee->phone,// 电话
+            'phone' => $account && $account->tel ? $account->tel : $employee->phone,// 电话
             'qq' => $account ? $account->qq :'',//qq帐号
         ];
         //权限系统添加用户

@@ -163,7 +163,7 @@ class GoodsUpForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
-
+            $this->afterApplySave($apply);
             $nextApproval = ApprovalLog::findOne(['apply_id'=>$this->apply_id,'is_to_me_now'=>1]);
             $content = "您好，{$nextApproval->approval_person}，{$apply->person}提交了一条商品上架审批，请及时处理。";
             $tel = Person::findOne($nextApproval->approval_person_id)->phone;

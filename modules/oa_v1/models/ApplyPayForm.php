@@ -111,6 +111,7 @@ class ApplyPayForm extends BaseForm
             $this->approvalPerson($apply);
             $this->copyPerson($apply);
             $transaction->commit();
+            $this->afterApplySave($apply);
             return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();
