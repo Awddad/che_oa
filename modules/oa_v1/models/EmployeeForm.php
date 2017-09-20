@@ -11,6 +11,7 @@ use app\models\EmployeeType;
 use app\models\EmployeeAccount;
 use app\models\Org;
 use app\modules\oa_v1\logic\EmployeeLogic;
+use yii\db\Exception;
 
 class EmployeeForm extends BaseForm
 {
@@ -112,12 +113,12 @@ class EmployeeForm extends BaseForm
                     $tran->commit();
                     return ['status'=>true];
                 }else{
-                    throw new \Exception($res['msg']);
+                    throw new Exception($res['msg']);
                 }
             }else{
-                throw new \Exception(current($model->getFirstErrors()));
+                throw new Exception(current($model->getFirstErrors()));
             }
-        }catch (\Exception $e){
+        }catch (Exception $e){
             $tran->rollBack();
             return ['status'=>false,'msg'=>$e->getMessage()];
         }

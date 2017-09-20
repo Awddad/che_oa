@@ -5,6 +5,7 @@ use app\modules\oa_v1\logic\BaseLogic;
 
 use Yii;
 use app\models as appmodel;
+use yii\db\Exception;
 use yii\web\UploadedFile;
 
 
@@ -98,7 +99,7 @@ class BaoxiaoForm extends BaseForm
 			}
 			$this->addError('',current($model_apply->getFirstErrors()));
 			return false;
-		}catch(\Exception $e){
+		}catch(Exception $e){
 			$transaction -> rollBack();
 			$this->addError('',$e->getMessage());
 			return false;
@@ -148,7 +149,7 @@ class BaoxiaoForm extends BaseForm
 			if($_model_biaoxiao_list -> insert()){
 				$v['id'] = $_model_biaoxiao_list -> id;
 			}else{
-				throw new \Exception(current($_model_biaoxiao_list->getErrors())[0]);
+				throw new Exception(current($_model_biaoxiao_list->getErrors())[0]);
 				//throw new \Exception('明细失败');
 			}
 		}
@@ -158,7 +159,7 @@ class BaoxiaoForm extends BaseForm
 		$model_bao_xiao = new appmodel\BaoXiao();
 		$this -> loadModel('baoxiao',$model_bao_xiao);
 		if(!$model_bao_xiao -> insert()){
-			throw new \Exception(current($model_bao_xiao->getErrors())[0]);
+			throw new Exception(current($model_bao_xiao->getErrors())[0]);
 			//throw new \Exception('报销失败');
 		}
 	}

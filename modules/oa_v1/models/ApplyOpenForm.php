@@ -3,7 +3,7 @@ namespace app\modules\oa_v1\models;
 
 use yii;
 use app\models\ApplyOpen;
-use Exception;
+use yii\db\Exception;
 use yii\data\Pagination;
 use app\modules\oa_v1\logic\BackLogic;
 use app\modules\oa_v1\logic\RegionLogic;
