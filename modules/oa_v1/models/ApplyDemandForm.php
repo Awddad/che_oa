@@ -159,6 +159,7 @@ class ApplyDemandForm extends BaseForm
             $this->copyPerson($apply);
             $this->saveApplyDemandList();
             $transaction->commit();
+            $this->afterApplySave($apply);
             return $apply;
         } catch (Exception $e) {
             $transaction->rollBack();

@@ -169,6 +169,7 @@ class BackForm extends BaseForm
             foreach ($this->apply_ids as $apply_id) {
                 JieKuan::updateAll(['status' => 100], ['apply_id' => $apply_id]);
             }
+            $this->afterApplySave($apply);
             $transaction->commit();
 
         } catch (Exception $exception){

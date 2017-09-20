@@ -11,6 +11,7 @@ namespace app\modules\oa_v1\models;
 
 use app\logic\MyTcPdf;
 use app\models\Person;
+use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\PersonLogic;
 use app\models\Apply;
 use yii\base\Model;
@@ -335,5 +336,56 @@ class BaseForm extends Model
         $apply->company_id = $person->company_id;
         $apply->copy_rule = intval(\Yii::$app->request->post('copy_rule', 1));
         return $apply;
+    }
+
+    /**
+     * @param $apply Apply
+     */
+    public function afterApplySave($apply)
+    {
+        $this->sendApprovalQQ($apply);
+        if($apply->copy_rule == 0){
+            $this->sendCopyQQ($apply);
+        }
+    }
+
+    /**
+     * @param $apply Apply
+     */
+    public function sendApprovalQQ($apply)
+    {
+        if(isset($this->approval_persons) && is_array($this->approval_persons)) {
+            $person = Person::findOne($this->approval_persons[0]);
+            if ($person->bqq_open_id) {
+                $typeName = Apply::TYPE_ARRAY[$this->type];
+                $data = [
+                    'tips_title' => 'OA -' . $typeName . '申请',
+                    'tips_content' => '员工' . $apply->person . '发起' . $typeName . '申请，请在OA系统进行审批处理',
+                    'receivers' => $person->bqq_open_id,
+                ];
+                BaseLogic::instance()->sendQqMsg($data);
+            }
+        }
+    }
+
+    /**
+     * @param $apply Apply
+     */
+    public function sendCopyQQ($apply)
+    {
+        if(isset($this->copy_person) && is_array($this->copy_person)) {
+            $typeName = Apply::TYPE_ARRAY[$this->type];
+            foreach($this->copy_person as $v){
+                $copyPerson = Person::findOne($v);
+                if ($copyPerson->bqq_open_id) {
+                    $data = [
+                        'tips_title' => 'OA - ' . $typeName . '申请',
+                        'tips_content' => '员工' . $apply->person . '发起了一笔' . $typeName . '审批',
+                        'receivers' => $copyPerson->bqq_open_id,
+                    ];
+                    BaseLogic::instance()->sendQqMsg($data);
+                }
+            }
+        }
     }
 }
