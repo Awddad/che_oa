@@ -78,7 +78,7 @@ class SalaryController extends BaseController
         if(!file_exists($rootPath)){
             echo '未找到该文件';die;
         }
-        header('Content-Type: application/octet-stream');
+        header('Content-Type: application/x-xls');
         header('Content-Disposition: attachment; filename="'.$name.'"');
         header('Content-Transfer-Encoding: binary');
         readfile($rootPath);
