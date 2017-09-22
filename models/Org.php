@@ -14,6 +14,8 @@ use yii\helpers\ArrayHelper;
  * @property integer $pid
  * @property string $org_short_name
  * @property integer $manager
+ *
+ * @property object $parent
  */
 class Org extends \yii\db\ActiveRecord
 {

@@ -3,6 +3,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\PeopleLog;
 use yii;
+use yii\db\Exception;
 
 class PeopleLogic extends BaseLogic
 {
@@ -28,7 +29,7 @@ class PeopleLogic extends BaseLogic
         $model->create_at = time();
         try{
 			if(!$model->insert()){
-			    throw new \Exception('error');
+			    throw new Exception('error');
 			}
 		}catch (\Exception $e){
 			yii::info("人才详情日志错误 {$person_name} {$content} {$model->data}");

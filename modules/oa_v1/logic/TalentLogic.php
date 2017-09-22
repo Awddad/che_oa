@@ -3,6 +3,7 @@ namespace app\modules\oa_v1\logic;
 
 use app\models\TalentLog;
 use yii;
+use yii\db\Exception;
 
 class TalentLogic extends BaseLogic
 {
@@ -41,7 +42,7 @@ class TalentLogic extends BaseLogic
 		$model->person_id = $person_id;
 		try{
 			if(!$model->insert()){
-			    throw new \Exception('error');
+			    throw new Exception('error');
 			}
 		}catch (\Exception $e){
 			yii::warning("人才日志错误 {$person_name} {$content} {$model->data}");

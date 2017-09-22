@@ -51,10 +51,12 @@ class QuanxianController extends Controller
             //角色权限目录相关信息变动
             case 'projects/roles'://项目角色
                 $intResult += $objQx->curlUpdateRole();//角色信息
+                Yii::$app->cache->flush();
                 break;
             case 'projects/permission-tree'://项目菜单权限树形结构
             case 'projects/permissions'://项目菜单权限树形结构
                 $intResult += $objQx->curlUpdateMenus();//项目菜单
+                Yii::$app->cache->flush();
                 break;
             case 'projects/role_user':
                 $intResult += $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
@@ -84,6 +86,7 @@ class QuanxianController extends Controller
         $intResult += $objQx->curlUpdateRole();//角色信息
         $intResult += $objQx->curlUpdateMenus();//项目菜单
         $intResult += $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
+        Yii::$app->cache->flush();
         if ($intResult == 0)
             echo '更新成功';
         else

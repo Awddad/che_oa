@@ -116,7 +116,7 @@ class FileForm extends Model
                 return false;
             }
             //去掉空格
-            $randName = md5($file->name) . "." . $ext;;
+            $randName = md5($file->name) . "." . $ext;
             if (!file_exists($rootPath)) {
                 mkdir($rootPath, 0777, true);
             }

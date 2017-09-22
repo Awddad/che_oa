@@ -1,6 +1,7 @@
 <?php
 namespace app\modules\oa_v1\models;
 
+use Yii;
 use app\logic\server\QuanXianServer;
 use app\models\Apply;
 use app\models\ApprovalConfig;
@@ -107,7 +108,7 @@ class ApprovalConfigForm extends BaseForm
                     foreach($data as $k=>$v){
                         if(!is_int($k)){
                             $this->addError($attribute, "条件不正确！");
-                            return fasle;
+                            return false;
                         }
                     }
                 }
@@ -312,7 +313,7 @@ class ApprovalConfigForm extends BaseForm
     /**
      * 获得配置列表
      * @param array $params
-     * @param string $roleName
+     * @param string $role_name
      * @return array
      */
     public function getList($params,$role_name='')
@@ -320,7 +321,7 @@ class ApprovalConfigForm extends BaseForm
         $keywords = trim(ArrayHelper::getValue($params,'keywords',null));
         $start_time = ArrayHelper::getValue($params,'start_time',null);
         $end_time = ArrayHelper::getValue($params,'end_time',null);
-        $page = ArrayHelper::getValue($params,'page',1);
+        //$page = ArrayHelper::getValue($params,'page',1);
         $page_size = ArrayHelper::getValue($params,'page_size',10);
         $sort = ArrayHelper::getValue($params,'sort','');
 
@@ -399,6 +400,7 @@ class ApprovalConfigForm extends BaseForm
     /**
      * 获得详情
      * @param int $id 配置id
+     * @return array
      */
     public function getInfo($id)
     {
@@ -423,7 +425,7 @@ class ApprovalConfigForm extends BaseForm
     }
     /**
      * 获得审批配置
-     * @param int $org_id
+     * @param Person $user
      * @param int $apply_type
      * @return array
      */
@@ -499,7 +501,8 @@ class ApprovalConfigForm extends BaseForm
     /**
      * 格式化审批人配置出库
      * @param string $config
-     * @param int   org_id
+     * @param int   $org_id
+     * @return array
      */
     protected function getConfig($config,$org_id = 0)
     {
@@ -542,7 +545,7 @@ class ApprovalConfigForm extends BaseForm
      */
     protected function getPersonById($person_id,$type=1)
     {
-        $person = (new \yii\db\Query())->select('p.*,pic.pic')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id,'is_delete'=>0])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
+        $person = (new Yii\db\Query())->select('p.*,pic.pic')->from(Person::tableName().' p')->where(['p.person_id'=>$person_id,'is_delete'=>0])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
         $tmp = [
             'type' => $type,
             'id' => $person['person_id'],
@@ -557,7 +560,7 @@ class ApprovalConfigForm extends BaseForm
     /**
      * 获得负责人信息
      * @param $org_id
-     * @param $level 几级负责人
+     * @param $level int 几级负责人
      * @return array
      */
     protected function getPersonByLevel($org_id,$level)
@@ -570,6 +573,9 @@ class ApprovalConfigForm extends BaseForm
         }else {//查询负责人
             $tmp = [];
             $i = 1;
+            /**
+             * @var $model Org
+             */
             $model = Org::findOne($org_id);
             while ($model) {
                 if ($i < $level || $model->manager <= 0) {
@@ -588,7 +594,8 @@ class ApprovalConfigForm extends BaseForm
 
     /**
      * 获得职位
-     * @param $id
+     * @param $id int
+     * @param $org_id int
      * @return array
      */
     protected function getJobById($id,$org_id)
@@ -604,7 +611,7 @@ class ApprovalConfigForm extends BaseForm
             $tmp = [];
             $job = Job::findOne($id);
             $company_id = QuanXianServer::instance()->getCompanyId($org_id);
-            $persons = (new \yii\db\Query())
+            $persons = (new Yii\db\Query())
                 ->select('p.*,pic.pic')
                 ->from(Person::tableName().' p')
                 ->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')
@@ -633,6 +640,8 @@ class ApprovalConfigForm extends BaseForm
 
     /**
      * 格式化抄送人配置入库
+     * @param $config array
+     * @return string
      */
     protected function setCopyConfig(&$config)
     {
@@ -650,6 +659,7 @@ class ApprovalConfigForm extends BaseForm
     /**
      * 格式化抄送人配置出库
      * @param string $config
+     * @return array
      */
     protected function getCopyConfig($config)
     {
@@ -661,7 +671,7 @@ class ApprovalConfigForm extends BaseForm
                     continue;
                 }
                 //$person = Person::findOne($v);
-                $person = (new \yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.person_id'=>$v])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
+                $person = (new Yii\db\Query())->select('*')->from(Person::tableName().' p')->where(['p.person_id'=>$v])->leftJoin(Employee::tableName().' e','e.person_id=p.person_id')->leftJoin(PeoplePic::tableName().' pic','pic.employee_id=e.id')->one();
                 $res[] = [
                     'id' => $person['person_id'],
                     'label' => $person['person_name'],
@@ -675,7 +685,8 @@ class ApprovalConfigForm extends BaseForm
     }
     /**
      * 获得可配置的审批类型
-     * @param unknown $role_name
+     * @param string $role_name
+     * @return array
      */
     public function getApplyType($role_name)
     {

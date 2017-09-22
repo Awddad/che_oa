@@ -4,6 +4,7 @@ namespace app\modules\oa_v1\logic;
 use yii;
 use app\models\SalaryLog;
 use app\models\Employee;
+use yii\db\Exception;
 
 class SalaryLogic extends BaseLogic
 {
@@ -74,7 +75,7 @@ class SalaryLogic extends BaseLogic
 		$model->person_id = $person_id;
 		try{
 			if(!$model->insert()){
-			    throw new \Exception('error');
+			    throw new Exception('error');
 			}
 		}catch (\Exception $e){
 			yii::warning("薪酬导入日志错误 {$person_name} {$model->data}");

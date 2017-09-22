@@ -94,7 +94,7 @@ class AssetListForm extends Model
             $asset->price = $this->price;
             $asset->free_amount = $this->amount;
         } else {
-            $asset->amount += $this->amount;;
+            $asset->amount += $this->amount;
             $asset->free_amount += $this->amount;
             $asset->price += $this->amount * $this->price;
         }
