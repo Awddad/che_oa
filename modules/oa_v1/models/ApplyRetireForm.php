@@ -90,6 +90,8 @@ class ApplyRetireForm extends BaseForm
         $model->apply_id = $apply->apply_id;
         $model->person_id = $this->person_id;
         $model->person_name = $person ? $person->person_name : '';
+        $model->profession = $person ? $person->profession : '';
+        $model->tel = $person ? $person->phone : '';
         $model->des = $this->des;
         $model->files = $this->files?json_encode($this->files):'';
         $model->created_at = time();
