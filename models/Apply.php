@@ -511,7 +511,8 @@ class Apply extends \yii\db\ActiveRecord
         15 => '出差',
         16 => '权限',
         17 => '证件',
-        18 => '休假'
+        18 => '休假',
+        19 => '辞退',
     ];
     
     public function getInfo()
