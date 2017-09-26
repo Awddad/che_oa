@@ -65,13 +65,7 @@ class ApplyRetireForm extends BaseForm
             ['files','safe'],
             ['date','date','format' => 'yyyy-mm-dd','message' => '辞退时间不正确'],
             ['des','string','max' => 1024,'message' => '辞退说明不正确！'],
-            [
-                'person_id',
-                'exist',
-                'targetClass'=>'\app\models\Person',
-                'targetAttribute'=>['person_id'=>'person_id','person_status'=>'is_delete'],
-                'message'=>'被辞退人不存在'
-            ],
+            ['person_id','checkPersonId'],
             [
                 'handover_id',
                 'exist',
@@ -88,6 +82,25 @@ class ApplyRetireForm extends BaseForm
         ];
     }
 
+    public function checkPersonId($attr)
+    {
+        $data = Apply::find()->alias('a')
+            ->leftJoin(ApplyRetire::tableName().' r','a.apply_id=r.apply_id')
+            ->where(['a.type'=>19,'r.person_id'=>$this->$attr,'a.status'=>[1,11,99]])
+            ->all();
+        if($data){
+            $this->addError($attr,'此人不能再申请辞退');
+            return false;
+        }else{
+            $person = Person::findOne(['person_id'=>$this->$attr,'is_delete'=>0]);
+            if(!$person){
+                $this->addError($attr,'被辞退人不存在');
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function scenarios()
     {
         return [
@@ -100,7 +113,7 @@ class ApplyRetireForm extends BaseForm
     {
         $apply = $this->setApply($user);
 
-        $transaction = \Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->beginTransaction();
         try{
             if(!$apply->save()){
                 throw new Exception(current($apply->getFirstErrors()));
