@@ -41,3 +41,5 @@ composer.lock
 /wiki/
 /asset.xlsx
 /modules/oa_v1/controllers/TestController.php
+
+yii
