@@ -109,4 +109,43 @@ class ApplyRetireController extends BaseController
             'page' => BackLogic::instance()->pageFix($pagination)
         ]);
     }
+
+    public function actionGetInfo()
+    {
+        $apply_id = Yii::$app->request->get('apply_id',null);
+        if($apply_id){
+            $res = ApplyRetire::findOne($apply_id);
+            if($res){
+                $data = [
+                    'date' => $res->is_execute? $res->leave_time : $res->retire_date,
+                    'des' => $res->is_execute ? $res->leave_des : $res->des,
+                    'finance_status' => $res->is_execute ? $res->finance_status : '',
+                    'account_status' => $res->is_execute ? $res->account_status : '',
+                    'work_status' => $res->is_execute ? $res->work_status : '',
+                    'handover_id' => $res->is_execute ? $res->handover_person_id : 0,
+                    'handover' => $res->is_execute ? $res->handover : '',
+                ];
+                return $this->_return($data);
+            }
+        }
+        return $this->_returnError(400,'信息不存在');
+    }
+
+    public function actionExecute()
+    {
+        $post = Yii::$app->request->post();
+        $data['ApplyRetireForm'] = $post;
+        $model = new ApplyRetireForm();
+        $model->setScenario($model::SCENARIO_EXECUTE);
+        $model->load($data);
+        if(!$model->validate()){
+            return $this->_returnError(403,current($model->getFirstErrors()),'参数错误');
+        }
+        $res = $model->execute($this->arrPersonInfo);
+        if($res['status']){
+            return $this->_return($res['apply_id']);
+        }else{
+            return $this->_returnError(400,$res['msg']);
+        }
+    }
 }

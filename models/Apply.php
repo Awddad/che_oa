@@ -53,6 +53,7 @@ use yii\db\Exception;
  * @property object $projectRole
  * @property ApplyCertificate $certificate
  * @property ApplyHoliday $holiday
+ * @property ApplyRetire $retire
  * @property BaoXiao $expense
  * @property object $info
  */
@@ -489,6 +490,15 @@ class Apply extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ApplyHoliday::className(),['apply_id'=>'apply_id']);
     }
+
+    /**
+     * 辞退申请
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRetire()
+    {
+        return $this->hasOne(ApplyRetire::className(),['apply_id'=>'apply_id']);
+    }
     
     /**
      * @var array
@@ -568,6 +578,9 @@ class Apply extends \yii\db\ActiveRecord
                 break;
             case 18:
                 $info = $this->holiday;
+                break;
+            case 19:
+                $info = $this->retire;
                 break;
             default:
                 $info = $this->expense;

@@ -20,6 +20,8 @@ use Yii;
  * @property integer $handover_person_id
  * @property string $handover
  * @property integer $is_execute
+ * @property integer $execute_person_id
+ * @property string $execute_person
  * @property string $leave_time
  * @property string $leave_des
  * @property string $files
@@ -42,9 +44,9 @@ class ApplyRetire extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id'], 'required'],
-            [['person_id', 'finance_status', 'account_status', 'work_status', 'handover_person_id', 'is_execute', 'created_at'], 'integer'],
+            [['person_id', 'finance_status', 'account_status', 'work_status', 'handover_person_id', 'is_execute', 'execute_person_id', 'created_at'], 'integer'],
             [['files'], 'string'],
-            [['apply_id', 'person_name', 'tel', 'handover'], 'string', 'max' => 20],
+            [['apply_id', 'person_name', 'tel', 'handover', 'execute_person'], 'string', 'max' => 20],
             [['profession'], 'string', 'max' => 32],
             [['retire_date', 'leave_time'], 'string', 'max' => 10],
             [['des', 'leave_des'], 'string', 'max' => 1024],
@@ -70,6 +72,8 @@ class ApplyRetire extends \yii\db\ActiveRecord
             'handover_person_id' => '离职交接人id',
             'handover' => '离职交接人',
             'is_execute' => '是否已执行 0否 1有',
+            'execute_person_id' => '执行人id',
+            'execute_person' => '执行人名',
             'leave_time' => '离职日期',
             'leave_des' => '离职原因',
             'files' => 'Files',

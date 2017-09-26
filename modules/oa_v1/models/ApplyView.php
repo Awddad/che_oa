@@ -7,6 +7,7 @@ use app\models\ApplyCertificate;
 use app\models\ApplyDemand;
 use app\models\ApplyHoliday;
 use app\models\ApplyProjectRole;
+use app\models\ApplyRetire;
 use app\models\ApplyTravel;
 use app\models\ApplyUseChapter;
 use app\models\AssetBack;
@@ -52,6 +53,7 @@ class ApplyView extends BaseForm
         16 => 'ProjectRole',
 		17 => 'Certificate',
 		18 => 'Holiday',
+		19 => 'Retire',
     ];
 
 
@@ -478,6 +480,22 @@ class ApplyView extends BaseForm
 			'duration' => $holiday->duration,
 			'type' => $holiday->type,
 			'type_name' => $holiday->type_name
+		];
+		return $data;
+	}
+
+	public function getRetire($apply)
+	{
+		/**
+		 * @var $retire ApplyRetire
+		 */
+		$retire = $apply->retire;
+		$data = [
+			'des' => $retire->des,
+			'files' => json_decode($retire->files)?:[],
+			'person' => $retire->person_name,
+			'person_id' => $retire->person_id,
+			'date' => date("Y年m月d日",strtotime($retire->retire_date)),
 		];
 		return $data;
 	}
