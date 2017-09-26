@@ -80,4 +80,9 @@ class ApplyRetire extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+
+    public function getDesInfo()
+    {
+        return $this->person_name;
+    }
 }
