@@ -100,6 +100,7 @@ class ApplyRetireController extends BaseController
                     'tel' => $v->tel,
                     'job' => $v->profession,
                     'des' => $v->des,
+                    'leave_date' => $v->leave_time
                 ];
             }
         }
