@@ -28,6 +28,7 @@ class ApplyRetireForm extends BaseForm
     public $date;
     public $files;
 
+    public $stock_status;
     public $finance_status;
     public $account_status;
     public $work_status;
@@ -79,7 +80,7 @@ class ApplyRetireForm extends BaseForm
                 'message'=>'交接人不存在'
             ],
             [
-                ['finance_status','account_status','work_status'],
+                ['stock_status','finance_status','account_status','work_status'],
                 'in',
                 'range' => [0,1],
                 'message' => '状态不正确'
@@ -91,7 +92,7 @@ class ApplyRetireForm extends BaseForm
     {
         return [
             self::SCENARIO_APPLY => ['apply_id','approval_persons','person_id','des','date','copy_person','files'],
-            self::SCENARIO_EXECUTE => ['apply_id','finance_status','account_status','work_status','handover_id','des','date'],
+            self::SCENARIO_EXECUTE => ['apply_id','stock_status','finance_status','account_status','work_status','handover_id','des','date'],
         ];
     }
 
@@ -160,6 +161,7 @@ class ApplyRetireForm extends BaseForm
             $retire->account_status = $this->account_status;
             $retire->work_status = $this->work_status;
             $retire->finance_status = $this->finance_status;
+            $retire->stock_status = $this->stock_status;
             $retire->leave_des = $this->des;
             $retire->leave_time = $this->date;
             $retire->handover_person_id = $this->handover_id;

@@ -10,7 +10,10 @@ namespace app\modules\oa_v1\controllers;
 
 use app\models\Apply;
 use app\models\ApplyRetire;
+use app\models\Employee;
+use app\modules\oa_v1\logic\AssetLogic;
 use app\modules\oa_v1\logic\BackLogic;
+use app\modules\oa_v1\logic\JieKuanLogic;
 use Yii;
 use app\modules\oa_v1\models\ApplyRetireForm;
 use yii\data\Pagination;
@@ -117,14 +120,21 @@ class ApplyRetireController extends BaseController
         if($apply_id){
             $res = ApplyRetire::findOne($apply_id);
             if($res){
+                $employee = Employee::find()->where(['person_id'=>$res->person_id])->one();
                 $data = [
                     'date' => $res->is_execute? $res->leave_time : $res->retire_date,
                     'des' => $res->is_execute ? $res->leave_des : $res->des,
+                    'stock_status' => $res->is_execute ? $res->stock_status : '',
                     'finance_status' => $res->is_execute ? $res->finance_status : '',
                     'account_status' => $res->is_execute ? $res->account_status : '',
                     'work_status' => $res->is_execute ? $res->work_status : '',
                     'handover_id' => $res->is_execute ? $res->handover_person_id : 0,
                     'handover' => $res->is_execute ? $res->handover : '',
+                    'stock_list' => AssetLogic::instance()->getAssetHistory($this->arrPersonInfo['person_id']),
+                    'finance_list' => JieKuanLogic::instance()->getHistory($this->arrPersonInfo['person_id']),
+                    'qq' => isset($employee->account) ? $employee->account->qq : '',
+                    'email' => isset($employee->account) ? $employee->account->email : '',
+                    'tel' => isset($employee->account)?$employee->account->tel:'',
                 ];
                 return $this->_return($data);
             }

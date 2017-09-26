@@ -14,6 +14,7 @@ use Yii;
  * @property string $tel
  * @property string $retire_date
  * @property string $des
+ * @property integer $stock_status
  * @property integer $finance_status
  * @property integer $account_status
  * @property integer $work_status
@@ -44,7 +45,7 @@ class ApplyRetire extends \yii\db\ActiveRecord
     {
         return [
             [['apply_id'], 'required'],
-            [['person_id', 'finance_status', 'account_status', 'work_status', 'handover_person_id', 'is_execute', 'execute_person_id', 'created_at'], 'integer'],
+            [['person_id', 'stock_status', 'finance_status', 'account_status', 'work_status', 'handover_person_id', 'is_execute', 'execute_person_id', 'created_at'], 'integer'],
             [['files'], 'string'],
             [['apply_id', 'person_name', 'tel', 'handover', 'execute_person'], 'string', 'max' => 20],
             [['profession'], 'string', 'max' => 32],
@@ -66,6 +67,7 @@ class ApplyRetire extends \yii\db\ActiveRecord
             'tel' => '手机号',
             'retire_date' => '辞退日期',
             'des' => '辞退备注',
+            'stock_status' => '物资状态',
             'finance_status' => '财务结算 0：未结算   1：已结算',
             'account_status' => '帐号交接 0：未交接  1：已交接',
             'work_status' => '工作交接 0：未交接  1：已交接',
