@@ -3,8 +3,12 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\models\Apply;
+use app\models\ApprovalCallLog;
+use app\models\ApprovalLog;
 use app\modules\oa_v1\logic\ApprovalLogLogic;
+use app\modules\oa_v1\logic\BaseLogic;
 use app\modules\oa_v1\logic\GoodsUpApprovalLogic;
+use app\models\Person;
 use Yii;
 use app\modules\oa_v1\logic\AfterApproval;
 
@@ -63,5 +67,45 @@ class ApprovalLogController extends BaseController
         $code = $approvalLogic->operate($status, $des);
 
         return $this->_returnError($code);
+    }
+
+    public function actionCall($apply_id)
+    {
+        /**
+         * @var $approval ApprovalLog
+         */
+        $approval = ApprovalLog::find()->where(['apply_id'=>$apply_id,'is_to_me_now'=>1])->one();
+        if($approval){
+            $date = date('Ymd');
+            $call_count = ApprovalCallLog::find()->where(['apply_id'=>$apply_id,'person_id'=>$approval->approval_person_id,'date'=>$date])->count();
+            if($call_count<=0){
+                $person = Person::findOne($approval->approval_person_id);
+                $apply = $approval->apply;
+                $typeName = Apply::TYPE_ARRAY[$apply->type];
+                $data = [
+                    'tips_title' => 'OA -' . $typeName . '申请',
+                    'tips_content' => '员工' . $apply->person . '发起' . $typeName . '申请，请在OA系统进行审批处理',
+                    'receivers' => $person->bqq_open_id,
+                ];
+                $rtn = BaseLogic::instance()->sendQqMsg($data);
+                $model = new ApprovalCallLog();
+                $model->apply_id = $apply_id;
+                $model->person_id = $approval->approval_person_id;
+                $model->date = $date;
+                $model->success = $rtn['success'] ? 1 : 0;
+                $model->data = json_encode($rtn,JSON_UNESCAPED_UNICODE);
+                if($model->save()){
+                    return $this->_return('成功');
+                }else{
+                    return $this->_returnError(400,current($model->getFirstErrors()));
+                }
+            }else{
+                return $this->_returnError(400,'今天已催过！');
+            }
+        }else{
+            return $this->_returnError(400,'审批不存在！');
+        }
+
+
     }
 }
