@@ -7,7 +7,7 @@
  */
 namespace app\modules\oa_v1\models;
 
-
+use Yii;
 use app\models\Apply;
 use app\models\ApplyRetire;
 use app\models\Employee;
@@ -118,6 +118,7 @@ class ApplyRetireForm extends BaseForm
 
     /**
      * @param $apply Apply
+     * @throws Exception
      */
     public function saveRetire($apply)
     {
@@ -140,6 +141,7 @@ class ApplyRetireForm extends BaseForm
 
     /**
      * @param $user Person
+     * @return array
      */
     public function execute($user)
     {
@@ -147,8 +149,11 @@ class ApplyRetireForm extends BaseForm
         if(empty($apply)){
             return ['status'=>false,'msg'=>'申请不存在 或未审批完成'];
         }
-        $retire = ApplyRetire::findOne($this->apply_id);
-        if($retire){
+        /**
+         * @var $retire ApplyRetire
+         */
+        $retire = ApplyRetire::find()->where(['apply_id'=>$this->apply_id,'is_execute'=>0])->one();
+        if($retire) {
             $retire->is_execute = 1;
             $retire->execute_person_id = $user->person_id;
             $retire->execute_person = $user->person_name;
@@ -159,18 +164,46 @@ class ApplyRetireForm extends BaseForm
             $retire->leave_time = $this->date;
             $retire->handover_person_id = $this->handover_id;
             $retire->handover = Person::findOne($this->handover_id)->person_name;
-            if($retire->save()){
-                $today = strtotime(date('Y-m-d'));
-                $leave_time = strtotime($retire->leave_time);
-                if($today >= $leave_time){
-                    $emp = Employee::findOne(['person_id'=>$retire->person_id]);
-                    $emp && EmployeeLogic::instance()->delQxEmp($emp);
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                if (!$retire->save()) {
+                    throw new Exception(current($retire->getFirstErrors()));
                 }
-                return ['status'=>true];
-            }else{
-                return ['status'=>false,'msg'=>current($retire->getFirstErrors())];
+                $this->leave($retire);
+                $transaction->commit();
+                return ['status' => true];
+            }catch(\Exception $e){
+                $transaction->rollBack();
+                return ['status'=>false,'msg'=>$e->getMessage()];
             }
         }
-        return ['status'=>false,'msg'=>'申请不存在'];
+        return ['status'=>false,'msg'=>'申请已处理'];
+    }
+
+    /**
+     * @param $retire ApplyRetire
+     * @return bool
+     * @throws Exception
+     */
+    private function leave($retire)
+    {
+        $emp = Employee::findOne(['person_id' => $retire->person_id]);
+        if ($emp) {
+            $emp->status = 3;
+            $emp->leave_time = $retire->leave_time;
+            if ($emp->save()) {
+                //权限系统接口
+                $res = EmployeeLogic::instance()->delQxEmp($emp);
+                if(!$res['status']){
+                    throw new Exception($res['msg']);
+                }else{
+                    return true;
+                }
+            }else{
+                throw new Exception(current($emp->getFirstErrors()));
+            }
+        }else{
+            throw new Exception('员工不存在');
+        }
     }
 }
