@@ -696,7 +696,7 @@ TABLEHTML;
     
     
     /**
-     * 调职
+     * 异动
      *
      * @param $param
      * @return string
@@ -705,7 +705,7 @@ TABLEHTML;
     {
         $strHtml = <<<TABLEHTML
 <div>
-    <h2 style="text-align: center;">调职申请单</h2>
+    <h2 style="text-align: center;">异动申请单</h2>
     <table style="text-align: center;line-height:24px;" border="1" width='98%' cellspacing="0">
         <tr>
             <td style="background-color:#f2f2f2">日期</td>
@@ -722,33 +722,33 @@ TABLEHTML;
         <tr>
             <td style="background-color:#f2f2f2"> 原部门</td>
             <td colspan="2">{$param['old_org_name']}</td>
-            <td style="background-color:#f2f2f2"> 调职后部门</td>
+            <td style="background-color:#f2f2f2"> 异动后部门</td>
             <td colspan="2">{$param['target_org_name']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2"> 原职位</td>
             <td colspan="2">{$param['old_profession']}</td>
-            <td style="background-color:#f2f2f2"> 调职后职位</td>
+            <td style="background-color:#f2f2f2"> 异动后职位</td>
             <td colspan="2">{$param['target_profession']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2"> 原基本薪资</td>
             <td colspan="2">{$param['old_base_salary']}</td>
-            <td style="background-color:#f2f2f2"> 调职后基本薪资</td>
+            <td style="background-color:#f2f2f2"> 异动后基本薪资</td>
             <td colspan="2">{$param['target_base_salary']}</td>
         </tr>
         <tr>
             <td style="background-color:#f2f2f2"> 原绩效薪资</td>
             <td colspan="2">{$param['old_jixiao']}</td>
-            <td style="background-color:#f2f2f2"> 调职后效薪资</td>
+            <td style="background-color:#f2f2f2"> 异动后效薪资</td>
             <td colspan="2">{$param['target_jixiao']}</td>
         </tr>
         <tr>
-            <td style="background-color:#f2f2f2"> 调职日期</td>
+            <td style="background-color:#f2f2f2"> 异动日期</td>
             <td colspan="5">{$param['transfer_time']}</td>
         </tr>
         <tr>
-            <td style="background-color:#f2f2f2"> 调职原因</td>
+            <td style="background-color:#f2f2f2"> 异动原因</td>
             <td colspan="5">{$param['des']}</td>
         </tr>
         <tr>

@@ -399,7 +399,7 @@ class Apply extends \yii\db\ActiveRecord
     }
     
     /**
-     * 调职申请
+     * 异动申请
      * @return \yii\db\ActiveQuery
      */
     public function getApplyTransfer()
@@ -515,7 +515,7 @@ class Apply extends \yii\db\ActiveRecord
         9 => '固定资产归还',
         10 => '转正',
         11 => '离职',
-        12 => '调职',
+        12 => '异动',
         13 => '开店',
         14 => '商品上架',
         15 => '出差',

@@ -548,7 +548,7 @@ class PdfLogic extends Logic
     }
     
     /**
-     * 调职
+     * 异动
      * @param $apply
      *
      * @return array

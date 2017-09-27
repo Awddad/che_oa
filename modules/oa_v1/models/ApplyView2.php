@@ -236,7 +236,7 @@ class ApplyView2 extends ApplyView
 	}
 
 	/**
-	 * 调职详情
+	 * 异动详情
 	 * @param \app\models\Apply $apply
 	 * @return array
 	 */

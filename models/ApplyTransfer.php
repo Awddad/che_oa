@@ -83,7 +83,7 @@ class ApplyTransfer extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获得调职说明
+     * 获得异动说明
      */
     public function getDesInfo()
     {

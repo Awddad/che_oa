@@ -49,14 +49,14 @@ class ApplyTransferForm extends BaseForm
 				[
 					['approval_persons', 'copy_person'], 'checkTotal'
 				],
-				['des','string','max' => 1024,'message' => '调职原因不正确！'],
+				['des','string','max' => 1024,'message' => '异动原因不正确！'],
 				['entry_time','date','format' => 'yyyy-mm-dd','message' => '入职时间不正确'],
-				['transfer_time','date','format' => 'yyyy-mm-dd','message' => '调职时间不正确'],
+				['transfer_time','date','format' => 'yyyy-mm-dd','message' => '异动时间不正确'],
 				['apply_id', 'unique','targetClass'=>'\app\models\Apply', 'message'=> '申请单已存在'],
 				['old_org_id','exist','targetClass'=>'\app\models\Org', 'targetAttribute'=>'org_id','message'=>'所属部门不存在'],
-				['target_org_id','exist','targetClass'=>'\app\models\Org', 'targetAttribute'=>'org_id','message'=>'调职后部门不存在'],
+				['target_org_id','exist','targetClass'=>'\app\models\Org', 'targetAttribute'=>'org_id','message'=>'异动后部门不存在'],
 		        ['old_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'原职位不存在'],
-		        ['target_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'调职后职位不存在'],
+		        ['target_profession_id','exist','targetClass'=>'\app\models\Job','targetAttribute'=>'id','message'=>'异动后职位不存在'],
 				['files','safe'],
 		        [
 		            ['old_salary','old_jixiao','target_salary','target_jixiao'],
@@ -90,7 +90,7 @@ class ApplyTransferForm extends BaseForm
 	
 	
 	/**
-	 * 保存调职表
+	 * 保存异动表
 	 */
 	public function saveTransfer($user)
 	{

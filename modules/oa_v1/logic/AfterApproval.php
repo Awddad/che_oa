@@ -61,7 +61,7 @@ class AfterApproval extends BaseLogic
     }
 
     /**
-     * 调职
+     * 异动
      * 
      * @param ApprovalLog $approvalLog
      * @return boolean

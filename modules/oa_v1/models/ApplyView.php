@@ -268,7 +268,7 @@ class ApplyView extends BaseForm
 	}
 
 	/**
-	 * 调职详情
+	 * 异动详情
 	 * @param \app\models\Apply $apply
 	 * @return array
 	 */
