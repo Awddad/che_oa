@@ -60,12 +60,19 @@ class OrgLogic extends BaseLogic
      */
     public function getOrgIdByChild($org_id)
     {
-        $data = [];
-        while(($res = Org::findOne($org_id)) && $res['pid'] >= 0){
-            $data[] = (int)$res['org_id'];
-            $org_id = $res['pid'];
+        $key = 'OA_ORG_IDS_'.$org_id;
+        $cache = \Yii::$app->cache;
+        $res = $cache->get($key);
+        if(!$res) {
+            $data = [];
+            while (($res = Org::findOne($org_id)) && $res['pid'] >= 0) {
+                $data[] = (int)$res['org_id'];
+                $org_id = $res['pid'];
+            }
+            $res = array_reverse($data);
+            $cache->set($key,$res);
         }
-        return array_reverse($data);
+        return $res;
     }
     
     /**
@@ -95,5 +102,45 @@ class OrgLogic extends BaseLogic
     {
         $company_id = QuanXianServer::instance()->getCompanyId($org_id);
         return $company_id ? Org::findOne($company_id)->org_name : '';
+    }
+
+
+    /**
+     * @param int $orgId
+     * @return array
+     */
+    public function getOrgs($orgId = 0)
+    {
+        $key = 'OA_ORG_'.$orgId;
+        $cache = \Yii::$app->cache;
+        $orgs = $cache->get($key);
+        if (empty($orgs)) {
+            $orgs = $this->_getOrgs($orgId);
+            $cache->set($key,$orgs);
+        }
+        return $orgs;
+    }
+
+    private function _getOrgs($orgId = 0, $data = [])
+    {
+        $org = Org::find()->where(['pid' => $orgId])->all();
+        if(empty($org)) {
+            return [];
+        }
+        foreach ($org as $value) {
+            if ($children = $this->_getOrgs($value->org_id, [])) {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                    'children' => $this->_getOrgs($value->org_id, [])
+                ];
+            } else {
+                $data[] = [
+                    'label' => $value->org_name,
+                    'value' => $value->org_id,
+                ];
+            }
+        }
+        return $data;
     }
 }

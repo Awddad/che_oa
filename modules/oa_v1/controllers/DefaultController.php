@@ -10,6 +10,7 @@ use app\models\PeoplePic;
 use app\models\Person;
 use app\models\Role;
 use app\modules\oa_v1\logic\BaseLogic;
+use app\modules\oa_v1\logic\OrgLogic;
 use app\modules\oa_v1\logic\PdfLogic;
 use Yii;
 use app\modules\oa_v1\logic\PersonLogic;
@@ -189,7 +190,7 @@ class DefaultController extends BaseController
      */
     public function actionOrg()
     {
-        $data = PersonLogic::instance()->getOrgs();
+        $data = OrgLogic::instance()->getOrgs();
         return $this->_return($data);
     }
     
@@ -200,7 +201,7 @@ class DefaultController extends BaseController
      */
     public function actionCompanyOrg()
     {
-        $data = PersonLogic::instance()->getOrgs($this->arrPersonInfo->company_id);
+        $data = OrgLogic::instance()->getOrgs($this->arrPersonInfo->company_id);
         return $this->_return($data);
     }
 

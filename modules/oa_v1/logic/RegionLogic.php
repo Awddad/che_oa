@@ -18,7 +18,7 @@ class RegionLogic extends BaseLogic
         $cache = yii::$app->cache;
         if(!$region = $cache->get($this->key)){
             $region = $this->getRegionByParent();
-            $cache->set($this->key, $region,86400);
+            $cache->set($this->key, $region);
         }
         return $region;
     }

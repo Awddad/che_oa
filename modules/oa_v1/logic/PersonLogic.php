@@ -214,37 +214,11 @@ class PersonLogic extends BaseLogic
         return '';
     }
 
-    /**
-     * @param int $orgId
-     * @param $data
-     * @return array
-     */
-    public function getOrgs($orgId = 0, $data = [])
-    {
-        $org = Org::find()->where(['pid' => $orgId])->all();
-        if(empty($org)) {
-            return [];
-        }
-        foreach ($org as $value) {
-            if ($children = $this->getOrgs($value->org_id, [])) {
-                $data[] = [
-                    'label' => $value->org_name,
-                    'value' => $value->org_id,
-                    'children' => $this->getOrgs($value->org_id, [])
-                ];
-            } else {
-                $data[] = [
-                    'label' => $value->org_name,
-                    'value' => $value->org_id,
-                ];
-            }
-        }
-        return $data;
-    }
-    
+
     /**
      * 根据部门id 获得部门名称
-     * @param unknown $org_id
+     * @param int $org_id
+     * @return string
      */
     public function getOrgById($org_id)
     {
