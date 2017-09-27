@@ -11,6 +11,10 @@ namespace app\modules\oa_v1\logic;
 
 use app\logic\server\ThirdServer;
 use app\models\Apply;
+use app\models\ApplyBuy;
+use app\models\ApplyPay;
+use app\models\BaoXiao;
+use app\models\JieKuan;
 use app\models\Person;
 use yii\data\Pagination;
 
@@ -69,7 +73,16 @@ class PayLogic extends BaseLogic
         }
         $keyword = trim(\Yii::$app->request->post('keyword'));
 
-        if ($keyword) {
+        if ($keyword && preg_match('/^\d+\.\d{2}$/',$keyword)) {
+            $money1 = $keyword;
+            $money2 = sprintf("%.2f",$keyword);
+
+            $query->leftJoin(BaoXiao::tableName().' bao','bao.apply_id=a.apply_id')
+                ->leftJoin(JieKuan::tableName().' j','j.apply_id=a.apply_id')
+                ->leftJoin(ApplyPay::tableName().' p','p.apply_id=a.apply_id')
+                ->leftJoin(ApplyBuy::tableName().' buy','buy.apply_id=a.apply_id')
+                ->andWhere(['or',"bao.money='{$money2}'","j.money='{$money1}'","p.money='{$money1}'","buy.money='{$money1}'"]);
+        }elseif($keyword){
             $query->andFilterWhere([
                 'or',
                 ['like', 'a.apply_id', $keyword],
