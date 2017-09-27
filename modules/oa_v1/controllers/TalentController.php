@@ -2,12 +2,20 @@
 namespace app\modules\oa_v1\controllers;
 
 use app\models\Educational;
+use app\models\EmployeeAccountParent;
 use app\models\Job;
+use app\models\PeopleAbility;
+use app\models\PeopleEduExperience;
+use app\models\PeopleFiles;
+use app\models\PeopleProjectExperience;
+use app\models\PeopleTrainExperience;
+use app\models\PeopleWorkExperience;
 use app\models\Person;
 use app\models\PersonType;
 use app\models\Talent;
 use app\modules\oa_v1\logic\RegionLogic;
 use app\modules\oa_v1\logic\TalentLogic;
+use app\modules\oa_v1\models\PeopleForm;
 use moonland\phpexcel\Excel;
 use yii;
 use app\modules\oa_v1\models\TalentForm;
@@ -430,5 +438,73 @@ class TalentController extends BaseController
                 'format' => 'Excel2007'
             ]);
         }
+    }
+
+    public function actionIndex()
+    {
+        $model = new TalentInfoForm();
+        $talent_id = Yii::$app->request->get('id');
+        $talent = Talent::findOne($talent_id);
+        if (empty($talent)) {
+            return [];
+        }
+
+        $baseInfo = $model->getTalentInfo($talent_id);
+        $score  = $model->getScore($talent_id);
+        $people = new PeopleForm();
+        // 工作经验
+        $workExperience = PeopleWorkExperience::find()->where(['talent_id' => $talent_id])->all();
+        $workExp = [];
+        if(!empty($workExperience)) {
+            foreach ($workExperience as $v) {
+                $workExp[] = $people->workExp($v);
+            }
+        }
+        // 项目经验
+        $projectExperience = PeopleProjectExperience::find()->where(['talent_id' => $talent_id])->all();
+        $projectExp = [];
+        if(!empty($projectExperience)) {
+            foreach ($projectExperience as $v) {
+                $projectExp[] = $people->projectExp($v);
+            }
+        }
+        //教育经历
+        $eduExperience = PeopleEduExperience::find()->where(['talent_id' => $talent_id])->all();
+        $eduExp = [];
+        if(!empty($eduExperience)) {
+            foreach ($eduExperience as $v) {
+                $eduExp[] = $people->eduExp($v);
+            }
+        }
+        //技能评价
+        $ability = PeopleAbility::find()->where(['talent_id' => $talent_id])->all();
+        $abilityDetail = [];
+        if(!empty($ability)) {
+            foreach ($ability as $v) {
+                $abilityDetail[] = $people->ability($v);
+            }
+        }
+
+        //培训经历
+        $trainExperience = PeopleTrainExperience::find()->where(['talent_id' => $talent_id])->all();
+        $trainExp = [];
+        if(!empty($trainExperience)) {
+            foreach ($trainExperience as $v) {
+                $trainExp[] = $people->trainExp($v);
+            }
+        }
+
+        //上传附件
+        $file = PeopleFiles::find()->where(['talent_id' => $talent_id])->all();
+        $files = [];
+        if(!empty($file)) {
+            foreach ($file as $v) {
+                $files[] = $people->files($v);
+            }
+        }
+
+
+        return $this->_return(compact('baseInfo', 'score', 'workExp',
+            'projectExp', 'eduExp', 'abilityDetail', 'trainExp', 'files'));
     }
 }

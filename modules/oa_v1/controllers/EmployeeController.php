@@ -1,7 +1,15 @@
 <?php
 namespace app\modules\oa_v1\controllers;
 
+use app\models\EmployeeAccountParent;
+use app\models\PeopleAbility;
+use app\models\PeopleEduExperience;
+use app\models\PeopleFiles;
+use app\models\PeopleProjectExperience;
+use app\models\PeopleTrainExperience;
+use app\models\PeopleWorkExperience;
 use app\modules\oa_v1\models\EmployeeForm;
+use app\modules\oa_v1\models\PeopleForm;
 use yii;
 use app\modules\oa_v1\models\EmployeeInfoForm;
 use app\modules\oa_v1\logic\AssetLogic;
@@ -287,5 +295,91 @@ class EmployeeController extends BaseController
         }else{
             return $this->_returnError(400,$data['msg']);
         }
+    }
+
+    public function actionIndex()
+    {
+        $model = new EmployeeInfoForm();
+        $employee = Employee::findOne(Yii::$app->request->get('id'));
+        if (empty($employee)) {
+            return [];
+        }
+
+        $baseInfo = $model->getEmpInfoByEmployee($employee);
+        $service  = $model->getServiceEmployee($employee);
+        $bandCards  = $model->getBandCardsEmployee($employee);
+        $account  = $model->getPersonAccount($employee->id);
+        $people = new PeopleForm();
+        // 工作经验
+        $workExperience = PeopleWorkExperience::find()->where(['employee_id' => $employee->id])->all();
+        $workExp = [];
+        if(!empty($workExperience)) {
+            foreach ($workExperience as $v) {
+                $workExp[] = $people->workExp($v);
+            }
+        }
+        // 项目经验
+        $projectExperience = PeopleProjectExperience::find()->where(['employee_id' => $employee->id])->all();
+        $projectExp = [];
+        if(!empty($projectExperience)) {
+            foreach ($projectExperience as $v) {
+                $projectExp[] = $people->projectExp($v);
+            }
+        }
+        //教育经历
+        $eduExperience = PeopleEduExperience::find()->where(['employee_id' => $employee->id])->all();
+        $eduExp = [];
+        if(!empty($eduExperience)) {
+            foreach ($eduExperience as $v) {
+                $eduExp[] = $people->eduExp($v);
+            }
+        }
+        //技能评价
+        $ability = PeopleAbility::find()->where(['employee_id' => $employee->id])->all();
+        $abilityDetail = [];
+        if(!empty($ability)) {
+            foreach ($ability as $v) {
+                $abilityDetail[] = $people->ability($v);
+            }
+        }
+
+        //培训经历
+        $trainExperience = PeopleTrainExperience::find()->where(['employee_id' => $employee->id])->all();
+        $trainExp = [];
+        if(!empty($trainExperience)) {
+            foreach ($trainExperience as $v) {
+                $trainExp[] = $people->trainExp($v);
+            }
+        }
+
+        //上传附件
+        $file = PeopleFiles::find()->where(['employee_id' => $employee->id])->all();
+        $files = [];
+        if(!empty($file)) {
+            foreach ($file as $v) {
+                $files[] = $people->files($v);
+            }
+        }
+
+        $accountParent = EmployeeAccountParent::find()->where(['employee_id' => $employee->id])->all();
+        $accountParents = [];
+        if($accountParent) {
+            /**
+             * @var EmployeeAccountParent $v
+             */
+            foreach ($accountParent as $v) {
+                $accountParents[] = [
+                    'id' => $v->id,
+                    'name' => $v->name,
+                    'relation' => $v->relation,
+                    'idnumber' => $v->idnumber,
+                    'bank_name' => $v->bank_name,
+                    'bank_card' => $v->bank_card,
+                ];
+            }
+        }
+
+        return $this->_return(compact('baseInfo', 'service', 'bandCards', 'account', 'workExp',
+            'projectExp', 'eduExp', 'abilityDetail', 'trainExp', 'files', 'accountParents'));
     }
 }
