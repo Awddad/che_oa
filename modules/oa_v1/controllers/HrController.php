@@ -33,7 +33,7 @@ class HrController extends BaseController
             ->from(Employee::tableName().' e')
             ->leftJoin(Talent::tableName().' t', 'e.id=t.employee_id')
             ->leftJoin(EmployeeAccount::tableName().' a','a.employee_id=e.id')
-            ->where(['>', 'person_id', 0]);
+            ->where(['>', 'e.person_id', 0]);
 
         if($keywords){
             $keywords = mb_convert_encoding($keywords,'UTF-8','auto');
@@ -210,5 +210,39 @@ class HrController extends BaseController
             'res' => $data,
             'page' => BackLogic::instance()->pageFix($pagination)
         ]);
+    }
+
+    public function actionCount()
+    {
+        $query = (new Query())
+            ->from(Employee::tableName().' e')
+            ->leftJoin(Talent::tableName().' t', 'e.id=t.employee_id')
+            ->leftJoin(EmployeeAccount::tableName().' a','a.employee_id=e.id')
+            ->where(['>', 'e.person_id', 0]);
+        $entry_count = $query->count();
+
+        $query = (new Query())
+            ->from(Employee::tableName().' e')
+            ->leftJoin(Talent::tableName().' t', 'e.id=t.employee_id')
+            ->leftJoin(EmployeeAccount::tableName().' a','a.employee_id=e.id')
+            ->where(['!=', 'leave_time', '']);
+        $leave_count = $query->count();
+
+        $query = (new Query())
+            ->from(Employee::tableName().' e')
+            ->leftJoin(Talent::tableName().' t', 'e.id=t.employee_id')
+            ->leftJoin(EmployeeAccount::tableName().' a','a.employee_id=e.id')
+            ->rightJoin(Apply::tableName().' app','app.person_id=e.person_id')
+            ->leftJoin(ApplyTransfer::tableName().' tr','tr.apply_id=app.apply_id')
+            ->where(['>','e.person_id',0])
+            ->andWhere(['app.type'=>12,'app.status'=>99]);
+        $tran_count = $query->count();
+
+        $data = [
+            'entry_count' => $entry_count,
+            'leave_count' => $leave_count,
+            'tran_count' => $tran_count,
+        ];
+        return $this->_return($data);
     }
 }
