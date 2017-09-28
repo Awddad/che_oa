@@ -122,6 +122,7 @@ class ApplyRetireController extends BaseController
             if($res){
                 $employee = Employee::find()->where(['person_id'=>$res->person_id])->one();
                 $data = [
+                    'person_name' => $res->person_name,
                     'date' => $res->is_execute? $res->leave_time : $res->retire_date,
                     'des' => $res->is_execute ? $res->leave_des : $res->des,
                     'stock_status' => $res->is_execute ? $res->stock_status : '',
