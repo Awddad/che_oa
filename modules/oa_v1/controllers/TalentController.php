@@ -451,6 +451,7 @@ class TalentController extends BaseController
 
         $baseInfo = $model->getTalentInfo($talent_id);
         $score  = $model->getScore($talent_id);
+        $yingpin = $model->getYingpin($talent_id);
         $people = new PeopleForm();
         // 工作经验
         $workExperience = PeopleWorkExperience::find()->where(['talent_id' => $talent_id])->all();
@@ -504,7 +505,7 @@ class TalentController extends BaseController
         }
 
 
-        return $this->_return(compact('baseInfo', 'score', 'workExp',
+        return $this->_return(compact('baseInfo', 'score', 'yingpin', 'workExp',
             'projectExp', 'eduExp', 'abilityDetail', 'trainExp', 'files'));
     }
 }
