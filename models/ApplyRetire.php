@@ -85,6 +85,6 @@ class ApplyRetire extends \yii\db\ActiveRecord
 
     public function getDesInfo()
     {
-        return $this->person_name;
+        return $this->des;
     }
 }
