@@ -169,13 +169,11 @@ class HrController extends BaseController
 
         //开始时间
         if($start_time){
-            $start_time = strtotime($start_time);
-            $query->andWhere(['>=', 'app.create_time', $start_time]);
+            $query->andWhere("date(tr.transfer_time) >= '{$start_time}'");
         }
         //结束时间
         if($end_time){
-            $end_time = strtotime($end_time.' 23:59:59');
-            $query->andWhere(['<=', 'a.create_time', $end_time]);
+            $query->andWhere("date(tr.transfer_time) <= '{$end_time}'");
         }
 
         //echo $query->createCommand()->getRawSql();die();
