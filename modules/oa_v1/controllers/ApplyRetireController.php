@@ -54,7 +54,7 @@ class ApplyRetireController extends BaseController
             ->where(['a.type'=>19,'a.status'=>99]);
 
         //是否已处理
-        if($status){
+        if($status != null){
             $query->andWhere(['r.is_execute'=>$status]);
         }
 
