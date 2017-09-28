@@ -132,6 +132,7 @@ class HrController extends BaseController
                 'name' => $v['name'],
                 'tel' => $v['tel'] ?: $v['phone'],
                 'job' => ($job = Job::findOne($v['profession'])) ? $job->name : '',
+                'entry_time' => $v['entry_time'],
                 'leave_time' => $v['leave_time'],
                 'hr' => $v['owner'],
                 'emp_id' => $v['id'],
