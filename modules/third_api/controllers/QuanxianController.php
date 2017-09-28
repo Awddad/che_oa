@@ -37,9 +37,11 @@ class QuanxianController extends Controller
             case 'organizations/tree'://组织架构树形结构
             case 'organizations/types'://组织架构类型
                 $intResult += $objQx->curlUpdateOrg();
+                Yii::$app->cache->flush();
                 break;
             case 'organizations/positions'://职位
             	$intResult += $objQx->curlUpdatePositions();
+                Yii::$app->cache->flush();
             	break;
             case 'users'://用户列表
                 $intResult += $objQx->curlUpdateAllUser();
@@ -60,6 +62,7 @@ class QuanxianController extends Controller
                 break;
             case 'projects/role_user':
                 $intResult += $objQx->curlUpdateUserRoleOrgPermission();//用户的数据权限
+                Yii::$app->cache->flush();
                 break;
             //菜单信息变动
         }

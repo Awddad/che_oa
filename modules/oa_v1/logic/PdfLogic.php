@@ -312,7 +312,7 @@ class PdfLogic extends Logic
             $total += $price * $v->amount;
         }
         $arrInfo['list'] = $list;
-        $arrInfo['total'] =  \Yii::$app->formatter->asCurrency($total);;
+        $arrInfo['total'] =  \Yii::$app->formatter->asCurrency($total);
         $arrInfo['total_supper'] = CnyLogic::instance()->cny((int)$total);
         
         

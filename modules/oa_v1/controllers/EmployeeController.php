@@ -379,7 +379,9 @@ class EmployeeController extends BaseController
             }
         }
 
+        $canBackAsset = AssetLogic::instance()->getCanBackAsset($employee->person_id);
+
         return $this->_return(compact('baseInfo', 'service', 'bandCards', 'account', 'workExp',
-            'projectExp', 'eduExp', 'abilityDetail', 'trainExp', 'files', 'accountParents'));
+            'projectExp', 'eduExp', 'abilityDetail', 'trainExp', 'files', 'accountParents','canBackAsset'));
     }
 }

@@ -195,7 +195,7 @@ class ApplyLogic extends BaseLogic
         }
         $apply['info'] = $info;
         $apply['caiwu'] = $caiwu;
-        $apply['approval'] = $this->getApproval($apply_id);;
+        $apply['approval'] = $this->getApproval($apply_id);
         $apply['copy_person'] = $this->getCopyPerson($apply_id);
         
         return $apply;
@@ -213,7 +213,7 @@ class ApplyLogic extends BaseLogic
         $_model = new appmodel\BaoXiaoList();
         $info = $model::find()->where(['apply_id' => $apply_id])->asArray()->one();
         if ($info['bao_xiao_list_ids'])
-            $info['list'] = $_model::find()->where("id in ({$info['bao_xiao_list_ids']})")->asArray()->all();;
+            $info['list'] = $_model::find()->where("id in ({$info['bao_xiao_list_ids']})")->asArray()->all();
         
         return $info;
     }
