@@ -71,23 +71,25 @@ class PayLogic extends BaseLogic
                 'in', 'a.type', [1, 2, 4, 5]
             ]);
         }
+
         $keyword = trim(\Yii::$app->request->post('keyword'));
-
-        if ($keyword && preg_match('/^\d+\.\d{2}$/',$keyword)) {
-            $money1 = $keyword;
-            $money2 = sprintf("%.2f",$keyword);
-
-            $query->leftJoin(BaoXiao::tableName().' bao','bao.apply_id=a.apply_id')
-                ->leftJoin(JieKuan::tableName().' j','j.apply_id=a.apply_id')
-                ->leftJoin(ApplyPay::tableName().' p','p.apply_id=a.apply_id')
-                ->leftJoin(ApplyBuy::tableName().' buy','buy.apply_id=a.apply_id')
-                ->andWhere(['or',"bao.money='{$money2}'","j.money='{$money1}'","p.money='{$money1}'","buy.money='{$money1}'"]);
-        }elseif($keyword){
+        if($keyword){
             $query->andFilterWhere([
                 'or',
                 ['like', 'a.apply_id', $keyword],
                 ['like', 'a.title', $keyword]
             ]);
+        }
+        $money = trim(\Yii::$app->request->post('money'));
+        if ($money) {
+            $money1 = $money;
+            $money2 = sprintf("%.2f",$money);
+
+            $query->leftJoin(BaoXiao::tableName().' bao','bao.apply_id=a.apply_id')
+                ->leftJoin(JieKuan::tableName().' j','j.apply_id=a.apply_id')
+                ->leftJoin(ApplyPay::tableName().' p','p.apply_id=a.apply_id')
+                ->leftJoin(ApplyBuy::tableName().' buy','buy.apply_id=a.apply_id')
+                ->andWhere(['or',"bao.money='{$money1}'","j.money='{$money1}'","p.money='{$money1}'","buy.money='{$money1}'"]);
         }
 
         $beginTime = \Yii::$app->request->post('begin_time');
