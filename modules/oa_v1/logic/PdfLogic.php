@@ -764,5 +764,42 @@ class PdfLogic extends Logic
             'path' => $root_path,
             'name' => $apply->apply_id.'.pdf'
         ];
+    }/**
+     * @param Apply $apply
+     *
+     * @return array
+     */
+    public function applyRetire($apply)
+    {
+        $pdf = new MyTcPdf();
+        $root_path = $this->getFilePath($apply);
+        if(file_exists($root_path)){
+            unlink($root_path);
+        }
+        $person = Person::findOne($apply->person_id);
+        /**
+         * @var ApplyHoliday $holiday
+         */
+        $retire = $apply->retire;
+        $arrInfo = [
+            'apply_date' => date('Y年m月d日', $apply->create_time),
+            'apply_id' => $apply->apply_id,
+            'org_full_name' => OrgLogic::instance()->getOrgName($apply->org_id),
+            'person' => $person->person_name,
+
+            '_person' => $retire->person_name,
+            'date' => date('Y年m月d日',strtotime($retire->retire_date)),
+            'des' => $retire->des,
+
+            'approval_person' =>$apply->approval_persons,//多个人、分隔
+            'copy_person' => $apply->copy_person ? : '--',//多个人、分隔
+        ];
+        $pdf->createdPdf($root_path, $arrInfo, 'retire');
+        return [
+            'path' => $root_path,
+            'name' => $apply->apply_id.'.pdf'
+        ];
     }
+
+
 }
