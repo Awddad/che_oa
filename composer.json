@@ -5,6 +5,9 @@
     "homepage": "http://www.yiiframework.com/",
     "type": "project",
     "license": "BSD-3-Clause",
+    "repositories": [
+        {"type": "composer", "url": "http://packagist.che.com"}
+    ],
     "support": {
         "issues": "https://github.com/yiisoft/yii2/issues?state=open",
         "forum": "http://www.yiiframework.com/forum/",
@@ -22,8 +25,8 @@
         "jasny/sso": "^0.3.0",
         "moonlandsoft/yii2-phpexcel": "*",
         "overtrue/pinyin": "~3.0",
-        "guzzlehttp/guzzle": "^6.3"
-        
+        "guzzlehttp/guzzle": "^6.3",
+        "che/framework": ">=1.0.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -35,7 +38,8 @@
         "codeception/specify": "~0.4.3"
     },
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
+        "secure-http": false
     },
     "scripts": {
         "post-create-project-cmd": [

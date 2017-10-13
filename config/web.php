@@ -7,7 +7,7 @@ $config = [
     'id' => 'basic',
     'timeZone' => 'Asia/Shanghai',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','chelog'],
     'language' => 'zh-CN',
     'modules' => [
         'oa_v1' => [
@@ -85,6 +85,9 @@ $config = [
         'formatter' => [
             'datetimeFormat' => 'php:Y-m-d H:i',
             'currencyCode' => 'CNY',
+        ],
+        'chelog' => [//初始化车城日志插件
+            'class' => 'app\che\Logs'
         ],
     ],
     'params' => $params,
