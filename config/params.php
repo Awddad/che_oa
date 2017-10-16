@@ -1,9 +1,9 @@
 <?php
 //项目基本信息的定义 - 暂时未找到合适的位置，先放在这里
-defined('PROD_CODE') or define('PROD_CODE', '200');//产品名称
+defined('PROD_CODE') or define('PROD_CODE', '800');//产品名称
 defined('PROD_NAME') or define('PROD_NAME', 'OA');//产品名称
-defined('APP_NAME') or define('APP_NAME', 'OA系统');//项目名称
-defined('APP_ID') or define('APP_ID', '200');//项目编号
+defined('APP_NAME') or define('APP_NAME', 'AO系统');//项目名称
+defined('APP_ID') or define('APP_ID', '801');//项目编号
 defined('APP_VERSION') or define('APP_VERSION', '1.2.7');//版本号
 if(!defined('LOG_DIR'))
 {
