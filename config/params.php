@@ -1,4 +1,18 @@
 <?php
+//项目基本信息的定义 - 暂时未找到合适的位置，先放在这里
+defined('PROD_CODE') or define('PROD_CODE', '200');//产品名称
+defined('PROD_NAME') or define('PROD_NAME', 'OA');//产品名称
+defined('APP_NAME') or define('APP_NAME', 'OA系统');//项目名称
+defined('APP_ID') or define('APP_ID', '200');//项目编号
+defined('APP_VERSION') or define('APP_VERSION', '1.2.7');//版本号
+if(!defined('LOG_DIR'))
+{
+    if (strtoupper(substr(PHP_OS,0,3))==='WIN') {
+        define('LOG_DIR', 'D:\log-test\oa');//日志插件记录的日志存放处
+    } else {
+        define('LOG_DIR', '/data/logs/oa/');//日志插件记录的日志存放处
+    }
+}
 if(YII_ENV_DEV) //开发库
 {
     return [
